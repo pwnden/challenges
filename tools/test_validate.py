@@ -7,12 +7,15 @@ import unittest
 from validate import InvalidChallenge, load_contract, validate_manifest
 
 
-CONTRACT = "version = 1\nsolve_network = 'default'\nsolve_timeout_seconds = 60\nattack_rejected_exit = 3\n"
-FILE = """schema = 1
+CONTRACT = "version = 2\nsolve_network = 'default'\nsolve_timeout_seconds = 60\nattack_rejected_exit = 3\n"
+FILE = """schema = 2
 slug = "sample"
 title = "Sample"
 category = "rev"
 files = ["data.bin"]
+[content]
+description = "README.md"
+walkthrough = "walkthrough.md"
 [flag]
 mode = "sha256"
 sha256 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -31,6 +34,8 @@ class ValidateTests(unittest.TestCase):
         self.directory.mkdir(parents=True)
         (self.root / 'contract.toml').write_text(CONTRACT)
         (self.directory / 'data.bin').write_bytes(b'data')
+        (self.directory / 'README.md').write_text('A player objective.', encoding='utf-8')
+        (self.directory / 'walkthrough.md').write_text('A complete explanation.', encoding='utf-8')
         self.definition = load_contract(self.root)
 
     def check(self, metadata):
@@ -43,13 +48,13 @@ class ValidateTests(unittest.TestCase):
 
     def test_invalid_metadata(self):
         cases = {
-            'unknown field': FILE.replace('schema = 1', 'schema = 1\nunknown = true'),
+            'unknown field': FILE.replace('schema = 2', 'schema = 2\nunknown = true'),
             'nested unknown field': FILE + 'extra = true\n',
             'missing title': FILE.replace('title = "Sample"\n', ''),
             'title type': FILE.replace('title = "Sample"', 'title = 123'),
             'slug mismatch': FILE.replace('slug = "sample"', 'slug = "other"'),
-            'version mismatch': FILE.replace('schema = 1', 'schema = 2'),
-            'boolean version': FILE.replace('schema = 1', 'schema = true'),
+            'version mismatch': FILE.replace('schema = 2', 'schema = 3'),
+            'boolean version': FILE.replace('schema = 2', 'schema = true'),
             'category': FILE.replace('category = "rev"', 'category = "invalid"'),
             'hash': FILE.replace('a' * 64, 'not-a-digest'),
             'image option': FILE.replace('python:3.13.15-slim', '--help'),
@@ -98,10 +103,22 @@ check = ["python3", "test.py"]
             self.check(FILE.replace('data.bin', 'linked.bin'))
 
     def test_invalid_contract(self):
-        for definition in [CONTRACT + 'extra = true\n', CONTRACT.replace('version = 1', 'version = 0'), CONTRACT.replace('solve_timeout_seconds = 60', 'solve_timeout_seconds = -1'), CONTRACT.replace('attack_rejected_exit = 3', 'attack_rejected_exit = 125')]:
+        for definition in [CONTRACT + 'extra = true\n', CONTRACT.replace('version = 2', 'version = 0'), CONTRACT.replace('solve_timeout_seconds = 60', 'solve_timeout_seconds = -1'), CONTRACT.replace('attack_rejected_exit = 3', 'attack_rejected_exit = 125')]:
             (self.root / 'contract.toml').write_text(definition)
             with self.subTest(definition=definition), self.assertRaises(InvalidChallenge):
                 load_contract(self.root)
+
+    def test_content_documents(self):
+        (self.directory / 'hint.md').write_text('A first hint.', encoding='utf-8')
+        valid = FILE.replace('walkthrough = "walkthrough.md"', 'walkthrough = "walkthrough.md"\nhints = ["hint.md"]')
+        self.check(valid)
+        for invalid in [valid.replace('hint.md', 'README.md'), valid.replace('["hint.md"]', '["hint.md", "hint.md"]'), valid.replace('walkthrough = "walkthrough.md"\n', ''), valid.replace('hint.md', 'missing.md'), valid.replace('README.md', '../../../outside.md'), valid.replace('["hint.md"]', '[' + ','.join(['"hint.md"'] * 11) + ']')]:
+            with self.subTest(metadata=invalid), self.assertRaises(ValueError):
+                self.check(invalid)
+        for body in [b'\xff', b' ', b'x' * ((1 << 20) + 1)]:
+            (self.directory / 'README.md').write_bytes(body)
+            with self.subTest(size=len(body)), self.assertRaises(InvalidChallenge):
+                self.check(FILE)
 
 
 if __name__ == '__main__':

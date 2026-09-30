@@ -1,8 +1,13 @@
-schema = 1
+schema = 2
 slug = "rotor-lock"
 title = "Rotor Lock"
 category = "rev"
 files = ["files/checker.py"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md", "hints/3.md"]
+walkthrough = "solve/README.md"
 
 [flag]
 mode = "sha256"

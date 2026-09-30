@@ -1,6 +1,6 @@
-# Problem contract v1
+# Problem contract v2
 
-This contract defines the problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **1**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
+This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **2**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
 
 Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the problem there and supply its files, Compose configuration, solution, and optional patch. A compatible consumer reads those declarations and implements this contract.
 
@@ -8,7 +8,7 @@ Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the
 
 The challenges repository maintains the contract and checks problem declarations in its own validator and CI. The platform consumes the contract: it confirms version support, parses execution fields, applies filesystem and Docker execution safety checks, and verifies running problems. See [format validation and CI](verification.md) for the author checks and the [platform verification guide](https://github.com/pwnden/platform/blob/main/docs/verification.md) for execution checks.
 
-The repository declares one positive integer `version`. Every problem's `schema` equals that version. The current platform explicitly supports version `1`; it rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
+The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `2` and retains version `1` execution support for installed snapshots; it rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
 
 Increment the contract version whenever consumed fields, types, requiredness, allowed values, defaults, or execution and result rules change. Update the document, TOML values, author validator, and problem declarations together. A consumer adds explicit support for the new version before it can execute those problems. Adding problems, changing their content within the same contract, and clarifying documentation without changing a rule keep the version.
 
@@ -16,9 +16,9 @@ Increment the contract version whenever consumed fields, types, requiredness, al
 
 All four fields in `contract.toml` are required. The author validator rejects unknown fields. These values belong to the versioned contract; editing them is a contract change.
 
-| Field | Type | Version 1 value | Rule |
+| Field | Type | Version 2 value | Rule |
 | --- | --- | --- | --- |
-| `version` | Integer | `1` | Positive contract version; matches every problem's `schema`. |
+| `version` | Integer | `2` | Positive contract version; matches every problem's `schema`. |
 | `solve_network` | String | `"default"` | Nonempty default Compose network key for service solutions. |
 | `solve_timeout_seconds` | Integer | `60` | Positive default runtime limit for each toolbox command, in seconds. |
 | `attack_rejected_exit` | Integer | `3` | Expected attack denial code; in the range 1–124. |
@@ -37,12 +37,29 @@ Paths are relative to the problem directory and follow the [files and resource r
 | `slug` | String | Required | Matches the directory name; 1–40 characters; lowercase letters and digits separated by single hyphens. |
 | `title` | String | Required | Nonempty display title. |
 | `category` | String | Required | One of `web`, `pwn`, `rev`, `crypto`, `forensics`, or `misc`. |
+| `content` | Table | Required | Player description, ordered optional hints and complete walkthrough. |
 | `files` | Array of strings | Defaults to `[]`; nonempty for file problems | Existing distribution files or directories inside this repository. Service problems may also distribute files. |
 | `compose` | String | Defaults to `""` | Existing regular Compose file for a service problem. |
 | `endpoints` | Array of tables | Defaults to `[]` | Service entry points; file problems use an empty array. |
 | `flag` | Table | Required | Flag comparison strategy described below. |
 | `solve` | Table | Required | Toolbox image, command, and execution options. |
 | `patched` | Table | Optional for service problems | Compose override and functional check; file problems omit it. |
+
+### `content`
+
+| Field | Type | Required or default | Rule |
+| --- | --- | --- | --- |
+| `description` | String | Required | Path to the player brief. |
+| `hints` | Array of strings | Defaults to `[]` | Up to 10 Markdown paths, ordered from general direction to concrete clues. |
+| `walkthrough` | String | Required | Path to a complete player-facing explanation. |
+
+Every document is a distinct existing regular `.md` file inside this repository, encoded as nonempty UTF-8 and at most 1 MiB. Paths follow the portable repository containment rules. These documents are content resources, independently declared from downloadable `files` and executable `solve.command`. Version 2 introduces these required content declarations; execution defaults and resource rules retain their existing semantics.
+
+The description provides the scenario, objective, supplied information, starting actions, expected result and submission format. It names the website's actual controls and gives enough context for a player to start without reading repository documentation. The authoring standard and review checklist are in [player content](player-content.md).
+
+Consumers render the brief in the workspace, expose hints separately in declaration order and expose the walkthrough with an explicit answer-spoiler label. Hint and walkthrough bodies are requested after player activation; they are absent from the default detail payload. A walkthrough explains the reasoning, reproducible steps, result and takeaway. For generated flags it explains how to obtain the current instance's answer. Players read it in the website.
+
+This presentation controls accidental spoilers. The local checkout and toolbox are available to the player, so it is not an answer confidentiality boundary. Author validation and automated verification commands belong in maintainer documentation. Commands in player content run in the website's prepared terminal and directly serve the exercise.
 
 ### `flag`
 
@@ -83,11 +100,16 @@ The patch attack uses the original `solve.image` and `solve.command`. Both patch
 ## File problem execution
 
 ```toml
-schema = 1
+schema = 2
 slug = "example-file"
 title = "Example file"
 category = "rev"
 files = ["files/example.bin"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md"]
+walkthrough = "solve/README.md"
 
 [flag]
 mode = "sha256"
@@ -106,11 +128,15 @@ The runner mounts the challenge directory at `/challenge` and runs the solution 
 ## Service problem execution
 
 ```toml
-schema = 1
+schema = 2
 slug = "example-service"
 title = "Example service"
 category = "web"
 compose = "compose.yaml"
+
+[content]
+description = "README.md"
+walkthrough = "solve/README.md"
 
 [flag]
 mode = "generated"
@@ -142,7 +168,7 @@ At each `run`, the runner generates a new `pwnden{...}` flag and passes it to Co
 
 Solutions print exactly one flag to stdout and send diagnostics to stderr. The consumer removes leading and trailing Unicode whitespace before comparing stdout. For file problems, it hashes the UTF-8 bytes of the remaining string with SHA-256. For service problems, it compares the entire remaining string with the current run's generated flag. A successful solution exits 0; a mismatched flag or nonzero exit fails verification.
 
-The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 1: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
+The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 2: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
 
 | Verification step | Required result |
 | --- | --- |
@@ -158,7 +184,7 @@ A patch is verified only when the vulnerable solution, patched attack, functiona
 - `files` lists distribution files or directories relative to the challenge directory. Paths may refer to shared content inside the challenges repository.
 - `compose` and `patched.compose` are relative to the challenge directory and stay inside the repository.
 - Paths use portable relative syntax with `/` separators; absolute paths, backslashes, and colons are invalid in declared problem paths. Resolved bind mount sources, build contexts, and Dockerfiles stay inside the challenges repository. The runner rejects outside paths, including paths reached through symlinks. A bind source must exist before `run`.
-- Docker-managed named volumes and bridge networks are scoped to the challenge project. External or explicitly shared volumes and networks, custom volume `driver_opts`, extra build contexts, and host privilege settings are outside format v1.
+- Docker-managed named volumes and bridge networks are scoped to the challenge project. External or explicitly shared volumes and networks, custom volume `driver_opts`, extra build contexts, and host privilege settings are outside format v2.
 - File-backed Compose configs and secrets must use files inside this repository. `volumes_from` is unsupported because it can inherit mounts from another container.
 - Local build cache imports (`cache_from` with `type=local,src=...`) and exports (`cache_to` with `type=local,dest=...`) stay inside the repository. Relative cache paths resolve from the problem directory. Cache directories may be created during a build; their existing ancestors and symlinks must resolve inside the repository.
 - The toolbox mounts the challenge directory read-only. Set `solve.writable = true` when the solution must write there. When the host supplies numeric effective user and group IDs, the writable toolbox uses those IDs so files follow the caller's permissions and ownership. Ordinary filesystem permissions still apply. Its container filesystem also provides temporary writable space.

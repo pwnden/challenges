@@ -9,6 +9,6 @@ This repository is the allowed root for host bind mounts. Keep Compose bind sour
 | [Rotor Lock](challenges/rotor-lock/README.md) | rev | File only |
 | [Note Vault](challenges/note-vault/README.md) | web | One service, solution and patch checks |
 
-Each challenge README includes its distribution files and execution instructions. Solutions and patch sources are stored alongside the challenge for authors and reviewers.
+Each challenge declares its player brief, ordered hints and complete walkthrough in `[content]`. Players read these in the website, open analysis materials there, use its prepared terminal and submit flags. Follow the [player content standard](docs/player-content.md). Executable solutions and patch sources support author verification; maintainer commands belong in [verification](docs/verification.md).
 
 Run `python3 tools/validate.py` to check the contract definition and every manifest using Python 3.11 or newer. See [format validation and CI](docs/verification.md) for details. A compatible runner owns execution and solution verification; the [platform repository](https://github.com/pwnden/platform) provides that runner.

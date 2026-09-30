@@ -79,13 +79,28 @@ def load_contract(root):
     return definition
 
 
+def markdown(root, directory, value, name):
+    path = repository_path(root, directory, value, name, regular=True)
+    if path.suffix.lower() != '.md':
+        raise InvalidChallenge(f"{name} must be a Markdown file")
+    with path.open('rb') as source:
+        content = source.read((1 << 20) + 1)
+    if len(content) > 1 << 20:
+        raise InvalidChallenge(f"{name} must be at most 1 MiB")
+    try:
+        text(content.decode('utf-8'), name)
+    except UnicodeDecodeError as error:
+        raise InvalidChallenge(f"{name} must be UTF-8") from error
+    return path
+
+
 def validate_manifest(root, manifest, definition):
     root = root.resolve()
     manifest = inside(root, manifest)
     directory = manifest.parent
     with manifest.open('rb') as source:
         data = tomllib.load(source)
-    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve'})
+    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched', 'content'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve', 'content'})
     if integer(data['schema'], 'schema') != definition['version']:
         raise InvalidChallenge(f"schema must match contract version {definition['version']}")
     slug = text(data['slug'], 'slug')
@@ -94,6 +109,15 @@ def validate_manifest(root, manifest, definition):
     text(data['title'], 'title')
     if data['category'] not in ('web', 'pwn', 'rev', 'crypto', 'forensics', 'misc'):
         raise InvalidChallenge('unsupported category')
+    content = table(data['content'], 'content', {'description', 'hints', 'walkthrough'}, {'description', 'walkthrough'})
+    paths = [markdown(root, directory, content['description'], 'content.description')]
+    hints = strings(content.get('hints', []), 'content.hints')
+    if len(hints) > 10:
+        raise InvalidChallenge('content.hints supports at most 10 steps')
+    paths.extend(markdown(root, directory, hint, 'content.hints') for hint in hints)
+    paths.append(markdown(root, directory, content['walkthrough'], 'content.walkthrough'))
+    if len(set(paths)) != len(paths):
+        raise InvalidChallenge('content documents must use distinct files')
     files = strings(data.get('files', []), 'files')
     for value in files:
         repository_path(root, directory, value, 'files')
