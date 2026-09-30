@@ -1,0 +1,7 @@
+*
+!vulnerable/
+!vulnerable/app.py
+!vulnerable/policy.py
+!vulnerable/Dockerfile
+!patched/
+!patched/policy.py
