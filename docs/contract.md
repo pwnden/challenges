@@ -1,6 +1,6 @@
-# Problem contract v2
+# Problem contract v3
 
-This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **2**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
+This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **3**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
 
 Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the problem there and supply its files, Compose configuration, solution, and optional patch. A compatible consumer reads those declarations and implements this contract.
 
@@ -8,7 +8,7 @@ Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the
 
 The challenges repository maintains the contract and checks problem declarations in its own validator and CI. The platform consumes the contract: it confirms version support, parses execution fields, applies filesystem and Docker execution safety checks, and verifies running problems. See [format validation and CI](verification.md) for the author checks and the [platform verification guide](https://github.com/pwnden/platform/blob/main/docs/verification.md) for execution checks.
 
-The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `2` and retains version `1` execution support for installed snapshots; it rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
+The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `3` and retains version `1` and `2` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
 
 Increment the contract version whenever consumed fields, types, requiredness, allowed values, defaults, or execution and result rules change. Update the document, TOML values, author validator, and problem declarations together. A consumer adds explicit support for the new version before it can execute those problems. Adding problems, changing their content within the same contract, and clarifying documentation without changing a rule keep the version.
 
@@ -16,9 +16,9 @@ Increment the contract version whenever consumed fields, types, requiredness, al
 
 All four fields in `contract.toml` are required. The author validator rejects unknown fields. These values belong to the versioned contract; editing them is a contract change.
 
-| Field | Type | Version 2 value | Rule |
+| Field | Type | Version 3 value | Rule |
 | --- | --- | --- | --- |
-| `version` | Integer | `2` | Positive contract version; matches every problem's `schema`. |
+| `version` | Integer | `3` | Positive contract version; matches every problem's `schema`. |
 | `solve_network` | String | `"default"` | Nonempty default Compose network key for service solutions. |
 | `solve_timeout_seconds` | Integer | `60` | Positive default runtime limit for each toolbox command, in seconds. |
 | `attack_rejected_exit` | Integer | `3` | Expected attack denial code; in the range 1–124. |
@@ -53,7 +53,7 @@ Paths are relative to the problem directory and follow the [files and resource r
 | `hints` | Array of strings | Defaults to `[]` | Up to 10 Markdown paths, ordered from general direction to concrete clues. |
 | `walkthrough` | String | Required | Path to a complete player-facing explanation. |
 
-Every document is a distinct existing regular `.md` file inside this repository, encoded as nonempty UTF-8 and at most 1 MiB. Paths follow the portable repository containment rules. These documents are content resources, independently declared from downloadable `files` and executable `solve.command`. Version 2 introduces these required content declarations; execution defaults and resource rules retain their existing semantics.
+Every document is a distinct existing regular `.md` file inside this repository, encoded as nonempty UTF-8 and at most 1 MiB. Paths follow the portable repository containment rules. These documents are content resources, independently declared from downloadable `files` and executable `solve.command`. Version 2 introduced the required content declarations. Version 3 retains their format and adds the common network isolation and ingress rules below.
 
 The description provides the scenario, objective, supplied information, starting actions, expected result and submission format. It names the website's actual controls and gives enough context for a player to start without reading repository documentation. The authoring standard and review checklist are in [player content](player-content.md).
 
@@ -100,7 +100,7 @@ The patch attack uses the original `solve.image` and `solve.command`. Both patch
 ## File problem execution
 
 ```toml
-schema = 2
+schema = 3
 slug = "example-file"
 title = "Example file"
 category = "rev"
@@ -128,7 +128,7 @@ The runner mounts the challenge directory at `/challenge` and runs the solution 
 ## Service problem execution
 
 ```toml
-schema = 2
+schema = 3
 slug = "example-service"
 title = "Example service"
 category = "web"
@@ -160,7 +160,7 @@ check = ["python3", "patched/test.py"]
 
 `compose` can define any positive number of services. `endpoints` documents entry points; each service must exist in the resolved Compose configuration. `protocol` is `http` or `tcp`. The solution runs on the named Compose network and can reach services by their Compose service names. `network` defaults to `default`; set it when the solution should join a custom network. Give target services health checks if the solution needs readiness: `run` uses `docker compose up --wait`.
 
-For local browser or terminal access, publish the endpoint port in Compose. A mapping such as `127.0.0.1::8000` publishes container port 8000 on a free loopback port; the runner prints the actual host URL. Endpoints without a published port are identified as `container network`. Host port numbers are not part of the challenge contract.
+Declare HTTP endpoints in the manifest. The platform provides browser access on a separate loopback origin through a fixed-destination Docker exec byte stream into the problem's isolated network. The platform removes service `ports` from the effective execution configuration; authors need no host port mapping or ingress implementation. The local server owns these origins for the running environment's lifetime. Standalone CLI `run` reports private service addresses; TCP endpoints are reached by service name from the problem terminal. Host port numbers are outside the challenge contract.
 
 At each `run`, the runner generates a new `pwnden{...}` flag and passes it to Compose as the `FLAG` environment variable. The Compose file injects `${FLAG}` into the intended service. The solution prints exactly that flag to stdout. `verify` checks the vulnerable run first. When `[patched]` exists, the runner starts a separate Compose project with the override, checks that the same solution no longer returns the flag, runs `patched.check`, and removes the patched project. `patched.image` can override the toolbox image for the functional check. `stop` removes the running vulnerable project and its saved flag.
 
@@ -168,7 +168,7 @@ At each `run`, the runner generates a new `pwnden{...}` flag and passes it to Co
 
 Solutions print exactly one flag to stdout and send diagnostics to stderr. The consumer removes leading and trailing Unicode whitespace before comparing stdout. For file problems, it hashes the UTF-8 bytes of the remaining string with SHA-256. For service problems, it compares the entire remaining string with the current run's generated flag. A successful solution exits 0; a mismatched flag or nonzero exit fails verification.
 
-The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 2: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
+The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 3: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
 
 | Verification step | Required result |
 | --- | --- |
@@ -184,15 +184,23 @@ A patch is verified only when the vulnerable solution, patched attack, functiona
 - `files` lists distribution files or directories relative to the challenge directory. Paths may refer to shared content inside the challenges repository.
 - `compose` and `patched.compose` are relative to the challenge directory and stay inside the repository.
 - Paths use portable relative syntax with `/` separators; absolute paths, backslashes, and colons are invalid in declared problem paths. Resolved bind mount sources, build contexts, and Dockerfiles stay inside the challenges repository. The runner rejects outside paths, including paths reached through symlinks. A bind source must exist before `run`.
-- Docker-managed named volumes and bridge networks are scoped to the challenge project. External or explicitly shared volumes and networks, custom volume `driver_opts`, extra build contexts, and host privilege settings are outside format v2.
+- Docker-managed named volumes and bridge networks are scoped to the challenge project. External or explicitly shared volumes and networks, custom volume `driver_opts`, extra build contexts, and host privilege settings are outside format v3.
 - File-backed Compose configs and secrets must use files inside this repository. `volumes_from` is unsupported because it can inherit mounts from another container.
 - Local build cache imports (`cache_from` with `type=local,src=...`) and exports (`cache_to` with `type=local,dest=...`) stay inside the repository. Relative cache paths resolve from the problem directory. Cache directories may be created during a build; their existing ancestors and symlinks must resolve inside the repository.
 - The toolbox mounts the challenge directory read-only. Set `solve.writable = true` when the solution must write there. When the host supplies numeric effective user and group IDs, the writable toolbox uses those IDs so files follow the caller's permissions and ownership. Ordinary filesystem permissions still apply. Its container filesystem also provides temporary writable space.
 - `solve.command` and `patched.check` are argument arrays executed directly in the toolbox image. Use `sh -c` explicitly if a shell is needed.
 
-The consumer validates resolved Compose configuration before creating resources, for both the vulnerable and patched projects. Supported service mounts are repository-contained binds, Docker volumes, and `tmpfs`. Services use Compose networks or `network_mode: none`. Services cannot request `privileged`, automatic engine socket and credential access through `use_api_socket`, devices, added capabilities, host PID/IPC, host providers, credential specifications, or inherited volumes through `volumes_from`. Builds cannot request SSH access, extra build contexts, privilege, or entitlements. The toolbox drops all capabilities and enables `no-new-privileges`; it mounts the problem directory at `/challenge`, which is also its working directory.
+The consumer validates resolved Compose configuration before creating resources, for both the vulnerable and patched projects. Supported service mounts are repository-contained binds, Docker volumes, and `tmpfs`. Services use Compose networks or `network_mode: none`. Services cannot request `privileged`, automatic engine socket and credential access through `use_api_socket`, devices, added capabilities, host PID/IPC, host providers, credential specifications, or inherited volumes through `volumes_from`. Builds cannot request SSH access, extra build contexts, privilege, or entitlements. All services, toolboxes and ingress connectors drop all capabilities and enable `no-new-privileges`. The toolbox mounts the problem directory at `/challenge`, which is also its working directory.
 
-Compose and toolbox containers receive repository files only through the permitted mounts. The generated flag and run state live in the consumer's local user cache, which is never mounted into a problem container. Repository containment checks prevent accidental access through host mounts outside the allowed checkout. Network access and ordinary Docker execution remain part of the declared environment; repository containment does not describe a network destination policy.
+Compose and toolbox containers receive repository files only through the permitted mounts. The generated flag and run state live in the consumer's local user cache, which is never mounted into a problem container. Repository containment checks prevent accidental access through host mounts outside the allowed checkout.
+
+### Network isolation
+
+Version 3 requires Docker Engine 28 or newer. The platform resolves the author's complete Compose configuration and starts it with every bridge network set to `internal: true` and both IPv4 and IPv6 gateway modes set to `isolated`. These are the only accepted network driver options. It checks the live Docker networks before exposing endpoints or attaching toolboxes. Existing environments with a different network policy require stop and restart.
+
+Problem services and their tools can communicate inside their own declared networks. Outbound access to the Internet, host services and other problem networks is blocked. File toolboxes use network mode `none`. Browser ingress uses a platform-owned, non-root, read-only connector on the isolated problem network with no host mounts, Docker socket or published ports. The platform chooses a declared service and port for each connection; the problem cannot select a host destination through this stream. The connector is removed with its problem project.
+
+Image downloads and builds are preparation operations performed by the consumer. Runtime containers retain the isolation policy after preparation. Docker remains the execution trust boundary; kernel or daemon exploits are outside the ordinary command and network isolation checks.
 
 Package and image versions in a problem should be pinned by its author. Problem source and Compose configuration should use portable paths and container tools so consumers can use the same declarations across operating systems.
 
