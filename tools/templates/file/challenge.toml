@@ -4,6 +4,9 @@ title = {{TITLE}}
 category = {{CATEGORY}}
 files = ["files/data.txt"]
 
+[player]
+tools = ["files", "terminal"]
+
 [content]
 description = "README.md"
 hints = {{HINTS}}

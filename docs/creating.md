@@ -12,7 +12,7 @@ learning-content paths and initial runtime configuration. The author supplies
 the actual exercise, resources, intended vulnerability, solution and explanation.
 Templates live under `tools/templates`; update them centrally when authoring
 conventions change. CI discovers their regression tests with the existing tools
-test command. The generator supports contract version 3 and uses its existing
+test command. The generator supports contract version 4 and uses its existing
 validator before reporting success. Update the templates explicitly for another
 contract version.
 

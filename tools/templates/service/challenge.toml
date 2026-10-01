@@ -4,6 +4,9 @@ title = {{TITLE}}
 category = {{CATEGORY}}
 compose = "compose.yaml"
 
+[player]
+tools = ["web"]
+
 [content]
 description = "README.md"
 hints = {{HINTS}}

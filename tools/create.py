@@ -27,8 +27,8 @@ def render(name, values):
 def scaffold(root, slug, *, kind, category, title=None, hints=3, patched=False, toolbox=IMAGE):
     root = root.resolve()
     definition = load_contract(root)
-    if definition['version'] != 3:
-        raise InvalidChallenge('creation templates support contract version 3; update templates before using another version')
+    if definition['version'] != 4:
+        raise InvalidChallenge('creation templates support contract version 4; update templates before using another version')
     if len(slug) > 40 or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', slug) or slug in RESERVED:
         raise InvalidChallenge('slug must be 1–40 lowercase letters/digits separated by hyphens, and usable as a Windows directory')
     if kind not in ('file', 'service') or category not in CATEGORIES:

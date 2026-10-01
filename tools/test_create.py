@@ -31,6 +31,7 @@ class CreateTests(unittest.TestCase):
                 destination, files = create(self.root, slug, kind=kind, category=category, patched=patched)
                 metadata = self.metadata(destination)
                 self.assertEqual(metadata['slug'], slug)
+                self.assertEqual(metadata['player']['tools'], ['web'] if kind == 'service' else ['files', 'terminal'])
                 self.assertEqual(metadata['content']['hints'], ['hints/1.md', 'hints/2.md', 'hints/3.md'])
                 self.assertEqual('patched' in metadata, patched)
                 self.assertEqual('compose' in metadata, kind == 'service')
@@ -105,7 +106,7 @@ class CreateTests(unittest.TestCase):
         self.assertEqual(list(outside.iterdir()), [])
         parent.unlink()
         contract = self.root / 'contract.toml'
-        contract.write_text(contract.read_text().replace('version = 3', 'version = 4'))
+        contract.write_text(contract.read_text().replace('version = 4', 'version = 5'))
         with self.assertRaisesRegex(InvalidChallenge, 'update templates'):
             create(self.root, 'sample', kind='file', category='rev')
         self.assertFalse(parent.exists())

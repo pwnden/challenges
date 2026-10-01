@@ -100,7 +100,7 @@ def validate_manifest(root, manifest, definition):
     directory = manifest.parent
     with manifest.open('rb') as source:
         data = tomllib.load(source)
-    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched', 'content'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve', 'content'})
+    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched', 'content', 'player'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve', 'content'} | ({'player'} if definition['version'] >= 4 else set()))
     if integer(data['schema'], 'schema') != definition['version']:
         raise InvalidChallenge(f"schema must match contract version {definition['version']}")
     slug = text(data['slug'], 'slug')
@@ -154,6 +154,15 @@ def validate_manifest(root, manifest, definition):
         if endpoint['protocol'] not in ('http', 'tcp') or name in names:
             raise InvalidChallenge('endpoint needs a unique name and http or tcp protocol')
         names.add(name)
+    if 'player' in data:
+        player = table(data['player'], 'player', {'tools'}, {'tools'})
+        tools = strings(player['tools'], 'player.tools', nonempty=True)
+        if len(set(tools)) != len(tools) or any(tool not in ('web', 'files', 'terminal') for tool in tools):
+            raise InvalidChallenge('player.tools must contain unique web, files or terminal tools')
+        if 'web' in tools and not any(endpoint['protocol'] == 'http' for endpoint in endpoints):
+            raise InvalidChallenge('web tool requires a declared HTTP endpoint')
+        if 'files' in tools and not files:
+            raise InvalidChallenge('files tool requires distribution files')
     if 'patched' in data:
         patched = table(data['patched'], 'patched', {'compose', 'check', 'image'}, {'compose', 'check'})
         if not compose:

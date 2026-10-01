@@ -46,6 +46,16 @@ class ValidateTests(unittest.TestCase):
     def test_file_with_defaults(self):
         self.assertEqual(self.check(FILE)['slug'], 'sample')
 
+    def test_declared_player_tools(self):
+        self.definition = {**self.definition, 'version': 4}
+        metadata = FILE.replace('schema = 2', 'schema = 4')
+        self.check(metadata + '\n[player]\ntools = ["files", "terminal"]\n')
+        for declaration in ['', '\n[player]\ntools = []\n', '\n[player]\ntools = ["files", "files"]\n',
+                            '\n[player]\ntools = ["unknown"]\n', '\n[player]\ntools = ["web"]\n',
+                            '\n[player]\ntools = "files"\n', '\n[player]\ntools = ["files"]\nunknown = true\n']:
+            with self.subTest(declaration=declaration), self.assertRaises(InvalidChallenge):
+                self.check(metadata + declaration)
+
     def test_invalid_metadata(self):
         cases = {
             'unknown field': FILE.replace('schema = 2', 'schema = 2\nunknown = true'),

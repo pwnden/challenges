@@ -1,8 +1,11 @@
-schema = 3
+schema = 4
 slug = "rotor-lock"
 title = "Rotor Lock"
 category = "rev"
 files = ["files/checker.py"]
+
+[player]
+tools = ["files", "terminal"]
 
 [content]
 description = "README.md"

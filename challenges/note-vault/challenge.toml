@@ -1,8 +1,11 @@
-schema = 3
+schema = 4
 slug = "note-vault"
 title = "Note Vault"
 category = "web"
 compose = "compose.yaml"
+
+[player]
+tools = ["web"]
 
 [content]
 description = "README.md"
