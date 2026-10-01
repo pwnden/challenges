@@ -16,10 +16,18 @@ Describe the intended objective and the actions the player can take directly. Ea
 - One explicit objective and an observable success condition.
 - Supplied resources and legitimate access, including credentials when appropriate.
 - Enough prerequisite context to begin; explain unfamiliar concepts needed for the first action.
-- Starting actions tied to actual UI labels: 자료 열기, 문제 실행, 문제 열기, 터미널 연결 and 플래그 제출.
+- Starting actions within the target exercise: sign in with the supplied credentials, inspect a provided resource, or run a problem-specific command.
 - The answer format and any instance-specific behavior, such as keys changing after restart.
 
 The panel already displays title and category. Start the brief with the scenario or objective, preserving a useful heading hierarchy rather than repeating the title. Keep the brief free of the answer. Show language names, protocols and commands when understanding them is part of the exercise. When a command is useful, identify the prepared website terminal as its execution location. Explain expected output. Author setup, Go runner commands, image digests, Compose internals, host architecture and automated verification details belong in maintainer documentation.
+
+The platform owns the common workspace workflow: preparing environments, attaching
+the terminal, presenting declared files and services, downloads, hints and answer
+submission. Shared usage guidance belongs in the platform's documentation and UI.
+Write each brief and walkthrough around its exercise, so changes to workspace
+button names or layout leave the problem content valid. Adding a problem requires
+its manifest and resources; catalog discovery and available player tools follow
+those declarations automatically.
 
 ## Hints
 
