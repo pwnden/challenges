@@ -10,6 +10,8 @@ A player can complete the exercise and read its explanation using the browser wo
 
 Provide the following information in concise, natural prose. Use sections only where they improve reading.
 
+Describe the intended objective and the actions the player can take directly. Each sentence adds relevant context, a required action, or a success condition. Keep solving strategy in progressive hints. Use the website's section headings and controls as the navigation, so the brief stays focused on the exercise.
+
 - A concrete scenario that explains what the player has and why the target matters.
 - One explicit objective and an observable success condition.
 - Supplied resources and legitimate access, including credentials when appropriate.
