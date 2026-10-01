@@ -4,6 +4,11 @@ Problem definitions, contract ownership, and metadata validation for pwnden. Add
 
 This repository is the allowed root for host bind mounts. Keep Compose bind sources and build contexts inside this checkout. File-only challenges need no Compose file.
 
+Create the directory, manifest, learning content and execution scaffold with
+`python3 tools/create.py <slug> --kind file --category rev` or
+`python3 tools/create.py <slug> --kind service --category web`.
+See [creating problems](docs/creating.md) for options and the authoring workflow.
+
 | Challenge | Category | Runtime |
 | --- | --- | --- |
 | [Rotor Lock](challenges/rotor-lock/README.md) | rev | File only |

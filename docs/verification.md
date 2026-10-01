@@ -16,6 +16,11 @@ python3 -B -m unittest discover -s tools -p 'test_*.py'
 
 Both commands use Python's standard library and run with this repository alone.
 
+The regression suite also checks the [problem generator](creating.md), its file
+and service templates, optional patches, contract defaults, safe creation and
+incomplete-solution behavior. Generated manifests pass these format rules;
+complete content and execution verification remain the author's publication gate.
+
 ## Maintainer execution checks
 
 With sibling checkouts and the platform development prerequisites available, run from `platform`:

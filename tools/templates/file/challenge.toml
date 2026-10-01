@@ -1,0 +1,19 @@
+schema = {{SCHEMA}}
+slug = {{SLUG}}
+title = {{TITLE}}
+category = {{CATEGORY}}
+files = ["files/data.txt"]
+
+[content]
+description = "README.md"
+hints = {{HINTS}}
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "sha256"
+# TODO: replace with SHA-256 of the completed solution's trimmed flag output.
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+
+[solve]
+image = {{IMAGE_TOML}}
+command = ["python3", "solve/solve.py"]

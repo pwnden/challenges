@@ -1,0 +1,23 @@
+schema = {{SCHEMA}}
+slug = {{SLUG}}
+title = {{TITLE}}
+category = {{CATEGORY}}
+compose = "compose.yaml"
+
+[content]
+description = "README.md"
+hints = {{HINTS}}
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "generated"
+
+[[endpoints]]
+name = "web"
+service = "app"
+port = 8000
+protocol = "http"
+
+[solve]
+image = {{IMAGE_TOML}}
+command = ["python3", "solve/solve.py"]
