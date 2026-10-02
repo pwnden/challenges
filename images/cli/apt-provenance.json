@@ -1,0 +1,9 @@
+{
+  "base": "kalilinux/kali-last-release@sha256:61d2b988d3be6b5b2d8f55b40946a2b82f98e71f961927a4c44ba70b0ec95542",
+  "architecture": "amd64",
+  "repository": "http://http.kali.org/kali/",
+  "suite": "kali-last-snapshot",
+  "inrelease_date": "2026-09-25T12:46:44Z",
+  "inrelease_sha256": "5bc9a9bf729d7f9a0c360afe66488379a04d809cbaa7ad4fcefe1704266f5f51",
+  "verification": "apt-get update with the base image's kali-archive-keyring; .deb SHA256 recorded from those indexes"
+}

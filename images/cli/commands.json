@@ -1,0 +1,14 @@
+{
+  "extended": [
+    "bash", "ls", "find", "cat", "head", "tail", "less", "grep", "rg", "sed", "awk", "sort", "uniq", "cut", "tr", "wc", "diff", "file", "strings", "xxd", "od", "hexdump", "base64", "basenc", "sha256sum", "sha512sum", "md5sum", "b2sum", "tar", "unzip", "7zz", "gzip", "xz", "zstd", "jq", "yq", "sqlite3", "git",
+    "curl", "wget", "http", "ffuf", "gobuster", "feroxbuster", "whatweb", "httpx", "httpx-toolkit", "katana", "nikto", "sqlmap", "nuclei", "jwt_tool.py", "testssl", "sslscan",
+    "nmap", "rustscan", "ncat", "nc", "socat", "dig", "host", "nslookup", "dnsrecon", "openssl", "ssh", "scp", "sftp", "lftp", "ftp", "telnet", "smbclient", "snmpwalk", "snmpget", "ldapsearch", "redis-cli", "psql", "mariadb", "ss", "ip", "ping", "traceroute", "tracepath",
+    "exiftool", "binwalk", "unsquashfs", "dtc", "pdfinfo", "pdftotext", "qpdf", "mutool", "oleid", "olevba", "pngcheck", "zsteg", "steghide", "stegseek", "foremost", "scalpel", "mmls", "fsstat", "fls", "icat", "bulk_extractor", "vol", "tshark", "capinfos", "editcap", "mergecap", "tcpdump", "termshark", "tcpflow",
+    "gpg", "hashid", "john", "zip2john", "ssh2john", "office2john", "hashcat", "clinfo", "crunch", "cewl", "hydra", "ncrack", "RsaCtfTool", "aircrack-ng",
+    "readelf", "objdump", "nm", "objcopy", "addr2line", "checksec", "patchelf", "scanelf", "radare2", "rizin", "ROPgadget", "ropper", "pwn", "yara", "capa", "floss", "gdb", "lldb", "pwndbg", "gdb-gef", "strace", "ltrace", "afl-fuzz", "afl-clang-fast", "honggfuzz", "hfuzz-clang", "clang",
+    "impacket-smbclient", "nxc", "enum4linux-ng", "rpcclient", "chisel", "proxychains4",
+    "apktool", "jadx", "gitleaks", "semgrep", "syft", "trivy", "grype", "cosign", "aws", "mc", "cast", "forge", "anvil", "solc", "frida", "frida-ps"
+  ],
+  "specialized": ["analyzeHeadless", "msfconsole", "msfvenom", "linpeas.sh"],
+  "restricted": ["masscan", "zmap", "hping3", "arpspoof", "ettercap", "bettercap", "airmon-ng", "airodump-ng", "aireplay-ng", "wifite", "subfinder", "amass", "adb"]
+}

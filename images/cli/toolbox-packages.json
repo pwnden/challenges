@@ -1,0 +1,15 @@
+{
+  "extended": [
+    "bash-completion", "less", "file", "binutils", "bsdextrautils", "xxd", "unzip", "zip", "7zip", "xz-utils", "zstd", "ripgrep", "jq", "curl", "wget", "openssl", "git", "sqlite3", "libimage-exiftool-perl", "ffuf",
+    "httpie", "gobuster", "feroxbuster", "whatweb", "httpx-toolkit", "katana", "nikto", "sqlmap", "nuclei", "testssl.sh", "sslscan",
+    "nmap", "ncat", "rustscan", "netcat-openbsd", "socat", "bind9-dnsutils", "dnsrecon", "openssh-client", "lftp", "ftp", "telnet", "snmp", "smbclient", "ldap-utils", "redis-tools", "postgresql-client", "mariadb-client", "iproute2", "iputils-ping", "traceroute", "iputils-tracepath",
+    "binwalk", "squashfs-tools", "device-tree-compiler", "qpdf", "poppler-utils", "mupdf-tools", "oletools", "pngcheck", "steghide", "stegseek", "foremost", "scalpel", "sleuthkit", "bulk-extractor", "tshark", "tcpdump", "termshark", "tcpflow",
+    "gnupg", "hashid", "john", "hashcat", "pocl-opencl-icd", "clinfo", "crunch", "cewl", "hydra", "ncrack", "aircrack-ng",
+    "checksec", "patchelf", "pax-utils", "radare2", "rizin", "python3-ropgadget", "ropper", "python3-pwntools", "yara", "gdb", "lldb", "gef", "strace", "ltrace", "afl++", "clang", "libclang-rt-dev", "gcc", "make",
+    "python3-impacket", "impacket-scripts", "netexec", "enum4linux-ng", "chisel", "proxychains4",
+    "apktool", "jadx", "gitleaks", "syft", "trivy", "cosign", "awscli",
+    "python3-venv", "python3-pip", "ruby", "ruby-dev", "libssl-dev", "libffi-dev", "libgmp-dev", "libmpfr-dev", "libmpc-dev", "libunwind-dev", "liblzma-dev", "binutils-dev", "pkg-config", "ca-certificates"
+  ],
+  "specialized": ["ghidra", "metasploit-framework", "peass"],
+  "restricted": ["masscan", "zmap", "hping3", "dsniff", "ettercap-text-only", "bettercap", "wifite", "subfinder", "amass", "adb"]
+}

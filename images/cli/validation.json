@@ -1,0 +1,641 @@
+{
+  "verified_at_utc": "2026-10-02T19:06:54.622284+00:00",
+  "environment": "Linux/WSL, Linux amd64 Docker",
+  "profiles": {
+    "images": [
+      {
+        "profile": "extended",
+        "image": "pwnden-cli:extended-20261003",
+        "id": "sha256:77ccce2b4282a46e28f6866e29df745c69b7d8a3304d35db1b896e1ce0a668c2",
+        "size_bytes": 3340272272,
+        "architecture": "amd64",
+        "user": "10001:10001",
+        "commands_checked": 174,
+        "missing": [],
+        "passed": true
+      },
+      {
+        "profile": "specialized",
+        "image": "pwnden-cli:specialized-20261003",
+        "id": "sha256:ccef61a5ebe85c4753df830ba21ae0379e7dd86bb48d917ce3356c81d76a5fd7",
+        "size_bytes": 4716700892,
+        "architecture": "amd64",
+        "user": "10001:10001",
+        "commands_checked": 178,
+        "missing": [],
+        "passed": true
+      },
+      {
+        "profile": "all",
+        "image": "pwnden-cli:all-20261003",
+        "id": "sha256:fb70dc1f75a998f8b98caf7c167e2330076e42292b92817b94db7cf0a565915a",
+        "size_bytes": 4791398266,
+        "architecture": "amd64",
+        "user": "10001:10001",
+        "commands_checked": 191,
+        "missing": [],
+        "passed": true
+      }
+    ],
+    "shared_layers": true
+  },
+  "standalone_fixtures": {
+    "image": "pwnden-cli:all-20261003",
+    "id": "sha256:fb70dc1f75a998f8b98caf7c167e2330076e42292b92817b94db7cf0a565915a",
+    "exit_code": 0,
+    "oom_killed": false,
+    "passed": 72,
+    "failed": 0,
+    "counts_by_kind": {
+      "installation": 1,
+      "policy": 3,
+      "functional": 65,
+      "startup": 2,
+      "measurement": 1
+    },
+    "checks": [
+      {
+        "name": "command-coverage",
+        "passed": true,
+        "kind": "installation",
+        "checked": 191,
+        "missing": []
+      },
+      {
+        "name": "nonroot-no-capabilities",
+        "passed": true,
+        "kind": "policy"
+      },
+      {
+        "name": "image-privilege-metadata-removed",
+        "passed": true,
+        "kind": "policy"
+      },
+      {
+        "name": "raw-socket-denied",
+        "passed": true,
+        "kind": "policy"
+      },
+      {
+        "name": "readonly-root",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.0
+      },
+      {
+        "name": "yq-mike-farah",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.01
+      },
+      {
+        "name": "zstd-roundtrip",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.01
+      },
+      {
+        "name": "hexdump",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.0
+      },
+      {
+        "name": "gpg-offline-roundtrip",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.92
+      },
+      {
+        "name": "hashid-candidate",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.06
+      },
+      {
+        "name": "crunch-bounded",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 3.0
+      },
+      {
+        "name": "john-jumbo-raw-md5",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.2
+      },
+      {
+        "name": "hashcat-cpu",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 15.25
+      },
+      {
+        "name": "john-zip-conversion",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.06
+      },
+      {
+        "name": "rsa-fermat",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.23
+      },
+      {
+        "name": "jwt-local-decode",
+        "passed": true,
+        "kind": "functional",
+        "code": 1,
+        "seconds": 0.51
+      },
+      {
+        "name": "jwt-local-initialization",
+        "passed": true,
+        "kind": "functional"
+      },
+      {
+        "name": "compile-fixture",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.06
+      },
+      {
+        "name": "checksec-elf",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.08
+      },
+      {
+        "name": "radare2-static",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.05
+      },
+      {
+        "name": "rizin-static",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.05
+      },
+      {
+        "name": "floss-static-string",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.68
+      },
+      {
+        "name": "capa-local-rule",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.87
+      },
+      {
+        "name": "ltrace-child",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.01
+      },
+      {
+        "name": "gef-child",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.26
+      },
+      {
+        "name": "pwndbg-child",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 1.35
+      },
+      {
+        "name": "frida-spawn-own-child",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.32
+      },
+      {
+        "name": "ghidra-headless",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 5.95
+      },
+      {
+        "name": "squashfs-userspace",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.02
+      },
+      {
+        "name": "device-tree",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.0
+      },
+      {
+        "name": "binwalk-signature",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.3
+      },
+      {
+        "name": "zsteg-png",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.12
+      },
+      {
+        "name": "stegseek-wordlist",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.05
+      },
+      {
+        "name": "bulk-extractor-file",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 1.03
+      },
+      {
+        "name": "scalpel-file-carving",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.01
+      },
+      {
+        "name": "tcpflow-offline",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.03
+      },
+      {
+        "name": "semgrep-local-rule",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 1.58
+      },
+      {
+        "name": "syft-file-sbom",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.68
+      },
+      {
+        "name": "grype-offline-db",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 3.51
+      },
+      {
+        "name": "trivy-offline-db",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.17
+      },
+      {
+        "name": "gitleaks-local-file",
+        "passed": true,
+        "kind": "functional",
+        "code": 1,
+        "seconds": 0.03
+      },
+      {
+        "name": "cosign-offline-key-signature",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.32
+      },
+      {
+        "name": "cosign-tampering-rejected",
+        "passed": true,
+        "kind": "functional",
+        "code": 1,
+        "seconds": 0.02
+      },
+      {
+        "name": "minio-client-local-copy",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.04
+      },
+      {
+        "name": "wget-http",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.0
+      },
+      {
+        "name": "httpie-http",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.23
+      },
+      {
+        "name": "gobuster-http",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.22
+      },
+      {
+        "name": "feroxbuster-http",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.77
+      },
+      {
+        "name": "whatweb-http",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 2.88
+      },
+      {
+        "name": "httpx-projectdiscovery",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.1
+      },
+      {
+        "name": "katana-http",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 11.09
+      },
+      {
+        "name": "rustscan-connect",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.02
+      },
+      {
+        "name": "nuclei-local-template",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.18
+      },
+      {
+        "name": "cewl-small-wordlist",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.25
+      },
+      {
+        "name": "tls-fixture-key",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.03
+      },
+      {
+        "name": "sslscan-local-tls",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.11
+      },
+      {
+        "name": "testssl-local-tls",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 7.44
+      },
+      {
+        "name": "libfuzzer-build",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.14
+      },
+      {
+        "name": "libfuzzer-runs",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.01
+      },
+      {
+        "name": "honggfuzz-instrument",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.09
+      },
+      {
+        "name": "honggfuzz-bounded-run",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 2.67
+      },
+      {
+        "name": "honggfuzz-real-crash",
+        "passed": true,
+        "kind": "functional"
+      },
+      {
+        "name": "forge-local-compiler",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.06
+      },
+      {
+        "name": "cast-local-chain",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.05
+      },
+      {
+        "name": "apktool-build-fixture",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 0.31
+      },
+      {
+        "name": "apktool-decode-fixture",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 1.17
+      },
+      {
+        "name": "jadx-dex-decompile",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 1.07
+      },
+      {
+        "name": "msfvenom-custom-fixture",
+        "passed": true,
+        "kind": "functional",
+        "code": 0,
+        "seconds": 2.7
+      },
+      {
+        "name": "msfvenom-generated-bytes",
+        "passed": true,
+        "kind": "functional"
+      },
+      {
+        "name": "volatility-cli-startup",
+        "passed": true,
+        "kind": "startup",
+        "code": 0,
+        "seconds": 0.38
+      },
+      {
+        "name": "netexec-cli-startup",
+        "passed": true,
+        "kind": "startup",
+        "code": 1,
+        "seconds": 0.39
+      },
+      {
+        "name": "resource-observations",
+        "passed": true,
+        "kind": "measurement",
+        "memory.peak": "2147487744",
+        "pids.peak": "54",
+        "cpu.stat": "usage_usec 56332852\nuser_usec 38686174\nsystem_usec 17646677\nnice_usec 0\nnr_periods 643\nnr_throttled 36\nthrottled_usec 752806\nnr_bursts 0\nburst_usec 0"
+      }
+    ]
+  },
+  "constraints": {
+    "uid_gid": "10001:10001",
+    "network": "none (loopback fixtures only)",
+    "rootfs": "read-only",
+    "capabilities": "all dropped",
+    "no_new_privileges": true,
+    "cpu_limit": 2,
+    "memory_bytes": 2147483648,
+    "additional_swap_bytes": 0,
+    "pids_limit": 256,
+    "tmp_bytes": 134217728,
+    "home_bytes": 67108864,
+    "workspace_bytes": 268435456,
+    "workspace_inodes": 32768
+  },
+  "author_integration": {
+    "image_id": "sha256:fb70dc1f75a998f8b98caf7c167e2330076e42292b92817b94db7cf0a565915a",
+    "passed": true,
+    "modes": [
+      {
+        "mode": "readonly",
+        "passed": true,
+        "checks": [
+          "uid-capabilities",
+          "readonly-root",
+          "workspace-write-policy",
+          "yq",
+          "compile-execute",
+          "gef-child",
+          "nmap-tcp",
+          "jwt-first-call"
+        ],
+        "original_preserved": true
+      },
+      {
+        "mode": "writable",
+        "passed": true,
+        "checks": [
+          "uid-capabilities",
+          "readonly-root",
+          "workspace-write-policy",
+          "yq",
+          "compile-execute",
+          "gef-child",
+          "nmap-tcp",
+          "jwt-first-call"
+        ],
+        "original_preserved": true
+      }
+    ],
+    "workspace_cleanup": true
+  },
+  "artifact_hash_check": {
+    "valid_download": true,
+    "tampered_cache_rejected_and_removed": true
+  },
+  "scope_notes": [
+    "Command presence includes aliases and grouped tool names; not every mode is functionally verified.",
+    "Volatility and NetExec checks are startup only; real memory dumps, symbols and AD service scenarios require problem fixtures.",
+    "Raw sockets, live capture, wireless/GPU/device/host access and public Internet are outside the runtime policy.",
+    "The vulnerability DBs and rules are pinned training snapshots, not live vulnerability data.",
+    "Basic/lab Dockerfile and requirements.lock are unchanged; their prior runtime validation is separate.",
+    "Fresh author readonly/writable smoke checks ran through tools.runtime.Docker; the complete fixture suite used the standalone Docker harness.",
+    "Windows/macOS host compatibility and Linux arm64 were not tested."
+  ],
+  "source_sha256": {
+    "Dockerfile.toolbox": "e734df005f63f1834737e34506d4c33a06a0c84e3a30e98db568db4d5cb10599",
+    "apt-provenance.json": "ccb4c3f818e3ff1e54c8572a9c24a0e4cf417daa2156500e8983a215bc2a5ce6",
+    "commands.json": "3575a9c4ebbec91f88a12a2776eaf020c97645064e2391ad1add8efbb2a050f1",
+    "databases.lock.json": "722b93be19e07edaae550d195e04806296f0a41af1e4cf88a4765fbed7643231",
+    "extended.apt.lock": "faca6b0981b2e413299b5694745dc068429c02c418ebbd36283a026ad59d075a",
+    "install_apt.sh": "fab61a7876dca391bda85152a4dfbbdb562d5364b200a460bf9700ebf629b1ac",
+    "install_upstream.py": "2765459168e1b415bdb3903ec848e8ceec66502474cfde78578f41fefde96556",
+    "jwt_launcher.py": "a936697e59985bf17e8eb89c022b9cd48618be9afbc0dfcff5fe2771acb29125",
+    "lock_databases.py": "0fb38656a44a715b110f1b36e5601a9bf9412ded5367ca1f832a710627a34596",
+    "lock_python.py": "a662fcd1a4ede4372ee216d8ecc2f3c10b77e14f9250de5a03388e65bb561793",
+    "lock_toolbox.py": "44bc166de4823e981d9588f441184a3b84bb2e21484a3a08da86628fcbe79fcd",
+    "lock_upstream.py": "464b9ef5ad9613bd59f7a60b51d91beae7d441832118ae1988173c3348bcc030",
+    "probe_toolbox.py": "4a21219ff20206638697e4ff4a1121a09eb1ba904e251fcadebc159befcd095e",
+    "python-toolbox.in": "6cfcd2008ddde11836ef702bd778e55c79c2de59f914b3d638104f1964b0ac4c",
+    "python-toolbox.lock": "effdbe96bdaac879b311e6d5e6895dcb013c1717a9d391ff84b7a2236ab1a5eb",
+    "restricted.apt.lock": "33488b5d21d408bb4d11fe050c2f0c7f669b2f89e5fc9eb3e80f6c5da2b9fa78",
+    "ruby-toolbox.lock.json": "78149796f84f39dcba92d67903fe2cfc9102ebf9ed97d8d851c86061b4e25135",
+    "specialized.apt.lock": "5824c19543662ee2a4de2cf9d017f3fec9423c83ac28fd6ccccd97bc2ef21561",
+    "strip_privileges.sh": "20576e20aaab31303be0723085642e7e332f75287bf9ecd9f9dea3f408007250",
+    "toolbox-packages.json": "1c984ee30619f09edbe9574f8294a585ecb65390c25e78d6092e8245ebe088d3",
+    "upstream.lock.json": "cd5392cf47476d4a4974277ba34d850dc8353f69d7ff5c0d8f2862bc19929384",
+    "verify_toolbox.py": "29d4adfa2174d9d9c774fdcf777e213030aa10c63e6b0b613e8652846a80b663"
+  }
+}

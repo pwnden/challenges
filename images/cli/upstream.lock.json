@@ -1,0 +1,62 @@
+{
+  "yq": {
+    "version": "v4.54.1",
+    "url": "https://github.com/mikefarah/yq/releases/download/v4.54.1/yq_linux_amd64",
+    "sha256": "8e34fc298390875de416e6a4afcb8cabeceb25d9aa8506c1a2f9353cf702ea5f"
+  },
+  "grype": {
+    "version": "v0.120.0",
+    "url": "https://github.com/anchore/grype/releases/download/v0.120.0/grype_0.120.0_linux_amd64.tar.gz",
+    "sha256": "a5a1218dce63acdac152a6b3b5bb366e7267e36f4069848cf455543b3fa5700e"
+  },
+  "foundry": {
+    "version": "v1.8.4",
+    "url": "https://github.com/foundry-rs/foundry/releases/download/v1.8.4/foundry_v1.8.4_linux_amd64.tar.gz",
+    "sha256": "699e2207a6a9b27ca17c48c81e56f1677ed9c58b623b59128b4e15ec9da0625e"
+  },
+  "pwndbg": {
+    "version": "2026.09.15",
+    "url": "https://github.com/pwndbg/pwndbg/releases/download/2026.09.15/pwndbg_2026.09.15_x86_64-portable.tar.xz",
+    "sha256": "7ba64666ee595885ba4b0e073f85e423829103e9fdbe921ba4eef1acd9150803"
+  },
+  "mc": {
+    "version": "RELEASE.2025-08-13T08-35-41Z",
+    "url": "https://github.com/minio/mc/releases/download/RELEASE.2025-08-13T08-35-41Z/mc.linux-amd64.RELEASE.2025-08-13T08-35-41Z",
+    "sha256": "01f866e9c5f9b87c2b09116fa5d7c06695b106242d829a8bb32990c00312e891"
+  },
+  "honggfuzz": {
+    "version": "940b958dfeb6f9131fd846cae31fcc0fe996ae98",
+    "url": "https://codeload.github.com/google/honggfuzz/tar.gz/940b958dfeb6f9131fd846cae31fcc0fe996ae98",
+    "sha256": "046264f794e495e638ed5ba80f88a8664f79252fb99a31347cf524e21fbbae9c"
+  },
+  "jwt_tool": {
+    "version": "3bc7407cf2222d6a821dcc19c776e5a1b1cb9a9b",
+    "url": "https://codeload.github.com/ticarpi/jwt_tool/tar.gz/3bc7407cf2222d6a821dcc19c776e5a1b1cb9a9b",
+    "sha256": "9ba64c43d965b3e5119807354abbb50cd40212a8a41c5fef873875e87d72d76d"
+  },
+  "rsactftool": {
+    "version": "c107d86e6aa87f029ce77244debb895da20522d1",
+    "url": "https://codeload.github.com/RsaCtfTool/RsaCtfTool/tar.gz/c107d86e6aa87f029ce77244debb895da20522d1",
+    "sha256": "b0db7f8eaf6316f1cfca399c2af7ca96a73258e60fce27cb9a898c79aa9059b3"
+  },
+  "nuclei_templates": {
+    "version": "b5aa0f999a04731e21adc4d6a0cf9838756cb58b",
+    "url": "https://codeload.github.com/projectdiscovery/nuclei-templates/tar.gz/b5aa0f999a04731e21adc4d6a0cf9838756cb58b",
+    "sha256": "336b0c8c9626c335c06c373633fd80dfdcfb31814c300105b38887c23cbf771c"
+  },
+  "capa_rules": {
+    "version": "805f9eaccfb6a4e1ddffc809d71d1e2b5ccc15e5",
+    "url": "https://codeload.github.com/mandiant/capa-rules/tar.gz/805f9eaccfb6a4e1ddffc809d71d1e2b5ccc15e5",
+    "sha256": "81a6dade461425e94a0d9d9c97db482a9dba4352efb1f297b4d80091c212705a"
+  },
+  "solc": {
+    "version": "0.8.37",
+    "url": "https://binaries.soliditylang.org/linux-amd64/solc-linux-amd64-v0.8.37+commit.f401782d",
+    "sha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a"
+  },
+  "trivy": {
+    "version": "v0.75.0",
+    "url": "https://github.com/aquasecurity/trivy/releases/download/v0.75.0/trivy_0.75.0_Linux-64bit.tar.gz",
+    "sha256": "c6e65abddb348e25f10549df887045629cf28cc72453cd1c63acb717316b3f3f"
+  }
+}

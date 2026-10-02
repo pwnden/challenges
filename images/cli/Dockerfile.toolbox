@@ -1,0 +1,65 @@
+# syntax=docker/dockerfile:1
+# The existing small Debian images remain available via Dockerfile.
+FROM python:3.13.15-slim-trixie@sha256:7c61056e61ac89e852de05f3dc6fa51a6dd2181797bceed46aa725dd7cb2cd3b AS python-runtime
+FROM python-runtime AS python-tools
+RUN sed -i 's|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/20261002T000000Z|;s|http://deb.debian.org/debian|https://snapshot.debian.org/archive/debian/20261002T000000Z|' /etc/apt/sources.list.d/debian.sources \
+    && printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot \
+    && apt-get update && apt-get install -y --no-install-recommends g++ \
+    && rm -rf /var/lib/apt/lists/*
+COPY python-toolbox.lock /opt/toolbox/python-toolbox.lock
+RUN /usr/local/bin/python3.13 -m venv /opt/python-tools \
+    && sed -n '/^setuptools==/p; /^wheel==/p; /^packaging==/p; /^pybind11==/p; /^Cython==/p' /opt/toolbox/python-toolbox.lock > /tmp/build-requirements.lock \
+    && /opt/python-tools/bin/pip install --require-hashes -r /tmp/build-requirements.lock \
+    && /opt/python-tools/bin/pip install --no-cache-dir --no-build-isolation --require-hashes -r /opt/toolbox/python-toolbox.lock
+FROM kalilinux/kali-last-release@sha256:61d2b988d3be6b5b2d8f55b40946a2b82f98e71f961927a4c44ba70b0ec95542 AS packages
+ENV DEBIAN_FRONTEND=noninteractive
+COPY *.apt.lock install_apt.sh /opt/toolbox/
+COPY --from=python-runtime /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+# Disable daemon starts during package configuration; runtime starts only the
+# command selected by the problem, with the normal isolation policy.
+RUN printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d \
+    && chmod 755 /usr/sbin/policy-rc.d \
+    && sh /opt/toolbox/install_apt.sh /opt/toolbox/extended.apt.lock \
+    && useradd --uid 10001 --create-home --home-dir /home/pwnden --shell /bin/bash pwnden
+COPY strip_privileges.sh /opt/toolbox/
+RUN sh /opt/toolbox/strip_privileges.sh
+
+ENV HOME=/home/pwnden XDG_CACHE_HOME=/tmp/.cache POCL_CACHE_DIR=/tmp/pocl-cache \
+    POCL_MAX_PTHREAD_COUNT=2 OMP_NUM_THREADS=2 JAVA_TOOL_OPTIONS="-XX:ActiveProcessorCount=2 -Xmx1024m"
+USER 10001:10001
+WORKDIR /challenge
+CMD ["/bin/bash"]
+
+FROM packages AS toolbox
+USER root
+COPY --from=python-tools /usr/local /usr/local
+COPY --from=python-tools /opt/python-tools /opt/python-tools
+COPY upstream.lock.json ruby-toolbox.lock.json databases.lock.json install_upstream.py jwt_launcher.py /opt/toolbox/
+RUN --mount=type=cache,target=/tmp/upstream-downloads \
+    /usr/local/bin/python3.13 /opt/toolbox/install_upstream.py \
+    && /opt/python-tools/bin/pip freeze > /opt/python-versions.txt \
+    && gem list --local > /opt/ruby-versions.txt \
+    && rm /usr/local/bin/python /usr/local/bin/python3 /usr/local/bin/pip /usr/local/bin/pip3 /usr/local/bin/pip3.13
+ENV SEMGREP_SEND_METRICS=off SEMGREP_ENABLE_VERSION_CHECK=0 \
+    GRYPE_CHECK_FOR_APP_UPDATE=false GRYPE_DB_AUTO_UPDATE=false GRYPE_DB_VALIDATE_AGE=false GRYPE_DB_CACHE_DIR=/opt/grype-db \
+    SYFT_CHECK_FOR_APP_UPDATE=false TRIVY_CACHE_DIR=/opt/trivy-cache TRIVY_SKIP_DB_UPDATE=true \
+    TRIVY_SKIP_JAVA_DB_UPDATE=true TRIVY_OFFLINE_SCAN=true TRIVY_DISABLE_TELEMETRY=true
+COPY apt-provenance.json commands.json python-toolbox.in python-toolbox.lock /opt/toolbox/
+USER 10001:10001
+
+FROM toolbox AS extended
+
+FROM extended AS specialized
+USER root
+RUN sh /opt/toolbox/install_apt.sh /opt/toolbox/specialized.apt.lock \
+    && sh /opt/toolbox/strip_privileges.sh \
+    && ln -s /usr/share/ghidra/support/analyzeHeadless /usr/local/bin/analyzeHeadless \
+    && linpeas=$(find /usr/share/peass -name linpeas.sh -print -quit) \
+    && test -n "$linpeas" && ln -s "$linpeas" /usr/local/bin/linpeas.sh
+USER 10001:10001
+
+FROM specialized AS all
+USER root
+RUN sh /opt/toolbox/install_apt.sh /opt/toolbox/restricted.apt.lock \
+    && sh /opt/toolbox/strip_privileges.sh
+USER 10001:10001

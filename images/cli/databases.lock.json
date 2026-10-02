@@ -1,0 +1,15 @@
+{
+  "grype": {
+    "version": "v6.1.9",
+    "built": "2026-10-02T06:31:53Z",
+    "url": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.9_2026-10-02T00:35:12Z_1790922713.tar.zst",
+    "sha256": "3c368df5c3624fe083ad646ca3be59525739dfe9caa4b6d14c7f252d155fbd98"
+  },
+  "trivy": {
+    "version": "schema-2",
+    "manifest": "sha256:3245da098a24a657dd8790300e5b38fc97a78fa8a8735ca2a4f2129527af403d",
+    "repository": "aquasecurity/trivy-db",
+    "sha256": "6cdbb12f0b1dcbc241a151000f2fb84a1cf370414f788c9b517894d0edb5b621",
+    "url": "https://ghcr.io/v2/aquasecurity/trivy-db/blobs/sha256:6cdbb12f0b1dcbc241a151000f2fb84a1cf370414f788c9b517894d0edb5b621"
+  }
+}
