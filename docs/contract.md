@@ -61,13 +61,13 @@ to evaluate the complete player journey, including prerequisite learning,
 discovery and implementation. The assessment uses the default brief and resources
 with hints and the walkthrough closed. Category remains a separate classification.
 
-| Value | Name |
-| --- | --- |
-| `1` | Intro |
-| `2` | Easy |
-| `3` | Medium |
-| `4` | Hard |
-| `5` | Expert |
+| Value | Korean label | English name |
+| --- | --- | --- |
+| `1` | 입문 | Intro |
+| `2` | 초급 | Easy |
+| `3` | 중급 | Medium |
+| `4` | 고급 | Hard |
+| `5` | 심화 | Expert |
 
 The consumer preserves the declared value in summaries and detail. Versions 1–4
 have no required difficulty; an absent value remains unrated. Presentation names,

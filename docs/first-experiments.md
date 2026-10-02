@@ -7,10 +7,10 @@ The usual player path requires text reading and supplied tool operations.
 
 | Scenario | Topic | Level | Player tools | Observation |
 | --- | --- | --- | --- | --- |
-| [Forgotten Shelf](../challenges/forgotten-shelf/README.md) | `web-information-disclosure` | Intro | Web | A removed link and a public collection rule leave a backup readable. |
-| [Query Desk](../challenges/query-desk/README.md) | `web-injection` | Easy | Web | Search input changes an actual SQLite condition and exposes a private row. |
-| [Wrapped Secret](../challenges/wrapped-secret/README.md) | `crypto-representation-protection` | Intro | Files, terminal | A public Base64 operation recovers an exposed key. |
-| [Midnight Trace](../challenges/midnight-trace/README.md) | `forensics-event-reconstruction` | Intro | Files | Matching request IDs connect a guest's successful request to another owner's export. |
+| [Forgotten Shelf](../challenges/forgotten-shelf/README.md) | `web-information-disclosure` | 입문 | Web | A removed link and a public collection rule leave a backup readable. |
+| [Query Desk](../challenges/query-desk/README.md) | `web-injection` | 초급 | Web | Search input changes an actual SQLite condition and exposes a private row. |
+| [Wrapped Secret](../challenges/wrapped-secret/README.md) | `crypto-representation-protection` | 입문 | Files, terminal | A public Base64 operation recovers an exposed key. |
+| [Midnight Trace](../challenges/midnight-trace/README.md) | `forensics-event-reconstruction` | 입문 | Files | Matching request IDs connect a guest's successful request to another owner's export. |
 
 Forgotten Shelf, Wrapped Secret and Midnight Trace are independent starting
 experiments. Query Desk adds condition syntax and inference; its brief explains
