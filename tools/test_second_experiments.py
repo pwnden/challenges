@@ -91,16 +91,19 @@ class PolicyTests(unittest.TestCase):
             with self.assertRaises(PermissionError):
                 locate(public, 'link/key.txt')
 
-    def test_local_policy_has_explicit_deny_precedence_and_exact_action_semantics(self):
+    def test_local_policy_distinguishes_current_and_historical_reads_with_deny_precedence(self):
         with patch.dict(os.environ, {'FLAG': 'synthetic-test-key'}):
             module = runpy.run_path(str(ROOT / 'borrowed-badge/vulnerable/app.py'))
         allowed = module['allowed']
-        self.assertTrue(allowed('read', 'locker/team-admin'))
+        self.assertFalse(allowed('read', 'locker/team-admin'))
+        self.assertTrue(allowed('read-history', 'locker/team-admin'))
+        self.assertTrue(allowed('read-version', 'locker/team-admin'))
         self.assertFalse(allowed('write', 'locker/team-admin'))
         self.assertFalse(allowed('read', 'locker/personal-draft'))
-        module['POLICY']['Statement'].append({'Effect': 'Deny', 'Action': 'read', 'Resource': 'locker/team-admin'})
-        self.assertFalse(allowed('read', 'locker/team-admin'))
-        self.assertTrue(allowed('read', 'locker/team-notes'))
+        module['POLICY']['Statement'].append({'Effect': 'Deny', 'Action': 'read*', 'Resource': 'locker/team-admin'})
+        for action in ['read', 'read-history', 'read-version']:
+            self.assertFalse(allowed(action, 'locker/team-admin'))
+            self.assertTrue(allowed(action, 'locker/team-notes'))
 
 
 if __name__ == '__main__':

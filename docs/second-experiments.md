@@ -11,12 +11,12 @@ tools. The authoring workflow, solutions and publication finish in this reposito
 | [비밀번호 후보 찾기](../challenges/hash-lantern/README.md) | crypto-hashes-authentication | 입문 | Files, terminal | One of six candidates matches the unsalted SHA-256 record. |
 | [확장자가 바뀐 파일](../challenges/false-label/README.md) | forensics-files-metadata | 입문 | Files, terminal | Signature bytes and an archive parser identify the supplied file. |
 | [DNS 조회에 담긴 데이터](../challenges/dns-detour/README.md) | forensics-network-evidence | 초급 | Files, terminal | Actual loopback DNS messages carry ordered, retransmitted Base32 chunks. |
-| [팀 문서의 읽기 권한](../challenges/borrowed-badge/README.md) | cloud-identity-policies | 초급 | Web | A broad document-name rule permits an unintended read. |
+| [팀 문서의 읽기 권한](../challenges/borrowed-badge/README.md) | cloud-identity-policies | 초급 | Web | A denied current read and broadly allowed historical reads expose a policy gap. |
 
 The `dns-detour` scenario teaches evidence analysis from a supplied capture. The `borrowed-badge` scenario
 uses the misc compatibility category and a labelled local policy subset; its
-learning area remains cloud and infrastructure security. The policy's exact
-action match, star resource match, default denial and explicit denial precedence
+learning area remains cloud and infrastructure security. The policy's star
+action and resource matching, default denial and explicit denial precedence
 are declared and tested. It is separate from a provider's complete IAM implementation.
 
 ## Shared starting notes

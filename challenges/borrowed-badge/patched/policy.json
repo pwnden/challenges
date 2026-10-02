@@ -1,5 +1,6 @@
 {
   "Statement": [
-    {"Effect": "Allow", "Action": "read", "Resource": "locker/team-notes"}
+    {"Effect": "Allow", "Action": "read*", "Resource": "locker/team-notes"},
+    {"Effect": "Deny", "Action": "read*", "Resource": "locker/team-admin"}
   ]
 }
