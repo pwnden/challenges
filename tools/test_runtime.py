@@ -201,6 +201,17 @@ class RuntimeTests(unittest.TestCase):
             commands.run([sys.executable, '-c', 'pass'])
         self.assertEqual(commands.run([sys.executable, '-c', 'pass'], cleanup=True).code, 0)
 
+    def test_commands_bound_output_and_still_accept_input(self):
+        commands = Commands()
+        for stream in ('stdout', 'stderr'):
+            with self.subTest(stream=stream), self.assertRaisesRegex(ExecutionError, 'output exceeded'):
+                commands.run([sys.executable, '-c',
+                              f'import sys; sys.{stream}.buffer.write(b"x" * (9 * 1024 * 1024))'], timeout=3)
+        result = commands.run([sys.executable, '-c',
+                               'import sys; sys.stdout.write(sys.stdin.read()); sys.stderr.write("error")'],
+                              input='input', timeout=3)
+        self.assertEqual((result.stdout, result.stderr), ('input', 'error'))
+
     def test_generated_flags_are_redacted(self):
         commands = Commands()
         commands.secrets.add('pwnden{secret}')

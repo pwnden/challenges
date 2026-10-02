@@ -10,10 +10,12 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+import threading
 import time
 import uuid
 
 from validate import InvalidChallenge, inside
+from policy import OUTPUT_LIMIT
 
 
 GATEWAY_KEYS = ('com.docker.network.bridge.gateway_mode_ipv4',
@@ -30,6 +32,29 @@ class Result:
     code: int
     stdout: str = ''
     stderr: str = ''
+
+
+class Output:
+    """Drain one pipe concurrently, keeping a fixed upper bound in memory."""
+
+    def __init__(self, pipe, overflow):
+        self.data = bytearray()
+        self.pipe, self.overflow = pipe, overflow
+        self.thread = threading.Thread(target=self.read, daemon=True)
+        self.thread.start()
+
+    def read(self):
+        try:
+            while chunk := self.pipe.read1(65536):
+                remaining = OUTPUT_LIMIT - len(self.data)
+                self.data.extend(chunk[:remaining])
+                if len(chunk) > remaining:
+                    self.overflow.set()
+        finally:
+            self.pipe.close()
+
+    def text(self):
+        return self.data.decode('utf-8', errors='replace')
 
 
 class Commands:
@@ -78,29 +103,49 @@ class Commands:
         try:
             self.child = subprocess.Popen(
                 [str(arg) for arg in args], cwd=cwd, env=env,
-                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                stdin=input if hasattr(input, 'read') else subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                 **options)
+            overflow = threading.Event()
+            stdout, stderr = Output(self.child.stdout, overflow), Output(self.child.stderr, overflow)
+            # communicate owns stdin and process waiting; readers own output.
+            self.child.stdout = self.child.stderr = None
             if self.interrupted and not cleanup:
                 self.interrupt(self.interrupted, None)
             try:
                 deadline = time.monotonic() + timeout
-                pending = None if input is None else input.encode('utf-8')
+                pending = None if input is None or hasattr(input, 'read') else input if isinstance(input, bytes) else input.encode('utf-8')
                 while True:
+                    if overflow.is_set():
+                        self.kill_child()
+                        raise ExecutionError('command output exceeded 8 MiB per stream')
                     if self.interrupted and not cleanup:
                         self.finish_child(timeout_grace)
                         raise ExecutionError('verification interrupted')
                     try:
-                        stdout, stderr = self.child.communicate(
+                        self.child.communicate(
                             pending, timeout=min(0.2, max(0, deadline - time.monotonic())))
                         break
                     except subprocess.TimeoutExpired:
                         pending = None
                         if time.monotonic() >= deadline:
                             raise
+                for output in (stdout, stderr):
+                    while output.thread.is_alive():
+                        output.thread.join(timeout=0.05)
+                        if overflow.is_set():
+                            self.kill_child()
+                            raise ExecutionError('command output exceeded 8 MiB per stream')
+                        if self.interrupted and not cleanup:
+                            self.finish_child(timeout_grace)
+                            raise ExecutionError('verification interrupted')
+                        if time.monotonic() >= deadline:
+                            raise subprocess.TimeoutExpired(args, timeout)
             except subprocess.TimeoutExpired as error:
                 self.finish_child(timeout_grace)
                 raise ExecutionError(f'{args[0]} timed out after {timeout} seconds') from error
-            result = Result(self.child.returncode, stdout.decode('utf-8'), stderr.decode('utf-8', errors='replace'))
+            if overflow.is_set():
+                raise ExecutionError('command output exceeded 8 MiB per stream')
+            result = Result(self.child.returncode, stdout.text(), stderr.text())
             if self.interrupted and not cleanup:
                 raise ExecutionError('verification interrupted')
             if check and result.code:
