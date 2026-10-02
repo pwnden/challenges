@@ -1,12 +1,12 @@
 {
   "slug": "quiet-route",
-  "verified_at_utc": "2026-10-02T20:22:02.774563+00:00",
+  "verified_at_utc": "2026-10-02T21:03:55.257018+00:00",
   "artifact_controls": false,
   "author_solution_patch_cleanup": true,
   "consumer_validate_run_verify_stop": true,
   "real_pty_solution_submission_interrupt_reattach_restart": true,
   "original_preserved": true,
-  "total_validation_seconds": 54.25,
+  "total_validation_seconds": 65.93,
   "distribution_bytes": 289,
   "passed": true
 }

@@ -27,6 +27,8 @@ class Handler(BaseHTTPRequestHandler):
         else:
             body = {'view': 'fallback', 'message': 'No public document at this address.'}
         data = json.dumps(body, separators=(',', ':')).encode()
+        if path not in ('/', '/help', '/healthz'):
+            data = data.ljust(256, b' ')
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', str(len(data)))

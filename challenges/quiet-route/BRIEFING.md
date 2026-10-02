@@ -29,11 +29,13 @@ wc -c first.json second.json
 cmp first.json second.json
 ```
 
-후보 탐색에는 아래 `크기`를 공통 안내의 바이트 수로 바꾼다. 결과에 남은 주소를
-`curl -sS 주소 | jq .`로 열어 실제 내용과 공개 정책을 비교하자.
+이 서버는 여러 JSON 응답의 길이를 같은 크기로 맞춘다. 크기가 같아도 내용은
+다를 수 있다. 두 안내의 JSON을 읽고 공통 안내임을 나타내는 view 값을 확인하자.
+아래 예제는 해당 표시를 가진 응답만 제외한다. 남은 주소를 curl과 jq로 읽어
+실제 내용과 공개 정책을 비교하자.
 
 ```sh
-ffuf -w files/paths.txt -u http://app:8000/FUZZ -fs 크기 -t 2 -rate 10 -maxtime 15
+ffuf -w files/paths.txt -u http://app:8000/FUZZ -fr '"view":"fallback"' -t 2 -rate 10 -maxtime 15
 ```
 ::
 
