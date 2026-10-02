@@ -103,6 +103,12 @@ increase these limits. Memory is not reserved in advance. Toolboxes run as
 `10001:10001` in both read-only and writable modes. A separate 64 MiB tmpfs at `/home/pwnden`
 provides a writable home; caches and compiled exercises use `/tmp`.
 
+`PWNDEN_CONTAINER_CPUS=1` tightens the service and toolbox CPU ceiling to one
+CPU; the default is 2, and only 1 or 2 are accepted. Aggregate limits still apply
+and remain clipped to daemon capacity. CI uses 1 so vulnerable and patched
+targets, the active toolbox and their temporary workspace keepers fit its
+four-core runner. Default-policy regressions run with 2.
+
 Logs rotate through the `local` driver with 10 MiB per file and 3 files.
 Command stdout and stderr each have an 8 MiB capture limit; exceeding either
 fails verification and still performs cleanup. All solution and patch commands

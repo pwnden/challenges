@@ -16,7 +16,7 @@ import uuid
 
 from validate import InvalidChallenge, inside
 from policy import OUTPUT_LIMIT, SECURITY_OPTIONS, service_policy, tool_options
-from budget import admission, Cost, TOOL_COST, MANAGED_LABEL
+from budget import admission, Cost, tool_cost, MANAGED_LABEL
 from execution import ExecutionError
 
 
@@ -379,7 +379,7 @@ class Docker:
                    '--mount', mount, '--workdir', '/challenge']
         options.extend(tool_options(writable))
         try:
-            with admission(self.call, TOOL_COST, interrupted=lambda: self.commands.interrupted):
+            with admission(self.call, tool_cost(), interrupted=lambda: self.commands.interrupted):
                 self.call(*options, '--', image, *args, timeout=self.prepare_timeout)
             result = self.call('start', '--attach', name, check=False,
                                timeout=metadata['solve']['timeout_seconds'])
@@ -421,7 +421,7 @@ class Project:
                 declared = json.loads(self.docker.call('image', 'inspect', '--format', '{{json .Config.Volumes}}', image).stdout)
                 if any(target not in targets for target in declared or {}):
                     raise ExecutionError('images must declare bounded service VOLUME storage explicitly')
-            with admission(self.docker.call, Cost(2_000_000_000*len(self.cfg['services']),
+            with admission(self.docker.call, Cost(sum(service['cpus'] for service in self.cfg['services'].values())*1_000_000_000,
                            2*1024**3*len(self.cfg['services']), 256*len(self.cfg['services']), len(self.cfg['services'])),
                            interrupted=lambda: self.docker.commands.interrupted):
                 self.compose('create', '--no-build', timeout=self.docker.prepare_timeout)

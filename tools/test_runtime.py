@@ -4,6 +4,7 @@ import copy
 from contextlib import nullcontext
 import csv
 import json
+import os
 from pathlib import Path
 import signal
 import sys
@@ -16,6 +17,8 @@ from unittest.mock import patch
 from runtime import (Commands, Docker, ExecutionError, GATEWAY_KEYS, OWNER_LABEL,
                      Project, Result, check_network, isolated_config, toolbox_mount)
 from validate import InvalidChallenge
+from policy import tool_options
+from budget import limits, tool_cost
 
 
 class RuntimeTests(unittest.TestCase):
@@ -43,6 +46,25 @@ class RuntimeTests(unittest.TestCase):
 
     def isolate(self, cfg=None):
         return isolated_config(self.root, self.directory, self.metadata, self.project, cfg or self.cfg)
+
+    def test_tighter_cpu_ceiling_matches_admission_and_execution(self):
+        with patch.dict(os.environ, {'PWNDEN_CONTAINER_CPUS': '1'}):
+            result = self.isolate()['services']['app']
+            options = tool_options(False)
+            self.assertEqual(result['cpus'], 1)
+            self.assertEqual(options[options.index('--cpus')+1], '1')
+            self.assertEqual(tool_cost().cpus, 1_000_000_000)
+            self.assertEqual(limits({'NCPU': 4, 'MemTotal': 8*1024**3}).cpus, 4_000_000_000)
+            self.assertEqual(result['mem_limit'], '2g')
+            self.assertTrue(result['read_only'])
+
+    def test_invalid_cpu_ceiling_is_rejected_before_execution(self):
+        for value in ('0', '3', '-1', '1.5', ' 1', 'one'):
+            with self.subTest(value=value), patch.dict(os.environ, {'PWNDEN_CONTAINER_CPUS': value}):
+                for operation in (self.isolate, lambda: tool_options(False), tool_cost,
+                                  lambda: limits({'NCPU': 4, 'MemTotal': 8*1024**3})):
+                    with self.assertRaisesRegex(ExecutionError, 'must be 1 or 2'):
+                        operation()
 
     def test_preserves_target_and_enforces_all_networks(self):
         self.cfg['networks']['private'] = {'name': self.project + '_private'}

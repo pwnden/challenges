@@ -13,6 +13,8 @@ jobs:
   verify:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    env:
+      PWNDEN_CONTAINER_CPUS: '1'
     steps:
       - name: Check out challenges
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -27,6 +29,8 @@ jobs:
           install -m 755 "$compose_binary" "$HOME/.docker/cli-plugins/docker-compose"
           docker compose version
       - name: Test authoring and verification tools
+        env:
+          PWNDEN_CONTAINER_CPUS: '2'
         run: python3 -B -m unittest discover -s tools -p 'test_*.py'
       - name: Validate every challenge
         run: python3 tools/validate.py

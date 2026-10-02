@@ -1,5 +1,8 @@
 """Runtime-owned limits shared by author service and toolbox execution."""
 
+import os
+from execution import ExecutionError
+
 CPU_LIMIT = 2
 MEMORY_LIMIT = '2g'
 PID_LIMIT = 256
@@ -13,6 +16,13 @@ SECURITY_OPTIONS = {'no-new-privileges', 'no-new-privileges:true',
                     'no-new-privileges=false'}
 
 
+def cpu_limit():
+    value = os.environ.get('PWNDEN_CONTAINER_CPUS') or str(CPU_LIMIT)
+    if value not in ('1', '2'):
+        raise ExecutionError('PWNDEN_CONTAINER_CPUS must be 1 or 2')
+    return int(value)
+
+
 def service_policy(service):
     """The consumer, rather than an exercise declaration, owns these limits."""
     for key in ('cpu_period', 'cpu_quota', 'cpu_rt_period', 'cpu_rt_runtime',
@@ -21,7 +31,7 @@ def service_policy(service):
     deploy = service.get('deploy')
     if deploy:
         deploy.pop('resources', None)
-    service.update(cpus=CPU_LIMIT, mem_limit=MEMORY_LIMIT, memswap_limit=MEMORY_LIMIT,
+    service.update(cpus=cpu_limit(), mem_limit=MEMORY_LIMIT, memswap_limit=MEMORY_LIMIT,
                    pids_limit=PID_LIMIT, oom_kill_disable=False, read_only=True, shm_size='64m',
                    cgroup='private', cap_drop=['ALL'],
                    security_opt=['no-new-privileges:true'],
@@ -45,7 +55,7 @@ def service_policy(service):
 def tool_options(writable):
     uid, gid = 10001, 10001
     options = ['--user', f'{uid}:{gid}', '--read-only', '--cgroupns', 'private',
-               '--cpus', str(CPU_LIMIT), '--memory', MEMORY_LIMIT,
+               '--cpus', str(cpu_limit()), '--memory', MEMORY_LIMIT,
                '--memory-swap', MEMORY_LIMIT, '--pids-limit', str(PID_LIMIT),
                '--tmpfs', '/tmp:' + TMP_OPTIONS,
                '--tmpfs', f'/home/pwnden:rw,nosuid,nodev,uid={uid},gid={gid},size=64m',

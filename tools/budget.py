@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import time
 from execution import ExecutionError
+from policy import cpu_limit
 
 INFO_FORMAT = '{"ID":{{json .ID}},"NCPU":{{.NCPU}},"MemTotal":{{.MemTotal}}}'
 MANAGED_LABEL = 'pwnden.managed'
@@ -31,7 +32,12 @@ class Cost:
 TOOL_COST = Cost(2_000_000_000, 2*1024**3, 256, 1)
 
 
+def tool_cost():
+    return Cost(cpu_limit()*1_000_000_000, TOOL_COST.memory, TOOL_COST.pids, TOOL_COST.containers)
+
+
 def limits(info):
+    cpu_limit()
     values = []
     for name, default, multiplier in (
             ('PWNDEN_RUNTIME_CPUS', 8, 1_000_000_000),
