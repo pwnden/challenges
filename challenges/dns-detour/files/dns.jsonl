@@ -1,0 +1,10 @@
+{"time": "2026-10-02T09:41:58.394297+00:00", "direction": "Q", "id": 1001, "type": "A", "qname": "status.box.test"}
+{"time": "2026-10-02T09:41:58.394357+00:00", "direction": "R", "id": 1001, "type": "A", "qname": "status.box.test"}
+{"time": "2026-10-02T09:41:58.394480+00:00", "direction": "Q", "id": 1002, "type": "A", "qname": "2-KYLLONPWIYLUMFPW6235.sync.box.test"}
+{"time": "2026-10-02T09:41:58.394526+00:00", "direction": "R", "id": 1002, "type": "A", "qname": "2-KYLLONPWIYLUMFPW6235.sync.box.test"}
+{"time": "2026-10-02T09:41:58.394630+00:00", "direction": "Q", "id": 1003, "type": "A", "qname": "assets.box.test"}
+{"time": "2026-10-02T09:41:58.394679+00:00", "direction": "R", "id": 1003, "type": "A", "qname": "assets.box.test"}
+{"time": "2026-10-02T09:41:58.394789+00:00", "direction": "Q", "id": 1004, "type": "A", "qname": "1-OB3W4ZDFNZ5WI3TTL5WG.sync.box.test"}
+{"time": "2026-10-02T09:41:58.394838+00:00", "direction": "R", "id": 1004, "type": "A", "qname": "1-OB3W4ZDFNZ5WI3TTL5WG.sync.box.test"}
+{"time": "2026-10-02T09:41:58.394958+00:00", "direction": "Q", "id": 1005, "type": "A", "qname": "2-KYLLONPWIYLUMFPW6235.sync.box.test"}
+{"time": "2026-10-02T09:41:58.395009+00:00", "direction": "R", "id": 1005, "type": "A", "qname": "2-KYLLONPWIYLUMFPW6235.sync.box.test"}
