@@ -13,13 +13,18 @@ if grep -q 'pwnden{' "$work/body"; then exit 1; fi
 test "$(request -b "$work/cookies" "$base/api/notes/7")" = 200
 jq -e '.owner == "guest"' "$work/body" >/dev/null
 test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":7}' "$base/api/exports")" = 200
+jq -e '.redacted == true and (.export | has("body") | not)' "$work/body" >/dev/null
+test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":7,"format":"full"}' "$base/api/exports")" = 200
 jq -e '.export.owner == "guest" and .export.body == "Meeting is on Friday."' "$work/body" >/dev/null
 test "$(request -b "$work/cookies" "$base/api/notes/42")" = 403
-for body in '{"note_id":42}' '{"note_id":42,"owner":"guest"}'; do
+test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":42}' "$base/api/exports")" = 200
+jq -e '.redacted == true and (.export | has("body") | not)' "$work/body" >/dev/null
+if grep -q 'pwnden{' "$work/body"; then exit 1; fi
+for body in '{"note_id":42,"format":"full"}' '{"note_id":42,"format":"full","owner":"guest"}'; do
     test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d "$body" "$base/api/exports")" = 403
     if grep -q 'pwnden{' "$work/body"; then exit 1; fi
 done
-for body in '{"note_id":"42"}' '{"note_id":true}' '[]' 'invalid'; do
+for body in '{"note_id":"42"}' '{"note_id":true}' '{"note_id":42,"format":[]}' '{"note_id":42,"format":"binary"}' '[]' 'invalid'; do
     test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d "$body" "$base/api/exports")" = 400
 done
 test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":999}' "$base/api/exports")" = 404

@@ -41,7 +41,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == '/healthz':
             return self.reply(200, {'status': 'ok'})
         if path == '/':
-            return self.reply(200, {'service': 'Lab notes API', 'operations': ['/api/login', '/api/catalog', '/api/notes/<id>', '/api/exports']})
+            return self.reply(200, {'service': 'Lab notes API', 'operations': ['/api/login', '/api/catalog', '/api/notes/<id>', '/api/exports'], 'export_formats': {'summary': 'Metadata only (default)', 'full': 'Includes document body'}})
         user = self.identity()
         if user is None:
             return self.reply(401, {'error': 'login_required'})
@@ -84,9 +84,14 @@ class Handler(BaseHTTPRequestHandler):
             note = NOTES.get(identity)
             if note is None:
                 return self.reply(404, {'error': 'not_found'})
+            form = body.get('format', 'summary')
+            if not isinstance(form, str) or form not in ('summary', 'full'):
+                return self.reply(400, {'error': 'unknown_export_format'})
+            if form == 'summary':
+                return self.reply(200, {'export': {k: note[k] for k in ('id', 'owner', 'title')}, 'redacted': True, 'format': 'summary'})
             if not export_allowed(note, user):
                 return self.reply(403, {'error': 'not_owner'})
-            return self.reply(200, {'export': note})
+            return self.reply(200, {'export': note, 'redacted': False, 'format': 'full'})
         self.reply(404, {'error': 'not_found'})
 
 

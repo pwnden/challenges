@@ -1,12 +1,12 @@
 {
   "slug": "export-gap",
-  "verified_at_utc": "2026-10-02T19:56:43.742842+00:00",
+  "verified_at_utc": "2026-10-02T20:56:32.038324+00:00",
   "artifact_controls": false,
   "author_solution_patch_cleanup": true,
   "consumer_validate_run_verify_stop": true,
   "real_pty_solution_submission_interrupt_reattach_restart": true,
   "original_preserved": true,
-  "total_validation_seconds": 61.1,
+  "total_validation_seconds": 48.54,
   "distribution_bytes": 0,
   "passed": true
 }

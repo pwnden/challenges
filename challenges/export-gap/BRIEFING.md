@@ -20,7 +20,8 @@ JSON 사본으로 내려받을 수 있다. 운영 담당자의 복구 절차 문
 - 로그인은 `POST /api/login`, 계정은 `guest`, 비밀번호는 `lab-guest`다.
 - `GET /api/catalog`는 문서의 ID·소유자·제목만 보여 준다.
 - `GET /api/notes/문서ID`는 본문 조회다.
-- `POST /api/exports`에 `{"note_id":문서ID}`를 보내면 JSON 사본을 요청한다.
+- `POST /api/exports`에 `{"note_id":문서ID}`를 보내면 기본 요약 사본을 요청한다.
+- `GET /`에는 제공하는 작업과 내보내기 형식의 안내가 있다.
 
 먼저 로그인 쿠키를 저장하고 목록과 자기 문서를 읽자.
 
@@ -33,6 +34,8 @@ curl -i -b cookies.txt http://app:8000/api/notes/7
 
 자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을
 비교하자. 쿠키와 응답 파일은 문제를 종료하면 지워지는 임시 공간에 저장된다.
+요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지
+확인하고, 형식에 따라 반환 내용과 권한 검사가 달라지는지 비교하자.
 ::
 
 ::knowledge{concepts="terminal-commands,http-messages,http-cookies,curl-json"}

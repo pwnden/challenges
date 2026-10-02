@@ -12,8 +12,13 @@ test "$(request -c "$work/cookies" -H 'Content-Type: application/json' -d '{"use
 test "$(request -b "$work/cookies" "$base/api/notes/7")" = 200
 jq -e '.owner == "guest" and .body == "Meeting is on Friday."' "$work/reply.json" >/dev/null
 test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":7}' "$base/api/exports")" = 200
+jq -e '.redacted == true and (.export | has("body") | not)' "$work/reply.json" >/dev/null
+test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":7,"format":"full"}' "$base/api/exports")" = 200
+jq -e '.export.body == "Meeting is on Friday."' "$work/reply.json" >/dev/null
 test "$(request -b "$work/cookies" "$base/api/notes/42")" = 403
-status=$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":42}' "$base/api/exports")
+test "$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":42}' "$base/api/exports")" = 200
+jq -e '.redacted == true and (.export | has("body") | not)' "$work/reply.json" >/dev/null
+status=$(request -b "$work/cookies" -H 'Content-Type: application/json' -d '{"note_id":42,"format":"full"}' "$base/api/exports")
 if [ "$status" = 403 ]; then exit 3; fi
 test "$status" = 200
 jq -er '.export | select(.id == 42 and .owner == "staff") | .body | select(startswith("pwnden{"))' "$work/reply.json"
