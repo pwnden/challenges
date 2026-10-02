@@ -1,0 +1,5 @@
+Sender public key delivered through the trusted lab channel.
+Signature: RSA-2048, SHA-256, PKCS#1 v1.5; detached delivery.sig.
+Exactly one document copy has the original signed bytes.
+Filenames and dates do not establish authenticity.
+Keys and documents are generated for this exercise; no real signing key is used.

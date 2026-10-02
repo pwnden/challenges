@@ -48,6 +48,7 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [개발용 점검 포트](challenges/diagnostic-port/README.md) | misc | Nmap TCP connection scan and Ncat diagnostic protocol comparison |
 | [모든 경로가 200을 반환하는 서버](challenges/quiet-route/README.md) | web | ffuf response-size filtering and actual JSON disclosure confirmation |
 | [패킷에 남은 전송 파일](challenges/packet-delivery/README.md) | forensics | TShark reassembles HTTP objects for file and archive inspection |
+| [서명이 맞는 납품 문서](challenges/signed-delivery/README.md) | crypto | OpenSSL detached RSA signatures identify the authentic document |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped

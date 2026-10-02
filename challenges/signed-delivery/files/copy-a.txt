@@ -1,0 +1,5 @@
+Lab delivery document
+Batch: LAB-17
+Quantity: 120
+Destination: Depot-D
+Approved by: Sender

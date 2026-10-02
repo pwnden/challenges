@@ -1,0 +1,24 @@
+schema = 5
+slug = "signed-delivery"
+title = "서명이 맞는 납품 문서"
+category = "crypto"
+difficulty = 2
+files = ["files/sender-public.pem", "files/delivery.sig", "files/copy-a.txt", "files/copy-b.txt", "files/copy-c.txt", "files/trust-note.txt"]
+
+[player]
+tools = ["terminal", "files"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "sha256"
+sha256 = "b3779381b9c370130a99d1d4a2caff1dbce048cd1e46e8401f0acc786cc21269"
+
+[solve]
+image = "pwnden-cli:basic-20261003"
+command = ["bash", "solve/solve.sh"]
+writable = true
+timeout_seconds = 30
