@@ -53,6 +53,23 @@ button names or layout leave the problem content valid. Adding a problem require
 its manifest and resources; catalog discovery and available player tools follow
 those declarations automatically.
 
+### Requester messages
+
+Use the named `message` block for dialogue from the requester:
+
+```markdown
+::message{from="moru17"}
+복구 키를 내보낸 파일이 공개됐어요. 다른 사람도 원래 값을 읽을 수 있나요?
+::
+```
+
+The platform recognizes this md4x component name and renders the sender above the
+message using the shared UI theme. `from` is an optional string; omit it for an
+unnamed message. The body supports the existing allowed Markdown elements. The
+renderer reads the sender as escaped text and applies its own fixed markup and
+styles. Author-supplied event handlers, CSS and other DOM attributes are ignored.
+Ordinary `>` quotations keep their general quotation style.
+
 ## Hints
 
 Use `##` for primary content headings and `###` for subsections. Consumers place brief headings beneath the panel title and walkthrough headings beneath the learning section.
