@@ -31,6 +31,26 @@ account before using it as a clue, and distinguish suspicions from established
 facts. Keep investigation discoveries in progressive hints while supplying all
 context needed to understand the assignment in the default brief.
 
+### Plain, concrete language
+
+Name the actual account, document, file, permission or operation the player will
+encounter. Introduce the target through familiar actions: signing in, reading a
+document, searching a name, or comparing records. Use the same terms in requester
+dialogue, the brief, target pages, hints and the walkthrough.
+
+Explain a necessary technical term before asking the player to act on it. Start
+with its everyday meaning and observable use, then name the term. For example,
+"the browser stores a small name=value pair and sends it back to the site; this
+is a cookie." A field such as `Resource` needs its meaning in this exercise:
+"the name of the document this access rule applies to."
+
+Each story element must correspond to an actual feature or supplied fact. State
+what a secret value is used for in the scenario, who should be able to read it,
+and why its disclosure matters. Keep code fields and inputs exact while explaining
+them in ordinary language. Review the text with a reader who has only basic
+browser skills: they should be able to describe the situation and their first
+action in their own words.
+
 Describe the intended objective and the actions the player can take directly. Each sentence adds relevant context, a required action, or a success condition. Keep solving strategy in progressive hints. Use the website's section headings and controls as the navigation, so the brief stays focused on the exercise.
 
 - A concrete scenario that explains what the player has and why the target matters.
@@ -106,6 +126,8 @@ Review the rendered problem as a first-time solver, independently of whether `so
 - Can I explain the target's normal use, the incident, the requester’s reason for
   seeking help, and how the supplied resources support my investigation?
 - Can I start using only the supplied context and visible controls?
+- Do the words in dialogue, documents and target pages name the same actual
+  features? Are unfamiliar terms explained before they are needed?
 - Do the stated prerequisites match every step, including language features,
   calculations and tool operations? Does the exercise demonstrate its stated
   security learning objective?

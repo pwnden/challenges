@@ -196,6 +196,8 @@ Publication requires evidence for each of these checks:
 - The difficulty rationale covers the full journey and matches learner evidence.
 - The brief, progressive hints and complete walkthrough pass the
   [content review](player-content.md#author-review).
+- Dialogue, content and target pages consistently name actual features and
+  explain required terms in ordinary language before using them in a task.
 - The intended and alternative accepted results can be verified. Avoid accidental
   answer leaks in the default content or target behavior that bypass the learning
   objective. Retain the explicit answer reveal in the walkthrough.
