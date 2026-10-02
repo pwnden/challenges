@@ -11,7 +11,7 @@
 외부에 전달됐는지 재확인해 달라고 의뢰했다. 자료는 이 실습을 위해 만든 PNG다.
 
 ::objective
-공개 이미지의 실제 형식과 속성을 조사하고, 함께 저장된 내부 복구 코드를 찾자.
+공개 이미지의 속성을 조사하고, 이번에 내보낸 배너 버전에 해당하는 내부 복구 코드를 찾자.
 ::
 
 ::resources{title="공개한 파일과 배포 규칙"}
@@ -26,12 +26,15 @@ file files/notice.png
 exiftool files/notice.png
 ```
 
-속성에 JSON 형태의 메모가 보이면 아래 설명의 작은 예제를 참고해 내용을 읽자.
+내보내기 기록의 `asset_id`는 배너 ID, `revision`은 배너 버전이다.
+메모 목록에는 다른 배너와 교체 전 버전의 기록도 섞일 수 있다.
+이번 내보내기 기록과 ID·버전이 같고 `state`가 `active`인 메모가 조사 대상이다.
+JSON을 읽을 때 첫 번째 코드나 버전 번호만 보고 선택하지 말자.
 ::
 
 ::knowledge{concepts="terminal-commands,image-metadata"}
 ::
 
 ::submission
-파일의 내부 메모에서 찾은 `pwnden{...}` 복구 코드 전체를 제출하자.
+이번 배너 버전에 해당하는 활성 메모의 `pwnden{...}` 복구 코드 전체를 제출하자.
 ::

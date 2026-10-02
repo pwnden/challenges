@@ -4,15 +4,20 @@
 실제 이미지에 화면 밖의 속성이 붙은 경우다. 배포 규칙은 픽셀 디자인만 공개하고
 복구 코드와 운영 메모는 내부에 남기도록 정한다.
 
-`exiftool files/notice.png`에서 Comment 속성을 발견한다. 다음처럼 JSON을 읽는다.
+ExifTool의 Description에는 이번 배너의 ID banner-17과 버전 3이 있다.
+Comment에는 다른 배너의 활성 메모와 같은 배너의 교체된 메모도 남았다.
+ID·버전·활성 상태를 함께 비교한다.
 
 ```sh
-exiftool -s3 -Comment files/notice.png | jq '.internal_memo'
-exiftool -s3 -Comment files/notice.png | jq -r '.internal_memo.recovery_code'
+exiftool -s3 -Description files/notice.png | jq .
+exiftool -s3 -Comment files/notice.png | jq '.records[]'
+exiftool -s3 -Comment files/notice.png | jq -r '.records[] | select(.asset_id == "banner-17" and .revision == 3 and .state == "active") | .recovery_code'
 ```
 
 출력은 `pwnden{picture_pixels_are_not_all}`이다. 코드가 그림의 픽셀과 별도로
 파일에 포함됐으므로 공개 파일을 받은 사람도 읽을 수 있다.
+처음 보이는 코드는 다른 배너의 값이며 같은 배너의 버전 2 코드는 교체된 값이다.
+정답 형식이 같아도 이번 내보내기의 근거와 일치하지 않으면 제출값이 아니다.
 
 ## 확인한 원리와 조치
 
