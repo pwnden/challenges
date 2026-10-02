@@ -10,7 +10,7 @@ tools = ["web"]
 
 [content]
 description = "README.md"
-hints = ["hints/1.md", "hints/2.md", "hints/3.md"]
+hints = ["hints/1.md"]
 walkthrough = "solve/README.md"
 
 [flag]
