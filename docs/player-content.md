@@ -104,7 +104,7 @@ supplies one visible heading and the matching shared presentation.
 | `::objective` | 의뢰 목표 | The action and observable completion result |
 | `::resources` | 전달받은 정보 | Files, accounts, credentials and supplied facts |
 | `::knowledge` | 시작 전 알아둘 것 | Starting concepts, examples and problem-specific tool use |
-| `::submission` | 제출할 값 | Answer format and any value changes after restart |
+| `::submission` | 정답 형식 | Answer format and any value changes after restart |
 
 Close each block with `::`. An optional escaped `title` string supplies a more
 specific heading, such as `::resources{title="접속 정보"}`. Write the content inside
