@@ -41,14 +41,14 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [확장자가 바뀐 파일](challenges/false-label/README.md) | forensics | Identify a mislabeled archive by bytes and parse its contents |
 | [DNS 조회에 담긴 데이터](challenges/dns-detour/README.md) | forensics | Reassemble data from captured local DNS query labels |
 | [팀 문서의 읽기 권한](challenges/borrowed-badge/README.md) | misc | Document access rules, solution and patch checks |
-| [공개 이미지에 남은 내부 메모](challenges/image-notes/README.md) | forensics | PNG metadata inspection with file, ExifTool and jq |
-| [지운 설정 파일의 이전 내용](challenges/commit-trail/README.md) | misc | Deleted configuration recovered through actual Git history |
-| [삭제한 문서가 남은 백업](challenges/retained-record/README.md) | forensics | SQLite list, deletion state and retained revisions compared |
-| [내보내기에서 빠진 권한 검사](challenges/export-gap/README.md) | web | curl and jq compare normal reads with an unprotected export |
-| [개발용 점검 포트](challenges/diagnostic-port/README.md) | misc | Nmap TCP connection scan and Ncat diagnostic protocol comparison |
-| [모든 경로가 200을 반환하는 서버](challenges/quiet-route/README.md) | web | ffuf response-size filtering and actual JSON disclosure confirmation |
-| [패킷에 남은 전송 파일](challenges/packet-delivery/README.md) | forensics | TShark reassembles HTTP objects for file and archive inspection |
-| [서명이 맞는 납품 문서](challenges/signed-delivery/README.md) | crypto | OpenSSL detached RSA signatures identify the authentic document |
+| [공개 이미지에 남은 내부 메모](challenges/image-notes/README.md) | forensics | Correlate PNG export identity, revision and active metadata |
+| [지운 설정 파일의 이전 내용](challenges/commit-trail/README.md) | misc | Follow key rotation and a renamed configuration through Git history |
+| [삭제한 문서가 남은 백업](challenges/retained-record/README.md) | forensics | Distinguish the last published SQLite revision from newer drafts |
+| [내보내기에서 빠진 권한 검사](challenges/export-gap/README.md) | web | Compare protected reads, safe summaries and vulnerable full exports |
+| [개발용 점검 포트](challenges/diagnostic-port/README.md) | misc | Identify TCP service roles and select the active diagnostic resource |
+| [모든 경로가 200을 반환하는 서버](challenges/quiet-route/README.md) | web | Compare JSON content when fallback and private responses have equal sizes |
+| [패킷에 남은 전송 파일](challenges/packet-delivery/README.md) | forensics | Reassemble repeated HTTP deliveries and compare archive receipts |
+| [서명이 맞는 납품 문서](challenges/signed-delivery/README.md) | crypto | Distinguish current approval from an authentic earlier document |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped
