@@ -1,0 +1,33 @@
+schema = 5
+slug = "diagnostic-port"
+title = "개발용 점검 포트"
+category = "misc"
+difficulty = 2
+compose = "compose.yaml"
+
+[player]
+tools = ["terminal"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "generated"
+
+[[endpoints]]
+name = "web"
+service = "app"
+port = 8000
+protocol = "http"
+
+[solve]
+image = "pwnden-cli:basic-20261003"
+command = ["bash", "solve/solve.sh"]
+writable = true
+timeout_seconds = 30
+
+[patched]
+compose = "compose.patched.yaml"
+check = ["bash", "patched/test.sh"]
