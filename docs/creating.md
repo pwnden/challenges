@@ -38,7 +38,7 @@ contract version.
 | --- | --- |
 | `<slug>` | Creates `challenges/<slug>`; follows the contract's 1–40 character slug syntax and excludes Windows device names. |
 | `--kind file` | Creates distribution material, a fixed-flag declaration and solution scaffold. |
-| `--kind service` | Creates a Python HTTP starter, Dockerfile, Compose configuration and a generated-flag HTTP endpoint. |
+| `--kind service` | Creates Python target logic, a Vue screen, Dockerfile and Compose configuration. |
 | `--category` | Required: `web`, `pwn`, `rev`, `crypto`, `forensics` or `misc`. Category and execution kind are independent. |
 | `--title` | Korean display title; defaults to the authoring placeholder `새 시나리오`. Set the final title before publication. |
 | `--difficulty` | 1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert; defaults to 1. Review the intended solution against the contract criteria before publication. |
@@ -66,7 +66,8 @@ Every problem gets `challenge.toml`, `README.md`, `AUTHORING.md`, `solve/solve.p
 `solve/README.md` and the chosen number of hint files under `hints/`.
 
 File problems also get `files/data.txt`. Service problems get `compose.yaml`,
-`.dockerignore`, `vulnerable/Dockerfile` and `vulnerable/app.py`. The optional
+`.dockerignore`, `vulnerable/Dockerfile`, `vulnerable/app.py` and
+`vulnerable/web/App.vue`. The optional
 patch adds `compose.patched.yaml`, `patched/app.py` and `patched/test.py`.
 
 The HTTP starter binds container port 8000, exposes `/healthz`, receives the
@@ -81,6 +82,11 @@ Python is the starter implementation. Authors can replace target source and
 runtime requirements as the exercise requires. TCP and multi-service exercises
 use the same contract; their services and endpoint declarations are authored to
 match their requirements. The platform derives its tools from those declarations.
+
+Service screens use the repository's [shared Vue presentation](target-web.md).
+Python owns HTTP behavior, data, permissions and the intended vulnerability;
+the problem's Vue component owns its screen. The repository owns asset serving,
+offline font delivery and the pinned build toolchain.
 
 ## Complete before publication
 

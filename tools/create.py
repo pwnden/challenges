@@ -49,7 +49,7 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, p
     values = {'SCHEMA': str(definition['version']), 'SLUG': quoted(slug), 'TITLE': quoted(title),
               'CATEGORY': quoted(category), 'DIFFICULTY': str(difficulty), 'IMAGE': toolbox, 'IMAGE_TOML': quoted(toolbox),
               'HINTS': quoted([f'hints/{i}.md' for i in range(1, hints + 1)]),
-              'NETWORK': quoted(definition['solve_network'])}
+              'NETWORK': quoted(definition['solve_network']), 'SLUG_PATH': slug}
     files = {
         'challenge.toml': render(f'{kind}/challenge.toml', values),
         'README.md': render(f'{kind}/README.md', values),
@@ -73,7 +73,7 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, p
     if kind == 'file':
         files['files/data.txt'] = render('file/data.txt', values)
     else:
-        for output in ('compose.yaml', 'vulnerable/Dockerfile', 'vulnerable/app.py', '.dockerignore'):
+        for output in ('compose.yaml', 'vulnerable/Dockerfile', 'vulnerable/app.py', 'vulnerable/web/App.vue', '.dockerignore'):
             files[output] = render('service/' + output, values)
         if patched:
             files['challenge.toml'] += '\n[patched]\ncompose = "compose.patched.yaml"\ncheck = ["python3", "patched/test.py"]\n'

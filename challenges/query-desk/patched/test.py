@@ -27,7 +27,7 @@ def check():
         result = search(name)
         assert "error" not in result and result["matches"] == [], name
     status, body = get("/?" + urlencode({"name": "<script>alert(1)</script>"}))
-    assert status == 200 and "<script>" not in body and "&lt;script&gt;" in body
+    assert status == 200 and json.loads(body)['matches'] == []
     status, body = get("/?" + urlencode({"name": "' OR 1=1 -- "}))
     assert status == 200 and "pwnden{" not in body
     assert get("/api/search?" + urlencode({"name": "x" * 257}))[0] == 400

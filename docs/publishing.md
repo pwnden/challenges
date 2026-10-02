@@ -33,8 +33,9 @@ included. The temporary checkout contains its own contract and author tools.
 The snapshot must pass:
 
 1. Author-tool regression tests.
-2. Actual network isolation with reachable host and separate-network controls.
-3. Format checks and every declared solution, patch and resource-cleanup check.
+2. Vue screen types and rendered behavior through the pinned Docker toolchain.
+3. Actual network isolation with reachable host and separate-network controls.
+4. Format checks and every declared solution, patch and resource-cleanup check.
 
 The [verification guide](verification.md) defines those checks and their
 coverage. The host control currently requires a locally accessible Linux/WSL

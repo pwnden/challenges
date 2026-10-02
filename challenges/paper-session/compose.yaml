@@ -1,8 +1,8 @@
 services:
   app:
     build:
-      context: .
-      dockerfile: vulnerable/Dockerfile
+      context: ../..
+      dockerfile: challenges/paper-session/vulnerable/Dockerfile
     environment:
       FLAG: ${FLAG:?Start this challenge with the pwnden runner}
     networks: ["default"]

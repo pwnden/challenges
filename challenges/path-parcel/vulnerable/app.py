@@ -1,13 +1,13 @@
 """Actual file reads in an ephemeral container directory."""
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import ThreadingHTTPServer
 import os
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 from policy import locate
+from web.server import TargetHandler
 
 ROOT = Path('/tmp/parcels')
 PUBLIC = ROOT / 'public'
-STYLE = 'body{max-width:48rem;margin:2rem auto;padding:1rem;background:#101722;color:#dae4f2;font:17px/1.7 sans-serif}input,button{font:inherit;padding:.5rem}input{width:22rem;max-width:90%}a{color:#8bbfff}'
 
 
 def prepare():
@@ -18,24 +18,16 @@ def prepare():
     (ROOT / 'private/recovery.txt').write_text('운영 복구 키=' + os.environ['FLAG'] + '\n', encoding='utf-8')
 
 
-class Handler(BaseHTTPRequestHandler):
-    def reply(self, status, body, kind='text/plain'):
-        data = body.encode()
-        self.send_response(status)
-        self.send_header('Content-Type', kind + '; charset=utf-8')
-        self.send_header('Content-Length', str(len(data)))
-        self.send_header('Cache-Control', 'no-store')
-        self.send_header('X-Content-Type-Options', 'nosniff')
-        self.end_headers()
-        self.wfile.write(data)
-
+class Handler(TargetHandler):
+    reply = TargetHandler.document
     def do_GET(self):
+        if self.assets():
+            return
         url = urlsplit(self.path)
         if url.path == '/healthz':
             self.reply(200, 'ok')
         elif url.path == '/':
-            body = '<h1>주소 없는 택배함</h1><p>접수 안내 문서를 파일명으로 찾아 읽는 사이트입니다.</p><p><a href="/view?file=welcome.txt">welcome.txt</a> · <a href="/view?file=guide.txt">guide.txt</a></p><form action="/view"><label>파일명 <input name="file" value="welcome.txt" maxlength="256" required></label> <button>읽기</button></form>'
-            self.reply(200, '<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>택배함</title><style>' + STYLE + '</style><body>' + body + '</body></html>', 'text/html')
+            self.page(200, {'files': ['welcome.txt', 'guide.txt']})
         elif url.path == '/view':
             name = parse_qs(url.query).get('file', [''])[0]
             if not name or len(name) > 256 or '\x00' in name:

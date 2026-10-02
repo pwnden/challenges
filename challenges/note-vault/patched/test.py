@@ -33,7 +33,7 @@ def check():
     form_client = build_opener(HTTPCookieProcessor(CookieJar()))
     login = Request("http://app:8000/login", data=urlencode({"username": "guest", "password": "guest"}).encode())
     with form_client.open(login, timeout=5) as response:
-        assert response.status == 200 and b"Signed in as guest" in response.read()
+        assert response.status == 200 and json.load(response)['user'] == 'guest'
     assert request(form_client, "/notes/1")[0] == 200
     assert request(form_client, "/notes/2")[0] == 404
     print("guest notes work; private notes stay private")

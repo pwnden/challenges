@@ -1,0 +1,32 @@
+@font-face { font-family: 'Pretendard Variable'; src: url('./fonts/PretendardVariable.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+:root { color-scheme: dark; font-family: 'Pretendard Variable', sans-serif; color: #dae4f2; background: #101722; font-size: 16px; line-height: 1.65; --inset: 1rem; --radius: 0.5rem; --control: 2.75rem; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 52rem; margin: auto; padding: var(--inset); }
+header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--inset); padding: var(--inset); border-bottom: 1px solid #34455c; }
+h1 { font-size: 1.5rem; line-height: 1.35; margin: 0; }
+h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+section { padding: var(--inset); border-bottom: 1px solid #34455c; }
+p { margin: 0 0 0.75rem; }
+a { color: #94c5ff; text-underline-offset: 0.2em; }
+a:hover { color: #c0ddff; }
+form, label { display: grid; gap: 0.5rem; }
+form { align-items: end; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem; }
+form.login { grid-template-columns: 1fr; max-width: 26rem; }
+input, button { min-width: 0; height: var(--control); font: inherit; line-height: 1.5rem; border: 1px solid #6489ad; border-radius: var(--radius); padding: calc((var(--control) - 1.5rem - 2px) / 2); }
+input { width: 100%; background: #182334; color: inherit; caret-color: #94c5ff; }
+button { color: inherit; background: #263b54; cursor: pointer; }
+button:hover { background: #314c69; }
+button:active { background: #1c3048; }
+button:disabled { opacity: 0.65; cursor: wait; }
+:focus-visible { outline: 2px solid #94c5ff; outline-offset: 3px; }
+::selection { background: #345b86; color: #fff; }
+pre { overflow: auto; padding: var(--inset); border-radius: var(--radius); background: #182334; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre, code { font-family: ui-monospace, monospace; }
+ul { padding-inline-start: 1.25rem; }
+li + li { margin-top: 0.5rem; }
+table { width: 100%; border-collapse: collapse; }
+td, th { text-align: left; padding: var(--inset); border-bottom: 1px solid #34455c; overflow-wrap: anywhere; }
+.error { color: #ffb7b7; }
+.feedback { min-height: 1.65rem; }
+@media (max-width: 28rem) { form { grid-template-columns: 1fr; } }

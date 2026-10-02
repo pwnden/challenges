@@ -1,24 +1,22 @@
 """Add the challenge-specific HTTP behavior here."""
 
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import ThreadingHTTPServer
 import os
+from web.server import TargetHandler
 
 
 FLAG = os.environ['FLAG']
 
 
-class Handler(BaseHTTPRequestHandler):
+class Handler(TargetHandler):
     def do_GET(self):
+        if self.assets():
+            return
         if self.path == '/healthz':
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(b'ok')
+            self.send(200, 'ok')
             return
         # TODO: implement the target's routes, data and intended vulnerability.
-        self.send_response(503)
-        self.send_header('Content-Type', 'text/plain; charset=utf-8')
-        self.end_headers()
-        self.wfile.write('문제를 준비하고 있습니다.'.encode('utf-8'))
+        self.page(503, {'error': '문제를 준비하고 있습니다.'})
 
 
 if __name__ == '__main__':

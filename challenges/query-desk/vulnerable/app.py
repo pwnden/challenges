@@ -1,18 +1,13 @@
 """A real SQLite search target with a replaceable query policy."""
 from contextlib import closing
-from html import escape
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import ThreadingHTTPServer
 import json
 import os
 import sqlite3
 from urllib.parse import parse_qs, urlsplit
 
 from policy import search
-
-STYLE = """body{max-width:52rem;margin:3rem auto;padding:1rem;background:#101722;color:#dae4f2;font:17px/1.7 sans-serif}
-input,button{font:inherit;padding:.6rem;border:1px solid #6489ad;border-radius:.3rem}
-pre{overflow:auto;background:#182334;padding:1rem}table{width:100%;border-collapse:collapse}
-td,th{text-align:left;border-bottom:1px solid #34455c;padding:.7rem}a{color:#8bbfff}"""
+from web.server import TargetHandler
 
 
 def lookup(name):
@@ -26,18 +21,11 @@ def lookup(name):
         return search(database, name)
 
 
-class Handler(BaseHTTPRequestHandler):
-    def reply(self, status, body, kind="text/html"):
-        payload = body.encode()
-        self.send_response(status)
-        self.send_header("Content-Type", kind + "; charset=utf-8")
-        self.send_header("Content-Length", str(len(payload)))
-        self.send_header("Cache-Control", "no-store")
-        self.send_header("X-Content-Type-Options", "nosniff")
-        self.end_headers()
-        self.wfile.write(payload)
-
+class Handler(TargetHandler):
+    reply = TargetHandler.send
     def do_GET(self):
+        if self.assets():
+            return
         url = urlsplit(self.path)
         if url.path == "/healthz":
             self.reply(200, "ok", "text/plain")
@@ -57,18 +45,7 @@ class Handler(BaseHTTPRequestHandler):
         if url.path == "/api/search":
             self.reply(200, json.dumps(result, ensure_ascii=False), "application/json")
             return
-        table = "".join("<tr><td>" + escape(row["name"]) + "</td><td>" + escape(row["note"]) + "</td></tr>"
-                        for row in result["matches"])
-        details = ('<p role="status">' + escape(result["error"]) + '</p>' if "error" in result else
-                   '<h2>이번 검색에 사용한 조건</h2><pre>' + escape(result["query"]) + '</pre>')
-        body = ('<h1>회원 검색 데스크</h1><p>공개 회원 mira와 sol의 소개를 검색할 수 있습니다.</p>'
-                '<form action="/" method="get"><label>회원 이름 <input name="name" value="' + escape(name, quote=True) +
-                '" maxlength="256"></label> <button>검색</button></form>' + details +
-                '<h2>검색 결과</h2><table><thead><tr><th>닉네임</th><th>소개</th></tr></thead><tbody>' + table +
-                '</tbody></table><p>public = 1은 공개 회원, public = 0은 비공개 회원을 뜻합니다.</p>')
-        self.reply(200, '<!doctype html><html lang="ko"><meta charset="utf-8">'
-                   '<meta name="viewport" content="width=device-width, initial-scale=1">'
-                   '<title>회원 검색 데스크</title><style>' + STYLE + '</style><body>' + body + '</body></html>')
+        self.page(200, result)
 
 
 if __name__ == "__main__":

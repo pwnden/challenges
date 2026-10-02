@@ -1,13 +1,13 @@
-from html import escape
 from http import HTTPStatus
 from http.cookies import SimpleCookie
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import ThreadingHTTPServer
 import json
 import os
 import secrets
 from urllib.parse import parse_qs, urlsplit
 
 from policy import read_note
+from web.server import TargetHandler
 
 NOTES = {
     1: {"id": 1, "owner": "guest", "title": "Welcome", "body": "Your first private note."},
@@ -16,19 +16,12 @@ NOTES = {
 SESSIONS = {}
 
 
-class Handler(BaseHTTPRequestHandler):
-    def reply(self, status, data, *, html=False, cookie=None):
-        body = data.encode("utf-8") if html else json.dumps(data).encode("utf-8")
-        self.send_response(status)
-        content_type = "text/html" if html else "application/json"
-        self.send_header("Content-Type", content_type + "; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
-        self.send_header("X-Content-Type-Options", "nosniff")
-        if cookie:
-            self.send_header("Set-Cookie", cookie)
-        self.end_headers()
-        self.wfile.write(body)
+class Handler(TargetHandler):
+    def reply(self, status, data, *, cookie=None):
+        if urlsplit(self.path).path.startswith('/notes/') and 'text/html' in self.headers.get('Accept', ''):
+            self.page(status, data, (cookie,) if cookie else ())
+            return
+        self.send(status, json.dumps(data), 'application/json', (cookie,) if cookie else ())
 
     def user(self):
         cookie = SimpleCookie()
@@ -39,29 +32,18 @@ class Handler(BaseHTTPRequestHandler):
         token = cookie.get("session")
         return SESSIONS.get(token.value) if token else None
 
-    def page(self, body):
-        self.reply(200, '<!doctype html><html lang="en"><meta charset="utf-8">'
-                   '<meta name="viewport" content="width=device-width, initial-scale=1">'
-                   '<title>개인 메모 사이트</title><body><h1>개인 메모 사이트</h1>' + body + '</body></html>', html=True)
-
     def do_GET(self):
+        if self.assets():
+            return
         path = urlsplit(self.path).path
         if path == "/healthz":
             self.reply(200, {"status": "ok"})
             return
         user = self.user()
         if path == "/":
-            if user is None:
-                self.page('<p>Sign in to read your private notes.</p>'
-                          '<form method="post" action="/login">'
-                          '<p><label>Username <input name="username" value="guest" required></label></p>'
-                          '<p><label>Password <input name="password" type="password" required></label></p>'
-                          '<button>Sign in</button></form>')
-            else:
-                items = ''.join(f'<li><a href="/notes/{note["id"]}">{escape(note["title"])}</a>'
-                                f' (#{note["id"]})</li>'
-                                for note in NOTES.values() if note["owner"] == user)
-                self.page(f'<p>Signed in as {escape(user)}.</p><ul>{items}</ul>')
+            self.page(200, {"site": "개인 메모 사이트", "user": user,
+                            "notes": [{"id": note["id"], "title": note["title"]}
+                                      for note in NOTES.values() if note["owner"] == user]})
             return
         if path != "/api/notes" and not path.startswith(("/api/notes/", "/notes/")):
             self.reply(404, {"error": "not_found"})
@@ -82,8 +64,7 @@ class Handler(BaseHTTPRequestHandler):
         if note is None:
             self.reply(404, {"error": "not_found"})
         elif path.startswith("/notes/"):
-            self.page(f'<h2>{escape(note["title"])}</h2><pre>{escape(note["body"])}</pre>'
-                      '<p><a href="/">My notes</a></p>')
+            self.page(200, note)
         else:
             self.reply(200, note)
 
