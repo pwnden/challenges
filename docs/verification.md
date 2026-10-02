@@ -53,7 +53,8 @@ For each selected problem, the verifier:
    services. Environment-file paths are checked before resolving their contents.
 2. Preserves the exercise configuration while removing published ports,
    isolating every bridge network, dropping all capabilities and enabling
-   `no-new-privileges`. It inspects live network ownership and configuration
+   `no-new-privileges`, enforcing the [author runtime limits](#runtime-limits).
+   It inspects live network ownership and configuration
    before attaching a toolbox.
 3. Runs the declared solution in its image. File toolboxes use network `none`
    and SHA-256 comparison; services receive a fresh generated flag and the
@@ -68,8 +69,8 @@ For each selected problem, the verifier:
 
 Verification uses fresh invocation-specific project/container identities and
 does not adopt or stop the player's existing environments. Images/build caches
-remain. `solve.writable` follows the contract: permitted repository writes can
-remain after verification, so authors must design those writes deliberately.
+remain. Writable copies are removed after author verification; generated files
+never change the author's repository.
 
 Missing toolbox images are prepared before the command's declared runtime limit.
 `--prepare-timeout 300` controls image preparation and service startup separately;
@@ -81,6 +82,47 @@ and redacted from verifier diagnostics.
 The generator deliberately creates incomplete solution stubs. A newly generated
 manifest can pass format checks while execution checks fail until the author
 implements the actual exercise.
+
+## Runtime limits
+
+The author runner rejects GPU/device access, privileged hooks, host namespaces,
+extra capabilities and custom security profiles before startup. Services retain
+their declared image and user, but receive a read-only root and an executable,
+writable 128 MiB `/tmp` tmpfs. Declare separate temporary data mounts for writes
+and use a non-root user in service images.
+
+Services and toolboxes have per-container ceilings of 2 CPUs, 2 GiB memory,
+no additional swap and 256 processes. Author resource declarations cannot
+increase these limits. Memory is not reserved in advance. Toolboxes run as
+`10001:10001` in both read-only and writable modes. A separate 64 MiB tmpfs at `/home/pwnden`
+provides a writable home; caches and compiled exercises use `/tmp`.
+
+Logs rotate through the `local` driver with 10 MiB per file and 3 files.
+Command stdout and stderr each have an 8 MiB capture limit; exceeding either
+fails verification and still performs cleanup. All solution and patch commands
+use this policy. Writable repository binds are rejected. Named service volumes
+use 256 MiB local-driver tmpfs with 32768 inodes and no automatic image copy.
+Other declared tmpfs mounts are capped at 256 MiB and shared memory at 64 MiB.
+Toolbox image `VOLUME` declarations are rejected; service image volumes require
+explicit mounted paths. Volumes disappear on stop/unmount and are unsuitable for
+durable data. Builds, downloads and image caches remain preparation operations.
+
+Writable toolboxes share a 256 MiB problem-specific copy, retained by a small
+networkless keeper until environment cleanup. Its ceilings are 0.25 CPU,
+512 MiB memory and 32 processes; the memory allowance also accounts for the
+workspace contents retained after a command exits. Commands and PTYs see the
+same copy, while patched projects receive a separate copy. Originals never change.
+
+On Linux/WSL, the Go consumer and Python author runner share a per-user, per-daemon
+lock in `/tmp`. Creation reserves actual container ceilings before processes
+start. The default aggregate budget is 8 CPUs, 8 GiB RAM, 1024 processes and
+12 containers, clipped to the daemon's CPU/RAM capacity. Connectors and keepers
+also count. Exceeding any dimension rejects creation, without interrupting
+existing environments. Created and stopped managed containers count until removed;
+unrelated applications do not count. Operator settings are positive integers:
+`PWNDEN_RUNTIME_CPUS`, `PWNDEN_RUNTIME_MEMORY_MIB`, `PWNDEN_RUNTIME_PIDS`,
+`PWNDEN_RUNTIME_CONTAINERS`. This admission policy assumes the controllers run
+as the same local OS user; it is not a daemon-wide quota for other users or hosts.
 
 ## Actual network isolation
 

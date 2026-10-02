@@ -15,16 +15,14 @@ import time
 import uuid
 
 from validate import InvalidChallenge, inside
-from policy import OUTPUT_LIMIT
+from policy import OUTPUT_LIMIT, SECURITY_OPTIONS, service_policy, tool_options
+from budget import admission, Cost, TOOL_COST, MANAGED_LABEL
+from execution import ExecutionError
 
 
 GATEWAY_KEYS = ('com.docker.network.bridge.gateway_mode_ipv4',
                 'com.docker.network.bridge.gateway_mode_ipv6')
 OWNER_LABEL = 'pwnden.author-verification'
-
-
-class ExecutionError(RuntimeError):
-    pass
 
 
 @dataclass
@@ -236,22 +234,40 @@ def isolated_config(root, directory, metadata, project, resolved):
         network['driver'] = 'bridge'
         network['internal'] = True
         network['driver_opts'] = dict.fromkeys(GATEWAY_KEYS, 'isolated')
+    if len(cfg.get('volumes') or {}) > 8:
+        raise InvalidChallenge('problem has too many temporary volumes')
+    if 'pwnden-workspace' in (cfg.get('volumes') or {}):
+        raise InvalidChallenge('volume name pwnden-workspace is reserved for the temporary toolbox workspace')
     for key, volume in (cfg.get('volumes') or {}).items():
         if (volume.get('external') or volume.get('name') != f'{project}_{key}'
                 or volume.get('driver', 'local') != 'local' or volume.get('driver_opts')):
             raise InvalidChallenge(f'volume {key!r} must be a project-scoped local volume')
+        volume['driver'] = 'local'
+        volume['driver_opts'] = {'type': 'tmpfs', 'device': 'tmpfs',
+                                 'o': 'size=256m,nosuid,nodev,nr_inodes=32768,mode=1777'}
     for name, service in services.items():
+        if service.get('scale', 1) != 1 or (service.get('deploy') or {}).get('replicas', 1) != 1:
+            raise InvalidChallenge(f'service {name!r} must have one replica')
+        if len(service.get('volumes') or [])+len(service.get('tmpfs') or []) > 16:
+            raise InvalidChallenge(f'service {name!r} has too many mounts')
         if (any(service.get(key) for key in ('privileged', 'use_api_socket', 'devices', 'cap_add',
                                             'gpus', 'device_cgroup_rules', 'provider',
                                             'credential_spec', 'volumes_from'))
-                or any(hook.get('privileged') for field in ('post_start', 'pre_stop')
+                or any(hook.get('privileged') for field in ('pre_start', 'post_start', 'pre_stop')
                        for hook in service.get(field) or [])
-                or service.get('pid') == 'host' or service.get('ipc') == 'host'
+                or service.get('pid') or service.get('ipc', '') not in ('', 'private', 'shareable')
+                or service.get('userns_mode') or service.get('cgroup', '') not in ('', 'private')
+                or service.get('uts')
+                or service.get('cgroup_parent') or service.get('runtime')
                 or service.get('network_mode', '') not in ('', 'none')):
             raise InvalidChallenge(f'service {name!r} requests host privileges')
+        if any(option not in SECURITY_OPTIONS for option in service.get('security_opt') or []):
+            raise InvalidChallenge(f'service {name!r} requests a custom security profile')
         for mount in service.get('volumes') or []:
             kind = mount.get('type')
             if kind == 'bind':
+                if not mount.get('read_only'):
+                    raise InvalidChallenge(f'service {name!r} requires read-only repository binds; use temporary volumes for writes')
                 mount['source'] = repository_source(root, directory, mount.get('source'))
             elif kind not in ('volume', 'tmpfs'):
                 raise InvalidChallenge(f'service {name!r} has an unsupported mount')
@@ -270,10 +286,7 @@ def isolated_config(root, directory, metadata, project, resolved):
             cache_sources(root, directory, build.get('cache_from'), 'src')
             cache_sources(root, directory, build.get('cache_to'), 'dest')
         service.pop('ports', None)
-        service['cap_drop'] = ['ALL']
-        service['security_opt'] = [option for option in service.get('security_opt', [])
-                                   if not option.startswith('no-new-privileges')]
-        service['security_opt'].append('no-new-privileges:true')
+        service_policy(service)
     for kind in ('configs', 'secrets'):
         for name, resource in (cfg.get(kind) or {}).items():
             if resource.get('external'):
@@ -310,6 +323,8 @@ class Docker:
         self.commands = commands or Commands()
         self.prepare_timeout = prepare_timeout
         self.owner = uuid.uuid4().hex
+        self.network_projects = {}
+        self.workspaces = {}
 
     def call(self, *args, **kwargs):
         return self.commands.run(['docker', *args], **kwargs)
@@ -327,6 +342,9 @@ class Docker:
     def prepare_image(self, image):
         if self.call('image', 'inspect', image, check=False).code:
             self.call('pull', image, timeout=self.prepare_timeout)
+        volumes = self.call('image', 'inspect', '--format', '{{json .Config.Volumes}}', image).stdout
+        if json.loads(volumes):
+            raise ExecutionError('toolbox images must not declare anonymous VOLUME storage')
 
     def project(self, root, directory, metadata, flag, *, patched=False):
         suffix = '-patched' if patched else ''
@@ -351,13 +369,19 @@ class Docker:
         self.prepare_image(image)
         name = f'pwnden-author-tool-{uuid.uuid4().hex}'
         writable = metadata['solve']['writable']
-        options = ['run', '--rm', '--name', name, '--label', f'{OWNER_LABEL}={self.owner}',
+        mount = toolbox_mount(directory, False)
+        if writable:
+            from workspace import ensure_workspace
+            mount = 'type=volume,source='+ensure_workspace(self, directory, network)+',target=/challenge,volume-nocopy'
+        options = ['create', '--rm', '--name', name, '--label', f'{OWNER_LABEL}={self.owner}',
+                   '--label', MANAGED_LABEL+'=true', '--label', 'pwnden.kind=tool',
                    '--network', network, '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
-                   '--mount', toolbox_mount(directory, writable), '--workdir', '/challenge']
-        if writable and hasattr(os, 'geteuid'):
-            options.extend(['--user', f'{os.geteuid()}:{os.getegid()}'])
+                   '--mount', mount, '--workdir', '/challenge']
+        options.extend(tool_options(writable))
         try:
-            result = self.call(*options, '--', image, *args, check=False,
+            with admission(self.call, TOOL_COST, interrupted=lambda: self.commands.interrupted):
+                self.call(*options, '--', image, *args, timeout=self.prepare_timeout)
+            result = self.call('start', '--attach', name, check=False,
                                timeout=metadata['solve']['timeout_seconds'])
             if result.code < 0 or result.code >= 125:
                 raise ExecutionError(self.commands.redact(f'toolbox launch/signal failure: {result.stderr.strip()}'))
@@ -388,14 +412,36 @@ class Project:
     def running(self):
         try:
             self.started = True  # A failed up can already have created project resources.
-            self.compose('up', '-d', '--build', '--wait', '--wait-timeout', '60',
-                         timeout=self.docker.prepare_timeout)
+            self.compose('pull', '--ignore-buildable', timeout=self.docker.prepare_timeout)
+            self.compose('build', timeout=self.docker.prepare_timeout)
+            for name, service in self.cfg['services'].items():
+                image = service.get('image') or self.name+'-'+name
+                targets = {mount['target'] for mount in service.get('volumes') or []}
+                targets.update(entry.split(':', 1)[0] for entry in service.get('tmpfs') or [])
+                declared = json.loads(self.docker.call('image', 'inspect', '--format', '{{json .Config.Volumes}}', image).stdout)
+                if any(target not in targets for target in declared or {}):
+                    raise ExecutionError('images must declare bounded service VOLUME storage explicitly')
+            with admission(self.docker.call, Cost(2_000_000_000*len(self.cfg['services']),
+                           2*1024**3*len(self.cfg['services']), 256*len(self.cfg['services']), len(self.cfg['services'])),
+                           interrupted=lambda: self.docker.commands.interrupted):
+                self.compose('create', '--no-build', timeout=self.docker.prepare_timeout)
+                self.check_mounts()
+            self.compose('start', '--wait', '--wait-timeout', '60', timeout=self.docker.prepare_timeout)
             self.networks()
             yield self
         finally:
             if self.started:
-                self.compose('down', '--volumes', '--remove-orphans', timeout=120, cleanup=True)
-                self.assert_removed()
+                from workspace import remove_workspace
+                failures = []
+                for cleanup in (lambda: remove_workspace(self.docker, self.name),
+                                lambda: self.compose('down', '--volumes', '--remove-orphans', timeout=120, cleanup=True),
+                                self.assert_removed):
+                    try:
+                        cleanup()
+                    except (ExecutionError, OSError, ValueError) as error:
+                        failures.append(str(error))
+                if failures:
+                    raise ExecutionError('project cleanup failed: '+ '; '.join(failures))
 
     def networks(self):
         ids = self.docker.call('network', 'ls', '--no-trunc', '--filter',
@@ -412,8 +458,27 @@ class Project:
     def network(self, key):
         for network in self.networks():
             if network['Labels'].get('com.docker.compose.network') == key:
+                self.docker.network_projects[network['Id']] = self.name
                 return network['Id']
         raise ExecutionError(f'solve network {key!r} is not running')
+
+    def check_mounts(self):
+        for volume in (self.cfg.get('volumes') or {}).values():
+            actual, = json.loads(self.docker.call('volume', 'inspect', volume['name']).stdout)
+            if actual['Driver'] != 'local' or actual['Options'] != {'type': 'tmpfs', 'device': 'tmpfs', 'o': 'size=256m,nosuid,nodev,nr_inodes=32768,mode=1777'}:
+                raise ExecutionError('existing service volume has no runtime quota; stop and restart')
+        ids = self.docker.call('container', 'ls', '--all', '--filter',
+                               f'label=com.docker.compose.project={self.name}', '--format', '{{.ID}}').stdout.split()
+        if not ids:
+            raise ExecutionError('problem has no created services')
+        containers = json.loads(self.docker.call('container', 'inspect', *ids).stdout)
+        if len(containers) != len(ids):
+            raise ExecutionError('incomplete service mount inspection')
+        volumes = {volume['name'] for volume in (self.cfg.get('volumes') or {}).values()}
+        for container in containers:
+            for mount in container.get('Mounts') or []:
+                if mount['Type'] == 'bind' and mount.get('RW') or mount['Type'] == 'volume' and mount['Name'] not in volumes:
+                    raise ExecutionError('writable host binds and anonymous service volumes are prohibited')
 
     def assert_removed(self):
         for kind, args in (('containers', ('ps', '-aq')), ('networks', ('network', 'ls', '-q')),

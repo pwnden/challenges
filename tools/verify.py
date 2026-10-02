@@ -1,6 +1,7 @@
 """Verify challenge targets, solutions, patches and cleanup with Python and Docker."""
 
 import argparse
+from budget import BudgetError
 import hashlib
 from pathlib import Path
 import secrets
@@ -85,9 +86,15 @@ def verify_catalog(root, slugs=(), *, docker=None, prepare_timeout=300):
             docker.prerequisites()
             for directory, metadata in records:
                 print(f'Verifying {metadata["slug"]}...', flush=True)
-                verify_problem(docker, root, directory, metadata, definition)
+                try:
+                    verify_problem(docker, root, directory, metadata, definition)
+                finally:
+                    if isinstance(docker, Docker):
+                        from workspace import remove_workspace
+                        for project in list(docker.workspaces):
+                            remove_workspace(docker, project)
                 print(f'verified {metadata["slug"]} (solution, declared patch checks, cleanup)', flush=True)
-    except (OSError, ValueError, ExecutionError) as error:
+    except (OSError, ValueError, ExecutionError, BudgetError) as error:
         raise ExecutionError(docker.commands.redact(str(error))) from error
     return len(records)
 

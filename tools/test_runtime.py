@@ -1,6 +1,7 @@
 """Execution boundaries, interruption and cleanup of author-owned verification."""
 
 import copy
+from contextlib import nullcontext
 import csv
 import json
 from pathlib import Path
@@ -19,6 +20,9 @@ from validate import InvalidChallenge
 
 class RuntimeTests(unittest.TestCase):
     def setUp(self):
+        admission_mock = patch('runtime.admission', side_effect=lambda *a, **kw: nullcontext())
+        admission_mock.start()
+        self.addCleanup(admission_mock.stop)
         temporary = tempfile.TemporaryDirectory(prefix='pwnden-author-policy-')
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
@@ -63,12 +67,52 @@ class RuntimeTests(unittest.TestCase):
                   'credential_spec': {'file': '/credentials'}, 'volumes_from': ['other'],
                   'gpus': ['all'], 'device_cgroup_rules': ['a *:* rwm'],
                   'post_start': [{'command': 'true', 'privileged': True}],
-                  'pre_stop': [{'command': 'true', 'privileged': True}]}
+                  'pre_start': [{'command': 'true', 'privileged': True}],
+                  'pre_stop': [{'command': 'true', 'privileged': True}],
+                  'userns_mode': 'host', 'cgroup': 'host', 'cgroup_parent': '/host',
+                  'runtime': 'custom', 'uts': 'host'}
         for key, value in values.items():
             cfg = copy.deepcopy(self.cfg)
             cfg['services']['app'][key] = value
             with self.subTest(key=key), self.assertRaisesRegex(InvalidChallenge, 'host privileges'):
                 self.isolate(cfg)
+
+    def test_rejects_custom_security_profiles(self):
+        for option in ('seccomp:unconfined', 'apparmor:unconfined', 'seccomp:/host/profile',
+                       'systempaths:unconfined', 'label:disable'):
+            cfg = copy.deepcopy(self.cfg)
+            cfg['services']['app']['security_opt'] = [option]
+            with self.subTest(option=option), self.assertRaisesRegex(InvalidChallenge, 'security profile'):
+                self.isolate(cfg)
+
+    def test_bounded_storage_rejects_writable_host_mounts_and_replicas(self):
+        for setting in ({'scale': 2}, {'deploy': {'replicas': 0}},
+                        {'volumes': [{'type':'bind', 'source':str(self.directory), 'target':'/data'}]}):
+            cfg = copy.deepcopy(self.cfg)
+            cfg['services']['app'].update(setting)
+            with self.subTest(setting=setting), self.assertRaises(InvalidChallenge):
+                self.isolate(cfg)
+        result = self.isolate()
+        self.assertEqual(result['volumes']['data']['driver_opts'],
+                         {'type':'tmpfs', 'device':'tmpfs', 'o':'size=256m,nosuid,nodev,nr_inodes=32768,mode=1777'})
+
+    def test_author_limits_cannot_override_runtime_policy(self):
+        app = self.cfg['services']['app']
+        app.update(cpus=99, mem_limit='64g', memswap_limit=-1, pids_limit=-1,
+                   cpu_quota=-1, oom_kill_disable=True, read_only=False,
+                   deploy={'resources': {'limits': {'cpus': '99', 'memory': '64g'}}},
+                   logging={'driver': 'syslog'}, tmpfs=['/tmp:size=1g', '/run:size=1m'],
+                   volumes=[{'type': 'tmpfs', 'target': '/tmp'}])
+        result = self.isolate()['services']['app']
+        self.assertEqual((result['cpus'], result['mem_limit'], result['memswap_limit'], result['pids_limit']),
+                         (2, '2g', '2g', 256))
+        self.assertTrue(result['read_only'])
+        self.assertFalse(result['oom_kill_disable'])
+        self.assertNotIn('cpu_quota', result)
+        self.assertNotIn('resources', result['deploy'])
+        self.assertEqual(result['logging']['driver'], 'local')
+        self.assertEqual(result['volumes'], [])
+        self.assertEqual(result['tmpfs'], ['/run:rw,exec,nosuid,nodev,size=256m,nr_inodes=32768', '/tmp:rw,exec,nosuid,nodev,size=128m'])
 
     def test_rejects_external_and_unowned_resources(self):
         changes = [('networks', 'external', True), ('networks', 'name', 'unrelated'),
@@ -87,7 +131,7 @@ class RuntimeTests(unittest.TestCase):
             cfg = copy.deepcopy(self.cfg)
             app = cfg['services']['app']
             if resource == 'bind':
-                app['volumes'] = [{'type': 'bind', 'source': str(outside), 'target': '/outside'}]
+                app['volumes'] = [{'type': 'bind', 'source': str(outside), 'target': '/outside', 'read_only': True}]
             elif resource in ('context', 'dockerfile'):
                 app['build'][resource] = str(outside)
             elif resource in ('secret', 'config'):
@@ -121,7 +165,7 @@ class RuntimeTests(unittest.TestCase):
 
     def test_accepts_internal_mounts_and_cache_csv(self):
         app = self.cfg['services']['app']
-        app['volumes'] = [{'type': 'bind', 'source': str(self.directory / 'data'), 'target': '/data'},
+        app['volumes'] = [{'type': 'bind', 'source': str(self.directory / 'data'), 'target': '/data', 'read_only': True},
                           {'type': 'volume', 'source': 'data', 'target': '/state'},
                           {'type': 'tmpfs', 'target': '/tmp'}]
         app['build']['cache_to'] = ['TYPE=local,"dest=cache,output"']
@@ -149,8 +193,10 @@ class RuntimeTests(unittest.TestCase):
         calls = []
         def call(*args, **kwargs):
             calls.append((args, kwargs))
-            if 'up' in args:
+            if 'create' in args:
                 raise ExecutionError('failed after resources were created')
+            if '{{json .Config.Volumes}}' in args:
+                return Result(0, 'null')
             return Result(0)
         with patch.object(docker, 'call', side_effect=call), self.assertRaisesRegex(ExecutionError, 'failed after'):
             with project.running():
@@ -164,8 +210,9 @@ class RuntimeTests(unittest.TestCase):
         docker = Docker()
         project = Project(docker, self.directory, self.project, self.isolate(), {})
         with patch.object(project, 'compose', return_value=Result(0)), \
+             patch.object(project, 'check_mounts'), \
              patch.object(project, 'networks', return_value=[]), \
-             patch.object(docker, 'call', return_value=Result(0, 'leftover')):
+             patch.object(docker, 'call', side_effect=lambda *args, **kw: Result(0, 'null' if '{{json .Config.Volumes}}' in args else 'leftover')):
             with self.assertRaisesRegex(ExecutionError, 'cleanup left project containers'):
                 with project.running():
                     pass
@@ -176,17 +223,21 @@ class RuntimeTests(unittest.TestCase):
         calls = []
         def call(*args, **kwargs):
             calls.append((args, kwargs))
-            if args[0] == 'run':
+            if args[0] == 'start':
                 raise ExecutionError('timeout')
+            if '{{json .Config.Volumes}}' in args:
+                return Result(0, 'null')
             if args[0] == 'ps':
                 return Result(0, 'owned-id\n')
             return Result(0)
         with patch.object(docker, 'call', side_effect=call), self.assertRaisesRegex(ExecutionError, 'timeout'):
             docker.tool(self.directory, metadata, 'none', 'image', ['solve'])
-        run, options = next((args, kwargs) for args, kwargs in calls if args[0] == 'run')
-        for value in ['--cap-drop', 'ALL', 'no-new-privileges', f'{OWNER_LABEL}={docker.owner}']:
+        run, options = next((args, kwargs) for args, kwargs in calls if args[0] == 'create')
+        for value in ['--cap-drop', 'ALL', 'no-new-privileges', f'{OWNER_LABEL}={docker.owner}',
+                      '--read-only', '--user', '10001:10001', '--pids-limit', '256',
+                      '--memory-swap', '2g', '/tmp:rw,exec,nosuid,nodev,size=128m']:
             self.assertIn(value, run)
-        self.assertEqual(options['timeout'], 3)
+        self.assertEqual(next(kwargs['timeout'] for args, kwargs in calls if args[0] == 'start'), 3)
         removal = next((args, kwargs) for args, kwargs in calls if args[0] == 'rm')
         self.assertTrue(removal[1]['cleanup'])
         self.assertEqual(removal[0][-1], 'owned-id')
