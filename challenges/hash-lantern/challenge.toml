@@ -1,0 +1,22 @@
+schema = 5
+slug = "hash-lantern"
+title = "Hash Lantern"
+category = "crypto"
+difficulty = 1
+files = ["files/account.txt", "files/candidates.txt"]
+
+[player]
+tools = ["files", "terminal"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md", "hints/3.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "sha256"
+sha256 = "f28d96cb3d35fadc6386dd3d43f448773d7759faafcbd215853f7f0a54c053b1"
+
+[solve]
+image = "python:3.13.15-slim-trixie@sha256:7c61056e61ac89e852de05f3dc6fa51a6dd2181797bceed46aa725dd7cb2cd3b"
+command = ["python3", "solve/solve.py"]

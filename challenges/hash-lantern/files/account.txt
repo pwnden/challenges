@@ -1,0 +1,5 @@
+account=backup-reader
+algorithm=SHA-256
+encoding=UTF-8
+salt=none
+password_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f
