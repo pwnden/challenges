@@ -6,14 +6,14 @@ tools. The authoring workflow, solutions and publication finish in this reposito
 
 | Scenario | Primary topic | Proposed level | Tools | Evidence |
 | --- | --- | --- | --- | --- |
-| [Paper Session](../challenges/paper-session/README.md) | web-authentication-sessions | 입문 | Web | Changing a browser role cookie changes a real authorization response. |
-| [Path Parcel](../challenges/path-parcel/README.md) | web-information-disclosure | 초급 | Web | A relative path reads an actual file outside the public directory. |
-| [Hash Lantern](../challenges/hash-lantern/README.md) | crypto-hashes-authentication | 입문 | Files, terminal | One of six candidates matches the unsalted SHA-256 record. |
-| [False Label](../challenges/false-label/README.md) | forensics-files-metadata | 입문 | Files, terminal | Signature bytes and an archive parser identify the supplied file. |
-| [DNS Detour](../challenges/dns-detour/README.md) | forensics-network-evidence | 초급 | Files, terminal | Actual loopback DNS messages carry ordered, retransmitted Base32 chunks. |
-| [Shared Files](../challenges/borrowed-badge/README.md) | cloud-identity-policies | 초급 | Web | A broad document-name rule permits an unintended read. |
+| [사용자 구분 값 바꾸기](../challenges/paper-session/README.md) | web-authentication-sessions | 입문 | Web | Changing a browser role cookie changes a real authorization response. |
+| [공개 폴더 밖의 문서](../challenges/path-parcel/README.md) | web-information-disclosure | 초급 | Web | A relative path reads an actual file outside the public directory. |
+| [비밀번호 후보 찾기](../challenges/hash-lantern/README.md) | crypto-hashes-authentication | 입문 | Files, terminal | One of six candidates matches the unsalted SHA-256 record. |
+| [확장자가 바뀐 파일](../challenges/false-label/README.md) | forensics-files-metadata | 입문 | Files, terminal | Signature bytes and an archive parser identify the supplied file. |
+| [DNS 조회에 담긴 데이터](../challenges/dns-detour/README.md) | forensics-network-evidence | 초급 | Files, terminal | Actual loopback DNS messages carry ordered, retransmitted Base32 chunks. |
+| [팀 문서의 읽기 권한](../challenges/borrowed-badge/README.md) | cloud-identity-policies | 초급 | Web | A broad document-name rule permits an unintended read. |
 
-DNS Detour teaches evidence analysis from a supplied capture. Shared Files
+The `dns-detour` scenario teaches evidence analysis from a supplied capture. The `borrowed-badge` scenario
 uses the misc compatibility category and a labelled local policy subset; its
 learning area remains cloud and infrastructure security. The policy's exact
 action match, star resource match, default denial and explicit denial precedence
@@ -55,7 +55,7 @@ the player. Source evidence regenerates the password record and archive. The arc
 has fixed time and OS-independent gzip metadata. Actual local UDP traffic regenerates
 the DNS record; reordered copies, missing chunks and conflicting data are tested.
 The seven evidence/policy tests also pass in pinned Python 3.13.15, alongside host
-Python 3.14.7. Shared Files, Path Parcel and Paper Session test normal and invalid
+Python 3.14.7. The `borrowed-badge`, `path-parcel` and `paper-session` scenarios test normal and invalid
 requests, attack recovery, patch denial and continued normal use.
 
 The UI package's md4x 0.0.30 parser recognized the four compiled briefing sections

@@ -1,6 +1,6 @@
 schema = 5
 slug = "false-label"
-title = "False Label"
+title = "확장자가 바뀐 파일"
 category = "forensics"
 difficulty = 1
 files = ["files/banner.png"]

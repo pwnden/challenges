@@ -127,7 +127,7 @@ completion time each supply context; they do not establish a level by themselves
 Observed learner time is useful evidence alongside the causes of progress or
 confusion. The generator's default level is an authoring placeholder to review.
 
-For example, Rotor Lock requires following Python functions and loops, byte
+For example, the `rotor-lock` scenario requires following Python functions and loops, byte
 values, XOR, shifts and rotation, then constructing an inverse transformation.
 Those abilities need to appear in its prerequisite assessment and player context.
 Assessing the number of lines in its checker alone misses that workload.

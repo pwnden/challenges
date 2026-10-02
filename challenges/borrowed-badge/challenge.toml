@@ -1,6 +1,6 @@
 schema = 5
 slug = "borrowed-badge"
-title = "Shared Files"
+title = "팀 문서의 읽기 권한"
 category = "misc"
 difficulty = 2
 compose = "compose.yaml"

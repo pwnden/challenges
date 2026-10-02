@@ -1,6 +1,6 @@
 schema = 5
 slug = "wrapped-secret"
-title = "Wrapped Secret"
+title = "문자로 바꾼 복구 키"
 category = "crypto"
 difficulty = 1
 files = ["files/recovery.txt"]

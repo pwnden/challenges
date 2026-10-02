@@ -22,18 +22,18 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 
 | Scenario | Category | Runtime |
 | --- | --- | --- |
-| [Rotor Lock](challenges/rotor-lock/README.md) | rev | File only |
-| [Note Vault](challenges/note-vault/README.md) | web | One service, solution and patch checks |
-| [Forgotten Shelf](challenges/forgotten-shelf/README.md) | web | Exposed backup, solution and patch checks |
-| [Query Desk](challenges/query-desk/README.md) | web | Real SQL search, solution and patch checks |
-| [Wrapped Secret](challenges/wrapped-secret/README.md) | crypto | File and prepared decoding command |
-| [Midnight Trace](challenges/midnight-trace/README.md) | forensics | Correlate captured HTTP and audit records |
-| [Paper Session](challenges/paper-session/README.md) | web | Browser cookie claims, solution and patch checks |
-| [Path Parcel](challenges/path-parcel/README.md) | web | Actual relative file reads, solution and patch checks |
-| [Hash Lantern](challenges/hash-lantern/README.md) | crypto | Compare six password candidates using the prepared hash command |
-| [False Label](challenges/false-label/README.md) | forensics | Identify a mislabeled archive by bytes and parse its contents |
-| [DNS Detour](challenges/dns-detour/README.md) | forensics | Reassemble data from captured local DNS query labels |
-| [Shared Files](challenges/borrowed-badge/README.md) | misc | Document access rules, solution and patch checks |
+| [잠금장치의 입력 검사](challenges/rotor-lock/README.md) | rev | File only |
+| [다른 사람의 메모](challenges/note-vault/README.md) | web | One service, solution and patch checks |
+| [남겨진 백업 파일](challenges/forgotten-shelf/README.md) | web | Exposed backup, solution and patch checks |
+| [비공개 회원 검색](challenges/query-desk/README.md) | web | Real SQL search, solution and patch checks |
+| [문자로 바꾼 복구 키](challenges/wrapped-secret/README.md) | crypto | File and prepared decoding command |
+| [자료 유출 기록](challenges/midnight-trace/README.md) | forensics | Correlate captured HTTP and audit records |
+| [사용자 구분 값 바꾸기](challenges/paper-session/README.md) | web | Browser cookie claims, solution and patch checks |
+| [공개 폴더 밖의 문서](challenges/path-parcel/README.md) | web | Actual relative file reads, solution and patch checks |
+| [비밀번호 후보 찾기](challenges/hash-lantern/README.md) | crypto | Compare six password candidates using the prepared hash command |
+| [확장자가 바뀐 파일](challenges/false-label/README.md) | forensics | Identify a mislabeled archive by bytes and parse its contents |
+| [DNS 조회에 담긴 데이터](challenges/dns-detour/README.md) | forensics | Reassemble data from captured local DNS query labels |
+| [팀 문서의 읽기 권한](challenges/borrowed-badge/README.md) | misc | Document access rules, solution and patch checks |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped

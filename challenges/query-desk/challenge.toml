@@ -1,6 +1,6 @@
 schema = 5
 slug = "query-desk"
-title = "Query Desk"
+title = "비공개 회원 검색"
 category = "web"
 difficulty = 2
 compose = "compose.yaml"

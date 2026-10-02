@@ -9,7 +9,7 @@ independent classifications: a learning area does not enable a runtime feature.
 
 This assessment compares each topic's entry design with the current contract
 and execution implementations. It is a design assessment, not an execution test
-of 50 targets. The published examples are Note Vault and Rotor Lock. Each new
+of 50 targets. The published examples use IDs `note-vault` and `rotor-lock`. Each new
 problem still needs its own target/tool verification and learner review.
 
 Use these statuses to decide what work must precede publication:
@@ -60,7 +60,7 @@ and [terminal configuration](https://github.com/pwnden/platform/blob/main/intern
 Existing boundary and isolation tests cover accepted/rejected configurations;
 the [actual isolation check](https://github.com/pwnden/platform/blob/main/docs/verification.md#actual-network-isolation)
 covers external, host and other-network denial against reachable controls,
-same-problem communication, Note Vault solving, patch checks and cleanup.
+same-problem communication, `note-vault` solving, patch checks and cleanup.
 
 Those checks establish a shared boundary on the verified Linux/WSL execution
 target. They do not establish every tool's compatibility or every target's
@@ -101,7 +101,7 @@ within their topic and area boundaries.
 | --- | --- | --- |
 | `web-information-disclosure` | `contract-fit` | Local site and actual deployment artifact; prepared header inspection for later variants. |
 | `web-authentication-sessions` | `contract-fit` | Session-aware request replay; keep target cookies separate from platform authentication. |
-| `web-access-control` | `contract-fit` | Note Vault is the existing path-based example; method/body variants need prepared request editing. |
+| `web-access-control` | `contract-fit` | The `note-vault` scenario is the existing path-based example; method/body variants need prepared request editing. |
 | `web-injection` | `contract-fit` | Real local interpreter and dependencies, annotated query observation and prepared request controls. |
 | `web-browser-security` | `contract-fit` | Actual browser origin/execution; prepare local viewer-account bots for stored-content variants. |
 | `web-business-logic` | `contract-fit` | Real local state and observable changes; coordinated race variants need deterministic tooling. |
@@ -115,7 +115,7 @@ within their topic and area boundaries.
 | `system-application-sandboxes` | `contract-fit` | Actual restricted user-space application within the enclosing problem container. |
 | `rev-static-analysis` | `contract-fit` | Actual artifact and prepared strings/disassembly tools; introduce the exact instruction vocabulary. |
 | `rev-dynamic-analysis` | `runtime-gate` | Actual stepping, process tracing and required architecture must work under current process restrictions. |
-| `rev-input-checks` | `contract-fit` | Actual checker plus prepared operations; Rotor Lock exists but needs learner-path reassessment. |
+| `rev-input-checks` | `contract-fit` | Actual checker plus prepared operations; the `rotor-lock` scenario exists but needs learner-path reassessment. |
 | `rev-data-formats` | `contract-fit` | Real artifact and prepared hex/edit operations; declare writable copies when necessary. |
 | `rev-obfuscation` | `contract-fit` | Static transformed-constant entry with real artifact. Dynamic and anti-debug variants require a tracing profile. |
 | `crypto-representation-protection` | `contract-fit` | Prepared representation operations with actual exposed data. |

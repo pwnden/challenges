@@ -1,6 +1,6 @@
 schema = 5
 slug = "path-parcel"
-title = "Path Parcel"
+title = "공개 폴더 밖의 문서"
 category = "web"
 difficulty = 2
 compose = "compose.yaml"

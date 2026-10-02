@@ -42,7 +42,7 @@ class Handler(BaseHTTPRequestHandler):
     def page(self, body):
         self.reply(200, '<!doctype html><html lang="en"><meta charset="utf-8">'
                    '<meta name="viewport" content="width=device-width, initial-scale=1">'
-                   '<title>Note Vault</title><body><h1>Note Vault</h1>' + body + '</body></html>', html=True)
+                   '<title>개인 메모 사이트</title><body><h1>개인 메모 사이트</h1>' + body + '</body></html>', html=True)
 
     def do_GET(self):
         path = urlsplit(self.path).path

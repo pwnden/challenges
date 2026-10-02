@@ -1,6 +1,6 @@
 schema = 5
 slug = "midnight-trace"
-title = "Midnight Trace"
+title = "자료 유출 기록"
 category = "forensics"
 difficulty = 1
 files = ["files/access.log", "files/audit.jsonl"]

@@ -1,6 +1,6 @@
 schema = 5
 slug = "paper-session"
-title = "Paper Session"
+title = "사용자 구분 값 바꾸기"
 category = "web"
 difficulty = 1
 compose = "compose.yaml"

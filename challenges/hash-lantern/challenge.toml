@@ -1,6 +1,6 @@
 schema = 5
 slug = "hash-lantern"
-title = "Hash Lantern"
+title = "비밀번호 후보 찾기"
 category = "crypto"
 difficulty = 1
 files = ["files/account.txt", "files/candidates.txt"]

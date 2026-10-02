@@ -157,7 +157,7 @@ They use the current [execution and network contract](contract.md).
 - **Principle:** Each resource or action must enforce the current identity's permitted access.
 - **Experiment:** Compare access to an owned object and another object's identifier; observe whether individual requests enforce the stated permission.
 - **Prerequisites:** `web-addresses`, `sessions`; the distinction between identity and permission is introduced with the exercise.
-- **Entry and progression:** Note Vault's object ownership check; then role-restricted actions, nested resources and multiple access paths.
+- **Entry and progression:** The `note-vault` scenario's object ownership check; then role-restricted actions, nested resources and multiple access paths.
 - **Tools:** Browser for path-based exercises; request inspector/editor for API, method or body variants.
 
 ### web-injection
@@ -273,7 +273,7 @@ They use the current [execution and network contract](contract.md).
 - **Principle:** An exposed input check may retain enough information to reconstruct an accepted input.
 - **Experiment:** Compare chosen input/output pairs, identify the sequence of transformations and test a reconstructed input against the actual checker.
 - **Prerequisites:** `data-representation`, `execution-tracing`; explain each needed operation with a scoped example.
-- **Entry and progression:** A single understandable transformation; then chained stateful checks. Reassess Rotor Lock's presentation and workload within this progression.
+- **Entry and progression:** A single understandable transformation; then chained stateful checks. Reassess the `rotor-lock` scenario's presentation and workload within this progression.
 - **Tools:** Prepared checker and transform workbench or annotated operation commands. The player selects operations and reasons about the sequence rather than implementing the author's Python routine.
 
 ### rev-data-formats
@@ -570,7 +570,7 @@ pedagogical suitability or a finished exercise. Add the player explanations,
 real target/artifact, prepared tools, intended solution, progressive hints and
 walkthrough, then record their execution and learner review evidence.
 
-Note Vault currently maps to `web-access-control`. Rotor Lock maps to
+The `note-vault` scenario currently maps to `web-access-control`. The `rotor-lock` scenario maps to
 `rev-input-checks` and needs its player path and workload reassessed against the
 direct-experiment standard. Their published manifest difficulty values remain
 separate from this topic assignment.

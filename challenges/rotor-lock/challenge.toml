@@ -1,6 +1,6 @@
 schema = 5
 slug = "rotor-lock"
-title = "Rotor Lock"
+title = "잠금장치의 입력 검사"
 category = "rev"
 difficulty = 2
 files = ["files/checker.py"]

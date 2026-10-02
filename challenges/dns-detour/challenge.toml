@@ -1,6 +1,6 @@
 schema = 5
 slug = "dns-detour"
-title = "DNS Detour"
+title = "DNS 조회에 담긴 데이터"
 category = "forensics"
 difficulty = 2
 files = ["files/dns.jsonl"]

@@ -7,15 +7,15 @@ The usual player path requires text reading and supplied tool operations.
 
 | Scenario | Topic | Level | Player tools | Observation |
 | --- | --- | --- | --- | --- |
-| [Forgotten Shelf](../challenges/forgotten-shelf/README.md) | `web-information-disclosure` | 입문 | Web | A removed link and a public collection rule leave a backup readable. |
-| [Query Desk](../challenges/query-desk/README.md) | `web-injection` | 초급 | Web | Search input changes an actual SQLite condition and exposes a private row. |
-| [Wrapped Secret](../challenges/wrapped-secret/README.md) | `crypto-representation-protection` | 입문 | Files, terminal | A public Base64 operation recovers an exposed key. |
-| [Midnight Trace](../challenges/midnight-trace/README.md) | `forensics-event-reconstruction` | 입문 | Files | Matching request IDs connect a guest's successful request to another owner's export. |
+| [남겨진 백업 파일](../challenges/forgotten-shelf/README.md) | `web-information-disclosure` | 입문 | Web | A removed link and a public collection rule leave a backup readable. |
+| [비공개 회원 검색](../challenges/query-desk/README.md) | `web-injection` | 초급 | Web | Search input changes an actual SQLite condition and exposes a private row. |
+| [문자로 바꾼 복구 키](../challenges/wrapped-secret/README.md) | `crypto-representation-protection` | 입문 | Files, terminal | A public Base64 operation recovers an exposed key. |
+| [자료 유출 기록](../challenges/midnight-trace/README.md) | `forensics-event-reconstruction` | 입문 | Files | Matching request IDs connect a guest's successful request to another owner's export. |
 
-Forgotten Shelf, Wrapped Secret and Midnight Trace are independent starting
-experiments. Query Desk adds condition syntax and inference; its brief explains
-the query vocabulary before the player changes input. Note Vault remains an
-access-control experiment. Rotor Lock keeps its existing implementation and
+The `forgotten-shelf`, `wrapped-secret` and `midnight-trace` scenarios are independent starting
+experiments. The `query-desk` scenario adds condition syntax and inference; its brief explains
+the query vocabulary before the player changes input. The `note-vault` scenario remains an
+access-control experiment. The `rotor-lock` scenario keeps its existing implementation and
 code-analysis workload.
 
 The briefs contain the required background directly. Shared concept declarations
@@ -26,8 +26,8 @@ and version 5 content contract.
 
 The service scenarios include a patch and a functional check. Verification runs
 actual target and solution containers, then checks attack denial, normal behavior
-and resource cleanup. Wrapped Secret's solution executes the same `base64`
-command supplied to the player. Midnight Trace distributes records captured from
+and resource cleanup. The `wrapped-secret` solution executes the same `base64`
+command supplied to the player. The `midnight-trace` scenario distributes records captured from
 six real HTTP exchanges with a local teaching fixture; its author capture script
 regenerates the files. These records model an incident in that fixture.
 

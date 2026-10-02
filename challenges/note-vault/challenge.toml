@@ -1,6 +1,6 @@
 schema = 5
 slug = "note-vault"
-title = "Note Vault"
+title = "다른 사람의 메모"
 category = "web"
 difficulty = 1
 compose = "compose.yaml"

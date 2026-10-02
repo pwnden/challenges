@@ -1,6 +1,6 @@
 schema = 5
 slug = "forgotten-shelf"
-title = "Forgotten Shelf"
+title = "남겨진 백업 파일"
 category = "web"
 difficulty = 1
 compose = "compose.yaml"
