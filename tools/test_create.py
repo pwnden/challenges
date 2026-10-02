@@ -31,6 +31,7 @@ class CreateTests(unittest.TestCase):
                 destination, files = create(self.root, slug, kind=kind, category=category, patched=patched)
                 metadata = self.metadata(destination)
                 self.assertEqual(metadata['slug'], slug)
+                self.assertEqual(metadata['difficulty'], 1)
                 self.assertEqual(metadata['player']['tools'], ['web'] if kind == 'service' else ['files', 'terminal'])
                 self.assertEqual(metadata['content']['hints'], ['hints/1.md', 'hints/2.md', 'hints/3.md'])
                 self.assertEqual('patched' in metadata, patched)
@@ -56,8 +57,9 @@ class CreateTests(unittest.TestCase):
         self.assertEqual(metadata['title'], title)
         self.assertEqual(metadata['content']['hints'], [])
         self.assertFalse((destination / 'hints').exists())
-        destination, _ = create(self.root, 'ten-hints', kind='file', category='crypto', hints=10)
+        destination, _ = create(self.root, 'ten-hints', kind='file', category='crypto', hints=10, difficulty=5)
         self.assertEqual(len(self.metadata(destination)['content']['hints']), 10)
+        self.assertEqual(self.metadata(destination)['difficulty'], 5)
 
     def test_dry_run_and_invalid_options_write_nothing(self):
         create(self.root, 'preview', kind='service', category='web', dry_run=True)
@@ -67,6 +69,7 @@ class CreateTests(unittest.TestCase):
             {'slug': 'lpt1'}, {'slug': 'two--hyphens'}, {'category': 'unknown'},
             {'kind': 'unknown'}, {'hints': -1}, {'hints': 11}, {'hints': True},
             {'title': '  '}, {'patched': True}, {'toolbox': '--help'},
+            {'difficulty': 0}, {'difficulty': 6}, {'difficulty': True}, {'difficulty': '2'},
             {'toolbox': 'python:3\nRUN something'},
         ]
         for options in invalid:
@@ -106,7 +109,7 @@ class CreateTests(unittest.TestCase):
         self.assertEqual(list(outside.iterdir()), [])
         parent.unlink()
         contract = self.root / 'contract.toml'
-        contract.write_text(contract.read_text().replace('version = 4', 'version = 5'))
+        contract.write_text(contract.read_text().replace('version = 5', 'version = 6'))
         with self.assertRaisesRegex(InvalidChallenge, 'update templates'):
             create(self.root, 'sample', kind='file', category='rev')
         self.assertFalse(parent.exists())

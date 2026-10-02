@@ -79,6 +79,18 @@ class ValidateTests(unittest.TestCase):
             with self.subTest(name=name), self.assertRaises(InvalidChallenge):
                 self.check(metadata)
 
+    def test_required_difficulty(self):
+        self.definition = {**self.definition, 'version': 5}
+        metadata = FILE.replace('schema = 2', 'schema = 5') + '\n[player]\ntools = ["files", "terminal"]\n'
+        for level in range(1, 6):
+            with self.subTest(level=level):
+                result = self.check(metadata.replace('category = "rev"', f'category = "rev"\ndifficulty = {level}'))
+                self.assertEqual(result['difficulty'], level)
+        for value in [None, '0', '6', '-1', 'true', '"2"', '2.5']:
+            declaration = '' if value is None else f'\ndifficulty = {value}'
+            with self.subTest(value=value), self.assertRaises(InvalidChallenge):
+                self.check(metadata.replace('category = "rev"', 'category = "rev"' + declaration))
+
     def test_service_and_patch(self):
         (self.directory / 'compose.yaml').write_text('services: {}')
         (self.directory / 'patched.yaml').write_text('services: {}')

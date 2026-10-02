@@ -24,17 +24,19 @@ def render(name, values):
     return re.sub(r'\{\{([A-Z_]+)\}\}', lambda match: values[match[1]], source)
 
 
-def scaffold(root, slug, *, kind, category, title=None, hints=3, patched=False, toolbox=IMAGE):
+def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=3, patched=False, toolbox=IMAGE):
     root = root.resolve()
     definition = load_contract(root)
-    if definition['version'] != 4:
-        raise InvalidChallenge('creation templates support contract version 4; update templates before using another version')
+    if definition['version'] != 5:
+        raise InvalidChallenge('creation templates support contract version 5; update templates before using another version')
     if len(slug) > 40 or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', slug) or slug in RESERVED:
         raise InvalidChallenge('slug must be 1–40 lowercase letters/digits separated by hyphens, and usable as a Windows directory')
     if kind not in ('file', 'service') or category not in CATEGORIES:
         raise InvalidChallenge('choose file/service and a supported category')
     if type(hints) is not int or not 0 <= hints <= 10:
         raise InvalidChallenge('hints must be between 0 and 10')
+    if type(difficulty) is not int or not 1 <= difficulty <= 5:
+        raise InvalidChallenge('difficulty must be between 1 and 5')
     if patched and kind != 'service':
         raise InvalidChallenge('patch checks require a service problem')
     title = title if title is not None else slug.replace('-', ' ').title()
@@ -44,7 +46,7 @@ def scaffold(root, slug, *, kind, category, title=None, hints=3, patched=False, 
     if re.search(r'\s|#', toolbox):
         raise InvalidChallenge('image must be a single Dockerfile image reference')
     values = {'SCHEMA': str(definition['version']), 'SLUG': quoted(slug), 'TITLE': quoted(title),
-              'CATEGORY': quoted(category), 'IMAGE': toolbox, 'IMAGE_TOML': quoted(toolbox),
+              'CATEGORY': quoted(category), 'DIFFICULTY': str(difficulty), 'IMAGE': toolbox, 'IMAGE_TOML': quoted(toolbox),
               'HINTS': quoted([f'hints/{i}.md' for i in range(1, hints + 1)]),
               'NETWORK': quoted(definition['solve_network'])}
     files = {
@@ -102,6 +104,8 @@ def main():
                         help='file resources or a starter HTTP service')
     parser.add_argument('--category', choices=CATEGORIES, required=True)
     parser.add_argument('--title', help='display title; defaults to the slug as words')
+    parser.add_argument('--difficulty', type=int, choices=range(1, 6), default=1,
+                        help='1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert (default: 1)')
     parser.add_argument('--hints', type=int, default=3, help='ordered hints, 0–10 (default: 3)')
     parser.add_argument('--patched', action='store_true', help='add service patch and functional-check scaffolds')
     parser.add_argument('--image', dest='toolbox', default=IMAGE, help='Python 3 toolbox and service base image')

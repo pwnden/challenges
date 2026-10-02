@@ -1,7 +1,8 @@
-schema = 4
+schema = 5
 slug = "note-vault"
 title = "Note Vault"
 category = "web"
+difficulty = 1
 compose = "compose.yaml"
 
 [player]

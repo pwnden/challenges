@@ -100,7 +100,7 @@ def validate_manifest(root, manifest, definition):
     directory = manifest.parent
     with manifest.open('rb') as source:
         data = tomllib.load(source)
-    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched', 'content', 'player'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve', 'content'} | ({'player'} if definition['version'] >= 4 else set()))
+    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'difficulty', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched', 'content', 'player'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve', 'content'} | ({'player'} if definition['version'] >= 4 else set()) | ({'difficulty'} if definition['version'] >= 5 else set()))
     if integer(data['schema'], 'schema') != definition['version']:
         raise InvalidChallenge(f"schema must match contract version {definition['version']}")
     slug = text(data['slug'], 'slug')
@@ -109,6 +109,8 @@ def validate_manifest(root, manifest, definition):
     text(data['title'], 'title')
     if data['category'] not in ('web', 'pwn', 'rev', 'crypto', 'forensics', 'misc'):
         raise InvalidChallenge('unsupported category')
+    if 'difficulty' in data and not 1 <= integer(data['difficulty'], 'difficulty') <= 5:
+        raise InvalidChallenge('difficulty must be between 1 and 5')
     content = table(data['content'], 'content', {'description', 'hints', 'walkthrough'}, {'description', 'walkthrough'})
     paths = [markdown(root, directory, content['description'], 'content.description')]
     hints = strings(content.get('hints', []), 'content.hints')

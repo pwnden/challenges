@@ -1,6 +1,6 @@
-# Problem contract v4
+# Problem contract v5
 
-This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **4**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
+This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **5**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
 
 Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the problem there and supply its files, Compose configuration, solution, and optional patch. A compatible consumer reads those declarations and implements this contract.
 
@@ -8,7 +8,7 @@ Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the
 
 The challenges repository maintains the contract and checks problem declarations in its own validator and CI. The platform consumes the contract: it confirms version support, parses execution fields, applies filesystem and Docker execution safety checks, and verifies running problems. See [format validation and CI](verification.md) for the author checks and the [platform verification guide](https://github.com/pwnden/platform/blob/main/docs/verification.md) for execution checks.
 
-The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `4` and retains versions `1`, `2` and `3` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
+The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `5` and retains versions `1`, `2`, `3` and `4` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
 
 Increment the contract version whenever consumed fields, types, requiredness, allowed values, defaults, or execution and result rules change. Update the document, TOML values, author validator, and problem declarations together. A consumer adds explicit support for the new version before it can execute those problems. Adding problems, changing their content within the same contract, and clarifying documentation without changing a rule keep the version.
 
@@ -16,9 +16,9 @@ Increment the contract version whenever consumed fields, types, requiredness, al
 
 All four fields in `contract.toml` are required. The author validator rejects unknown fields. These values belong to the versioned contract; editing them is a contract change.
 
-| Field | Type | Version 4 value | Rule |
+| Field | Type | Version 5 value | Rule |
 | --- | --- | --- | --- |
-| `version` | Integer | `4` | Positive contract version; matches every problem's `schema`. |
+| `version` | Integer | `5` | Positive contract version; matches every problem's `schema`. |
 | `solve_network` | String | `"default"` | Nonempty default Compose network key for service solutions. |
 | `solve_timeout_seconds` | Integer | `60` | Positive default runtime limit for each toolbox command, in seconds. |
 | `attack_rejected_exit` | Integer | `3` | Expected attack denial code; in the range 1–124. |
@@ -37,6 +37,7 @@ Paths are relative to the problem directory and follow the [files and resource r
 | `slug` | String | Required | Matches the directory name; 1–40 characters; lowercase letters and digits separated by single hyphens. |
 | `title` | String | Required | Nonempty display title. |
 | `category` | String | Required | One of `web`, `pwn`, `rev`, `crypto`, `forensics`, or `misc`. |
+| `difficulty` | Integer | Required | Difficulty from 1 (Intro) to 5 (Expert). |
 | `player` | Table | Required | Solver tools and their order. |
 | `content` | Table | Required | Player description, ordered optional hints and complete walkthrough. |
 | `files` | Array of strings | Defaults to `[]`; nonempty for file problems | Existing distribution files or directories inside this repository. Service problems may also distribute files. |
@@ -45,6 +46,25 @@ Paths are relative to the problem directory and follow the [files and resource r
 | `flag` | Table | Required | Flag comparison strategy described below. |
 | `solve` | Table | Required | Toolbox image, command, and execution options. |
 | `patched` | Table | Optional for service problems | Compose override and functional check; file problems omit it. |
+
+### Difficulty
+
+Version 5 requires `difficulty`, an integer from 1 to 5. Authors assess the intended
+solution without hints, considering prerequisite knowledge, discovery difficulty
+and implementation complexity. Elapsed time alone does not determine difficulty.
+Use the same criteria across categories; category remains a separate classification.
+
+| Value | Name | Intended solver work |
+| --- | --- | --- |
+| `1` | Intro | Learn and apply one core concept using the supplied explanation. |
+| `2` | Easy | Independently identify and apply one basic concept. |
+| `3` | Medium | Connect multiple clues and perform analysis or write a solving script. |
+| `4` | Hard | Analyze a complex structure or constraints and construct multiple solving steps. |
+| `5` | Expert | Apply deep domain knowledge and a non-obvious approach. |
+
+The consumer preserves the declared value in summaries and detail. Versions 1–4
+have no required difficulty; an absent value remains unrated. Presentation names,
+badge colors, filtering and sorting belong to the platform UI.
 
 ### `player`
 
@@ -175,7 +195,7 @@ At each `run`, the runner generates a new `pwnden{...}` flag and passes it to Co
 
 Solutions print exactly one flag to stdout and send diagnostics to stderr. The consumer removes leading and trailing Unicode whitespace before comparing stdout. For file problems, it hashes the UTF-8 bytes of the remaining string with SHA-256. For service problems, it compares the entire remaining string with the current run's generated flag. A successful solution exits 0; a mismatched flag or nonzero exit fails verification.
 
-The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 4: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
+The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 5: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
 
 | Verification step | Required result |
 | --- | --- |

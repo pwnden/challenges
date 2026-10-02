@@ -3,8 +3,8 @@
 From the challenges repository, use Python 3.11 or newer:
 
 ```sh
-python3 tools/create.py rotor-example --kind file --category rev --title "Rotor Example"
-python3 tools/create.py vault-example --kind service --category web --title "Vault Example" --patched
+python3 tools/create.py rotor-example --kind file --category rev --difficulty 2 --title "Rotor Example"
+python3 tools/create.py vault-example --kind service --category web --difficulty 1 --title "Vault Example" --patched
 ```
 
 The generator owns the repeated directory layout, manifest declarations,
@@ -12,7 +12,7 @@ learning-content paths and initial runtime configuration. The author supplies
 the actual exercise, resources, intended vulnerability, solution and explanation.
 Templates live under `tools/templates`; update them centrally when authoring
 conventions change. CI discovers their regression tests with the existing tools
-test command. The generator supports contract version 4 and uses its existing
+test command. The generator supports contract version 5 and uses its existing
 validator before reporting success. Update the templates explicitly for another
 contract version.
 
@@ -25,6 +25,7 @@ contract version.
 | `--kind service` | Creates a Python HTTP starter, Dockerfile, Compose configuration and a generated-flag HTTP endpoint. |
 | `--category` | Required: `web`, `pwn`, `rev`, `crypto`, `forensics` or `misc`. Category and execution kind are independent. |
 | `--title` | Display title; defaults to title-cased slug words. |
+| `--difficulty` | 1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert; defaults to 1. Review the intended solution against the contract criteria before publication. |
 | `--hints` | Generates 0–10 declared hints; defaults to 3. |
 | `--patched` | Adds a service Compose override, patch source and functional-check scaffold. |
 | `--image` | Python 3 image used by the toolbox and starter service; defaults to the repository's current pinned Python image and digest. |
@@ -75,7 +76,7 @@ match their requirements. The platform derives its tools from those declarations
    replace the marked zero digest with the SHA-256 of the solution's trimmed flag.
 4. Write progressive hints and a walkthrough that explains and reproduces the
    reasoning. For patch verification, implement the patch and functional check.
-5. Run `python3 tools/validate.py` and the platform's [execution checks](verification.md#maintainer-execution-checks).
+5. Review the declared difficulty against the intended solution without hints. Run `python3 tools/validate.py` and the platform's [execution checks](verification.md#maintainer-execution-checks).
 
 The generated manifest passes format validation. Solution and functional-check
 stubs exit with an explicit authoring error, so scaffolding does not pass

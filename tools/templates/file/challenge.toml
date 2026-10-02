@@ -2,6 +2,7 @@ schema = {{SCHEMA}}
 slug = {{SLUG}}
 title = {{TITLE}}
 category = {{CATEGORY}}
+difficulty = {{DIFFICULTY}}
 files = ["files/data.txt"]
 
 [player]
