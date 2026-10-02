@@ -52,6 +52,7 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=3, p
     files = {
         'challenge.toml': render(f'{kind}/challenge.toml', values),
         'README.md': render(f'{kind}/README.md', values),
+        'AUTHORING.md': render('common/authoring.md', values),
         'solve/README.md': render('common/walkthrough.md', values),
         'solve/solve.py': render('common/solve.py', values),
     }

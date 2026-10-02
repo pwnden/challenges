@@ -1,5 +1,9 @@
 # Player content standard
 
+Use the [authoring standard](authoring-standard.md) to establish the security
+learning objective, learner profile, prerequisite abilities and difficulty.
+This page describes how to present that design to the player.
+
 ## Reader and goal
 
 Write for a person solving the exercise in the pwnden website. The learning loop is: understand the situation and objective, inspect provided material or open the target service, experiment in the prepared workspace, submit an answer, then use hints and explanations to learn from the result. Content is authored in challenges; platform presents it and supplies the controls.
@@ -16,6 +20,9 @@ Describe the intended objective and the actions the player can take directly. Ea
 - One explicit objective and an observable success condition.
 - Supplied resources and legitimate access, including credentials when appropriate.
 - Enough prerequisite context to begin; explain unfamiliar concepts needed for the first action.
+- Scoped prerequisite abilities and available learning references before the step
+  that needs them. Supply the supporting explanation in the brief when a separate
+  player-facing resource is unavailable.
 - Starting actions within the target exercise: sign in with the supplied credentials, inspect a provided resource, or run a problem-specific command.
 - The answer format and any instance-specific behavior, such as keys changing after restart.
 
@@ -45,10 +52,13 @@ Review the rendered problem as a first-time solver, independently of whether `so
 
 - Can I state the goal and tell when I have succeeded?
 - Can I start using only the supplied context and visible controls?
+- Do the stated prerequisites match every step, including language features,
+  calculations and tool operations? Does the exercise demonstrate its stated
+  security learning objective?
 - Can I inspect each required resource and perform every exercise step in the prepared environment?
 - Are credentials, submission format, expected output and restart effects clear where relevant?
 - Do hints progress from direction to specific help? Is the answer absent from the initial brief?
 - Does the walkthrough explain why the approach works and reproduce the result?
 - Does a failure to load content offer a retry, rather than sending players into repository files?
 
-The format validator checks declarations, distinct regular Markdown files, repository containment, UTF-8, the 1 MiB limit and hint count. These checks cannot prove pedagogical quality. Author review supplies that judgment; runtime and API/UI tests verify execution and presentation.
+The format validator checks declarations, distinct regular Markdown files, repository containment, UTF-8, the 1 MiB limit and hint count. These checks cannot prove pedagogical quality. Author and learner review supply that judgment; runtime and API/UI tests verify execution and presentation. Record the evidence in `AUTHORING.md` using the [publication review](authoring-standard.md#review-before-publication).

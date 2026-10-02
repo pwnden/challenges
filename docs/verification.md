@@ -6,7 +6,7 @@ This repository owns the [problem contract](contract.md) and checks its machine-
 python3 tools/validate.py
 ```
 
-The validator reads `contract.toml`, discovers `challenges/*/challenge.toml`, and checks the contract version, required fields, types, allowed values, file and service rules, endpoint declarations, patch declarations and `[content]`. Player documents must be distinct nonempty UTF-8 Markdown files, at most 1 MiB each, with up to 10 ordered hints. Declared distribution, content and Compose paths must exist inside this repository, including their symlink targets. Errors identify the manifest and offending field. Review the rendered learning content against the [player content checklist](player-content.md) as a separate author responsibility.
+The validator reads `contract.toml`, discovers `challenges/*/challenge.toml`, and checks the contract version, required fields, types, allowed values, file and service rules, endpoint declarations, patch declarations and `[content]`. Player documents must be distinct nonempty UTF-8 Markdown files, at most 1 MiB each, with up to 10 ordered hints. Declared distribution, content and Compose paths must exist inside this repository, including their symlink targets. Errors identify the manifest and offending field. Review the learning design against the [authoring standard](authoring-standard.md#review-before-publication) and the rendered content against the [player content checklist](player-content.md#author-review).
 
 Run the format validator's regression checks with:
 
@@ -19,7 +19,10 @@ Both commands use Python's standard library and run with this repository alone.
 The regression suite also checks the [problem generator](creating.md), its file
 and service templates, optional patches, contract defaults, safe creation and
 incomplete-solution behavior. Generated manifests pass these format rules;
-complete content and execution verification remain the author's publication gate.
+complete learning, content and execution review remain the author's publication gate.
+The generated `AUTHORING.md` is a maintainer record. The format validator currently
+checks the declared contract and resources; it does not enforce completion of that
+record or determine prerequisite coverage and educational suitability.
 
 ## Maintainer execution checks
 

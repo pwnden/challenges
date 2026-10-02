@@ -32,6 +32,11 @@ class CreateTests(unittest.TestCase):
                 metadata = self.metadata(destination)
                 self.assertEqual(metadata['slug'], slug)
                 self.assertEqual(metadata['difficulty'], 1)
+                self.assertIn('AUTHORING.md', files)
+                authoring = (destination / 'AUTHORING.md').read_text(encoding='utf-8')
+                self.assertIn('선수 지식과 학습 내용', authoring)
+                self.assertIn('선언한 값: 1', authoring)
+                self.assertNotIn('{{', authoring)
                 self.assertEqual(metadata['player']['tools'], ['web'] if kind == 'service' else ['files', 'terminal'])
                 self.assertEqual(metadata['content']['hints'], ['hints/1.md', 'hints/2.md', 'hints/3.md'])
                 self.assertEqual('patched' in metadata, patched)
@@ -60,6 +65,7 @@ class CreateTests(unittest.TestCase):
         destination, _ = create(self.root, 'ten-hints', kind='file', category='crypto', hints=10, difficulty=5)
         self.assertEqual(len(self.metadata(destination)['content']['hints']), 10)
         self.assertEqual(self.metadata(destination)['difficulty'], 5)
+        self.assertIn('선언한 값: 5', (destination / 'AUTHORING.md').read_text(encoding='utf-8'))
 
     def test_dry_run_and_invalid_options_write_nothing(self):
         create(self.root, 'preview', kind='service', category='web', dry_run=True)

@@ -49,18 +49,19 @@ Paths are relative to the problem directory and follow the [files and resource r
 
 ### Difficulty
 
-Version 5 requires `difficulty`, an integer from 1 to 5. Authors assess the intended
-solution without hints, considering prerequisite knowledge, discovery difficulty
-and implementation complexity. Elapsed time alone does not determine difficulty.
-Use the same criteria across categories; category remains a separate classification.
+Version 5 requires `difficulty`, an integer from 1 to 5. Authors use the
+[authoring standard's assessment criteria](authoring-standard.md#select-difficulty-from-evidence)
+to evaluate the complete player journey, including prerequisite learning,
+discovery and implementation. The assessment uses the default brief and resources
+with hints and the walkthrough closed. Category remains a separate classification.
 
-| Value | Name | Intended solver work |
-| --- | --- | --- |
-| `1` | Intro | Learn and apply one core concept using the supplied explanation. |
-| `2` | Easy | Independently identify and apply one basic concept. |
-| `3` | Medium | Connect multiple clues and perform analysis or write a solving script. |
-| `4` | Hard | Analyze a complex structure or constraints and construct multiple solving steps. |
-| `5` | Expert | Apply deep domain knowledge and a non-obvious approach. |
+| Value | Name |
+| --- | --- |
+| `1` | Intro |
+| `2` | Easy |
+| `3` | Medium |
+| `4` | Hard |
+| `5` | Expert |
 
 The consumer preserves the declared value in summaries and detail. Versions 1–4
 have no required difficulty; an absent value remains unrated. Presentation names,

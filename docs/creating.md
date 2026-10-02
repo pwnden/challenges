@@ -1,5 +1,10 @@
 # Creating a problem
 
+Start with the [authoring standard](authoring-standard.md): define the security
+learning objective, intended learner and prerequisite abilities before choosing
+resources and execution kind. Record the intended solution and difficulty
+assessment in the generated `AUTHORING.md` as the exercise takes shape.
+
 From the challenges repository, use Python 3.11 or newer:
 
 ```sh
@@ -45,7 +50,7 @@ tool; players receive completed problems through the platform's existing setup.
 
 ## Generated layouts
 
-Every problem gets `challenge.toml`, `README.md`, `solve/solve.py`,
+Every problem gets `challenge.toml`, `README.md`, `AUTHORING.md`, `solve/solve.py`,
 `solve/README.md` and the chosen number of hint files under `hints/`.
 
 File problems also get `files/data.txt`. Service problems get `compose.yaml`,
@@ -67,16 +72,22 @@ match their requirements. The platform derives its tools from those declarations
 
 ## Complete before publication
 
-1. Replace bracketed authoring prompts with the scenario, objective and supplied
+1. Complete `AUTHORING.md` using the [authoring standard](authoring-standard.md).
+   Trace the intended solution, classify prerequisite and learning concepts,
+   and explain the declared difficulty against the full player journey.
+2. Replace bracketed authoring prompts with the scenario, objective and supplied
    information. Follow the [player content standard](player-content.md). Titles
    and categories are displayed by the platform; the brief starts with context.
-2. Replace sample distribution material or implement target behavior. The starter
+3. Replace sample distribution material or implement target behavior. The starter
    HTTP service reports preparation in progress outside its health route.
-3. Implement `solve/solve.py` to recover and print the flag. For file problems,
+4. Implement `solve/solve.py` to recover and print the flag. For file problems,
    replace the marked zero digest with the SHA-256 of the solution's trimmed flag.
-4. Write progressive hints and a walkthrough that explains and reproduces the
+5. Write progressive hints and a walkthrough that explains and reproduces the
    reasoning. For patch verification, implement the patch and functional check.
-5. Review the declared difficulty against the intended solution without hints. Run `python3 tools/validate.py` and the platform's [execution checks](verification.md#maintainer-execution-checks).
+6. Complete the [publication review](authoring-standard.md#review-before-publication),
+   including an independent learner review. Record the actual evidence and
+   revision in `AUTHORING.md`. Run `python3 tools/validate.py` and the platform's
+   [execution checks](verification.md#maintainer-execution-checks).
 
 The generated manifest passes format validation. Solution and functional-check
 stubs exit with an explicit authoring error, so scaffolding does not pass

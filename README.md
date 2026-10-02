@@ -4,7 +4,11 @@ Problem definitions, contract ownership, and metadata validation for pwnden. Add
 
 This repository is the allowed root for host bind mounts. Keep Compose bind sources and build contexts inside this checkout. File-only challenges need no Compose file.
 
-Create the directory, manifest, learning content and execution scaffold with
+Use the [authoring standard](docs/authoring-standard.md) to define a problem's
+security learning objective, intended learner, prerequisite abilities and
+difficulty evidence. Keep the design and review evidence in its `AUTHORING.md`.
+
+Create the directory, manifest, author record, learning content and execution scaffold with
 `python3 tools/create.py <slug> --kind file --category rev` or
 `python3 tools/create.py <slug> --kind service --category web`.
 See [creating problems](docs/creating.md) for options and the authoring workflow.
