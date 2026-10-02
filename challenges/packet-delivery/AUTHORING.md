@@ -1,0 +1,40 @@
+# 패킷에 남은 전송 파일 작성 기록
+
+## 목표와 선수 능력
+
+새벽전송은 테스트 전송 담당자다. URL 목록만으로는 내부 자료 포함 여부를
+확정할 수 없어 실제 본문을 복원하는 확인을 맡긴다.
+
+- 분야 `digital-forensics`, 주제 `forensics-network-evidence`, category `forensics`.
+- teaches: TCP 조각을 재조립해 실제 전송 파일로 자료 공개 여부를 입증한다.
+- requires `terminal-commands`, `file-paths`, `packet-streams`: PCAP 읽기·필터·
+  stream·객체 내보내기·형식 확인·tar 목록과 내용 출력을 본문에서 설명한다.
+- 대상: 준비된 터미널 명령을 조정하는 초급자. 난도 2는 요청·복원 객체·내부
+  경로·공개 범위를 연결하는 판단에 근거한다. 패킷 직접 구현과 Python은 필요 없다.
+
+## 자료 출처와 관찰
+
+`authoring/build.py`는 localhost stdlib HTTP 서버에서 실제 요청·응답을 얻는다.
+이를 Ethernet/IPv4/TCP 프레임과 PCAP 헤더로 구성한다. 외부 대상·실사용자·
+라이브 캡처는 없으며 브리핑과 공개 목록에 합성 자료임을 명시했다.
+두 연결에 실제 handshake·90바이트 이하 응답 조각·ACK·FIN을 넣는다.
+압축 묶음에는 정상 안내와 비공개 복구 절차가 함께 있다.
+
+1. 요청 주소만으로 내용 공개 여부를 확정할 수 없음을 확인한다.
+2. TShark HTTP 객체 내보내기로 압축 묶음을 복원한다.
+3. file·tar로 형식과 문서를 확인해 공개 정책과 비교한다.
+
+`authoring/check.py`는 IPv4/TCP checksum·길이·sequence·ACK, 실제 기록의
+HTTP 본문과 TShark 객체 바이트의 일치·해시·문서 내용을 확인한다. 핵심 payload
+조각이 없는 대조 캡처는 완전한 복구 코드를 내지 못하며 잘못된 캡처는 거부한다.
+재생성한 로컬 HTTP 대상에서도 같은 문서가 복원된다. 직접 stream 내용을
+복원하는 대안도 가능하다. 일반 풀이에는 HTTP 객체 내보내기를 제공한다.
+이미지는 basic에 tshark만 더한 pcap이며 raw 캡처 권한은 필요 없다.
+
+## 검증과 리뷰
+
+2026-10-03 Codex 작성. 의뢰·공개 목록·합성 자료 출처와 실제 전송을 대조했다.
+자료 대조 검사·작성자 해답·정리와 소비자 validate·run·verify·stop을 통과했다.
+실제 PTY의 시작 명령·해답·정답/오답 제출·중단·재접속·종료 후 초기화와
+원본 보존을 확인했다. 실행 기록은 `authoring/validation.json`에 있다.
+독립 학습자 리뷰와 최종 난도 확인은 배포 전 별도로 수행한다.

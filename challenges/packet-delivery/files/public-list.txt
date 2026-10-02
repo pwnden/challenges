@@ -1,0 +1,4 @@
+Public delivery: public/notice.txt only.
+Staff-only: internal recovery procedures and codes.
+Source: synthetic teaching PCAP made from actual localhost HTTP request/response bytes.
+No live capture or external traffic.

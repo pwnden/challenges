@@ -1,0 +1,24 @@
+schema = 5
+slug = "packet-delivery"
+title = "패킷에 남은 전송 파일"
+category = "forensics"
+difficulty = 2
+files = ["files/delivery.pcap", "files/public-list.txt"]
+
+[player]
+tools = ["terminal", "files"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "sha256"
+sha256 = "70ecf450e78633eda7154bbde8f99d47649ebf11d527acfceb1035f96daacf1d"
+
+[solve]
+image = "pwnden-cli:pcap-20261003"
+command = ["bash", "solve/solve.sh"]
+writable = true
+timeout_seconds = 30
