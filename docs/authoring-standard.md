@@ -191,10 +191,13 @@ review as separate evidence; a passing solution script establishes one of them.
 Publication requires evidence for each of these checks:
 
 - The objective teaches a stated security principle and success is observable.
+  State the observation and inference the learner must make before success.
+  Exercise the normal operation, the protected boundary and the vulnerable path.
+  Verify that copying a displayed target name cannot bypass the intended learning.
 - Required abilities are scoped, explained or linked before they are needed.
 - The learner can start and complete the exercise using its visible tools.
 - The difficulty rationale covers the full journey and matches learner evidence.
-- The brief, progressive hints and complete walkthrough pass the
+- The brief, any necessary hints and complete walkthrough pass the
   [content review](player-content.md#author-review).
 - Dialogue, content and target pages consistently name actual features and
   explain required terms in ordinary language before using them in a task.

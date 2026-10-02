@@ -25,7 +25,7 @@ def render(name, values):
     return re.sub(r'\{\{([A-Z_]+)\}\}', lambda match: values[match[1]], source)
 
 
-def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=3, patched=False, toolbox=IMAGE, concepts=()):
+def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, patched=False, toolbox=IMAGE, concepts=()):
     root = root.resolve()
     definition = load_contract(root)
     if definition['version'] != 5:
@@ -121,7 +121,7 @@ def main():
     parser.add_argument('--title', help='Korean display title; defaults to the authoring placeholder 새 시나리오')
     parser.add_argument('--difficulty', type=int, choices=range(1, 6), default=1,
                         help='1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert (default: 1)')
-    parser.add_argument('--hints', type=int, default=3, help='ordered hints, 0–10 (default: 3)')
+    parser.add_argument('--hints', type=int, default=0, help='optional ordered hints, 0–10 (default: 0)')
     parser.add_argument('--concept', dest='concepts', action='append', default=[], help='shared prerequisite ID; repeat for additional concepts')
     parser.add_argument('--patched', action='store_true', help='add service patch and functional-check scaffolds')
     parser.add_argument('--image', dest='toolbox', default=IMAGE, help='Python 3 toolbox and service base image')
@@ -139,7 +139,7 @@ def main():
     for name in files:
         print(f'  {name}')
     if not options['dry_run']:
-        print('Format validation passed. Complete the scenario briefing, hints, report and solution before publication.')
+        print('Format validation passed. Complete the scenario briefing, report and solution, and any selected hints before publication.')
 
 
 if __name__ == '__main__':

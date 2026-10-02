@@ -116,7 +116,9 @@ All blocks retain the existing allowed body elements and attribute restrictions.
 
 Use `##` for primary content headings and `###` for subsections. Consumers place brief headings beneath the panel title and walkthrough headings beneath the learning section.
 
-Declare Markdown files in `[content].hints`, in increasing specificity. Early hints suggest an observation or way of thinking. Later hints connect the observation to a concrete next step. Each should help the player move forward without requiring source checkout navigation. A hint may intentionally reveal a partial result late in the sequence. The UI lets players choose how many steps to open.
+Hints are optional. Use `hints = []` when the brief and starting knowledge provide enough help. Choose the count from actual distinct reasoning obstacles in the exercise. Each hint helps with one obstacle and adds information beyond the brief and preceding hints. Keep exact answers and complete solution sequences in the walkthrough.
+
+Declare selected Markdown files in `[content].hints`, in increasing specificity when more than one is useful. A hint suggests an observation, way of thinking or missing connection. It should help the player move forward without requiring source checkout navigation. The UI lets players choose which hints to open.
 
 ## Walkthrough
 
@@ -137,7 +139,7 @@ Review the rendered problem as a first-time solver, independently of whether `so
   security learning objective?
 - Can I inspect each required resource and perform every exercise step in the prepared environment?
 - Are credentials, submission format, expected output and restart effects clear where relevant?
-- Do hints progress from direction to specific help? Is the answer absent from the initial brief?
+- Does each optional hint address a distinct reasoning obstacle and add useful help? Is the answer absent from the initial brief?
 - Does the walkthrough explain why the approach works and reproduce the result?
 - Does a failure to load content offer a retry, rather than sending players into repository files?
 

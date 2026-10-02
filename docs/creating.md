@@ -42,7 +42,7 @@ contract version.
 | `--category` | Required: `web`, `pwn`, `rev`, `crypto`, `forensics` or `misc`. Category and execution kind are independent. |
 | `--title` | Korean display title; defaults to the authoring placeholder `새 시나리오`. Set the final title before publication. |
 | `--difficulty` | 1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert; defaults to 1. Review the intended solution against the contract criteria before publication. |
-| `--hints` | Generates 0–10 declared hints; defaults to 3. |
+| `--hints` | Generates 0–10 optional declared hints; defaults to 0. Choose the count for distinct points where a learner may get stuck. |
 | `--concept` | Connects a shared prerequisite from `knowledge/<id>.md`; repeat for additional concepts. Creates `BRIEFING.md` and compiles the player brief. |
 | `--patched` | Adds a service Compose override, patch source and functional-check scaffold. |
 | `--image` | Python 3 image used by the toolbox and starter service; defaults to the repository's current pinned Python image and digest. |

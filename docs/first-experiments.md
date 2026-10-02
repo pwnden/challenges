@@ -1,7 +1,7 @@
 # First security experiments
 
 This batch uses the current contract and existing player tools. Each scenario
-includes a request briefing, scoped starting knowledge, three progressive hints,
+includes a request briefing, scoped starting knowledge, optional focused hints,
 a reproducible investigation report and a problem-specific author record.
 The usual player path requires text reading and supplied tool operations.
 
