@@ -18,6 +18,7 @@
 | `image-metadata` | [이미지와 메타데이터](image-metadata.md) |
 | `git-history` | [현재 파일과 Git 이력](git-history.md) |
 | `sqlite-records` | [SQLite의 목록과 본문](sqlite-records.md) |
+| `curl-json` | [curl로 JSON API 읽기](curl-json.md) |
 
 작성자는 `BRIEFING.md`에 아래 블록을 둔다. `python3 tools/content.py`가
 공통 문서를 기존 `::knowledge` 블록으로 묶어 배포용 `README.md`에 반영한다.
