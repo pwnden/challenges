@@ -2,5 +2,6 @@
 set -euo pipefail
 sqlite3 -readonly files/snapshot.sqlite '
 SELECT r.body FROM documents d JOIN revisions r ON r.document_id = d.id
-WHERE d.status = "deleted" ORDER BY r.version DESC LIMIT 1;
+WHERE d.status = "deleted" AND d.title = "Board recovery procedure" AND r.publication = "published"
+ORDER BY r.version DESC LIMIT 1;
 ' | rg -o 'pwnden\{[^}]+\}'

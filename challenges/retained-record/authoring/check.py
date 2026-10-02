@@ -2,13 +2,14 @@ from build import build, KEY
 import csv
 import hashlib
 from pathlib import Path
+import re
 import shutil
 import sqlite3
 import subprocess
 import tempfile
 import tomllib
 
-query = 'SELECT r.body FROM documents d JOIN revisions r ON r.document_id = d.id WHERE d.status = "deleted" ORDER BY r.version DESC LIMIT 1;'
+query = 'SELECT r.body FROM documents d JOIN revisions r ON r.document_id = d.id WHERE d.status = "deleted" AND d.title = "Board recovery procedure" AND r.publication = "published" ORDER BY r.version DESC LIMIT 1;'
 path = Path('files/snapshot.sqlite')
 assert KEY in subprocess.check_output(['sqlite3', '-readonly', str(path), query], text=True)
 with path.open('rb') as source:
@@ -18,7 +19,14 @@ with sqlite3.connect('file:' + str(path) + '?mode=ro', uri=True) as db:
     with Path('files/visible-documents.csv').open() as source:
         rows = list(csv.DictReader(source))
     assert active == [(int(row['id']), row['title']) for row in rows]
-    assert list(db.execute('SELECT id FROM documents WHERE status = "deleted"')) == [(26,)]
+    assert list(db.execute('SELECT id FROM documents WHERE status = "deleted" ORDER BY id')) == [(26,), (40,)]
+    latest = db.execute('SELECT body FROM revisions WHERE document_id = 26 ORDER BY version DESC LIMIT 1').fetchone()[0]
+    assert 'draft_is_not_published' in latest and KEY not in latest
+    global_latest = db.execute('SELECT r.body FROM documents d JOIN revisions r ON r.document_id = d.id WHERE d.status = "deleted" ORDER BY r.version DESC LIMIT 1').fetchone()[0]
+    assert 'unrelated_deleted_board' in global_latest and KEY not in global_latest
+    for body, in db.execute('SELECT body FROM revisions WHERE body != ?', ('Internal board recovery code: ' + KEY,)):
+        for candidate in re.findall(r'pwnden\{[^}]+\}', body):
+            assert hashlib.sha256(candidate.encode()).hexdigest() != tomllib.loads(Path('challenge.toml').read_text())['flag']['sha256']
 with tempfile.TemporaryDirectory(dir='/tmp') as name:
     root = Path(name)
     build(root / 'regenerated')
@@ -35,4 +43,4 @@ with tempfile.TemporaryDirectory(dir='/tmp') as name:
     assert KEY.encode() not in control.read_bytes()
 assert hashlib.sha256(KEY.encode()).hexdigest() == tomllib.loads(Path('challenge.toml').read_text())['flag']['sha256']
 assert KEY not in Path('README.md').read_text()
-print('Real SQLite state, matching visible list, retained last revision, regeneration and purged-body control passed')
+print('Correct document and latest published revision, rejected draft/unrelated latest rows, CSV equality and purged-body control passed')

@@ -16,3 +16,6 @@ sqlite3 -readonly 예제.sqlite 'SELECT id, title FROM documents WHERE status = 
 연결은 `JOIN revisions AS r ON r.document_id = d.id`처럼 연결 열을 비교한다.
 `AS d`와 `AS r`는 짧은 별칭이다. `ORDER BY r.version DESC`는 큰 버전부터,
 `LIMIT 1`은 첫 행만 읽는다. 실제 테이블과 열은 `.schema` 결과에서 확인한다.
+`AND`는 조건을 함께 요구한다. 예를 들어 `WHERE status = "active" AND title = "Guide"`
+는 활성 상태이면서 제목이 Guide인 문서만 고른다. 버전 번호를 비교할 때는 먼저
+같은 문서인지, 적용 또는 승인된 상태인지 확인한다.

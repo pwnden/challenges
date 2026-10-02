@@ -15,15 +15,19 @@ def build(target):
         db.executescript('''
             CREATE TABLE documents(id INTEGER PRIMARY KEY, title TEXT NOT NULL, status TEXT NOT NULL);
             CREATE TABLE revisions(document_id INTEGER NOT NULL REFERENCES documents(id), version INTEGER NOT NULL,
+                                   publication TEXT NOT NULL CHECK(publication IN ('published','draft')),
                                    body TEXT NOT NULL, PRIMARY KEY(document_id, version));
         ''')
         db.executemany('INSERT INTO documents VALUES (?, ?, ?)',
                        [(10, 'Public meeting notice', 'active'), (26, 'Board recovery procedure', 'active'),
-                        (31, 'Public contact guide', 'active')])
-        db.executemany('INSERT INTO revisions VALUES (?, ?, ?)',
-                       [(10, 1, 'Meeting is on Friday.'), (26, 1, 'Old recovery code was retired.'),
-                        (26, 2, 'Internal board recovery code: ' + KEY),
-                        (31, 1, 'Contact the board manager for assistance.')])
+                        (31, 'Public contact guide', 'active'), (40, 'Retired test board', 'deleted')])
+        db.executemany('INSERT INTO revisions VALUES (?, ?, ?, ?)',
+                       [(10, 1, 'published', 'Meeting is on Friday.'),
+                        (26, 1, 'published', 'Retired code: pwnden{previous_backup_code}'),
+                        (26, 2, 'published', 'Internal board recovery code: ' + KEY),
+                        (26, 3, 'draft', 'Unapproved draft code: pwnden{draft_is_not_published}'),
+                        (31, 1, 'published', 'Contact the board manager for assistance.'),
+                        (40, 99, 'published', 'Other test board code: pwnden{unrelated_deleted_board}')])
         db.execute('UPDATE documents SET status = "deleted" WHERE id = 26')
         with (target / 'visible-documents.csv').open('w', newline='') as output:
             writer = csv.writer(output, lineterminator='\n')

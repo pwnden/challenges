@@ -1,12 +1,12 @@
 {
   "slug": "retained-record",
-  "verified_at_utc": "2026-10-02T19:49:51.121839+00:00",
+  "verified_at_utc": "2026-10-02T20:55:52.845632+00:00",
   "artifact_controls": true,
   "author_solution_patch_cleanup": true,
   "consumer_validate_run_verify_stop": true,
   "real_pty_solution_submission_interrupt_reattach_restart": true,
   "original_preserved": true,
-  "total_validation_seconds": 10.19,
-  "distribution_bytes": 16889,
+  "total_validation_seconds": 10.97,
+  "distribution_bytes": 17134,
   "passed": true
 }

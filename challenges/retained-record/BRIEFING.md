@@ -11,7 +11,7 @@
 내부 복구 코드가 남았는지 조사해 달라고 요청했다. 자료는 실습용 보드에서 생성했다.
 
 ::objective
-목록과 백업의 보관 상태를 비교하고, 삭제 상태 문서의 마지막 본문에 남은 복구 코드를 찾자.
+목록과 백업을 비교하고, 보드 복구 절차 문서의 마지막 승인 본문에 남은 코드를 찾자.
 ::
 
 ::resources{title="삭제 후 만든 백업"}
@@ -28,7 +28,9 @@ sqlite3 -readonly files/snapshot.sqlite '.tables'
 sqlite3 -readonly files/snapshot.sqlite '.schema'
 ```
 
-문서 상태와 본문의 연결 열, 버전 순서를 확인한 뒤 필요한 행을 조회할 수 있다.
+문서 제목은 `Board recovery procedure`다. `publication`이 `published`면 승인된
+본문이고 `draft`면 미승인 초안이다. 삭제 문서는 여럿일 수 있고 가장 큰 버전이
+항상 승인본인 것은 아니다. 조사할 문서와 승인 상태를 먼저 고른 뒤 버전을 비교하자.
 이번 조사는 저장된 행을 확인하며 디스크의 삭제 영역을 복구할 필요는 없다.
 ::
 
@@ -36,5 +38,5 @@ sqlite3 -readonly files/snapshot.sqlite '.schema'
 ::
 
 ::submission
-삭제 상태 문서의 마지막 본문에서 찾은 `pwnden{...}` 복구 코드를 제출하자.
+보드 복구 절차의 마지막 승인 본문에서 찾은 `pwnden{...}` 코드를 제출하자.
 ::
