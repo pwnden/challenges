@@ -1,8 +1,9 @@
-# CLI로 직접 조사하는 문제 계획
+# CLI로 직접 조사하는 문제
 
-2026-10-03 작성한 신규 문제 8개의 출제 계획이다. 현재 Linux/WSL의 Linux amd64
+2026-10-03 작성한 신규 문제 8개의 설계와 구현 기록이다. 현재 Linux/WSL의 Linux amd64
 Docker에서 검증한 공통 CLI 이미지와 격리 실행기로 자료·요청·서비스를 직접 조사한다.
-문제별 대상과 배포 자료의 구현·실행 검증은 다음 작업에서 진행한다.
+8개 모두 대상·배포 자료·브리핑·힌트·해설·CLI 해답을 구현하고 문제별 기술 검증을
+마쳤다. 독립 학습자 리뷰와 최종 난도 확인은 배포 전에 별도로 수행한다.
 
 기존 [12개 문제](../README.md)의 입문·초급 학습 흐름을 이어 간다는 가정으로
 범위를 잡았다. 아래 난도는 설계 목표이며, 완성된 풀이 경로와 독립 학습자
@@ -36,17 +37,17 @@ Docker에서 검증한 공통 CLI 이미지와 격리 실행기로 자료·요�
 
 | 순서 | 표시 제목 / slug | 도구 | 형태·이미지 | 목표 난도 |
 | --- | --- | --- | --- | --- |
-| 1 | 공개 이미지에 남은 내부 메모 / `image-notes` | `file`, `exiftool`, `jq` | 파일·basic | 1 입문 |
-| 2 | 지운 설정 파일의 이전 내용 / `commit-trail` | `git`, `rg` | 파일·basic | 2 초급 |
-| 3 | 삭제한 문서가 남은 백업 / `retained-record` | `sqlite3` | 파일·basic | 2 초급 |
-| 4 | 내보내기에서 빠진 권한 검사 / `export-gap` | `curl`, `jq` | 서비스 1개·basic | 2 초급 |
-| 5 | 개발용 점검 포트 / `diagnostic-port` | `nmap`, `ncat`, `curl` | 서비스 1개·basic | 2 초급 |
-| 6 | 모든 경로가 200을 반환하는 서버 / `quiet-route` | `ffuf`, `curl`, `jq` | 서비스 1개·basic | 2 초급 |
-| 7 | 패킷에 남은 전송 파일 / `packet-delivery` | `tshark`, `file`, `tar` | 파일·pcap | 2 초급 |
-| 8 | 서명이 맞는 납품 문서 / `signed-delivery` | `openssl`, `sha256sum` | 파일·basic | 2 초급 |
+| 1 | [공개 이미지에 남은 내부 메모](../challenges/image-notes/README.md) / `image-notes` | `file`, `exiftool`, `jq` | 파일·basic | 1 입문 |
+| 2 | [지운 설정 파일의 이전 내용](../challenges/commit-trail/README.md) / `commit-trail` | `tar`, `git`, `rg` | 파일·basic | 2 초급 |
+| 3 | [삭제한 문서가 남은 백업](../challenges/retained-record/README.md) / `retained-record` | `sqlite3` | 파일·basic | 2 초급 |
+| 4 | [내보내기에서 빠진 권한 검사](../challenges/export-gap/README.md) / `export-gap` | `curl`, `jq` | 서비스 1개·basic | 2 초급 |
+| 5 | [개발용 점검 포트](../challenges/diagnostic-port/README.md) / `diagnostic-port` | `nmap`, `ncat`, `curl` | 서비스 1개·basic | 2 초급 |
+| 6 | [모든 경로가 200을 반환하는 서버](../challenges/quiet-route/README.md) / `quiet-route` | `ffuf`, `curl`, `jq` | 서비스 1개·basic | 2 초급 |
+| 7 | [패킷에 남은 전송 파일](../challenges/packet-delivery/README.md) / `packet-delivery` | `tshark`, `file`, `tar` | 파일·pcap | 2 초급 |
+| 8 | [서명이 맞는 납품 문서](../challenges/signed-delivery/README.md) / `signed-delivery` | `openssl`, `sha256sum` | 파일·basic | 2 초급 |
 
 basic은 `pwnden-cli:basic-20261003`, pcap은 `pwnden-cli:pcap-20261003`을 뜻한다.
-현재 계획에는 basic과 basic에 `tshark`만 추가한 pcap 두 이미지를 사용한다.
+현재 8개 문제에는 basic과 basic에 `tshark`만 추가한 pcap 두 이미지를 사용한다.
 도구는 문제의 학습 목표와 실제 풀이 명령을 기준으로 선택한다. 새 문제가 추가
 도구를 요구하면 해당 문제용 이미지를 준비하고, 기능·용량·격리 조건을 검증한다.
 현재 PC에 빌드된 로컬 이미지를 사용한다. 새로운 PC에서 실행할 때는
@@ -75,9 +76,9 @@ basic은 `pwnden-cli:basic-20261003`, pcap은 `pwnden-cli:pcap-20261003`을 뜻�
   확인해 달라는 요청이다. 전달된 저장소는 이 실습을 위해 만든 작은 로컬 Git 저장소다.
 - **학습 목표:** 현재 파일 삭제와 Git 이력에 저장된 비밀 제거의 차이를 확인한다.
   분야 `software-supply-chain-security`, 주제 `supply-chain-history`, category `misc`.
-- **자료:** `files/source/`의 정상 Git 저장소. 6개 안팎의 커밋과 현재의 예제 설정,
+- **자료:** `files/source.tar.gz` 안의 정상 Git 저장소. 6개 커밋과 현재의 예제 설정,
   과거 `config/runtime.env`의 실습용 복구 키가 포함된다. 원격 주소와 외부 객체 참조가
-  없는 독립 저장소로 만든다.
+  없는 독립 저장소다. 터미널에서 임시 폴더에 압축을 풀어 조사한다.
 - **풀이:** 현재 파일을 조사한 뒤 `git log --all`로 변경을 찾고, 해당 커밋의 diff와
   `git show <commit>:<path>`로 삭제 전 설정을 읽는다. 커밋·diff·과거 파일 경로를
   작은 별도 예제로 소개한다.
@@ -182,7 +183,8 @@ basic은 `pwnden-cli:basic-20261003`, pcap은 `pwnden-cli:pcap-20261003`을 뜻�
   코드 회수, 핵심 payload를 빠뜨린 대조 캡처의 회수 실패를 확인한다. 패킷 단위
   문자열 검색만으로 전체 코드를 찾지 못하도록 압축된 본문을 사용한다.
   공통 pcap 이미지에서 작은 합성 캡처의 HTTP 객체 내보내기를 검증했다.
-  실제 문제 자료의 바이트 일치와 대조 캡처 검사는 구현할 때 별도로 수행한다.
+  실제 문제의 HTTP 바이트 일치·checksum·sequence/ACK·불완전 캡처·재생성
+  검사도 `authoring/check.py`에서 통과했다.
 
 ## 8. 서명이 맞는 납품 문서
 
@@ -226,8 +228,8 @@ Git 이력, SQLite 레코드, 메타데이터, curl·JSON 요청, TCP 서비스,
    실패·중단·재시작·정리 결과. 실행 중 새 CLI 설치 없이 완주해야 한다.
 
 문제별 배포 자료 합계는 8MiB 이하, PCAP은 2MiB 이하, 개별 자동 해답은 기본 60초 이내를
-초기 예산으로 삼는다. HTTP/TCP 문제는 컨테이너 1개에 구성한다. 각 목표의 실제
-실행 시간과 자원 사용을 측정해 작성 기록에 남기고 현재 실행 상한에서 확인한다.
+초기 예산으로 삼는다. HTTP/TCP 문제는 컨테이너 1개에 구성한다. 각 문제의 실제
+검증 시간을 작성 기록에 남기고 현재 실행기의 자원 상한에서 확인한다.
 
 각 문제의 가벼운 검사, 작성자 실행 검증과 소비자 재현을 마친 뒤 해당 단위를 커밋한다.
 소비자 검증은 직접 `validate`·`run`·`verify`·`stop`을 호출해 확인한다.
@@ -246,9 +248,51 @@ python3 -B challenges/tools/verify.py
 python3 -B platform/tools/verify.py
 ```
 
+파일 자료의 제거·변조·재생성 대조 검사는 문제별 `authoring/check.py`에 있다.
+소비자 CLI를 준비한 workspace 루트에서 같은 문제 이미지로 다시 실행할 수 있다.
+이 검사는 작성자용이며 일반 풀이에는 Python이 필요하지 않다.
+
+```sh
+set -e
+for slug in image-notes commit-trail retained-record packet-delivery signed-delivery; do
+  pwnden --repo challenges exec "$slug" -- python3 -B authoring/check.py
+  pwnden --repo challenges stop "$slug"
+done
+```
+
 CLI와 검사 스크립트 재현은 기술 검증이다. 배포 전에는 준비된 터미널에서 처음
 풀이하는 학습자의 독립 리뷰로 시작 설명·힌트·난도를 확인하고 `AUTHORING.md`에
 기록한다. 그때까지 문제의 구현·기술 검증과 공개 준비 상태를 구분해 관리한다.
+
+## 문제별 완료 기록
+
+각 기록은 자료 대조 검사(파일 문제), 작성자 해답과 서비스 패치·정상 기능,
+소비자 validate·run·verify·stop 및 실제 PTY에서 시작 명령·해답·정답/오답 제출·
+Ctrl+C·재접속·종료 후 새 작업 공간·원본 보존을 확인한 결과다.
+시간은 이 검사 묶음의 총 시간이며 개별 해답의 timeout과 다르다.
+
+| 문제 | 기록 | 검증 총 시간 | 배포 자료 | 문제 단위 커밋 |
+| --- | --- | --- | --- | --- |
+| image-notes | [통과](../challenges/image-notes/authoring/validation.json) | 10.80초 | 762 B | `0d0cec5` |
+| commit-trail | [통과](../challenges/commit-trail/authoring/validation.json) | 10.31초 | 4,230 B | `fcd8c8a` |
+| retained-record | [통과](../challenges/retained-record/authoring/validation.json) | 10.19초 | 16,889 B | `1db5515` |
+| export-gap | [통과](../challenges/export-gap/authoring/validation.json) | 61.10초 | 0 B | `27c81c9` |
+| diagnostic-port | [통과](../challenges/diagnostic-port/authoring/validation.json) | 72.63초 | 0 B | `253619d` |
+| quiet-route | [통과](../challenges/quiet-route/authoring/validation.json) | 54.25초 | 289 B | `5513a37` |
+| packet-delivery | [통과](../challenges/packet-delivery/authoring/validation.json) | 11.52초 | 2,971 B | `6a11015` |
+| signed-delivery | [통과](../challenges/signed-delivery/authoring/validation.json) | 11.10초 | 1,296 B | `5f097dc` |
+
+Ncat 7.95의 응답 이후 대기는 1초 idle 제한으로 끝낸다. 자동 검사는 해당 idle
+메시지와 완전한 프로토콜 응답이 함께 있을 때만 종료 코드 1을 허용한다.
+SQLite 재생성은 버전별 파일 헤더 차이를 고려해 SQL 내용으로 비교한다.
+ffuf 후보에 403도 포함될 수 있으므로 본문의 공개 여부를 직접 확인한다.
+브라우저 화면의 시각 검사는 이 기술 검증 기록에 포함하지 않는다.
+
+2026-10-03 최종 묶음 검증에서 기존 12개와 신규 8개를 합한 20개 카탈로그의
+콘텐츠 일치·형식 검사, 작성자 회귀 테스트 65개, 작성자 전체 verify와 소비자 전체
+validate·run·verify·stop을 모두 통과했다. 위 소비자 CLI로 파일 대조 검사 5개도
+재현했다. 커밋에서 내보낸 배포 파일은 작업 사본과 바이트가 일치하며 합계
+26,437 B다. basic·pcap 이미지 ID를 유지해 추가 CLI 설치 없이 완주했다.
 
 ## 작성자용 기술 근거
 
