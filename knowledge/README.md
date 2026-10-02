@@ -14,7 +14,7 @@
 | `file-signatures` | [확장자와 식별 바이트](file-signatures.md) |
 | `dns-records` | [DNS 기록 읽기](dns-records.md) |
 | `base32` | [Base32 복원](base32.md) |
-| `resource-policies` | [동작과 리소스 권한](resource-policies.md) |
+| `resource-policies` | [누가 어떤 문서를 읽을 수 있나](resource-policies.md) |
 
 작성자는 `BRIEFING.md`에 아래 블록을 둔다. `python3 tools/content.py`가
 공통 문서를 기존 `::knowledge` 블록으로 묶어 배포용 `README.md`에 반영한다.

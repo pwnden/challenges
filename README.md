@@ -33,7 +33,7 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [Hash Lantern](challenges/hash-lantern/README.md) | crypto | Compare six password candidates using the prepared hash command |
 | [False Label](challenges/false-label/README.md) | forensics | Identify a mislabeled archive by bytes and parse its contents |
 | [DNS Detour](challenges/dns-detour/README.md) | forensics | Reassemble data from captured local DNS query labels |
-| [Borrowed Badge](challenges/borrowed-badge/README.md) | misc | Scoped local resource policy, solution and patch checks |
+| [Shared Files](challenges/borrowed-badge/README.md) | misc | Document access rules, solution and patch checks |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped

@@ -1,6 +1,6 @@
 schema = 5
 slug = "borrowed-badge"
-title = "Borrowed Badge"
+title = "Shared Files"
 category = "misc"
 difficulty = 2
 compose = "compose.yaml"

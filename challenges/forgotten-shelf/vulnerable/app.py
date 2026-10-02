@@ -37,7 +37,7 @@ class Handler(BaseHTTPRequestHandler):
                     '<p><a href="/about">운영 안내</a></p>' if path == "/" else
                     '<h1>운영 안내</h1><p>최근 자료를 이전하면서 내보낸 백업이 있습니다.</p>'
                     '<p>이전 작업의 내보내기 파일명은 <code>site-backup.txt</code>입니다.</p>'
-                    '<p>검색 로봇의 수집 안내는 사이트 루트의 robots.txt에 두었습니다.</p>'
+                    '<p>검색 서비스가 페이지를 수집할 때 참고하는 안내는 /robots.txt에 있습니다.</p>'
                     '<p><a href="/">보관소로 돌아가기</a></p>')
             self.reply(200, '<!doctype html><html lang="ko"><meta charset="utf-8">'
                        '<meta name="viewport" content="width=device-width, initial-scale=1">'

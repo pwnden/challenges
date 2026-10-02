@@ -41,16 +41,16 @@ class Handler(BaseHTTPRequestHandler):
         if url.path == '/healthz':
             self.reply(200, 'ok')
         elif url.path == '/':
-            body = '<h1>배지 보관소</h1><p>당신은 team-reader 역할입니다. 로컬 평가기가 아래 정책으로 읽기 요청을 판단합니다.</p><h2>리소스 목록</h2><ul><li>locker/team-notes — 팀 공유</li><li>locker/team-admin — 운영자 전용</li><li>locker/personal-draft — 개인 전용</li></ul><h2>현재 역할 정책</h2><pre>' + escape(json.dumps(POLICY, ensure_ascii=False, indent=2)) + '</pre><form action="/read"><label>리소스 <input name="resource" value="locker/team-notes" maxlength="128" required></label> <button>읽기 요청</button></form>'
-            self.reply(200, '<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>배지 보관소</title><style>' + STYLE + '</style><body>' + body + '</body></html>', 'text/html')
+            body = '<h1>팀 문서 사이트</h1><p>현재 팀원용 권한인 team-reader로 문서를 읽을 수 있습니다.</p><h2>문서 목록</h2><ul><li>locker/team-notes — 팀 공유 작업 노트</li><li>locker/team-admin — 운영자의 복구 문서</li><li>locker/personal-draft — 다른 사용자의 개인 초안</li></ul><h2>이 계정의 접근 규칙</h2><p>Effect의 Allow는 허용, Action의 read는 읽기, Resource는 문서 이름입니다. 이름의 *는 뒤에 오는 글자 전체를 대신합니다. 허용 규칙에 맞지 않거나 Deny 규칙에 맞으면 거절합니다.</p><pre>' + escape(json.dumps(POLICY, ensure_ascii=False, indent=2)) + '</pre><form action="/read"><label>문서 이름 <input name="resource" value="locker/team-notes" maxlength="128" required></label> <button>읽기</button></form>'
+            self.reply(200, '<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>팀 문서 사이트</title><style>' + STYLE + '</style><body>' + body + '</body></html>', 'text/html')
         elif url.path == '/read':
             resource = parse_qs(url.query).get('resource', [''])[0]
             if not resource or len(resource) > 128:
-                self.reply(400, '리소스 이름을 입력하세요.')
+                self.reply(400, '문서 이름을 입력하세요.')
             elif not allowed('read', resource):
-                self.reply(403, '정책이 이 읽기 요청을 허용하지 않습니다.')
+                self.reply(403, '현재 권한으로는 이 문서를 읽을 수 없습니다.')
             elif resource not in ITEMS:
-                self.reply(404, '리소스를 찾을 수 없습니다.')
+                self.reply(404, '문서를 찾을 수 없습니다.')
             else:
                 self.reply(200, ITEMS[resource])
         else:
