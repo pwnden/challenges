@@ -20,6 +20,7 @@ From the challenges repository, use Python 3.11 or newer:
 ```sh
 python3 tools/create.py rotor-example --kind file --category rev --difficulty 2 --title "Rotor Example"
 python3 tools/create.py vault-example --kind service --category web --difficulty 1 --title "Vault Example" --patched
+python3 tools/create.py session-example --kind service --category web --patched --concept http-messages --concept http-cookies
 ```
 
 The generator owns the repeated directory layout, manifest declarations,
@@ -42,6 +43,7 @@ contract version.
 | `--title` | Display title; defaults to title-cased slug words. |
 | `--difficulty` | 1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert; defaults to 1. Review the intended solution against the contract criteria before publication. |
 | `--hints` | Generates 0–10 declared hints; defaults to 3. |
+| `--concept` | Connects a shared prerequisite from `knowledge/<id>.md`; repeat for additional concepts. Creates `BRIEFING.md` and compiles the player brief. |
 | `--patched` | Adds a service Compose override, patch source and functional-check scaffold. |
 | `--image` | Python 3 image used by the toolbox and starter service; defaults to the repository's current pinned Python image and digest. |
 | `--dry-run` | Lists the files that would be created and writes nothing. |
@@ -81,6 +83,27 @@ use the same contract; their services and endpoint declarations are authored to
 match their requirements. The platform derives its tools from those declarations.
 
 ## Complete before publication
+
+### Shared starting knowledge
+
+Use [shared starting notes](../knowledge/README.md) for reusable prerequisite
+explanations. With `--concept`, edit `BRIEFING.md` for the scenario context and
+keep the empty `::knowledge{concepts="id,other-id"}` block. Edit the referenced
+concept Markdown to improve a shared explanation. Then run:
+
+```sh
+python3 tools/content.py
+python3 tools/content.py --check
+```
+
+The first command refreshes all compiled briefs. The second checks equality
+without writing; ordinary format and execution verification also reject stale
+compiled prerequisites. The generated `README.md` remains the contract v5 player
+document and displays the notes within the existing website reading pane.
+Author records receive the concept reference links. Scenarios authored directly
+in `README.md` retain their existing workflow.
+
+### Scenario completion
 
 1. Complete `AUTHORING.md` using the [authoring standard](authoring-standard.md).
    Define the request, player role and actual evidence behind its clues.

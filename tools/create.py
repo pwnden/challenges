@@ -7,6 +7,7 @@ import re
 import shutil
 
 from validate import InvalidChallenge, image, inside, load_contract, validate_manifest
+from content import compile_brief
 
 
 TEMPLATES = Path(__file__).resolve().parent / 'templates'
@@ -24,7 +25,7 @@ def render(name, values):
     return re.sub(r'\{\{([A-Z_]+)\}\}', lambda match: values[match[1]], source)
 
 
-def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=3, patched=False, toolbox=IMAGE):
+def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=3, patched=False, toolbox=IMAGE, concepts=()):
     root = root.resolve()
     definition = load_contract(root)
     if definition['version'] != 5:
@@ -58,6 +59,17 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=3, p
     }
     for i in range(1, hints + 1):
         files[f'hints/{i}.md'] = render('common/hint.md', {'STEP': str(i)})
+    if concepts:
+        if len(concepts) != len(set(concepts)) or any(not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', key) for key in concepts):
+            raise InvalidChallenge('concepts need distinct lowercase concept IDs')
+        for key in concepts:
+            path = inside(root, root / 'knowledge' / f'{key}.md')
+            if not path.is_file():
+                raise InvalidChallenge(f'unknown concept: {key}')
+        files['BRIEFING.md'] = re.sub(r'::knowledge\n.*?\n::', '::knowledge{concepts="' + ','.join(concepts) + '"}\n::', files['README.md'], flags=re.DOTALL)
+        files['AUTHORING.md'] += '\n## 연결된 공통 시작 지식\n\n' + '\n'.join(
+            f'- requires `{key}`: [공통 설명](../../knowledge/{key}.md).' for key in concepts
+        ) + '\n'
     if kind == 'file':
         files['files/data.txt'] = render('file/data.txt', values)
     else:
@@ -89,6 +101,8 @@ def create(root, slug, *, dry_run=False, **options):
             path.parent.mkdir(parents=True, exist_ok=True)
             with path.open('x', encoding='utf-8', newline='\n') as output:
                 output.write(content)
+        if 'BRIEFING.md' in files:
+            (destination / 'README.md').write_text(compile_brief(root, destination / 'BRIEFING.md'), encoding='utf-8', newline='\n')
         validate_manifest(root, destination / 'challenge.toml', definition)
     except BaseException:
         # Only this invocation's newly reserved, repository-contained directory.
@@ -108,6 +122,7 @@ def main():
     parser.add_argument('--difficulty', type=int, choices=range(1, 6), default=1,
                         help='1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert (default: 1)')
     parser.add_argument('--hints', type=int, default=3, help='ordered hints, 0–10 (default: 3)')
+    parser.add_argument('--concept', dest='concepts', action='append', default=[], help='shared prerequisite ID; repeat for additional concepts')
     parser.add_argument('--patched', action='store_true', help='add service patch and functional-check scaffolds')
     parser.add_argument('--image', dest='toolbox', default=IMAGE, help='Python 3 toolbox and service base image')
     parser.add_argument('--dry-run', action='store_true', help='list files without writing them')

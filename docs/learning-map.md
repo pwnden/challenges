@@ -78,8 +78,9 @@ target, tools or privileged variants can run on the current platform.
 
 ## Shared foundations
 
-The keys below refer to prerequisite abilities, not existing concept pages.
-Supply the needed explanation or prepared practice before the problem step
+The keys below refer to prerequisite abilities. Reusable scoped explanations
+are available in [starting knowledge](../knowledge/README.md); choose notes that
+cover the actual ability needed. Supply the explanation or prepared practice before the problem step
 that uses it. Each topic lists the abilities required for its entry exercise;
 extend that list when authoring a more demanding variant.
 

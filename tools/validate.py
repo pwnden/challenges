@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path, PurePosixPath
 import re
 import tomllib
+from content import check_brief
 
 
 class InvalidChallenge(ValueError):
@@ -120,6 +121,8 @@ def validate_manifest(root, manifest, definition):
     paths.append(markdown(root, directory, content['walkthrough'], 'content.walkthrough'))
     if len(set(paths)) != len(paths):
         raise InvalidChallenge('content documents must use distinct files')
+    if content['description'] == 'README.md':
+        check_brief(root, directory)
     files = strings(data.get('files', []), 'files')
     for value in files:
         repository_path(root, directory, value, 'files')

@@ -21,6 +21,11 @@ tools, difficulty and declared player documents. Paths and symlink targets stay
 inside the repository. Declared Markdown files are distinct, nonempty UTF-8,
 at most 1 MiB, with up to 10 ordered hints.
 
+Scenarios with a `BRIEFING.md` source compile shared prerequisite notes using
+`python3 tools/content.py`. Format validation also checks that their player
+`README.md` matches that source and the referenced notes. A changed concept
+requires refreshing the consuming briefs before verification or publication.
+
 The regression suite covers format rules, generation, execution boundaries,
 result semantics, timeout/interruption and resource cleanup. Format validation
 does not establish target execution, author-record completeness or learning
