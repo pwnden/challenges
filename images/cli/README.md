@@ -1,44 +1,40 @@
 # 공통 CLI 이미지
 
 문제의 `solve.image`로 풀이 터미널과 자동 풀이에 쓸 이미지를 선택한다.
-도구와 내부 Python·Ruby·Java 런타임은 Docker 이미지에 미리 설치한다.
+실제 풀이에 필요한 도구와 런타임을 Docker 이미지에 미리 설치한다.
 지원·검증 환경은 Linux/WSL의 Linux amd64 Docker다.
 
-## 이미지 선택과 빌드
+## 현재 문제 계획에 필요한 이미지
+
+[8개 문제 계획](../../docs/cli-challenge-plan.md)은 아래 두 이미지로 구성한다.
+7개 문제에는 basic, PCAP 문제 1개에는 basic에 `tshark`를 추가한 pcap을 사용한다.
+추가 도구는 새 문제의 학습 목표와 실제 풀이 명령을 정한 뒤 선택한다.
 
 | 이미지 | 구성 |
 | --- | --- |
 | `pwnden-cli:basic-20261003` | 기본 파일 명령, Bash, rg, Binutils, xxd, 압축 도구, curl, jq, OpenSSL, Git, Nmap, Ncat, SQLite, ExifTool, ffuf, socat, DNS·SSH 클라이언트 |
-| `pwnden-cli:lab-20261003` | basic + PCAP·파일 포렌식, DB·SMB·LDAP 클라이언트, sqlmap, Hydra·Ncrack, 기본 John, CPU Hashcat/PoCL, GDB·LLDB·strace, AFL++, GCC, pwntools, ROPgadget·ropper, oletools, Volatility 3 |
-| `pwnden-cli:extended-20261003` | 조사 목록의 일반 CLI 묶음. 웹 탐색·TLS·JWT, John Jumbo, 정적 분석·디버깅·퍼징, APK, 공급망 분석, Foundry, Frida와 오프라인 DB·규칙·템플릿 포함. 명령 174개 |
-| `pwnden-cli:specialized-20261003` | extended + Ghidra headless, Metasploit, linPEAS. 명령 178개 |
-| `pwnden-cli:all-20261003` | specialized + raw 스캔·무선·공개 자산 수집·ADB 도구의 실행 파일. 명령 191개. 실행 권한과 장치·인터넷 정책은 동일 |
+| `pwnden-cli:pcap-20261003` | basic + `tshark`와 필요한 OS 의존성. 제공된 PCAP 읽기·TCP 재조립·HTTP 객체 내보내기 |
 
-기존 basic/lab 이미지는 유지한다. 확장 세 이미지는 `extended → specialized → all`
-순서로 레이어를 공유한다. 작은 문제는 basic/lab, 모든 도구를 준비해 둘 때는 all을
-선택한다. 서비스 컨테이너는 문제에 필요한 별도 이미지를 사용한다.
+두 이미지는 기본 레이어를 공유한다. 서비스 컨테이너는 문제에 필요한 별도 이미지를
+사용한다. 취약점 DB·메모리 분석·디버거·컴파일러는 해당 분석을 수행하는 문제의
+이미지에 추가한다.
 
 ```sh
 cd /path/to/challenges
 docker build --platform linux/amd64 --target basic -t pwnden-cli:basic-20261003 images/cli
-docker build --platform linux/amd64 --target lab -t pwnden-cli:lab-20261003 images/cli
-docker build --platform linux/amd64 --target extended -f images/cli/Dockerfile.toolbox -t pwnden-cli:extended-20261003 images/cli
-docker build --platform linux/amd64 --target specialized -f images/cli/Dockerfile.toolbox -t pwnden-cli:specialized-20261003 images/cli
-docker build --platform linux/amd64 --target all -f images/cli/Dockerfile.toolbox -t pwnden-cli:all-20261003 images/cli
+docker build --platform linux/amd64 --target pcap -t pwnden-cli:pcap-20261003 images/cli
 ```
 
-이미지 준비에는 인터넷과 디스크 공간이 필요하다. 확장 이미지에는 Grype·Trivy의
-큰 DB도 포함된다. 검증한 image ID와 용량 측정은 [validation.json](validation.json)에
-기록한다. 현재 containerd 저장소에서 `docker image inspect`의 `Size`는 압축된
+이미지 준비에는 인터넷과 디스크 공간이 필요하다. 기본 Dockerfile의 최종 단계도
+pcap이므로 target을 생략하면 pcap을 빌드한다. 선택한 이미지의 검증 결과는
+[selection-validation.json](selection-validation.json)에 기록한다.
+현재 containerd 저장소에서 `docker image inspect`의 `Size`는 압축된
 콘텐츠 크기다. `docker image ls --tree`의 `DISK USAGE`와 구분한다.
 
 | 이미지 | 압축 콘텐츠 | Docker 표시 디스크 사용량 |
 | --- | --- | --- |
 | basic | 116MB | 483MB |
-| lab | 712MB | 2.99GB |
-| extended | 3.34GB | 16.0GB |
-| specialized | 4.72GB | 20.4GB |
-| all | 4.79GB | 20.7GB |
+| pcap | 157MB | 683MB |
 
 containerd는 압축본과 압축 해제본을 함께 보관한다.
 [Docker 저장소 문서](https://docs.docker.com/engine/storage/containerd/)에서 설명하는
@@ -46,17 +42,11 @@ containerd는 압축본과 압축 해제본을 함께 보관한다.
 빌드 캐시와 이전 이미지까지 남아 있으면 별도 공간이 더 필요하다.
 이미지 크기가 풀이 컨테이너의 RAM 예약량을 뜻하지는 않는다.
 
-all 내부에서 큰 경로는 Grype DB 약 3.15GB, Trivy DB 1.48GB, Ghidra 0.79GB,
-Metasploit 자료 0.68GB, Pwndbg portable 0.75GB, 별도 Python 환경 0.81GB다.
-그 밖에 컴파일러·LLVM·PoCL·Java와 도구 의존성이 포함된다.
-전체 도구와 두 DB를 하나에 포함한 all은 큰 준비 이미지다. 가벼운 문제에는
-필요한 CLI가 포함된 basic/lab을 선택하고, 큰 분석 자료는 문제 목적에 맞춰 선택한다.
-
 문제 선언 예:
 
 ```toml
 [solve]
-image = "pwnden-cli:all-20261003"
+image = "pwnden-cli:basic-20261003"
 command = ["sh", "solve.sh"]
 writable = true
 timeout_seconds = 30
@@ -75,9 +65,37 @@ timeout_seconds = 30
 정확한 조건은 [runtime limits](../../docs/verification.md#runtime-limits)를 따른다.
 
 Nmap은 `nmap --unprivileged -sT -Pn -n TARGET`처럼 TCP 연결 스캔을 사용한다.
-이미지의 파일 capability와 setuid/setgid도 제거하므로 Nmap 실행 자체가
-capability 없는 환경에서 거부되는 문제를 피한다. Hashcat은 CPU PoCL backend를
-포함하며 CPU 스레드를 2개로 제한한다. Java에도 CPU·힙 상한을 지정한다.
+PCAP은 `tshark -r`로 제공된 파일을 읽는다. 라이브 캡처용 권한은 부여하지 않는다.
+
+## 추가 도구가 필요한 문제의 선택형 구성
+
+아래 구성은 도구 조사·기능 검증을 위해 준비한 선택형 이미지다.
+현재 8개 문제의 준비 단계는 위의 basic과 pcap만 빌드한다.
+새 문제에는 실제 풀이에 필요한 도구만 기본 이미지에 추가하는 방식을 우선한다.
+
+| 이미지 | 구성 | 압축 콘텐츠 | Docker 표시 디스크 사용량 |
+| --- | --- | --- | --- |
+| `pwnden-cli:lab-20261003` | basic + 파일 포렌식, DB·SMB·LDAP 클라이언트, sqlmap, Hydra·Ncrack, 기본 John, CPU Hashcat/PoCL, GDB·LLDB·strace, AFL++, GCC, Python 분석 도구 | 712MB | 2.99GB |
+| `pwnden-cli:extended-20261003` | 웹·TLS·JWT, John Jumbo, 정적 분석·디버깅·퍼징, APK, 공급망 분석, Foundry, Frida와 오프라인 DB·규칙·템플릿. 명령 174개 | 3.34GB | 16.0GB |
+| `pwnden-cli:specialized-20261003` | extended + Ghidra headless, Metasploit, linPEAS. 명령 178개 | 4.72GB | 20.4GB |
+| `pwnden-cli:all-20261003` | specialized + raw 스캔·무선·공개 자산 수집·ADB 실행 파일. 명령 191개 | 4.79GB | 20.7GB |
+
+확장 세 이미지는 `extended → specialized → all` 순서로 레이어를 공유한다.
+검증한 ID와 크기는 [validation.json](validation.json)에 있다.
+all의 큰 경로는 Grype DB 약 3.15GB, Trivy DB 1.48GB, Ghidra 0.79GB,
+Metasploit 자료 0.68GB, Pwndbg portable 0.75GB, 별도 Python 환경 0.81GB다.
+DB는 공식 취약점 자료의 고정 snapshot이며, 문제용 데이터셋과 구분한다.
+추가 분석용 구성을 빌드할 때만 아래의 해당 명령을 실행한다.
+
+```sh
+docker build --platform linux/amd64 --target lab -t pwnden-cli:lab-20261003 images/cli
+docker build --platform linux/amd64 --target extended -f images/cli/Dockerfile.toolbox -t pwnden-cli:extended-20261003 images/cli
+docker build --platform linux/amd64 --target specialized -f images/cli/Dockerfile.toolbox -t pwnden-cli:specialized-20261003 images/cli
+docker build --platform linux/amd64 --target all -f images/cli/Dockerfile.toolbox -t pwnden-cli:all-20261003 images/cli
+```
+
+확장 이미지의 파일 capability와 setuid/setgid는 제거한다. CPU Hashcat은 PoCL
+backend를 포함하고 CPU 스레드를 2개로 제한한다. Java에도 CPU·힙 상한을 지정한다.
 
 all에 실행 파일이 있어도 raw 패킷, 라이브 캡처, 무선 장치, GPU, 호스트 접근,
 외부 인터넷을 허용하지 않는다. 서비스 문제는 같은 문제의 격리 네트워크를 쓴다.
@@ -109,8 +127,9 @@ Semgrep은 로컬 규칙을 지정한다. Cosign은 문제의 로컬 키·번들
 
 ## 출처와 고정 방식
 
-기존 basic/lab은 Python base digest, Debian `20261002T000000Z` snapshot과
-Python 44개 버전을 고정한다. 확장 이미지에는 별도 Kali base digest를 사용한다.
+basic·pcap·lab은 Python base digest와 Debian `20261002T000000Z` snapshot을
+고정한다. lab은 추가 Python 44개 버전을 고정한다.
+확장 이미지에는 별도 Kali base digest를 사용한다.
 
 - [toolbox-packages.json](toolbox-packages.json): APT 묶음의 직접 의존성.
 - `extended.apt.lock`, `specialized.apt.lock`, `restricted.apt.lock`: 각 묶음의 누적
@@ -138,6 +157,13 @@ Kali 준비 컨테이너에서 서명 검증을 유지한 `apt-get update` 후 �
 이 생성기는 준비 단계의 유지보수용이며 풀이 중에 실행하지 않는다.
 
 ## 검증
+
+선택한 basic·pcap의 이미지 ID, 문제별 필수 명령, PCAP의 정상·불완전 입력,
+실제 작성자 실행과 임시 공간 정리 결과는
+[selection-validation.json](selection-validation.json)에 있다.
+공통 이미지 검증과 새 문제 자체의 구현·검증은 별도 작업이다.
+
+아래 검사기는 선택형 확장 이미지를 검증할 때 사용한다.
 
 ```sh
 python3 -B images/cli/verify_toolbox.py pwnden-cli:all-20261003 --profile restricted --report /tmp/toolbox-report.json

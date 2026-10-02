@@ -42,10 +42,13 @@ Docker에서 검증한 공통 CLI 이미지와 격리 실행기로 자료·요�
 | 4 | 내보내기에서 빠진 권한 검사 / `export-gap` | `curl`, `jq` | 서비스 1개·basic | 2 초급 |
 | 5 | 개발용 점검 포트 / `diagnostic-port` | `nmap`, `ncat`, `curl` | 서비스 1개·basic | 2 초급 |
 | 6 | 모든 경로가 200을 반환하는 서버 / `quiet-route` | `ffuf`, `curl`, `jq` | 서비스 1개·basic | 2 초급 |
-| 7 | 패킷에 남은 전송 파일 / `packet-delivery` | `tshark`, `file`, `tar` | 파일·lab | 2 초급 |
+| 7 | 패킷에 남은 전송 파일 / `packet-delivery` | `tshark`, `file`, `tar` | 파일·pcap | 2 초급 |
 | 8 | 서명이 맞는 납품 문서 / `signed-delivery` | `openssl`, `sha256sum` | 파일·basic | 2 초급 |
 
-basic은 `pwnden-cli:basic-20261003`, lab은 `pwnden-cli:lab-20261003`을 뜻한다.
+basic은 `pwnden-cli:basic-20261003`, pcap은 `pwnden-cli:pcap-20261003`을 뜻한다.
+현재 계획에는 basic과 basic에 `tshark`만 추가한 pcap 두 이미지를 사용한다.
+도구는 문제의 학습 목표와 실제 풀이 명령을 기준으로 선택한다. 새 문제가 추가
+도구를 요구하면 해당 문제용 이미지를 준비하고, 기능·용량·격리 조건을 검증한다.
 현재 PC에 빌드된 로컬 이미지를 사용한다. 새로운 PC에서 실행할 때는
 [공통 이미지의 빌드 방법](../images/cli/README.md)을 먼저 따른다.
 
@@ -178,8 +181,8 @@ basic은 `pwnden-cli:basic-20261003`, lab은 `pwnden-cli:lab-20261003`을 뜻한
 - **검증:** 실제 HTTP 응답과 내보낸 객체의 바이트 일치, 객체의 해시·압축 해제·
   코드 회수, 핵심 payload를 빠뜨린 대조 캡처의 회수 실패를 확인한다. 패킷 단위
   문자열 검색만으로 전체 코드를 찾지 못하도록 압축된 본문을 사용한다.
-  현재 CLI 검사는 PCAP 읽기를 확인한 상태이므로 이 문제의 HTTP 객체 내보내기는
-  새 자료를 준비한 후 공통 lab 이미지에서 반드시 별도로 검증한다.
+  공통 pcap 이미지에서 작은 합성 캡처의 HTTP 객체 내보내기를 검증했다.
+  실제 문제 자료의 바이트 일치와 대조 캡처 검사는 구현할 때 별도로 수행한다.
 
 ## 8. 서명이 맞는 납품 문서
 

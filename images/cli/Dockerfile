@@ -27,3 +27,11 @@ COPY requirements.lock /opt/requirements.lock
 RUN pip install --no-cache-dir -r /opt/requirements.lock \
     && dpkg-query -W > /opt/package-versions.txt && pip freeze > /opt/python-versions.txt
 USER 10001:10001
+
+# The default build adds only the offline packet reader to the basic toolbox.
+FROM basic AS pcap
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends tshark \
+    && rm -rf /var/lib/apt/lists/* \
+    && dpkg-query -W > /opt/package-versions.txt
+USER 10001:10001

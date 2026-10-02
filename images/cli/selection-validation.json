@@ -1,0 +1,232 @@
+{
+  "verified_at_utc": "2026-10-02T19:29:51.063119+00:00",
+  "environment": "Linux/WSL, Linux amd64 Docker with containerd image store",
+  "images": {
+    "basic": {
+      "image": "pwnden-cli:basic-20261003",
+      "id": "sha256:7fd2e99542b464a51e7179d56f49f8cc0fd9c04af05c6acf39b0239ca1b37558",
+      "compressed_content_bytes": 115704888,
+      "docker_display_disk_usage": "483MB",
+      "architecture": "amd64",
+      "user": "10001:10001"
+    },
+    "pcap": {
+      "image": "pwnden-cli:pcap-20261003",
+      "id": "sha256:abfd94b3230d9cef7715a6fa31f9988457cc76c036b3f119e007904880fad48a",
+      "compressed_content_bytes": 157130025,
+      "docker_display_disk_usage": "683MB",
+      "architecture": "amd64",
+      "user": "10001:10001"
+    }
+  },
+  "basic_image_unchanged": true,
+  "shared_base_layers": true,
+  "default_build_target": "pcap",
+  "planned_challenge_command_coverage": [
+    {
+      "slug": "image-notes",
+      "profile": "basic",
+      "commands": [
+        "file",
+        "exiftool",
+        "jq"
+      ],
+      "passed": true
+    },
+    {
+      "slug": "commit-trail",
+      "profile": "basic",
+      "commands": [
+        "git",
+        "rg"
+      ],
+      "passed": true
+    },
+    {
+      "slug": "retained-record",
+      "profile": "basic",
+      "commands": [
+        "sqlite3"
+      ],
+      "passed": true
+    },
+    {
+      "slug": "export-gap",
+      "profile": "basic",
+      "commands": [
+        "curl",
+        "jq"
+      ],
+      "passed": true
+    },
+    {
+      "slug": "diagnostic-port",
+      "profile": "basic",
+      "commands": [
+        "nmap",
+        "ncat",
+        "curl"
+      ],
+      "passed": true
+    },
+    {
+      "slug": "quiet-route",
+      "profile": "basic",
+      "commands": [
+        "ffuf",
+        "curl",
+        "jq"
+      ],
+      "passed": true
+    },
+    {
+      "slug": "packet-delivery",
+      "profile": "pcap",
+      "commands": [
+        "tshark",
+        "file",
+        "tar"
+      ],
+      "passed": true
+    },
+    {
+      "slug": "signed-delivery",
+      "profile": "basic",
+      "commands": [
+        "openssl",
+        "sha256sum"
+      ],
+      "passed": true
+    }
+  ],
+  "author_execution": {
+    "modes": [
+      {
+        "mode": "readonly",
+        "checks": [
+          {
+            "name": "nonroot-no-capabilities-no-new-privileges",
+            "passed": true
+          },
+          {
+            "name": "raw-socket-denied",
+            "passed": true
+          },
+          {
+            "name": "readonly-root",
+            "passed": true
+          },
+          {
+            "name": "workspace-write-policy",
+            "passed": true
+          },
+          {
+            "name": "large-tools-and-databases-absent",
+            "passed": true
+          },
+          {
+            "name": "dumpcap-file-capabilities-absent",
+            "passed": true
+          },
+          {
+            "name": "pcap-http-request-filter",
+            "passed": true
+          },
+          {
+            "name": "http-object-reassembly-byte-equality",
+            "passed": true
+          },
+          {
+            "name": "exported-file-format",
+            "passed": true
+          },
+          {
+            "name": "archive-document-recovery",
+            "passed": true
+          },
+          {
+            "name": "incomplete-stream-cannot-recover-object",
+            "passed": true
+          },
+          {
+            "name": "incomplete-stream-cannot-recover-document",
+            "passed": true
+          },
+          {
+            "name": "invalid-capture-rejected",
+            "passed": true
+          }
+        ],
+        "exported_object_sha256": "5ccebc5bcf752d63b4a2a49b493bce6c3a2cadff732af14cd1ba5656441780c8",
+        "original_preserved": true
+      },
+      {
+        "mode": "writable",
+        "checks": [
+          {
+            "name": "nonroot-no-capabilities-no-new-privileges",
+            "passed": true
+          },
+          {
+            "name": "raw-socket-denied",
+            "passed": true
+          },
+          {
+            "name": "readonly-root",
+            "passed": true
+          },
+          {
+            "name": "workspace-write-policy",
+            "passed": true
+          },
+          {
+            "name": "large-tools-and-databases-absent",
+            "passed": true
+          },
+          {
+            "name": "dumpcap-file-capabilities-absent",
+            "passed": true
+          },
+          {
+            "name": "pcap-http-request-filter",
+            "passed": true
+          },
+          {
+            "name": "http-object-reassembly-byte-equality",
+            "passed": true
+          },
+          {
+            "name": "exported-file-format",
+            "passed": true
+          },
+          {
+            "name": "archive-document-recovery",
+            "passed": true
+          },
+          {
+            "name": "incomplete-stream-cannot-recover-object",
+            "passed": true
+          },
+          {
+            "name": "incomplete-stream-cannot-recover-document",
+            "passed": true
+          },
+          {
+            "name": "invalid-capture-rejected",
+            "passed": true
+          }
+        ],
+        "exported_object_sha256": "5ccebc5bcf752d63b4a2a49b493bce6c3a2cadff732af14cd1ba5656441780c8",
+        "original_preserved": true
+      }
+    ],
+    "workspace_cleanup": true,
+    "container_cleanup": true
+  },
+  "source_sha256": {
+    "images/cli/Dockerfile": "3a2a1995768a8b278b92c284cce65014da78367560c41a80ad9a75bdc68724db",
+    "docs/cli-challenge-plan.md": "e1df72993244e061f2e7466a6da306d77ba68ba6a82d563485b52c0507dbe7d0"
+  },
+  "scope": "Common image checks with synthetic fixtures; eight planned challenges are not implemented.",
+  "passed": true
+}
