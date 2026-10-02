@@ -1,5 +1,6 @@
 Lab delivery document
 Batch: LAB-17
-Quantity: 121
+Revision: 2
+Quantity: 120
 Destination: Depot-C
 Approved by: Sender

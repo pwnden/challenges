@@ -1,12 +1,12 @@
 {
   "slug": "signed-delivery",
-  "verified_at_utc": "2026-10-02T20:29:20.690997+00:00",
+  "verified_at_utc": "2026-10-02T21:08:45.680516+00:00",
   "artifact_controls": true,
   "author_solution_patch_cleanup": true,
   "consumer_validate_run_verify_stop": true,
   "real_pty_solution_submission_interrupt_reattach_restart": true,
   "original_preserved": true,
-  "total_validation_seconds": 11.1,
-  "distribution_bytes": 1296,
+  "total_validation_seconds": 9.65,
+  "distribution_bytes": 1822,
   "passed": true
 }
