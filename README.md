@@ -7,6 +7,8 @@ This repository is the allowed root for host bind mounts. Keep Compose bind sour
 Use the [authoring standard](docs/authoring-standard.md) to define a problem's
 security learning objective, intended learner, prerequisite abilities and
 difficulty evidence. Keep the design and review evidence in its `AUTHORING.md`.
+The [learning map](docs/learning-map.md) defines areas, topics, observable
+experiments, scoped prerequisites and required tool capabilities.
 
 Create the directory, manifest, author record, learning content and execution scaffold with
 `python3 tools/create.py <slug> --kind file --category rev` or

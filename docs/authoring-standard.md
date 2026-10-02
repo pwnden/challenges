@@ -30,6 +30,10 @@ exercise; language knowledge contributes to the player's workload and must be
 accounted for explicitly. Record how each substantial coding or calculation step
 supports the security objective.
 
+Use the [learning map](learning-map.md) to select an area and topic and scope the
+observable experiment and prerequisites. Record the topic in `AUTHORING.md`;
+the current contract declares category but has no structured topic field.
+
 Keep an introductory exercise focused on one new security concept. Supporting
 steps should make that concept observable. Each additional concept needs a reason
 to be present and contributes to the assessment of prerequisites and difficulty.

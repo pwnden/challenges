@@ -4,6 +4,8 @@ Start with the [authoring standard](authoring-standard.md): define the security
 learning objective, intended learner and prerequisite abilities before choosing
 resources and execution kind. Record the intended solution and difficulty
 assessment in the generated `AUTHORING.md` as the exercise takes shape.
+Use the [learning map](learning-map.md) to select the primary area and topic,
+the security experiment and required tool capabilities.
 
 From the challenges repository, use Python 3.11 or newer:
 
