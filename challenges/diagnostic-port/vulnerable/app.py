@@ -42,10 +42,14 @@ class DiagnosticHandler(socketserver.StreamRequestHandler):
             if len(line) > 128 or not line.endswith(b'\n'):
                 reply = 'ERR newline_required_or_command_too_long'
             elif line.strip() == b'HELP':
-                reply = 'OK commands: HELP, STATUS, READ <resource>'
+                reply = 'OK commands: HELP, STATUS, LIST, READ <resource>'
             elif line.strip() == b'STATUS':
-                reply = 'OK board=ready'
-            elif line.strip() == b'READ recovery':
+                reply = 'OK board=ready active_resource=recovery-current'
+            elif line.strip() == b'LIST':
+                reply = 'OK resources: recovery-retired, recovery-current'
+            elif line.strip() == b'READ recovery-retired':
+                reply = 'OK pwnden{retired_diagnostic_code}' if ALLOW_RECOVERY else 'DENIED protected_recovery'
+            elif line.strip() == b'READ recovery-current':
                 reply = ('OK ' + os.environ['FLAG']) if ALLOW_RECOVERY else 'DENIED protected_recovery'
             elif line.strip().startswith(b'READ '):
                 reply = 'ERR unknown_resource'
@@ -56,12 +60,27 @@ class DiagnosticHandler(socketserver.StreamRequestHandler):
             pass
 
 
+class HealthHandler(socketserver.StreamRequestHandler):
+    def handle(self):
+        self.request.settimeout(2)
+        try:
+            self.wfile.write(b'LAB-HEALTH/1\n')
+            self.wfile.flush()
+            line = self.rfile.readline(129)
+            reply = 'OK health=ready commands: HELP, STATUS' if line.strip() in (b'HELP', b'STATUS') and line.endswith(b'\n') else 'ERR unsupported_command'
+            self.wfile.write((reply + '\n').encode())
+        except (socket.timeout, BrokenPipeError, ConnectionResetError):
+            pass
+
+
 class DiagnosticServer(socketserver.ThreadingTCPServer):
     allow_reuse_address = True
     daemon_threads = True
 
 
 if __name__ == '__main__':
+    health = DiagnosticServer(('0.0.0.0', 8003), HealthHandler)
+    threading.Thread(target=health.serve_forever, daemon=True).start()
     diagnostic = DiagnosticServer(('0.0.0.0', 8007), DiagnosticHandler)
     threading.Thread(target=diagnostic.serve_forever, daemon=True).start()
     ThreadingHTTPServer(('0.0.0.0', 8000), HTTPHandler).serve_forever()

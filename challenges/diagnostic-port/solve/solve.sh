@@ -12,14 +12,18 @@ probe() {
         test "$code" = 1
         grep -qx 'Ncat: Idle timeout expired (1000 ms).' "$work/ncat-error"
     fi
-    grep -qx 'LAB-DIAG/1' "$3"
     test "$(wc -l < "$3")" = 2
 }
 for port in $ports; do
     if [ "$port" = 8000 ]; then continue; fi
     probe HELP "$port" "$work/help"
     if ! grep -q '^LAB-DIAG/1' "$work/help"; then continue; fi
-    probe 'READ recovery' "$port" "$work/read"
+    probe STATUS "$port" "$work/status"
+    resource=$(sed -n 's/^OK board=ready active_resource=//p' "$work/status")
+    test -n "$resource"
+    probe LIST "$port" "$work/list"
+    grep -q "$resource" "$work/list"
+    probe "READ $resource" "$port" "$work/read"
     if grep -q '^DENIED' "$work/read"; then exit 3; fi
     rg -o 'pwnden\{[^}]+\}' "$work/read"
     exit 0
