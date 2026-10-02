@@ -34,12 +34,26 @@ Keep an introductory exercise focused on one new security concept. Supporting
 steps should make that concept observable. Each additional concept needs a reason
 to be present and contributes to the assessment of prerequisites and difficulty.
 
+### Make security knowledge observable
+
+Prefer player actions that directly reveal the security behavior: change an
+input, compare responses, follow access to a resource, inspect an artifact or
+observe a boundary being crossed. Provide prepared commands, analysis tools or
+small visual experiments when these let the player focus on the principle.
+
+Keep Python primarily an authoring and automated verification tool. Target
+implementation and solution-script languages are separate from the abilities
+required of the player. Design the usual player path to work without Python
+knowledge. When understanding or writing code is essential to the security
+objective, state the exact ability, explain why it is needed in `AUTHORING.md`
+and provide the scoped context and examples. Assess that workload explicitly.
+
 ## Identify the intended learner and prerequisites
 
 The common starting point is a person who can use a browser, read the supplied
 instructions and enter or copy text. State any additional prerequisite as a
-concrete ability. "Python basics" becomes "read a function and loop, follow a
-list of byte values and understand the operators used by the checker."
+concrete ability. A necessary code-reading prerequisite becomes "follow the
+condition and values used by this input check."
 "Networking" becomes the specific ability needed, such as interpreting an HTTP
 request and response.
 
