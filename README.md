@@ -43,6 +43,7 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [팀 문서의 읽기 권한](challenges/borrowed-badge/README.md) | misc | Document access rules, solution and patch checks |
 | [공개 이미지에 남은 내부 메모](challenges/image-notes/README.md) | forensics | PNG metadata inspection with file, ExifTool and jq |
 | [지운 설정 파일의 이전 내용](challenges/commit-trail/README.md) | misc | Deleted configuration recovered through actual Git history |
+| [삭제한 문서가 남은 백업](challenges/retained-record/README.md) | forensics | SQLite list, deletion state and retained revisions compared |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped
