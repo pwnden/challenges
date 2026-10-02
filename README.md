@@ -28,10 +28,20 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [Query Desk](challenges/query-desk/README.md) | web | Real SQL search, solution and patch checks |
 | [Wrapped Secret](challenges/wrapped-secret/README.md) | crypto | File and prepared decoding command |
 | [Midnight Trace](challenges/midnight-trace/README.md) | forensics | Correlate captured HTTP and audit records |
+| [Paper Session](challenges/paper-session/README.md) | web | Browser cookie claims, solution and patch checks |
+| [Path Parcel](challenges/path-parcel/README.md) | web | Actual relative file reads, solution and patch checks |
+| [Hash Lantern](challenges/hash-lantern/README.md) | crypto | Compare six password candidates using the prepared hash command |
+| [False Label](challenges/false-label/README.md) | forensics | Identify a mislabeled archive by bytes and parse its contents |
+| [DNS Detour](challenges/dns-detour/README.md) | forensics | Reassemble data from captured local DNS query labels |
+| [Borrowed Badge](challenges/borrowed-badge/README.md) | misc | Scoped local resource policy, solution and patch checks |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped
 background needed to begin without writing Python.
+
+The [second experiment guide](docs/second-experiments.md) covers six additional
+scenarios and their scoped learning evidence. Reusable [starting knowledge](knowledge/README.md)
+is maintained once and compiled into the new player briefs by the author tools.
 
 Each challenge declares its player brief, ordered hints and complete walkthrough in `[content]`. Players read these in the website, open analysis materials there, use its prepared terminal and submit flags. Follow the [player content standard](docs/player-content.md). Executable solutions and patch sources support author verification; maintainer commands belong in [verification](docs/verification.md).
 
