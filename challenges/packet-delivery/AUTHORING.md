@@ -17,12 +17,14 @@
 `authoring/build.py`는 localhost stdlib HTTP 서버에서 실제 요청·응답을 얻는다.
 이를 Ethernet/IPv4/TCP 프레임과 PCAP 헤더로 구성한다. 외부 대상·실사용자·
 라이브 캡처는 없으며 브리핑과 공개 목록에 합성 자료임을 명시했다.
-두 연결에 실제 handshake·90바이트 이하 응답 조각·ACK·FIN을 넣는다.
+세 연결에 실제 handshake·90바이트 이하 응답 조각·ACK·FIN을 넣는다.
+같은 URL의 두 묶음은 폐기 버전 1과 승인 버전 2다. 공개 영수증과 목록을 대조해
+배치·버전·상태가 맞는 묶음을 골라야 하며 폐기 코드는 오답이다.
 압축 묶음에는 정상 안내와 비공개 복구 절차가 함께 있다.
 
 1. 요청 주소만으로 내용 공개 여부를 확정할 수 없음을 확인한다.
 2. TShark HTTP 객체 내보내기로 압축 묶음을 복원한다.
-3. file·tar로 형식과 문서를 확인해 공개 정책과 비교한다.
+3. file·tar·jq로 영수증을 비교해 승인 버전을 고른 뒤 내부 문서를 확인한다.
 
 `authoring/check.py`는 IPv4/TCP checksum·길이·sequence·ACK, 실제 기록의
 HTTP 본문과 TShark 객체 바이트의 일치·해시·문서 내용을 확인한다. 핵심 payload

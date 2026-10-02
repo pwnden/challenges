@@ -2,6 +2,7 @@
 import gzip
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import io
+import json
 from pathlib import Path
 import socket
 import struct
@@ -9,14 +10,19 @@ import tarfile
 import threading
 
 KEY = 'pwnden{tcp_reassembles_the_delivery}'
-NOTICE = b'Public delivery notice: one package was sent in this lab.\n'
+NOTICE = b'Public delivery notice: the approved package is LAB-17 revision 2.\n'
 DOCUMENT = ('Staff recovery procedure\nFor operations staff only.\nRecovery code: ' + KEY + '\n').encode()
+OLD_DOCUMENT = DOCUMENT.replace(KEY.encode(), b'pwnden{retired_delivery_code}')
 
 
-def bundle():
+def bundle(revision):
     raw = io.BytesIO()
     with tarfile.open(fileobj=raw, mode='w') as archive:
-        for name, data in [('public/notice.txt', NOTICE), ('internal/recovery.txt', DOCUMENT)]:
+        receipt = json.dumps({'batch': 'LAB-17', 'revision': revision,
+                              'status': 'approved' if revision == 2 else 'retired'}).encode()
+        document = DOCUMENT if revision == 2 else OLD_DOCUMENT
+        for name, data in [('public/notice.txt', NOTICE), ('public/receipt.json', receipt),
+                           ('internal/recovery.txt', document)]:
             info = tarfile.TarInfo(name)
             info.size, info.mode, info.mtime = len(data), 0o644, 0
             archive.addfile(info, io.BytesIO(data))
@@ -27,14 +33,17 @@ def bundle():
 
 
 def http_bytes():
-    payloads = {'/notice.txt': NOTICE, '/delivery.tar.gz': bundle()}
+    payloads = [('/notice.txt', NOTICE), ('/delivery.tar.gz', bundle(1)), ('/delivery.tar.gz', bundle(2))]
 
     class Handler(BaseHTTPRequestHandler):
+        index = 0
         def log_message(self, *_):
             pass
 
         def do_GET(self):
-            data = payloads[self.path]
+            path, data = payloads[type(self).index]
+            assert self.path == path
+            type(self).index += 1
             self.send_response_only(200)
             self.send_header('Content-Type', 'application/gzip' if self.path.endswith('.gz') else 'text/plain')
             self.send_header('Content-Length', str(len(data)))
@@ -47,14 +56,14 @@ def http_bytes():
     thread.start()
     pairs = []
     try:
-        for path in payloads:
+        for path, payload in payloads:
             request = ('GET ' + path + ' HTTP/1.1\r\nHost: delivery.lab\r\nConnection: close\r\n\r\n').encode()
             with socket.create_connection(server.server_address, timeout=3) as connection:
                 connection.sendall(request)
                 response = b''
                 while data := connection.recv(65535):
                     response += data
-            assert response.split(b'\r\n\r\n', 1)[1] == payloads[path]
+            assert response.split(b'\r\n\r\n', 1)[1] == payload
             pairs.append((request, response))
     finally:
         server.shutdown()
@@ -111,7 +120,7 @@ def capture(items):
 def build(output):
     output.mkdir(parents=True, exist_ok=True)
     (output / 'delivery.pcap').write_bytes(capture(frames(http_bytes())))
-    (output / 'public-list.txt').write_text('Public delivery: public/notice.txt only.\nStaff-only: internal recovery procedures and codes.\nSource: synthetic teaching PCAP made from actual localhost HTTP request/response bytes.\nNo live capture or external traffic.\n')
+    (output / 'public-list.txt').write_text('Approved delivery: batch LAB-17, revision 2, status approved.\nPublic delivery: public/notice.txt and public/receipt.json only.\nStaff-only: internal recovery procedures and codes.\nRepeated URL names can represent different delivery revisions; inspect each receipt.\nSource: synthetic teaching PCAP made from actual localhost HTTP request/response bytes.\nNo live capture or external traffic.\n')
 
 
 if __name__ == '__main__':

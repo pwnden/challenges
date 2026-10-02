@@ -1,4 +1,6 @@
-Public delivery: public/notice.txt only.
+Approved delivery: batch LAB-17, revision 2, status approved.
+Public delivery: public/notice.txt and public/receipt.json only.
 Staff-only: internal recovery procedures and codes.
+Repeated URL names can represent different delivery revisions; inspect each receipt.
 Source: synthetic teaching PCAP made from actual localhost HTTP request/response bytes.
 No live capture or external traffic.
