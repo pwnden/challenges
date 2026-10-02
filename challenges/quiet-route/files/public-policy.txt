@@ -1,0 +1,4 @@
+Lab delivery board publication policy
+Public: help and health status.
+Staff only: operational diagnostics and recovery codes.
+This short candidate list is supplied for the isolated lab host app only.

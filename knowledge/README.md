@@ -20,6 +20,7 @@
 | `sqlite-records` | [SQLite의 목록과 본문](sqlite-records.md) |
 | `curl-json` | [curl로 JSON API 읽기](curl-json.md) |
 | `tcp-services` | [포트와 TCP 연결](tcp-services.md) |
+| `response-comparison` | [응답을 비교해 후보 줄이기](response-comparison.md) |
 
 작성자는 `BRIEFING.md`에 아래 블록을 둔다. `python3 tools/content.py`가
 공통 문서를 기존 `::knowledge` 블록으로 묶어 배포용 `README.md`에 반영한다.

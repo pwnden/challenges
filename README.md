@@ -46,6 +46,7 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [삭제한 문서가 남은 백업](challenges/retained-record/README.md) | forensics | SQLite list, deletion state and retained revisions compared |
 | [내보내기에서 빠진 권한 검사](challenges/export-gap/README.md) | web | curl and jq compare normal reads with an unprotected export |
 | [개발용 점검 포트](challenges/diagnostic-port/README.md) | misc | Nmap TCP connection scan and Ncat diagnostic protocol comparison |
+| [모든 경로가 200을 반환하는 서버](challenges/quiet-route/README.md) | web | ffuf response-size filtering and actual JSON disclosure confirmation |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped

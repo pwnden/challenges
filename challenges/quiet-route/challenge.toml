@@ -1,0 +1,34 @@
+schema = 5
+slug = "quiet-route"
+title = "모든 경로가 200을 반환하는 서버"
+category = "web"
+difficulty = 2
+compose = "compose.yaml"
+files = ["files/paths.txt", "files/public-policy.txt"]
+
+[player]
+tools = ["terminal", "files"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "generated"
+
+[[endpoints]]
+name = "web"
+service = "app"
+port = 8000
+protocol = "http"
+
+[solve]
+image = "pwnden-cli:basic-20261003"
+command = ["bash", "solve/solve.sh"]
+writable = true
+timeout_seconds = 30
+
+[patched]
+compose = "compose.patched.yaml"
+check = ["bash", "patched/test.sh"]
