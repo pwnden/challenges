@@ -6,20 +6,24 @@
 각 도구의 모든 플러그인과 공격 모드를 지원한다는 뜻은 아니다.
 도구의 기능은 공식 문서·저장소에서 확인했고, 추가 가능성은 현재
 [계약](contract.md), [실행 범위](execution-feasibility.md), 실제 도구 컨테이너
-실행 옵션을 바탕으로 판단했다. 표의 판정은 조사 당시의 도입 기준이다.
+실행 옵션을 바탕으로 판단했다. 표는 도구별 실습 방식·실행 제약·준비 사항을 제시한다.
 
-2026-10-03에는 실행기 보강과 일부 CLI 실험을 진행했다. 아래 판정은 원래 조사
-기준이며, 94개 항목 전체가 실행 검증된 목록은 아니다. 현재의 비특권 사용자,
-작업 공간과 자원 상한은 [runtime limits](verification.md#runtime-limits)에 따른다.
-공통 CLI 이미지는 UID `10001`의 계정과 `/home/pwnden` 홈을 포함하고,
-CPU Hashcat을 제공할 때는 CPU OpenCL backend도 함께 준비해야 한다.
-공통 이미지의 구성과 사용법은 [CLI 이미지](../images/cli/README.md)에 있다.
+2026-10-03에는 실행기 보강과 공통 CLI 이미지 설치·검증을 진행했다.
+목록에서 이름을 명시한 CLI는 `pwnden-cli:all-20261003`에 포함했고,
+별칭·하위 명령을 포함한 명령 이름 191개의 존재를 확인했다. 일반 묶음은
+`extended`, Ghidra·Metasploit 등을 더한 묶음은 `specialized`로도 선택할 수 있다.
+구성·버전·사용법과 검증 결과는 [CLI 이미지](../images/cli/README.md)에 있다.
+
+아래 판정은 도입 시 확인할 사용 방식이다. 94개 항목의 모든 기능이 검증됐다는
+뜻은 아니다. 설치 여부와 실제 기능 검증, 실행 권한은 구분한다. 현재 비특권
+사용자·작업 공간·자원 상한은 [runtime limits](verification.md#runtime-limits)를
+따른다. 추가 설치를 위해 실행기의 권한·장치·통신 범위를 넓히지는 않았다.
 
 ## 판정 읽기
 
 | 판정 | 의미 |
 | --- | --- |
-| 후보 | 파일 처리 또는 일반 사용자 공간 통신으로 구성할 수 있는 추가 후보. 버전이 고정된 이미지에서 실제 명령과 풀이를 검증한 뒤 제공한다. |
+| 후보 | 파일 처리 또는 일반 사용자 공간 통신으로 구성할 수 있는 실습 후보. 설치된 이미지에서도 문제별 실제 명령과 풀이를 검증한다. |
 | 모드 한정 | 도구 중 현재 정책에 맞는 기능만 후보. 인터넷·원시 패킷·장치 접근이 필요한 다른 모드는 함께 제공 가능한 기능으로 취급하지 않는다. |
 | 검증 필요 | 디버깅, 특수 런타임, 복잡한 서비스, 자원 또는 아키텍처에 대한 실행 증거가 먼저 필요하다. |
 | 범위 밖 | 명시한 사용 방식이 현재 호스트·장치·권한·외부 통신 제약과 맞지 않는다. |
@@ -45,7 +49,7 @@ CPU Hashcat을 제공할 때는 CPU OpenCL backend도 함께 준비해야 한다
 | `base64`, `basenc` | 데이터 표현 변환 | 후보 | 암호화와 인코딩의 차이를 실습한다. |
 | `sha256sum`, `sha512sum`, `md5sum`, `b2sum` | 파일·후보 문자열의 해시 비교 | 후보 | 사용 알고리즘의 목적과 한계를 설명한다. |
 | `tar`, `unzip`, `7zz`, `gzip`, `xz`, `zstd` | 압축 자료 목록 확인·해제 | 후보 | 추출 결과는 별도 작업 경로에 둔다. |
-| [`jq`](https://jqlang.org/manual/), [`yq`](https://github.com/mikefarah/yq) | JSON·YAML 등 구조화된 자료 탐색 | 후보 | `yq`는 Mike Farah 구현을 선택할 때의 후보이며 동명의 다른 프로그램과 구분한다. |
+| [`jq`](https://jqlang.org/manual/), [`yq`](https://github.com/mikefarah/yq) | JSON·YAML 등 구조화된 자료 탐색 | 후보 | 확장 이미지의 `yq`는 Mike Farah 구현이며 동명의 Python 프로그램과 구분한다. |
 | `sqlite3` | 배포된 데이터베이스의 테이블·레코드 조사 | 후보 | 원본 DB의 분석과 수정할 복사본을 구분한다. |
 | `git` | 로컬 변경 이력·삭제된 파일·과거 설정 조사 | 후보 | 실습용 이력을 문제 자료로 포함한다. 호스트 저장소·인증 정보와 연결하지 않는다. |
 
@@ -56,7 +60,7 @@ CPU Hashcat을 제공할 때는 CPU OpenCL backend도 함께 준비해야 한다
 | 도구 | 무엇을 하는가 / 가능한 실습 | 판정 | 준비 사항 |
 | --- | --- | --- | --- |
 | [`curl`](https://curl.se/docs/manpage.html) | HTTP 헤더·쿠키·메서드·본문 변경, 응답 비교 | 후보 | 가장 먼저 제공할 웹 CLI. 현재 문제 주소만 사용한다. |
-| `wget`, `http`(HTTPie) | 자료 요청·읽기 쉬운 HTTP 요청 | 후보 | `curl`과 기능이 겹치므로 첫 묶음의 필수 도구로 모두 넣을 필요는 없다. |
+| `wget`, `http`(HTTPie) | 자료 요청·읽기 쉬운 HTTP 요청 | 후보 | 확장 이미지에 모두 포함한다. 문제의 요청·응답을 직접 비교한다. |
 | [`ffuf`](https://github.com/ffuf/ffuf) | URL 경로·파라미터·가상 호스트 후보를 바꿔 응답 차이 찾기 | 후보 | 짧은 문제별 단어 목록과 제한된 요청량을 제공한다. |
 | [`gobuster`](https://github.com/OJ/gobuster) | 경로·DNS·가상 호스트 후보 탐색 | 모드 한정 | 웹 경로는 같은 문제 사이트, DNS는 문제의 DNS 서버를 대상으로 한다. |
 | [`feroxbuster`](https://github.com/epi052/feroxbuster) | 경로를 재귀적으로 탐색 | 후보 | 깊이·동시 요청·시간을 제한한다. `ffuf`와 겹치는 기능은 대안으로 둔다. |
@@ -78,7 +82,7 @@ Nuclei 공식 문서는 `-duc`(업데이트 확인 중단)과 `-ni`(외부 Inter
 | --- | --- | --- | --- |
 | [`nmap`](https://nmap.org/book/man-port-scanning-techniques.html) | 열린 포트·서비스 조사 | 모드 한정 | 일반 TCP 연결 스캔(`-sT`)과 서비스 조사 후보. `--unprivileged`, `-Pn`, `-n`을 포함한 실제 명령을 검증한다. SYN·OS 탐지 등 raw 모드는 현재 권한으로 제공하지 않는다. |
 | `rustscan` | TCP 포트를 빠르게 찾고 조사 도구에 연결 | 모드 한정 | 동시 연결 수와 후속 Nmap 모드를 지정해야 한다. 첫 포트 탐색 도구는 Nmap을 우선한다. |
-| [`ncat`](https://nmap.org/ncat/), `nc`(netcat) | TCP/UDP로 직접 데이터를 주고받기 | 후보 | 처음에는 Ncat 또는 netcat 한 구현을 선택한다. 구현별 옵션 차이를 고정한다. |
+| [`ncat`](https://nmap.org/ncat/), `nc`(netcat) | TCP/UDP로 직접 데이터를 주고받기 | 후보 | 확장 이미지에 Ncat과 OpenBSD netcat을 포함한다. 문제 설명에서 구현별 옵션을 구분한다. |
 | `socat` | 소켓·스트림 연결과 프로토콜 실험 | 모드 한정 | 사용자 공간의 같은 문제 안 연결. 호스트 장치·외부 터널은 사용 범위 밖이다. |
 | `dig`, `host`, `nslookup`, [`dnsrecon`](https://github.com/darkoperator/dnsrecon) | DNS 레코드·이름·구역 전송 조사 | 모드 한정 | 실제 문제 DNS 서버를 명시한다. 공개 DNS와 외부 자산 수집을 전제로 하지 않는다. |
 | `openssl s_client` | TLS 서비스와 직접 대화·인증서 확인 | 후보 | 문제 서버와 실습용 신뢰 자료를 제공한다. |
@@ -148,7 +152,7 @@ Hashcat은 CPU 실행에도 backend 준비가 필요하다. CPU로 실행 가능
 | [`readelf`, `objdump`, `nm`, `objcopy`, `addr2line`(Binutils)](https://sourceware.org/binutils/docs/binutils/) | 실행 파일 형식·섹션·심볼·명령어 조사 | 후보 | 분석 대상 아키텍처와 도구가 지원하는 형식을 확인한다. |
 | [`checksec`](https://github.com/slimm609/checksec) | 실행 파일의 보호 기법 조사 | 후보 | 선택 구현·버전의 실제 파일 검사 명령을 제공한다. |
 | `patchelf`, `scanelf` | ELF 로더·연결·속성 조사와 파일 실험 | 후보 | 파일 수정은 컨테이너 내부 복사본에서 한다. |
-| [`radare2`](https://github.com/radareorg/radare2), [`rizin`](https://github.com/rizinorg/rizin) | 대화형 정적 분석·디스어셈블 | 모드 한정 | 정적 분석 후보. 동적 디버깅 기능은 아래 디버거 검증을 따른다. 첫 전용 이미지에는 한 도구를 우선한다. |
+| [`radare2`](https://github.com/radareorg/radare2), [`rizin`](https://github.com/rizinorg/rizin) | 대화형 정적 분석·디스어셈블 | 모드 한정 | 확장 이미지에 두 도구를 포함한다. 정적 분석을 검사했고 동적 디버깅 기능은 아래 검증을 따른다. |
 | [`ROPgadget`](https://github.com/JonathanSalwan/ROPgadget), [`ropper`](https://github.com/sashs/Ropper) | 바이너리에서 짧은 명령어 조각 조사 | 후보 | 지원 형식·명령어 집합과 실제 파일을 함께 검증한다. |
 | [`pwn cyclic`, `pwn checksec`, `pwn asm`, `pwn disasm`(pwntools CLI)](https://github.com/Gallopsled/pwntools) | 패턴·파일 보호·기계어 변환 실험 | 모드 한정 | CLI 경로를 준비하고 필요한 assembler를 포함한다. Python으로 exploit을 작성해야 하는 단계는 별도의 선수 지식이다. |
 | [`analyzeHeadless`(Ghidra)](https://github.com/NationalSecurityAgency/ghidra) | 자동 정적 분석·디컴파일 | 검증 필요 | Java·메모리·시작 비용을 검증한다. GUI를 터미널에 제공하는 도구로 취급하지 않는다. |
@@ -159,7 +163,7 @@ Hashcat은 CPU 실행에도 backend 준비가 필요하다. CPU로 실행 가능
 | 도구 | 무엇을 하는가 / 가능한 실습 | 판정 | 준비 사항 |
 | --- | --- | --- | --- |
 | [`gdb`](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Starting.html), `lldb` | 프로세스 실행·중단·메모리·레지스터 관찰 | 검증 필요 | 같은 컨테이너에서 대상 자식 프로세스를 시작하는 실제 경로를 검사한다. ptrace·seccomp·ASLR·아키텍처를 함께 검증한다. |
-| [`pwndbg`](https://github.com/pwndbg/pwndbg), [`GEF`](https://github.com/hugsy/gef) | 디버거의 메모리·스택·힙 관찰 지원 | 검증 필요 | 선택한 GDB/LLDB 프로필이 실제 동작한 뒤 추가한다. 초기 도입은 확장 하나를 선택한다. |
+| [`pwndbg`](https://github.com/pwndbg/pwndbg), [`GEF`](https://github.com/hugsy/gef) | 디버거의 메모리·스택·힙 관찰 지원 | 검증 필요 | 확장 이미지에 `pwndbg`, `gdb-gef`를 포함하고 자식 프로세스의 중단·관찰을 검사했다. 문제별 대상과 기능도 검증한다. |
 | [`strace`](https://github.com/strace/strace), `ltrace` | 시스템 호출·라이브러리 호출 추적 | 검증 필요 | 대상 시작과 추적을 실제 정책에서 수행한다. 호스트 또는 다른 컨테이너에 attach하지 않는다. |
 | `AFL++`, `honggfuzz`, `libFuzzer` | 입력 변형으로 프로그램 오류 찾기 | 검증 필요 | 대상 빌드·계측·프로세스 수·CPU·메모리·시간·충돌 자료를 검증한다. 일부 관찰 모드는 권한에 따라 제한될 수 있다. |
 
@@ -198,15 +202,15 @@ Docker의 [seccomp 문서](https://docs.docker.com/engine/security/seccomp/)는 
 | `tcpdump`·TShark의 라이브 인터페이스 캡처 | 범위 밖 | 현재 raw 캡처 권한과 호스트 네트워크 접근을 제공하지 않는다. 오프라인 PCAP 분석은 별도 지원 후보다. |
 | `arpspoof`, [`ettercap`](https://github.com/Ettercap/ettercap), Bettercap의 ARP/MITM·raw 모드 | 범위 밖 | raw 패킷·인터페이스·네트워크 변경 권한이 필요하다. 해당 모드의 실행을 다른 학습으로 대체해 완료 처리하지 않는다. |
 | `airmon-ng`, `airodump-ng`, `aireplay-ng`, [`wifite`](https://github.com/derv82/wifite2)의 라이브 무선 실습 | 범위 밖 | 무선 장치·monitor 모드·장치 접근이 필요하다. 제공 캡처 분석과 구분한다. |
-| GPU를 사용하는 Hashcat | 범위 밖 | 현재 호스트 GPU 장치를 제공하지 않는다. CPU profile은 별도 검증 후 판정한다. |
+| GPU를 사용하는 Hashcat | 범위 밖 | 현재 호스트 GPU 장치를 제공하지 않는다. CPU PoCL backend는 작은 실제 해시로 검증했다. |
 | [`subfinder`](https://github.com/projectdiscovery/subfinder), [`amass`](https://github.com/owasp-amass/amass)의 공개 인터넷 자산 수집 | 범위 밖 | 공개 DNS·검색·인증서·외부 API가 주된 입력인 사용 방식이다. 내부 DNS 실습은 `dig` 등과 실제 내부 서버로 별도 설계한다. |
-| TUN·호스트 라우팅을 사용하는 터널, 실기기를 연결하는 `adb`·Frida | 범위 밖 | 현재 제공하지 않는 장치 또는 네트워크 관리 접근이 필요하다. 컨테이너 내부 프로세스 계측은 별도 검증 대상으로만 판단한다. |
+| TUN·호스트 라우팅을 사용하는 터널, 실기기를 연결하는 `adb`·Frida | 범위 밖 | 현재 제공하지 않는 장치 또는 네트워크 관리 접근이 필요하다. Frida의 컨테이너 내부 자식 프로세스 계측은 별도로 검증했다. |
 | 호스트 Docker·Kubernetes 대상 CLI, 호스트 privilege escalation·escape | 범위 밖 | 호스트 daemon·cluster·장치·비밀을 문제에 제공하지 않는다. 저장된 설정 파일 분석은 다른 명확한 목표로 작성한다. |
 
 Burp Suite, Wireshark GUI, Ghidra GUI, Cutter, IDA 등은 이 CLI 공급 목록과 다른
 화면·사용자 경험이 필요하다. Ghidra headless와 Wireshark CLI는 위에서 따로 판단했다.
 
-## 우선 도입 순서 제안
+## 실습 구성 순서
 
 ### 1차: 직접 관찰과 조작
 
@@ -217,20 +221,26 @@ Burp Suite, Wireshark GUI, Ghidra GUI, Cutter, IDA 등은 이 CLI 공급 목록�
 - 경로 후보 탐색: `ffuf`와 작은 실습용 사전.
 
 처음부터 프로그래밍 없이 요청·응답·바이트·로그·서비스를 직접 관찰하는 문제를
-만들 수 있는 묶음이다. 여기의 도구도 실제 정책에서 검증한 뒤 제공한다.
+만들 수 있는 묶음이다. 기존 basic 이미지로 준비하고 문제별 풀이를 검증한다.
 
 ### 2차: 분야별 묶음
 
 - 웹: `whatweb`, `sqlmap`, JWT 도구, 로컬 Nuclei 템플릿, TLS 검사.
 - 포렌식: TShark의 파일 모드, `binwalk`, `zsteg`, Sleuth Kit, 문서 분석.
 - 암호·인증: John Jumbo, 변환 도구, 작은 사전, 제한된 인증 실험.
-- 리버싱: Binutils, `checksec`, 정적 분석 도구 하나, `ROPgadget` 또는 `ropper`.
+- 리버싱: Binutils, `checksec`, `radare2`·`rizin`, `ROPgadget`·`ropper`.
 
 ### 3차: 실행 프로필 검증 후 선택
 
 디버거·추적기·퍼저, Hashcat CPU, 메모리 덤프, AD/SMB 복합 서비스,
 Metasploit, Ghidra headless, 실제 로컬 체인 등이다.
 필수 작업이 현재 정책에서 실패하면 그 프로필은 미검증으로 남긴다.
+
+확장 이미지에서는 John Jumbo·CPU Hashcat, JWT, TLS, 파일 복구·PCAP 스트림,
+GEF·Pwndbg·Frida의 자식 프로세스 관찰, Ghidra headless, libFuzzer·honggfuzz,
+로컬 규칙·오프라인 DB, Cosign 서명·변조 거부, Foundry, APK 처리를 검사했다.
+Volatility와 NetExec는 CLI 시작만 확인했으며 실제 덤프·AD 서비스가 있는
+문제의 검증은 추가로 필요하다. 전체 목록의 모든 모드를 검증한 결과는 아니다.
 
 ## 공급 구조와 책임
 
@@ -240,25 +250,27 @@ Metasploit, Ghidra headless, 실제 로컬 체인 등이다.
 도구 이미지 소스·버전·검증·배포의 관리 주체는 challenges다.
 platform은 선언된 이미지와 도구를 기존 격리 정책으로 실행한다.
 
-향후 공급 구조는 다음처럼 구성하는 것을 제안한다.
+현재 공급 구조는 다음과 같다.
 
-- 공통 `base` 위에 `web`, `network`, `forensics`, `reverse`, `crypto` 등 필요한
-  묶음을 준비한다. 이 이름은 제안이며 현재 등록된 이미지나 계약 필드가 아니다.
-- 문제마다 필요한 묶음 하나를 선택한다. 공통 이미지·레이어를 재사용하고,
+- 기본 문제는 `basic` 또는 `lab`, 넓은 도구 묶음은 `extended`, `specialized`,
+  `all`의 로컬 이미지를 선택한다. 확장 세 이미지는 공통 레이어를 재사용한다.
+- 문제마다 필요한 이미지 하나를 선택하고,
   터미널은 문제의 `[player].tools`에 필요한 경우에만 노출한다.
-- 단어 목록·템플릿·심볼·예제·시작 지식은 공통 관리하고, 문제에 필요한 작은
-  자료만 선택한다. 도구 설치 코드를 문제마다 복사하지 않는다.
+- Nuclei·capa 규칙, Grype·Trivy DB snapshot과 내부 런타임은 확장 이미지에
+  포함한다. 단어 목록·심볼·대상 파일·서비스·예제·시작 지식은 문제에 필요한
+  자료를 준비한다. 도구 설치 코드를 문제마다 복사하지 않는다.
 - 실제 문제 사이트의 Python 이미지는 풀이 도구 이미지와 별도로 관리한다.
   현재 생성기의 `--image`는 두 역할을 함께 바꾸므로, 도입 시 작성 도구에서
   두 선택을 분리해야 한다. 소비 계약에 중복된 프로필 해석기를 추가할 필요는 없다.
 - 사용자의 호스트에는 Docker 전제만 유지한다. 추가 언어·패키지·도구 설치는
   준비된 컨테이너가 담당한다.
 
-## 실제 추가 전 통과할 검증
+## 이미지 갱신과 문제 추가 시 통과할 검증
 
 1. 버전·의존성·출처·라이선스를 고정한다. OS 패키지는 버전과 저장소 snapshot,
    언어 패키지는 exact 버전·lockfile, 배포 이미지는 immutable digest로 관리한다.
-   이 조사 문서는 구체적인 설치 버전이나 배포 이미지가 확정되었다고 간주하지 않는다.
+   현재 이미지의 exact 버전·artifact SHA256·출처는 `images/cli`의 lock에 있다.
+   로컬 이미지와 공개 registry 배포를 구분한다.
 2. 인터넷이 없는 실제 풀이 컨테이너에서 필요한 명령·정상 결과·오류 결과를
    실행한다. `--help`나 설치 성공만으로 기능을 검증했다고 처리하지 않는다.
 3. `/challenge`의 읽기 전용 원본, 컨테이너 내부 작업 파일, 캐시·출력 위치를 확인한다.
@@ -266,13 +278,14 @@ platform은 선언된 이미지와 도구를 기존 격리 정책으로 실행�
 4. 네트워크 도구는 같은 문제의 연결 성공과 인터넷·호스트·다른 문제의 차단을
    도달 가능한 대조군으로 확인한다. 플러그인·업데이트·콜백 경로도 포함한다.
 5. cold/warm 준비 시간, 이미지 용량, CPU·RAM·프로세스·출력 비용을 측정한다.
-   현재 도구 실행 경로에는 통일된 CPU·RAM·PID 상한이 없다. 크래킹·퍼징 등의
-   무거운 묶음은 실제 author/consumer 실행 경로의 자원 상한을 정한 뒤 도입한다.
+   현재 author/consumer는 컨테이너당 2 CPU·2GiB RAM·256 PID 및 공통 총량
+   상한을 적용한다. 무거운 대상도 해당 상한과 임시 공간 안에서 검사한다.
 6. Linux 컨테이너의 지원 CPU 아키텍처를 고정하고 검증한다. 현재 호스트의 실행
    증거와 나중의 Windows/macOS 호스트 검증 범위를 구분한다.
 7. 실제 문제의 풀이·정답 확인·선택한 패치·취소·정리를 검증한다.
    짧은 사용 설명과 공통 시작 지식을 제공하고, 필요한 도구 자체는 학습 목표와
    선수 지식에 연결한다. 자동 스캐너 결과만 복사하면 끝나는지를 학습 리뷰에서 확인한다.
 
-현재 단계는 도구 조사와 도입 후보 정리다. 도구 이미지 생성·설치·배포 및
-새로운 Nmap/CLI 시나리오 추가는 후속 구현 작업이다.
+현재 공통 이미지의 설치·로컬 빌드·대표 기능 검증을 완료했다.
+[CLI 문제 계획](cli-challenge-plan.md)의 8개 새 시나리오는 구현 단계에서
+문제별 풀이·정답·패치·정리를 검증한다.
