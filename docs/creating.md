@@ -18,9 +18,9 @@ record the independent learning area and topic in `AUTHORING.md`.
 From the challenges repository, use Python 3.11 or newer:
 
 ```sh
-python3 tools/create.py rotor-example --kind file --category rev --difficulty 2 --title "Rotor Example"
-python3 tools/create.py vault-example --kind service --category web --difficulty 1 --title "Vault Example" --patched
-python3 tools/create.py session-example --kind service --category web --patched --concept http-messages --concept http-cookies
+python3 tools/create.py rotor-example --kind file --category rev --difficulty 2 --title "입력 검사 분석"
+python3 tools/create.py vault-example --kind service --category web --difficulty 1 --title "개인 메모의 접근 권한" --patched
+python3 tools/create.py session-example --kind service --category web --title "접속 상태 확인" --patched --concept http-messages --concept http-cookies
 ```
 
 The generator owns the repeated directory layout, manifest declarations,
@@ -40,7 +40,7 @@ contract version.
 | `--kind file` | Creates distribution material, a fixed-flag declaration and solution scaffold. |
 | `--kind service` | Creates a Python HTTP starter, Dockerfile, Compose configuration and a generated-flag HTTP endpoint. |
 | `--category` | Required: `web`, `pwn`, `rev`, `crypto`, `forensics` or `misc`. Category and execution kind are independent. |
-| `--title` | Display title; defaults to title-cased slug words. |
+| `--title` | Korean display title; defaults to the authoring placeholder `새 시나리오`. Set the final title before publication. |
 | `--difficulty` | 1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert; defaults to 1. Review the intended solution against the contract criteria before publication. |
 | `--hints` | Generates 0–10 declared hints; defaults to 3. |
 | `--concept` | Connects a shared prerequisite from `knowledge/<id>.md`; repeat for additional concepts. Creates `BRIEFING.md` and compiles the player brief. |

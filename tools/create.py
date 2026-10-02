@@ -40,7 +40,7 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=3, p
         raise InvalidChallenge('difficulty must be between 1 and 5')
     if patched and kind != 'service':
         raise InvalidChallenge('patch checks require a service problem')
-    title = title if title is not None else slug.replace('-', ' ').title()
+    title = title if title is not None else '새 시나리오'
     if not isinstance(title, str) or not title.strip():
         raise InvalidChallenge('title must be nonempty')
     image(toolbox, 'image')
@@ -118,7 +118,7 @@ def main():
     parser.add_argument('--kind', choices=('file', 'service'), required=True,
                         help='file resources or a starter HTTP service')
     parser.add_argument('--category', choices=CATEGORIES, required=True)
-    parser.add_argument('--title', help='display title; defaults to the slug as words')
+    parser.add_argument('--title', help='Korean display title; defaults to the authoring placeholder 새 시나리오')
     parser.add_argument('--difficulty', type=int, choices=range(1, 6), default=1,
                         help='1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert (default: 1)')
     parser.add_argument('--hints', type=int, default=3, help='ordered hints, 0–10 (default: 3)')

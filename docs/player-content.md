@@ -12,6 +12,10 @@ Keep the technical objective and required starting information precise.
 
 ## Reader and goal
 
+Player-visible problem titles are Korean. Name the actual scenario or task in
+clear language. Repository directories, filenames and scenario slugs use English
+identifiers; the manifest's `title` supplies the visible name independently.
+
 Write for a person solving the exercise in the pwnden website. The learning loop is: understand the situation and objective, inspect provided material or open the target service, experiment in the prepared workspace, submit an answer, then use hints and explanations to learn from the result. Content is authored in challenges; platform presents it and supplies the controls.
 
 A player can complete the exercise and read its explanation using the browser workspace and its terminal. Docker is prepared before entering this flow. Players need no host language SDK, repository layout knowledge or maintainer CLI. Downloads are an optional convenience. Text materials open in the workspace; binary and large materials are already accessible in the terminal.

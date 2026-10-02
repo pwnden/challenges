@@ -136,7 +136,7 @@ The patch attack uses the original `solve.image` and `solve.command`. Both patch
 ```toml
 schema = 3
 slug = "example-file"
-title = "Example file"
+title = "파일 분석 예제"
 category = "rev"
 files = ["files/example.bin"]
 
@@ -164,7 +164,7 @@ The runner mounts the challenge directory at `/challenge` and runs the solution 
 ```toml
 schema = 3
 slug = "example-service"
-title = "Example service"
+title = "웹 서비스 예제"
 category = "web"
 compose = "compose.yaml"
 
