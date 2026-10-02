@@ -6,7 +6,13 @@ Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the
 
 ## Ownership and compatibility
 
-The challenges repository maintains the contract and checks problem declarations in its own validator and CI. The platform consumes the contract: it confirms version support, parses execution fields, applies filesystem and Docker execution safety checks, and verifies running problems. See [format validation and CI](verification.md) for the author checks and the [platform verification guide](https://github.com/pwnden/platform/blob/main/docs/verification.md) for execution checks.
+The challenges repository maintains the contract and owns authoring verification
+of declarations, target execution, solutions, patches, isolation and cleanup.
+Its tools and CI run with Python and Docker independently of a consumer.
+The platform consumes published problem snapshots: it confirms version support,
+parses execution fields, applies its own filesystem and Docker execution safety
+checks, and tests player integration. See [author verification](verification.md)
+and the [platform integration guide](https://github.com/pwnden/platform/blob/main/docs/verification.md).
 
 The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `5` and retains versions `1`, `2`, `3` and `4` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
 

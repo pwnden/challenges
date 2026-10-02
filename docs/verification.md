@@ -1,46 +1,125 @@
-# Problem format validation
+# Author verification
 
-This repository owns the [problem contract](contract.md) and checks its machine-readable values and manifests before publication. Run this command from the repository root with Python 3.11 or newer:
+The challenges repository owns the complete author workflow: problem design,
+declarations, target and solution verification, patch checks and catalog
+publication. Python 3.11 or newer, Docker Engine 28 or newer with Linux containers,
+and Docker Compose are the execution prerequisites. These tools run with this
+checkout alone. Go, a platform checkout and frontend assets are unnecessary.
+
+## Format checks
+
+From the repository root:
 
 ```sh
 python3 tools/validate.py
-```
-
-The validator reads `contract.toml`, discovers `challenges/*/challenge.toml`, and checks the contract version, required fields, types, allowed values, file and service rules, endpoint declarations, patch declarations and `[content]`. Player documents must be distinct nonempty UTF-8 Markdown files, at most 1 MiB each, with up to 10 ordered hints. Declared distribution, content and Compose paths must exist inside this repository, including their symlink targets. Errors identify the manifest and offending field. Review the learning design against the [authoring standard](authoring-standard.md#review-before-publication) and the rendered content against the [player content checklist](player-content.md#author-review).
-
-Run the format validator's regression checks with:
-
-```sh
 python3 -B -m unittest discover -s tools -p 'test_*.py'
 ```
 
-Both commands use Python's standard library and run with this repository alone.
+The validator discovers `challenges/*/challenge.toml`, reads `contract.toml`, and
+checks version, fields, values, file/service rules, endpoints, patches, player
+tools, difficulty and declared player documents. Paths and symlink targets stay
+inside the repository. Declared Markdown files are distinct, nonempty UTF-8,
+at most 1 MiB, with up to 10 ordered hints.
 
-The regression suite also checks the [problem generator](creating.md), its file
-and service templates, optional patches, contract defaults, safe creation and
-incomplete-solution behavior. Generated manifests pass these format rules;
-complete learning, content and execution review remain the author's publication gate.
-The generated `AUTHORING.md` is a maintainer record. The format validator currently
-checks the declared contract and resources; it does not enforce completion of that
-record or determine prerequisite coverage and educational suitability.
+The regression suite covers format rules, generation, execution boundaries,
+result semantics, timeout/interruption and resource cleanup. Format validation
+does not establish target execution, author-record completeness or learning
+suitability. Follow the [authoring standard](authoring-standard.md) and
+[player-content review](player-content.md#author-review).
 
-## Maintainer execution checks
+## Author execution checks
 
-With sibling checkouts and the platform development prerequisites available, run from `platform`:
+Verify one problem or the whole catalog:
 
 ```sh
-go run ./cmd/pwnden --repo ../challenges validate rotor-lock
-go run ./cmd/pwnden --repo ../challenges verify rotor-lock
-go run ./cmd/pwnden --repo ../challenges validate note-vault
-go run ./cmd/pwnden --repo ../challenges run note-vault
-go run ./cmd/pwnden --repo ../challenges verify note-vault
-go run ./cmd/pwnden --repo ../challenges stop note-vault
+python3 tools/verify.py note-vault
+python3 tools/verify.py
 ```
 
-Rotor Lock uses the pinned solution image without a service. Note Vault verification checks flag recovery, rejection by the patched service, its functional behavior and cleanup. Maintainer commands exercise authored declarations; player briefs describe the website workflow instead.
+Multiple slugs can be supplied. `--repo <path>` selects another challenges
+checkout. All manifests are format-checked before the selected problems run.
+This author verifier explicitly supports contract version 5; update its
+implementation when the authoring contract changes.
+
+For each selected problem, the verifier:
+
+1. Resolves both vulnerable and optional patched Compose models and checks
+   repository-contained inputs and project-scoped resources before starting
+   services. Environment-file paths are checked before resolving their contents.
+2. Preserves the exercise configuration while removing published ports,
+   isolating every bridge network, dropping all capabilities and enabling
+   `no-new-privileges`. It inspects live network ownership and configuration
+   before attaching a toolbox.
+3. Runs the declared solution in its image. File toolboxes use network `none`
+   and SHA-256 comparison; services receive a fresh generated flag and the
+   toolbox joins only the declared problem network.
+4. For a declared patch, starts a separate project, rejects continued flag
+   recovery, accepts only normal completion or the contract's attack-denial
+   code, and requires the functional check to succeed. Connection/launch/signal
+   errors and unexpected exit codes fail verification.
+5. Removes toolboxes and both projects on success, failure, timeout or handled
+   interruption. It checks that project containers, networks and volumes are
+   absent; cleanup failure prevents a successful result.
+
+Verification uses fresh invocation-specific project/container identities and
+does not adopt or stop the player's existing environments. Images/build caches
+remain. `solve.writable` follows the contract: permitted repository writes can
+remain after verification, so authors must design those writes deliberately.
+
+Missing toolbox images are prepared before the command's declared runtime limit.
+`--prepare-timeout 300` controls image preparation and service startup separately;
+change it when the authored profile needs a longer preparation period. A
+timeout still requires cleanup. Generated flags are passed through the child
+environment and configuration stdin, with no flag-bearing configuration file,
+and redacted from verifier diagnostics.
+
+The generator deliberately creates incomplete solution stubs. A newly generated
+manifest can pass format checks while execution checks fail until the author
+implements the actual exercise.
+
+## Actual network isolation
+
+On Linux/WSL with a locally accessible Docker bridge:
+
+```sh
+python3 -B tools/check_isolation.py
+```
+
+This standalone check uses the pinned Python toolbox image and fresh controls.
+It first establishes that a synthetic host listener and a service on another
+network are reachable from the control network. From the isolated toolbox it
+requires Internet IPv4/IPv6/DNS, host and peer connections to fail while
+same-problem HTTP succeeds. The target and controls are cleaned up afterward.
+This check uses neither platform code nor a running player environment.
+
+The host-listener check requires the Python host to reach the Docker bridge
+address; it fails explicitly when that setup is unavailable. Windows/macOS
+actual host checks remain later work. The shared runtime still uses portable
+paths and the same Docker contract. Docker and its kernel remain trusted;
+ordinary network and mount checks do not establish resistance to kernel or
+daemon exploits.
 
 ## GitHub Actions
 
-`.github/workflows/verify.yml` runs the regression checks and validates all manifests on pushes to `main`, pull requests, and manual dispatches. Commit and push these files to activate the workflow. Its checkout uses read-only repository permissions and does not persist credentials.
+`.github/workflows/verify.yml` checks out only challenges with read-only
+permissions and credentials not persisted. On main pushes, pull requests and
+manual dispatch it runs author-tool regressions, format validation, actual
+network isolation and every declared solution/patch/cleanup check. New manifests
+join discovery automatically. No platform revision, Go setup, frontend build
+or consumer artifact is used by these publication checks.
 
-Execution, flag recovery, patch behavior, and Docker cleanup are verified by the consuming runner. The [platform verification guide](https://github.com/pwnden/platform/blob/main/docs/verification.md) explains those checks. Format validation checks declarations; the execution check resolves Compose and observes the running problem.
+## Publication gate
+
+`python3 tools/publish.py --check` runs regressions, actual network isolation and
+the complete execution check on an immutable committed snapshot. After a pass,
+`python3 tools/publish.py` publishes the checked commit. See
+[catalog publication](publishing.md) for the author workflow and Git requirements.
+
+## Consumer integration
+
+A consumer independently implements the versioned contract and its runtime
+policy, and tests its use of published problems. The platform's own tests cover
+catalog acquisition, player tools, browser ingress, submissions and lifecycle.
+They are consumer integration evidence; authoring verification finishes in
+challenges before publication. See the
+[platform integration guide](https://github.com/pwnden/platform/blob/main/docs/verification.md).

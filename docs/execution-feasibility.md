@@ -8,7 +8,7 @@ with declared HTTP/TCP endpoints and web, files and terminal tools. These are
 independent classifications: a learning area does not enable a runtime feature.
 
 This assessment compares each topic's entry design with the current contract
-and platform implementation. It is a design assessment, not an execution test
+and execution implementations. It is a design assessment, not an execution test
 of 50 targets. The published examples are Note Vault and Rotor Lock. Each new
 problem still needs its own target/tool verification and learner review.
 
@@ -46,7 +46,13 @@ The current runtime policy requires:
   UDP ingress. Raw packets and network administration require permissions the
   current policy does not grant.
 
-Evidence comes from the versioned contract and the platform's
+Author verification applies these boundaries in
+[`tools/runtime.py`](../tools/runtime.py) and checks live networks before each
+solution. The standalone [isolation check](verification.md#actual-network-isolation)
+uses reachable host/peer controls. Target, solution, patch and cleanup evidence
+belongs to the challenges authoring workflow.
+
+Consumer integration evidence additionally comes from the platform's
 [network policy](https://github.com/pwnden/platform/blob/main/docs/network-isolation.md),
 [`checkConfig` and command toolbox](https://github.com/pwnden/platform/blob/main/internal/runtime/runtime.go),
 [`isolatedConfig`](https://github.com/pwnden/platform/blob/main/internal/runtime/isolation.go)
@@ -172,7 +178,7 @@ a simulation while claiming the original target now works.
 
 ## External mechanism references
 
-The support judgments above are inferred from pwnden's implementation, not from
+The support judgments above are inferred from pwnden's execution implementations, not from
 general Docker feature availability. Check the exact host/runtime profile:
 
 - Docker's [isolated gateway mode](https://docs.docker.com/engine/network/port-publishing/#gateway-modes)

@@ -1,6 +1,6 @@
 # pwnden challenges
 
-Problem definitions, contract ownership, and metadata validation for pwnden. Add each challenge under `challenges/<slug>/` with a `challenge.toml`. This repository owns the [complete problem contract](docs/contract.md) and the machine-readable version, defaults, and result code in [`contract.toml`](contract.toml).
+Problem authoring, verification and catalog publication for pwnden. Add each challenge under `challenges/<slug>/` with a `challenge.toml`. This repository owns the [complete problem contract](docs/contract.md) and the machine-readable version, defaults, and result code in [`contract.toml`](contract.toml).
 
 This repository is the allowed root for host bind mounts. Keep Compose bind sources and build contexts inside this checkout. File-only challenges need no Compose file.
 
@@ -25,4 +25,13 @@ See [creating problems](docs/creating.md) for options and the authoring workflow
 
 Each challenge declares its player brief, ordered hints and complete walkthrough in `[content]`. Players read these in the website, open analysis materials there, use its prepared terminal and submit flags. Follow the [player content standard](docs/player-content.md). Executable solutions and patch sources support author verification; maintainer commands belong in [verification](docs/verification.md).
 
-Run `python3 tools/validate.py` to check the contract definition and every manifest using Python 3.11 or newer. See [format validation and CI](docs/verification.md) for details. A compatible runner owns execution and solution verification; the [platform repository](https://github.com/pwnden/platform) provides that runner.
+Run `python3 tools/validate.py` for format checks and `python3 tools/verify.py`
+for complete target, solution, patch and cleanup verification. These author tools
+use Python 3.11 or newer and Docker Engine 28 or newer with Compose, independently
+of platform, Go or frontend tools. See [author verification](docs/verification.md).
+After reviewing and committing the completed catalog, run
+`python3 tools/publish.py --check` to check that exact commit and
+`python3 tools/publish.py` to publish it to `origin/main`.
+See [catalog publication](docs/publishing.md) for gates and prerequisites.
+The [platform repository](https://github.com/pwnden/platform) independently consumes
+published catalogs and checks their integration with the player.

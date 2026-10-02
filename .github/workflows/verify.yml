@@ -1,4 +1,4 @@
-name: Validate challenges
+name: Verify challenges
 
 on:
   push:
@@ -10,15 +10,23 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 30
     steps:
       - name: Check out challenges
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Test format validation
+      - name: Test authoring and verification tools
         run: python3 -B -m unittest discover -s tools -p 'test_*.py'
       - name: Validate every challenge
         run: python3 tools/validate.py
+      - name: Check Docker runtime tools
+        run: |
+          docker version
+          docker compose version
+      - name: Check actual network isolation against host and peer controls
+        run: python3 -B tools/check_isolation.py
+      - name: Verify every challenge solution, patch and cleanup
+        run: python3 -B tools/verify.py

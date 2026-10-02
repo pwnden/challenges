@@ -91,8 +91,12 @@ match their requirements. The platform derives its tools from those declarations
    reasoning. For patch verification, implement the patch and functional check.
 6. Complete the [publication review](authoring-standard.md#review-before-publication),
    including an independent learner review. Record the actual evidence and
-   revision in `AUTHORING.md`. Run `python3 tools/validate.py` and the platform's
-   [execution checks](verification.md#maintainer-execution-checks).
+   revision in `AUTHORING.md`. Run `python3 tools/validate.py` and this repository's
+   [execution checks](verification.md#author-execution-checks):
+   `python3 tools/verify.py <slug>`. Author verification uses Python and Docker.
+7. Commit the reviewed catalog on `main` and run `python3 tools/publish.py`.
+   The [publication command](publishing.md) rechecks the committed snapshot's
+   author tools, isolation, solutions, patches and cleanup before pushing it.
 
 The generated manifest passes format validation. Solution and functional-check
 stubs exit with an explicit authoring error, so scaffolding does not pass
