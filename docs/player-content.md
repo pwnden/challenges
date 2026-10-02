@@ -70,6 +70,24 @@ renderer reads the sender as escaped text and applies its own fixed markup and
 styles. Author-supplied event handlers, CSS and other DOM attributes are ignored.
 Ordinary `>` quotations keep their general quotation style.
 
+### Briefing sections
+
+Use MDC blocks to declare the role of each part of the briefing. The platform
+supplies one visible heading and the matching shared presentation.
+
+| Block | Default heading | Content |
+| --- | --- | --- |
+| `::objective` | 의뢰 목표 | The action and observable completion result |
+| `::resources` | 전달받은 정보 | Files, accounts, credentials and supplied facts |
+| `::knowledge` | 시작 전 알아둘 것 | Starting concepts, examples and problem-specific tool use |
+| `::submission` | 제출할 값 | Answer format and any value changes after restart |
+
+Close each block with `::`. An optional escaped `title` string supplies a more
+specific heading, such as `::resources{title="접속 정보"}`. Write the content inside
+the block; its heading is supplied once by the renderer. Keep narrative context
+in ordinary paragraphs. Use normal Markdown headings in hints and walkthroughs.
+All blocks retain the existing allowed body elements and attribute restrictions.
+
 ## Hints
 
 Use `##` for primary content headings and `###` for subsections. Consumers place brief headings beneath the panel title and walkthrough headings beneath the learning section.
