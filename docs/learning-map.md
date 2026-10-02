@@ -2,7 +2,7 @@
 
 ## Use this map when designing a problem
 
-This map organizes six areas and 32 topics by the security behavior a player
+This map organizes 12 learning areas and 50 topics by the security behavior a player
 will observe. Choose a primary area and topic, identify the concepts taught and
 required, then design the exercise using the [authoring standard](authoring-standard.md).
 Record the choices and evidence in the problem's `AUTHORING.md`.
@@ -13,24 +13,68 @@ Entry exercises are design patterns, not published problems or promises of
 Intro difficulty. Advanced topics have advanced prerequisites. Assess the
 actual workload and learner evidence for each authored problem.
 
-The topic keys in this document identify authoring topics. Contract v5 accepts
-the six existing `category` values and has no topic or concept-reference field.
-Record a topic key in `AUTHORING.md` today; structured catalog declarations and
-graph presentation require their own contract and platform work.
+Learning area IDs and topic keys identify authoring choices independently of
+the manifest's `category`. Contract v5 accepts six `category` values and has no
+learning-area, topic or concept-reference field. Record the learning area and
+topic in `AUTHORING.md` today. Structured catalog declarations and graph
+presentation require their own contract and platform work.
 
-| Area | Category | Topics |
+## Learning areas
+
+This is the current authoring coverage, which can grow as learning objectives
+are added. It is not a claim to enumerate all of security. Choose a learning
+area by the primary objective, independently of the target's implementation
+language, artifact format or execution form.
+
+| Learning area | Area ID | Topics |
 | --- | --- | --- |
-| [Web security](#web-security) | `web` | Information disclosure; authentication and sessions; access control; injection; browser security; business logic; servers and proxies. |
-| [System exploitation](#system-exploitation) | `pwn` | Memory boundaries; integers and sizes; control flow; heap and lifetime; mitigations; kernel boundaries. |
-| [Reverse engineering](#reverse-engineering) | `rev` | Static analysis; dynamic analysis; input checks; data formats; obfuscation. |
-| [Cryptographic security](#cryptographic-security) | `crypto` | Representation and protection; key management; modes and nonces; hashes and message authentication; public keys and signatures. |
-| [Digital forensics](#digital-forensics) | `forensics` | Files and metadata; network evidence; event reconstruction; memory evidence; storage recovery. |
-| [Additional areas](#additional-areas) | `misc` | Sandboxes; software supply chains; AI systems; smart contracts. |
+| [Web security](#web-security) | `web-security` | Information disclosure; authentication and sessions; access control; injection; browser security; business logic; servers and proxies. |
+| [System security](#system-security) | `system-security` | Memory boundaries; integers and sizes; control flow; heap and lifetime; mitigations; kernel boundaries; application sandboxes. |
+| [Reverse engineering](#reverse-engineering) | `reverse-engineering` | Static analysis; dynamic analysis; input checks; data formats; obfuscation. |
+| [Cryptographic security](#cryptographic-security) | `cryptographic-security` | Representation and protection; key management; modes and nonces; hashes and message authentication; public keys and signatures. |
+| [Digital forensics](#digital-forensics) | `digital-forensics` | Files and metadata; network evidence; event reconstruction; memory evidence; storage recovery. |
+| [Network security](#network-security) | `network-security` | Protocol state; service trust; wireless evidence. |
+| [Cloud and infrastructure security](#cloud-and-infrastructure-security) | `cloud-infrastructure-security` | Identity policies; storage exposure; orchestration boundaries. |
+| [Mobile security](#mobile-security) | `mobile-security` | Local data; backend trust; runtime integrity. |
+| [Hardware and embedded security](#hardware-and-embedded-security) | `hardware-embedded-security` | Firmware artifacts; device protocols; physical measurement evidence. |
+| [Software supply-chain security](#software-supply-chain-security) | `software-supply-chain-security` | Repository history; dependencies and builds; artifact provenance. |
+| [AI security](#ai-security) | `ai-security` | Instruction boundaries; retrieval access; model artifacts. |
+| [Blockchain security](#blockchain-security) | `blockchain-security` | Caller authority; state and reentrancy; transaction ordering. |
 
 Areas and topics support navigation. Concepts can be shared across topics;
 prerequisite relationships establish learning order, and difficulty describes
-the complete solving workload. A problem's primary category follows its main
-learning objective; supporting concepts may come from other areas.
+the complete solving workload. Supporting concepts may come from other areas.
+For example, inspecting an APK can teach mobile local-data protection, reverse
+engineering or forensics. Choose the primary objective and record the supporting
+concepts rather than assigning the learning area solely from the file extension.
+
+### Mapping to the current contract
+
+`category` is a compatibility classification consumed by the current catalog;
+it does not select file/service execution or change isolation. Keep the learning
+area and topic explicit in the author record. Select one supported category for
+the actual exercise using the following guidance; new learning areas do not add
+manifest enum values.
+
+| Primary exercise objective | Current category |
+| --- | --- |
+| Web behavior and web/API authorization | `web` |
+| User-space memory exploitation | `pwn` |
+| Reconstructing program or firmware behavior | `rev` |
+| Cryptographic construction or key handling | `crypto` |
+| Reconstructing evidence from supplied artifacts | `forensics` |
+| Other objectives, including application sandbox, build provenance or chain state rules | `misc` |
+
+A mobile backend authorization exercise can therefore use learning area
+`mobile-security`, topic `mobile-backend-trust`, and category `web`. An AI
+retrieval-permission exercise uses `ai-security` and `ai-retrieval-access` with
+`web` when the primary exercise is API authorization, or `misc` for an agent
+workflow. Record the choice's reason. Learning-area presentation is future
+platform work; current catalog filters still use `category`.
+
+Check the [execution feasibility map](execution-feasibility.md) before selecting
+an experiment. Inclusion in a learning area does not establish that its real
+target, tools or privileged variants can run on the current platform.
 
 ## Shared foundations
 
@@ -147,7 +191,7 @@ They use the current [execution and network contract](contract.md).
 - **Entry and progression:** Server-side fetching reaches a local private service; then host handling, cache identity and request-boundary disagreement as separate branches.
 - **Tools:** Request inspector/editor and declared local proxy, cache or private-service components. Raw protocol variants require a prepared raw-request capability.
 
-## System exploitation
+## System security
 
 ### pwn-memory-boundaries
 
@@ -196,6 +240,14 @@ They use the current [execution and network contract](contract.md).
 - **Prerequisites:** `files-processes`, `memory-layout`, `execution-tracing`, the relevant prior memory topic; introduce guest privilege levels and the device interface.
 - **Entry and progression:** One faulty range or permission check in a lab driver; then guest-only memory corruption and privilege-boundary consequences.
 - **Tools:** Prepared guest/emulator, target driver and debugger or guest observation tools. All target effects remain in the authored guest; verify real execution and resource cost before publishing.
+
+### system-application-sandboxes
+
+- **Principle:** An application's restrictions must account for the actual interpreter or capability boundary it exposes.
+- **Experiment:** Compare an allowed action with another path to the same capability; demonstrate the lab restriction's gap and its scope.
+- **Prerequisites:** `files-processes`, `state-ordering`; introduce the precise interpreter behavior or capability used.
+- **Entry and progression:** An application command filter overlooks an equivalent lab operation; then parser behavior and language sandboxes as separately scoped branches.
+- **Tools:** Prepared restricted target and terminal or target interface. State the application boundary being tested and retain the enclosing problem isolation. Host kernel and Docker escape targets are outside the current execution policy.
 
 ## Reverse engineering
 
@@ -323,17 +375,113 @@ They use the current [execution and network contract](contract.md).
 - **Entry and progression:** Recover an unoverwritten deleted lab file; then fragmented artifacts, filesystem metadata and multiple partitions.
 - **Tools:** Prepared image/filesystem analysis and extraction tools. Work on repository-contained copies and record image size and resource cost.
 
-## Additional areas
+## Network security
 
-### misc-sandboxes
+### network-protocol-state
 
-- **Principle:** An application's restrictions must account for the actual interpreter or capability boundary it exposes.
-- **Experiment:** Compare an allowed action with another path to the same capability; demonstrate the lab restriction's gap and its scope.
-- **Prerequisites:** `files-processes`, `state-ordering`; introduce the precise interpreter behavior or capability used.
-- **Entry and progression:** An application command filter overlooks an equivalent lab operation; then parser behavior and language sandboxes as separately scoped branches.
-- **Tools:** Prepared restricted target and terminal or target interface. State the application boundary being tested and retain the enclosing problem isolation.
+- **Principle:** A protocol implementation must preserve message boundaries and validate the state in which each operation is allowed.
+- **Experiment:** Compare an ordinary local exchange with a changed length or reordered message and observe the server's actual state transition.
+- **Prerequisites:** `data-representation`, `state-ordering`, `files-processes`; introduce the small protocol's fields and normal exchange.
+- **Entry and progression:** A TCP service accepts an operation before its required step; then framing, parser disagreement and replay as separate branches.
+- **Tools:** Local TCP target and prepared message sender in the terminal. Internal UDP exchanges can use ordinary sockets; browser/host UDP endpoints and raw packet operations are separate unsupported capabilities.
 
-### misc-supply-chains
+### network-service-trust
+
+- **Principle:** Reachability or a caller-supplied identity is insufficient evidence of a service's authority.
+- **Experiment:** Compare a local service's response to an ordinary request and a request with a changed claimed identity or destination; identify the trust assumption.
+- **Prerequisites:** `http-messages` or the supplied protocol vocabulary, `sessions`, `web-addresses` where names are used.
+- **Entry and progression:** A service trusts a supplied peer identity field; then local name-resolution, certificate and service-discovery checks.
+- **Tools:** Authored internal services and prepared client commands. Real transport evidence must come from the actual transport; routing, packet interception and host network changes need a separate feasibility decision.
+
+### network-wireless-evidence
+
+- **Principle:** Wireless authentication and protection can be assessed from the specific exchanges and parameters visible in recorded evidence.
+- **Experiment:** Inspect a supplied wireless capture, locate the relevant exchange and substantiate the stated protection or exposed information.
+- **Prerequisites:** `data-representation`, `state-ordering`; introduce frame fields and the particular authentication/protection scheme.
+- **Entry and progression:** Identify exposed information in a supplied capture; then recorded authentication exchanges and protocol-specific analysis.
+- **Tools:** Prepared offline capture viewer and real authored evidence. Live radio transmission, monitor mode and physical adapters are outside the current platform policy; a capture exercise teaches evidence analysis.
+
+## Cloud and infrastructure security
+
+### cloud-identity-policies
+
+- **Principle:** Effective authorization depends on the combined identity, resource, action and policy conditions.
+- **Experiment:** Compare supplied policy decisions for two lab identities, vary one action or resource and identify the rule that grants unintended access.
+- **Prerequisites:** `sessions`, `state-ordering`; introduce policy syntax, rule precedence and scope.
+- **Entry and progression:** A broad resource/action grant; then policy composition, delegation and short-lived credentials.
+- **Tools:** Policy artifacts and a labelled local evaluator with explicit semantics. Validate any provider-specific claim against that provider's rules; access to a real external cloud account is outside runtime isolation.
+
+### cloud-storage-exposure
+
+- **Principle:** Object storage permissions and access tokens must preserve the intended object and identity boundaries.
+- **Experiment:** Compare access to private and shared objects on an authored local object-storage target; change the object or permission and inspect the actual result.
+- **Prerequisites:** `web-addresses`, `http-messages`, `sessions`; introduce the selected storage API and permission model.
+- **Entry and progression:** An unintended public object or listing; then scoped access tokens and separation between object and bucket permissions.
+- **Tools:** Prepared local storage service and browser/request client. A compatible API is identified by its actual implementation; it does not prove identical behavior on a public cloud provider.
+
+### cloud-orchestration-boundaries
+
+- **Principle:** Workload declarations, service identities and orchestration permissions determine which infrastructure actions an application can perform.
+- **Experiment:** Inspect supplied workload and policy artifacts, connect an overbroad permission to its documented consequence and compare a restricted configuration.
+- **Prerequisites:** `files-processes`, `state-ordering`, identity/permission concepts; introduce only the selected orchestration fields.
+- **Entry and progression:** An excessive service-account permission in supplied manifests; then an actual isolated control-plane exercise after its runtime is verified.
+- **Tools:** Artifact viewer and scoped policy/configuration inspection. A real control plane is an unverified runtime; host Docker sockets, nested privileged Docker and host cluster access are outside policy.
+
+## Mobile security
+
+### mobile-local-data
+
+- **Principle:** Bundled or persisted mobile application data can expose information beyond the intended user or protection boundary.
+- **Experiment:** Inspect an authored package or data snapshot and recover the protected value from the actual supplied artifact.
+- **Prerequisites:** `files-processes`, `data-representation`; introduce the selected package or storage format and its origin.
+- **Entry and progression:** A credential in bundled configuration; then local databases, backups and native components.
+- **Tools:** Prepared archive, database and package viewers. Static snapshots support artifact claims; actual mobile storage enforcement requires the corresponding runtime.
+
+### mobile-backend-trust
+
+- **Principle:** A mobile client does not provide a trusted authorization boundary for its backend.
+- **Experiment:** Inspect a supplied ordinary client exchange, change a claimed account or operation and compare the local backend's access decision.
+- **Prerequisites:** `http-messages`, `sessions`; explain the client/backend roles and the request field being tested.
+- **Entry and progression:** A backend trusts a client-supplied account identifier; then client-only workflow controls and replay protection.
+- **Tools:** Real local backend and request inspector or prepared client. An emulator is needed only when the learning objective depends on actual client execution.
+
+### mobile-runtime-integrity
+
+- **Principle:** Platform permissions and app integrity checks have specific enforcement points whose effects must be observed in the real runtime.
+- **Experiment:** Compare a permitted and denied app action in a prepared mobile runtime and identify the enforcing component.
+- **Prerequisites:** `files-processes`, `state-ordering`, `execution-tracing`; introduce the exact platform permission or integrity mechanism.
+- **Entry and progression:** One app permission boundary; then inter-app access, instrumentation and integrity-check bypass.
+- **Tools:** Unverified mobile runtime, app controls and instrumentation profile. Current tools have no emulator display or device integration. Artifact inspection is a distinct exercise; host devices and accelerated-device passthrough are outside policy.
+
+## Hardware and embedded security
+
+### hardware-firmware-artifacts
+
+- **Principle:** Distributed firmware can reveal credentials, exposed services and security decisions through its contents.
+- **Experiment:** Inspect a real authored firmware artifact, locate the relevant configuration or code and connect it to the documented device behavior.
+- **Prerequisites:** `files-processes`, `data-representation`; introduce the selected container/filesystem format.
+- **Entry and progression:** A credential in extracted configuration; then filesystem structure, update verification and compiled components.
+- **Tools:** Prepared extraction and static analysis commands. Tools must read or extract repository-contained files without loop devices or privileged mounts; full device execution needs separate verification.
+
+### hardware-device-protocols
+
+- **Principle:** An embedded command interface must enforce operation authority and state constraints independently of transport access.
+- **Experiment:** Send ordinary and modified messages to an authored local protocol target and compare the actual accepted commands and state changes.
+- **Prerequisites:** `data-representation`, `state-ordering`; introduce command framing and device states.
+- **Entry and progression:** An omitted command authorization check; then update commands and replay-sensitive control flows.
+- **Tools:** Local protocol implementation and prepared sender. Identify any emulated device model; claims about physical hardware require hardware evidence. USB, serial and debug-adapter passthrough are outside policy.
+
+### hardware-physical-evidence
+
+- **Principle:** Physical measurements can reveal information about device operations within the limits of the measurement and experimental setup.
+- **Experiment:** Compare supplied traces with labelled operations and recover the specific correlation supported by the actual measurements.
+- **Prerequisites:** `data-representation`, `state-ordering`, the narrowly required statistics and timing concepts.
+- **Entry and progression:** Correlate labelled timing/power traces; then larger datasets and recorded fault responses with additional prerequisites.
+- **Tools:** Prepared trace viewer and scoped analysis operations. Mark synthetic traces as synthetic. Actual measurement and fault injection require external hardware and are outside the current platform policy.
+
+## Software supply-chain security
+
+### supply-chain-history
 
 - **Principle:** Software provenance, build configuration and dependency authority can expose secrets or influence the delivered artifact.
 - **Experiment:** Inspect a supplied history or build record, identify the change that carries sensitive data or unwanted authority, and verify its consequence in the local lab.
@@ -341,7 +489,25 @@ They use the current [execution and network contract](contract.md).
 - **Entry and progression:** Recover a secret from a removed historical file; then dependency selection, artifact changes and local build-step permissions.
 - **Tools:** Prepared history/diff or Git commands; authored local package/build fixtures for later variants. Required dependencies are supplied with the exercise.
 
-### misc-ai-security
+### supply-chain-builds
+
+- **Principle:** Dependency selection and build inputs can grant unintended influence over a delivered program.
+- **Experiment:** Compare two fully local build inputs, identify the changed dependency or hook and observe its effect in the resulting artifact.
+- **Prerequisites:** `files-processes`, `state-ordering`; introduce the dependency selection and build step used.
+- **Entry and progression:** A local dependency substitution changes a security-relevant value; then install hooks and compromised build inputs.
+- **Tools:** Prepared compiler/package commands and local dependency fixtures in an ordinary container. Keep runtime builds offline and unprivileged; real registries, Docker socket access and privileged nested builders are outside policy.
+
+### supply-chain-provenance
+
+- **Principle:** A provenance claim must establish who produced an artifact and which content and build inputs it covers.
+- **Experiment:** Compare a supplied artifact with its signed or hashed record, modify one value and identify whether the actual verifier enforces the stated linkage.
+- **Prerequisites:** `files-processes`, `data-representation`, `crypto-primitives` at the scope of the supplied verifier.
+- **Entry and progression:** A manifest does not bind the claimed digest to the distributed file; then identity, signatures and build-input evidence.
+- **Tools:** Prepared artifact and attestation verification commands with local trust material. The exercise names the chosen format and verifier; no live hosted signing service is required.
+
+## AI security
+
+### ai-instruction-boundaries
 
 - **Principle:** Agent decisions must preserve the boundary between trusted authority, untrusted content and permitted tools or data.
 - **Experiment:** Compare tool actions with ordinary and instruction-bearing retrieved material; show whether the target grants authority to that material.
@@ -349,13 +515,47 @@ They use the current [execution and network contract](contract.md).
 - **Entry and progression:** One local document causes an agent to attempt a prohibited lab action; then retrieval provenance, tool authorization and model artifacts.
 - **Tools:** Prepared local model/agent and action trace. Label a deterministic model fixture as a fixture; model-behavior claims require tests against the actual model and its resource profile.
 
-### misc-smart-contracts
+### ai-retrieval-access
+
+- **Principle:** Retrieval and tool data access must enforce the acting identity's permissions before supplying protected material.
+- **Experiment:** Compare the actual local retrieval results for two lab identities and change a document reference to test the access check.
+- **Prerequisites:** `http-messages`, `sessions`; introduce retrieval scope, document identity and the acting principal.
+- **Entry and progression:** An unauthorized document returned by a retrieval API; then cross-user indexes and delegated tool identities.
+- **Tools:** Real local retrieval service and prepared request client. A model is unnecessary for a retrieval authorization objective; claims about model decisions need actual model execution.
+
+### ai-model-artifacts
+
+- **Principle:** Model packaging and loading establish trust boundaries for metadata, executable content and dependencies.
+- **Experiment:** Inspect an authored model package, identify a risky loading option or exposed metadata and verify the consequence in a prepared local loader.
+- **Prerequisites:** `files-processes`, `data-representation`; introduce the chosen artifact format and loading behavior.
+- **Entry and progression:** Exposed sensitive model metadata; then unsafe deserialization and dependency loading after loader verification.
+- **Tools:** Artifact inspection and a pinned offline loader. Actual inference needs a verified CPU/resource profile; host GPU access is outside policy. Label model fixtures and preserve enclosing isolation.
+
+## Blockchain security
+
+### blockchain-caller-authority
 
 - **Principle:** Contract state transitions must enforce caller authority and the intended asset or workflow rules.
 - **Experiment:** Compare the same state-changing call from two supplied lab identities and inspect the resulting contract state and transaction evidence.
 - **Prerequisites:** `state-ordering`, `crypto-primitives` for identity/signatures; introduce callers, transactions and the supplied contract interface.
 - **Entry and progression:** A local contract action lacks the stated caller check; then balances, reentrant calls and transaction ordering with their added prerequisites.
 - **Tools:** Authored local chain, prepared identities and call interface. Players invoke actual lab transactions through the provided controls without writing a client SDK.
+
+### blockchain-state-reentrancy
+
+- **Principle:** Contract state must preserve its invariants across external calls and repeated entry into a workflow.
+- **Experiment:** Compare an ordinary transaction with a prepared callback sequence and trace the actual balance and state updates on the local chain.
+- **Prerequisites:** `state-ordering`, `execution-tracing`, the caller and transaction concepts introduced by the preceding exercise.
+- **Entry and progression:** A balance update occurs after a callback; then cross-function invariants and token-specific behavior.
+- **Tools:** Verified local chain, supplied actor contracts and a prepared transaction/trace interface. The player chooses the sequence; actual VM execution supports the observed result.
+
+### blockchain-transaction-ordering
+
+- **Principle:** A contract's assumptions about transaction order and external values can affect the authority and fairness of its state changes.
+- **Experiment:** Compare the same prepared transactions in two controlled orders and inspect the actual local-chain result.
+- **Prerequisites:** `state-ordering`, transaction and block concepts; introduce the selected pricing or settlement rule.
+- **Entry and progression:** A state-dependent action accepts a changed ordering; then local price-oracle and settlement assumptions.
+- **Tools:** Verified local chain with deterministic block/transaction controls and declared internal data sources. Public networks, real funds and external oracle access are outside runtime policy.
 
 ## Turn a topic into a publishable exercise
 

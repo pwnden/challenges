@@ -6,6 +6,9 @@ resources and execution kind. Record the intended solution and difficulty
 assessment in the generated `AUTHORING.md` as the exercise takes shape.
 Use the [learning map](learning-map.md) to select the primary area and topic,
 the security experiment and required tool capabilities.
+Check the [execution feasibility map](execution-feasibility.md) for its actual
+runtime requirements. `--category` selects an existing contract classification;
+record the independent learning area and topic in `AUTHORING.md`.
 
 From the challenges repository, use Python 3.11 or newer:
 

@@ -24,15 +24,20 @@ walkthrough explains the permission failure and the corrected behavior. A revers
 engineering exercise can ask the player to reconstruct an input check and explain
 which transformations preserve enough information to recover its input.
 
-Choose the category from this learning objective. Choose file or service execution
+Choose the learning area and topic from this objective, then map the actual
+exercise to one category supported by the current contract. Learning areas grow
+independently of that compatibility field. Choose file or service execution
 from the resources needed to perform it. The implementation language supplies the
 exercise; language knowledge contributes to the player's workload and must be
 accounted for explicitly. Record how each substantial coding or calculation step
 supports the security objective.
 
 Use the [learning map](learning-map.md) to select an area and topic and scope the
-observable experiment and prerequisites. Record the topic in `AUTHORING.md`;
-the current contract declares category but has no structured topic field.
+observable experiment and prerequisites. Record the learning area, topic and
+category choice in `AUTHORING.md`; the current contract has no structured
+learning-area or topic field. Check the [execution feasibility map](execution-feasibility.md)
+for the exact experiment's support and required preparation. A learning topic's
+presence does not establish target or tool readiness.
 
 Keep an introductory exercise focused on one new security concept. Supporting
 steps should make that concept observable. Each additional concept needs a reason

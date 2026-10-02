@@ -9,6 +9,9 @@ security learning objective, intended learner, prerequisite abilities and
 difficulty evidence. Keep the design and review evidence in its `AUTHORING.md`.
 The [learning map](docs/learning-map.md) defines areas, topics, observable
 experiments, scoped prerequisites and required tool capabilities.
+Learning areas are independent of contract categories; the
+[execution feasibility map](docs/execution-feasibility.md) distinguishes current
+execution shapes, artifact-only scope and unverified runtime profiles.
 
 Create the directory, manifest, author record, learning content and execution scaffold with
 `python3 tools/create.py <slug> --kind file --category rev` or
