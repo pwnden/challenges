@@ -1,0 +1,24 @@
+schema = 5
+slug = "commit-trail"
+title = "지운 설정 파일의 이전 내용"
+category = "misc"
+difficulty = 2
+files = ["files/source.tar.gz", "files/release-note.txt"]
+
+[player]
+tools = ["terminal", "files"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "sha256"
+sha256 = "2cd60cac66ccc4b5c60563fde1f19ce08d340b2a9e4c0f2723cf23654868b0dd"
+
+[solve]
+image = "pwnden-cli:basic-20261003"
+command = ["bash", "solve/solve.sh"]
+writable = true
+timeout_seconds = 30

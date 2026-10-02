@@ -42,6 +42,7 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [DNS 조회에 담긴 데이터](challenges/dns-detour/README.md) | forensics | Reassemble data from captured local DNS query labels |
 | [팀 문서의 읽기 권한](challenges/borrowed-badge/README.md) | misc | Document access rules, solution and patch checks |
 | [공개 이미지에 남은 내부 메모](challenges/image-notes/README.md) | forensics | PNG metadata inspection with file, ExifTool and jq |
+| [지운 설정 파일의 이전 내용](challenges/commit-trail/README.md) | misc | Deleted configuration recovered through actual Git history |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped
