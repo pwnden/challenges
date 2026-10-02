@@ -18,7 +18,18 @@ A player can complete the exercise and read its explanation using the browser wo
 
 ## Brief
 
-Provide the following information in concise, natural prose. Use sections only where they improve reading.
+Provide the following information in natural prose with enough context for a
+first-time reader. Use sections where they improve reading. Explain the target's
+normal use, what prompted the investigation, why the requester supplies these
+resources, and what the player can establish with them. Give this chain room to
+develop across paragraphs; choose length by the information needed to understand
+the situation.
+
+Introduce each nickname through its relationship to the target. Define unfamiliar
+features in terms of what users do with them. Explain the role of each file and
+account before using it as a clue, and distinguish suspicions from established
+facts. Keep investigation discoveries in progressive hints while supplying all
+context needed to understand the assignment in the default brief.
 
 Describe the intended objective and the actions the player can take directly. Each sentence adds relevant context, a required action, or a success condition. Keep solving strategy in progressive hints. Use the website's section headings and controls as the navigation, so the brief stays focused on the exercise.
 
@@ -57,6 +68,8 @@ Every problem supplies `[content].walkthrough`. Explain the key insight, observa
 Review the rendered problem as a first-time solver, independently of whether `solve.command` passes.
 
 - Can I state the goal and tell when I have succeeded?
+- Can I explain the target's normal use, the incident, the requester’s reason for
+  seeking help, and how the supplied resources support my investigation?
 - Can I start using only the supplied context and visible controls?
 - Do the stated prerequisites match every step, including language features,
   calculations and tool operations? Does the exercise demonstrate its stated
