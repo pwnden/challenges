@@ -1,0 +1,6 @@
+Lab board export policy
+
+notice.png is a generated teaching banner with blue borders and a pale center.
+Only the public pixel design may be distributed. Board recovery codes and
+internal operations notes must stay in the internal workspace.
+The supplied file models an export from that workspace; it is not a real incident.

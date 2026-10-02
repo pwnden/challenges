@@ -1,0 +1,24 @@
+schema = 5
+slug = "image-notes"
+title = "공개 이미지에 남은 내부 메모"
+category = "forensics"
+difficulty = 1
+files = ["files/notice.png", "files/export-policy.txt"]
+
+[player]
+tools = ["terminal", "files"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "sha256"
+sha256 = "b3c1c4248193e09825fbed2a3fed3fa1a4137e0ee68e93743cd1d32d104c59df"
+
+[solve]
+image = "pwnden-cli:basic-20261003"
+command = ["bash", "solve/solve.sh"]
+writable = true
+timeout_seconds = 30
