@@ -26,7 +26,7 @@ typography:
     fontFamily: "'Pretendard Variable', sans-serif"
     fontSize: "1.1rem"
   code:
-    fontFamily: "ui-monospace, monospace"
+    fontFamily: "'D2Coding', monospace"
 rounded:
   control: "0.5rem"
 spacing:
@@ -46,7 +46,7 @@ The background and foreground tokens set the document palette. The surface suppo
 
 ## Typography
 
-Pretendard Variable is bundled locally and loads with `font-display: swap`. Body text, controls and document output share the body font; titles and section headings use the recorded scales. Explicit `code` elements use the system monospace stack, including SQL and JSON blocks. Document output preserves whitespace, wraps long text and allows scrolling.
+Pretendard Variable and D2Coding are bundled locally and load with `font-display: swap`. Body text, controls and document output share Pretendard; titles and section headings use the recorded scales. Explicit `code` elements use D2Coding through `--font-code`, including SQL and JSON blocks. Document output preserves whitespace, wraps long text and allows scrolling.
 
 ## Layout
 

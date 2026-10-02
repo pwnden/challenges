@@ -1,5 +1,6 @@
 @font-face { font-family: 'Pretendard Variable'; src: url('./fonts/PretendardVariable.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
-:root { color-scheme: dark; font-family: 'Pretendard Variable', sans-serif; color: #dae4f2; background: #101722; font-size: 16px; line-height: 1.65; --inset: 1rem; --radius: 0.5rem; --control: 2.75rem; }
+@font-face { font-family: 'D2Coding'; src: url('./fonts/D2Coding-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+:root { color-scheme: dark; font-family: 'Pretendard Variable', sans-serif; color: #dae4f2; background: #101722; font-size: 16px; line-height: 1.65; --font-code: 'D2Coding', monospace; --inset: 1rem; --radius: 0.5rem; --control: 2.75rem; }
 * { box-sizing: border-box; }
 body { margin: 0; }
 main { max-width: 52rem; margin: auto; padding: var(--inset); }
@@ -23,7 +24,7 @@ button:disabled { opacity: 0.65; cursor: wait; }
 ::selection { background: #345b86; color: #fff; }
 pre { overflow: auto; padding: var(--inset); border-radius: var(--radius); background: #182334; white-space: pre-wrap; overflow-wrap: anywhere; }
 pre { font-family: inherit; }
-code { font-family: ui-monospace, monospace; }
+code { font-family: var(--font-code); }
 ul { padding-inline-start: 1.25rem; }
 li + li { margin-top: 0.5rem; }
 table { width: 100%; border-collapse: collapse; }
