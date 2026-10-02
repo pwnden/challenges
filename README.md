@@ -18,6 +18,10 @@ The [CLI tooling inventory](docs/cli-tooling.md) maps common analysis commands
 to learner experiments, current execution constraints and proposed supply order.
 Tool candidates still require pinned-image execution checks before publication.
 
+The [CLI challenge plan](docs/cli-challenge-plan.md) specifies eight new exercises
+using the common toolboxes, with investigation steps, control cases and
+per-problem implementation and verification units.
+
 Create the directory, manifest, author record, learning content and execution scaffold with
 `python3 tools/create.py <slug> --kind file --category rev` or
 `python3 tools/create.py <slug> --kind service --category web`.
