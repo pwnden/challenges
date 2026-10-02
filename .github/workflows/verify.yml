@@ -18,6 +18,14 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Install verified Docker Compose
+        run: |
+          compose_binary="$RUNNER_TEMP/docker-compose"
+          curl --fail --location --retry 3 --output "$compose_binary" https://github.com/docker/compose/releases/download/v5.1.3/docker-compose-linux-x86_64
+          printf '%s  %s\n' 'a0298760c9772d2c06888fc8703a487c94c3c3b0134adeef830742a2fc7647b4' "$compose_binary" | sha256sum --check
+          mkdir -p "$HOME/.docker/cli-plugins"
+          install -m 755 "$compose_binary" "$HOME/.docker/cli-plugins/docker-compose"
+          docker compose version
       - name: Test authoring and verification tools
         run: python3 -B -m unittest discover -s tools -p 'test_*.py'
       - name: Validate every challenge
@@ -30,5 +38,9 @@ jobs:
           docker compose version
       - name: Check actual network isolation against host and peer controls
         run: python3 -B tools/check_isolation.py
+      - name: Prepare the selected CLI toolboxes
+        run: |
+          docker build --platform linux/amd64 --target basic --tag pwnden-cli:basic-20261003 images/cli
+          docker build --platform linux/amd64 --target pcap --tag pwnden-cli:pcap-20261003 images/cli
       - name: Verify every challenge solution, patch and cleanup
         run: python3 -B tools/verify.py

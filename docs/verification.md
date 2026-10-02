@@ -6,6 +6,12 @@ publication. Python 3.11 or newer, Docker Engine 28 or newer with Linux containe
 and Docker Compose are the execution prerequisites. These tools run with this
 checkout alone. Go, a platform checkout and frontend assets are unnecessary.
 
+Compose must support `start --wait` and `--wait-timeout`: services are created and
+their mounts checked before they start. CI installs Compose 5.1.3 from the official
+release with its SHA-256 checked. It builds the basic and pcap
+[CLI images](../images/cli/README.md) before verifying the catalog. Prepare those
+images locally as well; their exercise tags are built from this repository.
+
 ## Format checks
 
 From the repository root:
