@@ -22,7 +22,8 @@ button:disabled { opacity: 0.65; cursor: wait; }
 :focus-visible { outline: 2px solid #94c5ff; outline-offset: 3px; }
 ::selection { background: #345b86; color: #fff; }
 pre { overflow: auto; padding: var(--inset); border-radius: var(--radius); background: #182334; white-space: pre-wrap; overflow-wrap: anywhere; }
-pre, code { font-family: ui-monospace, monospace; }
+pre { font-family: inherit; }
+code { font-family: ui-monospace, monospace; }
 ul { padding-inline-start: 1.25rem; }
 li + li { margin-top: 0.5rem; }
 table { width: 100%; border-collapse: collapse; }

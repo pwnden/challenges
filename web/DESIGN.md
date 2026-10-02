@@ -46,7 +46,7 @@ The background and foreground tokens set the document palette. The surface suppo
 
 ## Typography
 
-Pretendard Variable is bundled locally and loads with `font-display: swap`. Body text and controls share the body font; titles and section headings use the recorded scales. Code and document output use the system monospace stack. Output preserves whitespace, wraps long text and allows scrolling.
+Pretendard Variable is bundled locally and loads with `font-display: swap`. Body text, controls and document output share the body font; titles and section headings use the recorded scales. Explicit `code` elements use the system monospace stack, including SQL and JSON blocks. Document output preserves whitespace, wraps long text and allows scrolling.
 
 ## Layout
 
