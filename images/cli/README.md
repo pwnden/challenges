@@ -28,9 +28,29 @@ docker build --platform linux/amd64 --target all -f images/cli/Dockerfile.toolbo
 ```
 
 이미지 준비에는 인터넷과 디스크 공간이 필요하다. 확장 이미지에는 Grype·Trivy의
-큰 DB도 포함된다. Docker가 보고한 크기와 검증한 image ID는 [validation.json](validation.json)에
-기록한다. 빌드 캐시와 이전 이미지까지 남아 있으면 실제 디스크 사용량은 더 크다.
+큰 DB도 포함된다. 검증한 image ID와 용량 측정은 [validation.json](validation.json)에
+기록한다. 현재 containerd 저장소에서 `docker image inspect`의 `Size`는 압축된
+콘텐츠 크기다. `docker image ls --tree`의 `DISK USAGE`와 구분한다.
+
+| 이미지 | 압축 콘텐츠 | Docker 표시 디스크 사용량 |
+| --- | --- | --- |
+| basic | 116MB | 483MB |
+| lab | 712MB | 2.99GB |
+| extended | 3.34GB | 16.0GB |
+| specialized | 4.72GB | 20.4GB |
+| all | 4.79GB | 20.7GB |
+
+containerd는 압축본과 압축 해제본을 함께 보관한다.
+[Docker 저장소 문서](https://docs.docker.com/engine/storage/containerd/)에서 설명하는
+동작이다. 이미지 간 공유 레이어를 고려하면 위 값을 합산한 값이 전체 사용량은 아니다.
+빌드 캐시와 이전 이미지까지 남아 있으면 별도 공간이 더 필요하다.
 이미지 크기가 풀이 컨테이너의 RAM 예약량을 뜻하지는 않는다.
+
+all 내부에서 큰 경로는 Grype DB 약 3.15GB, Trivy DB 1.48GB, Ghidra 0.79GB,
+Metasploit 자료 0.68GB, Pwndbg portable 0.75GB, 별도 Python 환경 0.81GB다.
+그 밖에 컴파일러·LLVM·PoCL·Java와 도구 의존성이 포함된다.
+전체 도구와 두 DB를 하나에 포함한 all은 큰 준비 이미지다. 가벼운 문제에는
+필요한 CLI가 포함된 basic/lab을 선택하고, 큰 분석 자료는 문제 목적에 맞춰 선택한다.
 
 문제 선언 예:
 

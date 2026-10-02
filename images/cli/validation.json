@@ -637,5 +637,44 @@
     "toolbox-packages.json": "1c984ee30619f09edbe9574f8294a585ecb65390c25e78d6092e8245ebe088d3",
     "upstream.lock.json": "cd5392cf47476d4a4974277ba34d850dc8353f69d7ff5c0d8f2862bc19929384",
     "verify_toolbox.py": "29d4adfa2174d9d9c774fdcf777e213030aa10c63e6b0b613e8652846a80b663"
+  },
+  "size_diagnostic": {
+    "measured_at_utc": "2026-10-02T19:15:55.341166+00:00",
+    "storage_backend": "io.containerd.snapshotter.v1",
+    "profiles_size_bytes_metric": "docker image inspect Size: compressed content bytes in this containerd store",
+    "disk_usage_metric": "docker image ls Size: compressed content plus unpacked image layers; values include shared layers and must not be summed across profiles",
+    "images": [
+      {
+        "image": "pwnden-cli:all-20261003",
+        "docker_image_ls_disk_usage": "20.7GB"
+      },
+      {
+        "image": "pwnden-cli:specialized-20261003",
+        "docker_image_ls_disk_usage": "20.4GB"
+      },
+      {
+        "image": "pwnden-cli:extended-20261003",
+        "docker_image_ls_disk_usage": "16GB"
+      },
+      {
+        "image": "pwnden-cli:lab-20261003",
+        "docker_image_ls_disk_usage": "2.99GB"
+      },
+      {
+        "image": "pwnden-cli:basic-20261003",
+        "docker_image_ls_disk_usage": "483MB"
+      }
+    ],
+    "major_paths_allocated_bytes": {
+      "/opt/grype-db": 3151532032,
+      "/opt/trivy-cache": 1480171520,
+      "/opt/python-tools": 805183488,
+      "/opt/upstream/pwndbg": 746242048,
+      "/opt/upstream/foundry": 301133824,
+      "/usr/share/ghidra": 790659072,
+      "/usr/share/metasploit-framework": 682315776
+    },
+    "path_measurement": "du -x -B1 -s inside the unchanged all image (read-only root, no network, no capabilities)",
+    "reference": "https://docs.docker.com/engine/storage/containerd/"
   }
 }
