@@ -1,4 +1,4 @@
-"""Create six actual local Git commits and a deterministic source bundle."""
+"""Create eight local commits including a key rotation and configuration rename."""
 import gzip
 import io
 import os
@@ -8,6 +8,7 @@ import tarfile
 import tempfile
 
 KEY = 'pwnden{deleted_file_live_history}'
+OLD_KEY = 'pwnden{retired_scheduler_key}'
 
 
 def bundle(include_secret=True):
@@ -34,13 +35,19 @@ def bundle(include_secret=True):
         commit('Set backup schedule')
         (root / 'config').mkdir()
         key = KEY if include_secret else 'EXAMPLE_ONLY'
-        (root / 'config/runtime.env').write_text('SCHEDULER_MODE=lab\nRECOVERY_KEY=' + key + '\n')
+        old_key = OLD_KEY if include_secret else 'RETIRED_EXAMPLE'
+        (root / 'config/runtime.env').write_text('SCHEDULER_MODE=lab-v1\nRECOVERY_KEY=' + old_key + '\n')
         commit('Add runtime configuration')
+        (root / 'config/runtime.env').write_text('SCHEDULER_MODE=lab-v2\nRECOVERY_KEY=' + key + '\n')
+        commit('Rotate recovery key for lab-v2; retire lab-v1 key')
+        git('mv', 'config/runtime.env', 'config/worker.env')
+        commit('Rename runtime configuration for worker')
         (root / 'schedule.txt').write_text('backup=03:00\n')
         commit('Move backup schedule')
-        (root / 'config/runtime.env').unlink()
+        (root / 'config/worker.env').unlink()
         commit('Remove internal configuration from release')
         (root / 'config/example.env').write_text('SCHEDULER_MODE=lab\nRECOVERY_KEY=YOUR_TEST_KEY\n')
+        (root / 'config/release.txt').write_text('release=lab-v2\nprivate_config=config/worker.env\n')
         commit('Add public configuration example')
         # Rebuild the index without host-specific inode/ctime values.
         (root / '.git/index').unlink()

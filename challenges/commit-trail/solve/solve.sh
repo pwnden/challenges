@@ -4,6 +4,7 @@ work=$(mktemp -d /tmp/commit-trail.XXXXXX)
 trap 'rm -rf "$work"' EXIT
 tar -xzf files/source.tar.gz -C "$work"
 repo="$work/source"
-deleted=$(git -C "$repo" log --all --diff-filter=D --format=%H -- config/runtime.env)
+path=$(sed -n 's/^private_config=//p' "$repo/config/release.txt")
+deleted=$(git -C "$repo" log --diff-filter=D --format=%H -- "$path")
 test -n "$deleted"
-git -C "$repo" show "$deleted^:config/runtime.env" | rg -o 'pwnden\{[^}]+\}'
+git -C "$repo" show "$deleted^:$path" | rg -o 'pwnden\{[^}]+\}'
