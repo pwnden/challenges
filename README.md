@@ -24,6 +24,14 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | --- | --- | --- |
 | [Rotor Lock](challenges/rotor-lock/README.md) | rev | File only |
 | [Note Vault](challenges/note-vault/README.md) | web | One service, solution and patch checks |
+| [Forgotten Shelf](challenges/forgotten-shelf/README.md) | web | Exposed backup, solution and patch checks |
+| [Query Desk](challenges/query-desk/README.md) | web | Real SQL search, solution and patch checks |
+| [Wrapped Secret](challenges/wrapped-secret/README.md) | crypto | File and prepared decoding command |
+| [Midnight Trace](challenges/midnight-trace/README.md) | forensics | Correlate captured HTTP and audit records |
+
+The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
+their learning topics, tools and review status. Each brief supplies the scoped
+background needed to begin without writing Python.
 
 Each challenge declares its player brief, ordered hints and complete walkthrough in `[content]`. Players read these in the website, open analysis materials there, use its prepared terminal and submit flags. Follow the [player content standard](docs/player-content.md). Executable solutions and patch sources support author verification; maintainer commands belong in [verification](docs/verification.md).
 
