@@ -1,4 +1,9 @@
-# Creating a problem
+# Creating a scenario
+
+A scenario is a hacking request that the player investigates in the prepared
+workspace. Use the [scenario writing framework](scenario-authoring.md) for its
+briefing, additional information and investigation report. The existing
+challenge contract supplies its declarations and execution profile.
 
 Start with the [authoring standard](authoring-standard.md): define the security
 learning objective, intended learner and prerequisite abilities before choosing
@@ -78,17 +83,20 @@ match their requirements. The platform derives its tools from those declarations
 ## Complete before publication
 
 1. Complete `AUTHORING.md` using the [authoring standard](authoring-standard.md).
+   Define the request, player role and actual evidence behind its clues.
    Trace the intended solution, classify prerequisite and learning concepts,
    and explain the declared difficulty against the full player journey.
-2. Replace bracketed authoring prompts with the scenario, objective and supplied
-   information. Follow the [player content standard](player-content.md). Titles
+2. Complete the request briefing, objective and supplied information using the
+   [scenario framework](scenario-authoring.md) and
+   [player content standard](player-content.md). Titles
    and categories are displayed by the platform; the brief starts with context.
 3. Replace sample distribution material or implement target behavior. The starter
    HTTP service reports preparation in progress outside its health route.
 4. Implement `solve/solve.py` to recover and print the flag. For file problems,
    replace the marked zero digest with the SHA-256 of the solution's trimmed flag.
-5. Write progressive hints and a walkthrough that explains and reproduces the
-   reasoning. For patch verification, implement the patch and functional check.
+5. Write progressive additional information and an investigation report that
+   explains and reproduces the reasoning and security principle.
+   For patch verification, implement the patch and functional check.
 6. Complete the [publication review](authoring-standard.md#review-before-publication),
    including an independent learner review. Record the actual evidence and
    revision in `AUTHORING.md`. Run `python3 tools/validate.py` and this repository's

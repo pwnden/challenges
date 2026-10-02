@@ -1,4 +1,4 @@
-"""Create an authoring scaffold using this repository's problem contract."""
+"""Create a scenario authoring scaffold using this repository's challenge contract."""
 
 import argparse
 import json
@@ -124,7 +124,7 @@ def main():
     for name in files:
         print(f'  {name}')
     if not options['dry_run']:
-        print('Format validation passed. Complete the exercise content and solution before publication.')
+        print('Format validation passed. Complete the scenario briefing, hints, report and solution before publication.')
 
 
 if __name__ == '__main__':

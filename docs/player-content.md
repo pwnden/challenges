@@ -4,6 +4,12 @@ Use the [authoring standard](authoring-standard.md) to establish the security
 learning objective, learner profile, prerequisite abilities and difficulty.
 This page describes how to present that design to the player.
 
+Use the [scenario writing framework](scenario-authoring.md) for the shared
+voice: the player receives a hacking request, investigates it, and completes
+the mission. The brief introduces the request, hints deliver additional
+information, and the walkthrough reports the investigation and security lessons.
+Keep the technical objective and required starting information precise.
+
 ## Reader and goal
 
 Write for a person solving the exercise in the pwnden website. The learning loop is: understand the situation and objective, inspect provided material or open the target service, experiment in the prepared workspace, submit an answer, then use hints and explanations to learn from the result. Content is authored in challenges; platform presents it and supplies the controls.

@@ -1,4 +1,4 @@
-# Challenge authoring standard
+# Scenario authoring standard
 
 ## Purpose and ownership
 
@@ -6,7 +6,10 @@ Use this standard to design, classify and review security exercises for pwnden.
 The challenges repository owns these criteria. A problem is ready for publication
 when its learning design, player content and execution have each been reviewed.
 
-Start here before using the [generator](creating.md). The [player content
+Start here before using the [scenario generator](creating.md). Use the
+[scenario writing framework](scenario-authoring.md) to connect the actual target
+and learning objective to a request, player role and observable mission outcome.
+Record that setting in `AUTHORING.md`. The [player content
 standard](player-content.md) covers briefs, hints and walkthroughs; the
 [contract](contract.md) defines supported metadata and execution rules;
 [verification](verification.md) covers automated checks.
