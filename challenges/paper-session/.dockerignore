@@ -1,0 +1,9 @@
+.git
+__pycache__
+*.pyc
+solve
+hints
+README.md
+challenge.toml
+compose*.yaml
+patched/test.py
