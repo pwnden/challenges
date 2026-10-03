@@ -1,0 +1,577 @@
+{
+  "slug": "image-notes",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "66930802e254152faa808d45fd39f90733d93b923689519fd3848a9f220c878c",
+  "source_sha256_after": "afb7817ccc8af617513c5c7b3ca11432889b948f0651e48c7d591e41f9042685",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "image-notes",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/image-notes/challenge.toml",
+          "input/challenges/image-notes/BRIEFING.md",
+          "input/challenges/image-notes/README.md",
+          "input/challenges/image-notes/files/export-policy.txt",
+          "input/challenges/image-notes/hints/1.md",
+          "input/challenges/image-notes/hints/2.md",
+          "input/challenges/image-notes/solve/README.md",
+          "input/challenges/image-notes/AUTHORING.md",
+          "input/challenges/image-notes/authoring/check.py",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/image-metadata.md",
+          "input/knowledge/hidden-file-data.md"
+        ],
+        "first_pass": "작업 보드 배너를 외부에 공개한 뒤 그림에 보이지 않는 내부 메모가 함께 나갔다는 제보가 있다. 복구 코드와 운영 메모는 내부 자료다. 공개 파일 및 규칙을 확인하고 PNG 속성에서 이번 배너 ID·버전에 해당하며 활성인 메모를 골라 코드 전체를 제출한다. 시작 명령과 선택 조건은 안내되어 있다. 메모 JSON의 실제 위치는 처음 읽을 때 확정되지 않았으나 메타데이터에서 찾도록 본문이 연결한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "담당자, 공개 배너와 플레이어의 조사 행동이 구체적이다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/BRIEFING.md",
+                "quote": "모래시계는 공개한 파일과 배포 규칙을 전달하고,"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "공개 범위 위반 제보와 내부 복구 코드 확인 목적이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/files/export-policy.txt",
+                "quote": "Only the public pixel design may be distributed. Board recovery codes and"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "제보는 확인 전 의심으로 제시되고 ID·버전·상태 비교가 그 질문의 확인 절차다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/README.md",
+                "quote": "외부에 전달됐는지 재확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "메타데이터, 속성, ID, revision/state를 이미지 태그의 구체 값에 연결한다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/image-metadata.md",
+                "quote": "이름과 값으로 보여 준다. 특정 속성의 값만 읽으려면 `exiftool -s3 -속성이름 경로`를"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설의 파일 형식 및 메타데이터/선택 조건 주장은 checker의 데이터 파싱 및 비교 조건과 대응한다. 이 리뷰는 검사를 실행하지 않았다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/authoring/check.py",
+                "quote": "r['asset_id'] == receipt['asset_id'] and r['revision'] == receipt['revision'] and r['state'] == 'active'"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "배포 규칙은 원칙, 포함 여부는 확인할 질문으로 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/BRIEFING.md",
+                "quote": "모래시계는 공개한 파일과 배포 규칙을 전달하고, 화면에 보이지 않는 정보도"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 도구에 맞는 첫 명령, 비교 기준과 전체 제출 형식이 제공된다. 단계별 힌트는 선택 조건을 좁힌다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/README.md",
+                "quote": "ID·버전이 같고 `state`가 `active`인 메모가 조사 대상이다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문장은 평이하고 조건을 병렬로 열거해 선택 규칙이 잘 읽힌다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/README.md",
+                "quote": "이번 내보내기 기록과 ID·버전이 같고 `state`가 `active`인 메모가 조사 대상이다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/image-notes/solve/README.md",
+            "quote": "ExifTool의 Description에는 이번 배너의 ID banner-17과 버전 3이 있다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/authoring/check.py",
+                "quote": "receipt = json.loads(subprocess.check_output(['exiftool', '-s3', '-Description', 'files/notice.png'], text=True))"
+              }
+            ],
+            "verdict": "checker는 Description을 영수증으로 읽어 ID/revision 비교에 쓰도록 구성돼 있다.",
+            "reason": "이미지 데이터를 이번에 직접 파싱하지 않았다."
+          },
+          {
+            "path": "input/challenges/image-notes/solve/README.md",
+            "quote": "출력은 `pwnden{picture_pixels_are_not_all}`이다. 코드가 그림의 픽셀과 별도로",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/authoring/check.py",
+                "quote": "assert pixels(original) == pixels(stripped.read_bytes())"
+              },
+              {
+                "path": "input/challenges/image-notes/authoring/check.py",
+                "quote": "assert chosen == [KEY]"
+              }
+            ],
+            "verdict": "속성 선택 및 속성 제거 대조를 검사하도록 작성된 checker와 대응한다.",
+            "reason": "checker 실행 결과를 새로 주장하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "PNG 메타데이터를 직접 실행 도구로 추출하지 않았다.",
+          "실제 학습자 관찰은 수행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — image-notes\n\n의뢰인은 작업 보드 배너를 외부 공개한 뒤 그림에 보이지 않는 내부 메모까지 나갔다는 제보를 받고, 공개 이미지 파일과 배포 규칙을 줬다. 보드 복구 코드와 운영 메모는 내부 자료다. PNG 속성에 외부 전달된 정보가 있는지 살펴보고 이번에 내보낸 배너 버전의 활성 메모에서 복구 코드를 찾는 일이다. `export-policy.txt`, 파일 형식, PNG 메타데이터를 확인하고 메타데이터의 asset ID/revision을 메모 목록과 맞춰 상태가 active인 항목을 골라야 한다. 완료 증거는 그 항목의 전체 `pwnden{...}` 복구 코드.\n\n선수지식은 `terminal-commands`, `image-metadata`. 시작 명령과 여러 메모 중 고를 조건, 제출값이 특정되어 있다. 자료에서 메모 목록이 어디에 존재하는지는 첫 본문만으로 확정되지 않지만 이후 메타데이터 설명 및 제공 파일에서 확인할 수 있다. 당장 누락 정보로 남김: JSON 메모가 어느 경로/형식으로 제공되는지.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "image-notes",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/image-notes/challenge.toml",
+          "challenges/image-notes/BRIEFING.md",
+          "challenges/image-notes/README.md",
+          "challenges/image-notes/AUTHORING.md",
+          "challenges/image-notes/files/export-policy.txt",
+          "challenges/image-notes/hints/1.md",
+          "challenges/image-notes/hints/2.md",
+          "challenges/image-notes/solve/README.md",
+          "challenges/image-notes/solve/solve.sh",
+          "challenges/image-notes/authoring/build.py",
+          "challenges/image-notes/authoring/check.py",
+          "challenges/image-notes/authoring/validation.json",
+          "docs/text-review.md",
+          "docs/authoring-standard.md",
+          "docs/player-content.md",
+          "knowledge/terminal-commands.md",
+          "knowledge/image-metadata.md",
+          "evidence-first.md"
+        ],
+        "first_pass": "# First pass: image-notes\n\n**읽은 범위(첫 단계):** `input/challenges/image-notes/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 모래시계가 공개한 작업 보드 배너에 화면에 보이지 않는 내부 메모가 함께 나갔다는 제보를 조사한다. 복구 코드와 운영 메모는 내부용이다.\n- **질문:** 제공된 공개 PNG의 속성 안에 이번에 내보낸 배너 버전에 연결된 내부 복구 코드가 있는가?\n- **시작:** 공개 범위 규칙을 읽고 `file` 및 `exiftool`로 파일 형식·속성을 확인한다. 내보내기 기록의 `asset_id`와 `revision`을 기준으로 활성 메모를 골라야 한다는 안내가 있다.\n- **완료:** 그 배너 버전의 활성 메모에 든 `pwnden{...}` 복구 코드 전체 제출.\n- **불명확한 점:** 브리핑은 “같이 나갔다는 제보”를 사실로 확정하지 않고 조사 의뢰로 제시한다. 어떤 메모가 실제 대상인지는 자료 대조 전에는 모른다.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "모래시계, 배너 파일, 공개 범위, 속성 조사와 대상 메모 선택이 구체적이다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/BRIEFING.md",
+                "quote": "작업 보드에서 배너를 내보냈는데, 그림에는 없는 내부 메모도 같이 나갔다는 제보가 왔어요. 공개 파일에 무엇이 들어 있는지 확인해 주세요."
+              },
+              {
+                "path": "challenges/image-notes/README.md",
+                "quote": "작업 보드에서 배너를 내보냈는데, 그림에는 없는 내부 메모도 같이 나갔다는 제보가 왔어요. 공개 파일에 무엇이 들어 있는지 확인해 주세요."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "화면 밖 내부 메모가 공개됐을 수 있다는 제보를 재확인하며, 보호할 코드와 확인 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/BRIEFING.md",
+                "quote": "작업 보드에서 배너를 내보냈는데, 그림에는 없는 내부 메모도 같이 나갔다는 제보가 왔어요. 공개 파일에 무엇이 들어 있는지 확인해 주세요."
+              },
+              {
+                "path": "challenges/image-notes/files/export-policy.txt",
+                "quote": "Lab board export policy"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "내보내기 ID·버전과 기록 목록의 ID·버전·상태를 비교하라는 흐름이 일관된다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/README.md",
+                "quote": "작업 보드에서 배너를 내보냈는데, 그림에는 없는 내부 메모도 같이 나갔다는 제보가 왔어요. 공개 파일에 무엇이 들어 있는지 확인해 주세요."
+              },
+              {
+                "path": "challenges/image-notes/hints/1.md",
+                "quote": "속성에 배너의 내보내기 기록과 여러 메모가 함께 있다. 현재 내보내기의 ID와"
+              },
+              {
+                "path": "challenges/image-notes/hints/2.md",
+                "quote": "Description은 이번 배너의 ID·버전이고 Comment의 records는 메모 목록이다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "PNG 속성·ExifTool·Description/Comment JSON 구조를 도구 및 JSON 자료와 연결해 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/README.md",
+                "quote": "작업 보드에서 배너를 내보냈는데, 그림에는 없는 내부 메모도 같이 나갔다는 제보가 왔어요. 공개 파일에 무엇이 들어 있는지 확인해 주세요."
+              },
+              {
+                "path": "challenges/image-notes/solve/README.md",
+                "quote": "`file files/notice.png`는 정상 PNG로 판별한다. 확장자를 바꾼 파일이 아니라,"
+              },
+              {
+                "path": "challenges/image-notes/authoring/build.py",
+                "quote": "\"\"\"Generate a real PNG with an export receipt and retained versioned memos.\"\"\""
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설의 공개 파일 포함 주장은 실제 PNG 생성기, 속성 추출 대조, 제거 후 픽셀 동일성 검사와 연결된다. 실행 성공은 검토자가 새로 주장하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/solve/README.md",
+                "quote": "`file files/notice.png`는 정상 PNG로 판별한다. 확장자를 바꾼 파일이 아니라,"
+              },
+              {
+                "path": "challenges/image-notes/authoring/check.py",
+                "quote": "\"\"\"Check actual PNG parsing, identical pixels and the metadata-removal control.\"\"\""
+              },
+              {
+                "path": "challenges/image-notes/authoring/validation.json",
+                "quote": "\"slug\": \"image-notes\","
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "내부 전용은 정책 원칙, 공개 파일의 실제 속성은 해설이 자료로 확인한 결과로 나뉜다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/files/export-policy.txt",
+                "quote": "Lab board export policy"
+              },
+              {
+                "path": "challenges/image-notes/solve/README.md",
+                "quote": "`file files/notice.png`는 정상 PNG로 판별한다. 확장자를 바꾼 파일이 아니라,"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "초급 선수 수준에서 시작할 파일·도구·선택 조건·제출값이 본문에 안내된다. 단계형 힌트가 비교 기준을 좁힌다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/challenge.toml",
+                "quote": "slug = \"image-notes\""
+              },
+              {
+                "path": "challenges/image-notes/README.md",
+                "quote": "작업 보드에서 배너를 내보냈는데, 그림에는 없는 내부 메모도 같이 나갔다는 제보가 왔어요. 공개 파일에 무엇이 들어 있는지 확인해 주세요."
+              },
+              {
+                "path": "challenges/image-notes/hints/1.md",
+                "quote": "속성에 배너의 내보내기 기록과 여러 메모가 함께 있다. 현재 내보내기의 ID와"
+              },
+              {
+                "path": "challenges/image-notes/hints/2.md",
+                "quote": "Description은 이번 배너의 ID·버전이고 Comment의 records는 메모 목록이다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "오답 후보가 왜 배제되는지 설명하고 메타데이터와 픽셀을 구분해 자연스럽게 읽힌다.",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/solve/README.md",
+                "quote": "`file files/notice.png`는 정상 PNG로 판별한다. 확장자를 바꾼 파일이 아니라,"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/image-notes/solve/README.md",
+            "quote": "ExifTool의 Description에는 이번 배너의 ID banner-17과 버전 3이 있다.",
+            "kind": "의심",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/solve/README.md",
+                "quote": "ExifTool의 Description에는 이번 배너의 ID banner-17과 버전 3이 있다."
+              },
+              {
+                "path": "challenges/image-notes/BRIEFING.md",
+                "quote": "그림을 내보내는 도구가 보드의 속성까지 파일에 넣었을 가능성이 있다."
+              }
+            ],
+            "verdict": "가능성으로 제시하고 실제 포함 여부는 조사 목표로 남겨 원칙·사실을 혼동하지 않는다.",
+            "reason": "가능성으로 제시하고 실제 포함 여부는 조사 목표로 남겨 원칙·사실을 혼동하지 않는다."
+          },
+          {
+            "path": "challenges/image-notes/solve/README.md",
+            "quote": "출력은 `pwnden{picture_pixels_are_not_all}`이다. 코드가 그림의 픽셀과 별도로\n파일에 포함됐으므로 공개 파일을 받은 사람도 읽을 수 있다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/solve/README.md",
+                "quote": "출력은 `pwnden{picture_pixels_are_not_all}`이다. 코드가 그림의 픽셀과 별도로\n파일에 포함됐으므로 공개 파일을 받은 사람도 읽을 수 있다."
+              }
+            ],
+            "verdict": "결과 문장은 설명된 정적 자료와 검사 의도를 정확히 특정한다. validation.json은 해당 검증 완료 기록이지만 이번 리뷰에서 다시 실행한 증거로 쓰지 않았다.",
+            "reason": "결과 문장은 설명된 정적 자료와 검사 의도를 정확히 특정한다. validation.json은 해당 검증 완료 기록이지만 이번 리뷰에서 다시 실행한 증거로 쓰지 않았다."
+          },
+          {
+            "path": "challenges/image-notes/solve/README.md",
+            "quote": "코드가 그림의 픽셀과 별도로\n파일에 포함됐으므로 공개 파일을 받은 사람도 읽을 수 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/image-notes/solve/README.md",
+                "quote": "코드가 그림의 픽셀과 별도로\n파일에 포함됐으므로 공개 파일을 받은 사람도 읽을 수 있다."
+              }
+            ],
+            "verdict": "생성된 배포 파일의 속성 공개 범위로 주장한다. 이는 원칙 위반 가능성의 실습 자료이지 실제 사고 주장은 아니다.",
+            "reason": "생성된 배포 파일의 속성 공개 범위로 주장한다. 이는 원칙 위반 가능성의 실습 자료이지 실제 사고 주장은 아니다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "학습자 독립 리뷰는 별도 대기 상태다. validation.json과 check.py를 정적 근거로 읽었으며 이 검토에서는 검사나 도구 실행을 반복하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: image-notes\n\n**읽은 범위(첫 단계):** `input/challenges/image-notes/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 모래시계가 공개한 작업 보드 배너에 화면에 보이지 않는 내부 메모가 함께 나갔다는 제보를 조사한다. 복구 코드와 운영 메모는 내부용이다.\n- **질문:** 제공된 공개 PNG의 속성 안에 이번에 내보낸 배너 버전에 연결된 내부 복구 코드가 있는가?\n- **시작:** 공개 범위 규칙을 읽고 `file` 및 `exiftool`로 파일 형식·속성을 확인한다. 내보내기 기록의 `asset_id`와 `revision`을 기준으로 활성 메모를 골라야 한다는 안내가 있다.\n- **완료:** 그 배너 버전의 활성 메모에 든 `pwnden{...}` 복구 코드 전체 제출.\n- **불명확한 점:** 브리핑은 “같이 나갔다는 제보”를 사실로 확정하지 않고 조사 의뢰로 제시한다. 어떤 메모가 실제 대상인지는 자료 대조 전에는 모른다.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "image-notes",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/image-notes/challenge.toml",
+          "input/challenges/image-notes/BRIEFING.md",
+          "input/challenges/image-notes/README.md",
+          "input/challenges/image-notes/AUTHORING.md",
+          "input/challenges/image-notes/hints/1.md",
+          "input/challenges/image-notes/hints/2.md",
+          "input/challenges/image-notes/solve/README.md",
+          "input/challenges/image-notes/solve/solve.sh",
+          "input/challenges/image-notes/files/export-policy.txt",
+          "input/challenges/image-notes/authoring/build.py",
+          "input/challenges/image-notes/authoring/check.py",
+          "input/challenges/image-notes/authoring/validation.json",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/image-metadata.md"
+        ],
+        "first_pass": "모래시계는 작업 보드를 운영하며 외부 안내용 배너는 공개 가능하지만 복구 코드와 운영 메모는 팀 안에 두어야 한다. 화면에 보이지 않는 메모까지 함께 나갔다는 제보를 확인해 달라고 한다. 공개 PNG와 배포 규칙을 제공하고 파일 형식·메타데이터를 확인하도록 시작 명령을 안내한다. 내보내기 기록의 asset_id와 revision을 기준으로 이번 버전을 찾고 state가 active인 메모만 조사 대상으로 삼는다. 해당 버전의 활성 메모에 있는 복구 코드 전체를 제출한다. 제보는 확인할 의심으로 남아 있으며 상황·자료·완료 조건이 선명하다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "의뢰인, PNG, 메타데이터 조사와 버전별 기록 선택이 명확하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/BRIEFING.md",
+                "quote": "공개 이미지의 속성을 조사하고, 이번에 내보낸 배너 버전에 해당하는 내부 복구 코드를 찾자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "공개 가능한 픽셀 디자인과 내부 자료 보호 원칙이 제보 조사 이유를 뒷받침한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/files/export-policy.txt",
+                "quote": "Only the public pixel design may be distributed."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "내보내기 기록의 ID·버전과 메모의 활성 상태를 별개 조건으로 연결한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/BRIEFING.md",
+                "quote": "이번 내보내기 기록과 ID·버전이 같고"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "메타데이터·PNG·JSON을 구체적인 속성 이름과 도구로 안내한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/README.md",
+                "quote": "내보내기 기록의 `asset_id`는 배너 ID, `revision`은 배너 버전이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "Description의 receipt와 Comment의 records를 실제 생성 자료 및 체크 로직이 같은 필드 조건으로 대조한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/authoring/build.py",
+                "quote": "RECEIPT = {'asset_id': 'banner-17', 'revision': 3}"
+              },
+              {
+                "path": "input/challenges/image-notes/authoring/check.py",
+                "quote": "r['asset_id'] == receipt['asset_id'] and r['revision'] == receipt['revision'] and r['state'] == 'active'"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "정책은 공개 범위의 원칙으로, 제보는 확인할 가능성으로 표현한다. 해설은 실제 파일의 속성과 조치를 구별한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/BRIEFING.md",
+                "quote": "그림을 내보내는 도구가 보드의 속성까지 파일에 넣었을 가능성이 있다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 지식, 파일과 첫 명령, 선택 조건, 제출 항목을 제공하며 특정 복구 코드는 숨긴다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/challenge.toml",
+                "quote": "requires = [\"terminal-commands\",\"image-metadata\"]"
+              },
+              {
+                "path": "input/challenges/image-notes/hints/2.md",
+                "quote": "ID·버전이 내보내기 기록과 같고 state가 active인 항목을 고른다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "한국어 문장은 조사 대상과 조건을 구체적으로 설명하며 중첩 번역투가 없다.",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/BRIEFING.md",
+                "quote": "JSON을 읽을 때 첫 번째 코드나 버전 번호만 보고 선택하지 말자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/image-notes/BRIEFING.md",
+            "quote": "자료는 이 실습을 위해 만든 PNG다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/files/export-policy.txt",
+                "quote": "notice.png is a generated teaching banner"
+              },
+              {
+                "path": "input/challenges/image-notes/authoring/build.py",
+                "quote": "Generate a real PNG with an export receipt and retained versioned memos."
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "작성 자료가 생성 파일임을 설명하고 빌더가 PNG와 기록을 생성한다."
+          },
+          {
+            "path": "input/challenges/image-notes/solve/README.md",
+            "quote": "ExifTool의 Description에는 이번 배너의 ID banner-17과 버전 3이 있다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/authoring/build.py",
+                "quote": "RECEIPT = {'asset_id': 'banner-17', 'revision': 3}"
+              },
+              {
+                "path": "input/challenges/image-notes/solve/solve.sh",
+                "quote": "receipt=$(exiftool -s3 -Description files/notice.png)"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "기록 필드가 빌더 상수와 풀이 필터에서 추적된다."
+          },
+          {
+            "path": "input/challenges/image-notes/solve/README.md",
+            "quote": "실제 복구 코드가 노출됐다면 코드도 교체한다. 메타데이터를 제거한 대조 파일은",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/authoring/check.py",
+                "quote": "assert pixels(original) == pixels(stripped.read_bytes())"
+              },
+              {
+                "path": "input/challenges/image-notes/authoring/check.py",
+                "quote": "assert subprocess.check_output(['exiftool', '-s3', '-Comment', str(stripped)]) == b''"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "체크 자료는 픽셀 동일성과 해당 메타데이터 삭제를 별도로 확인하도록 작성됐다."
+          },
+          {
+            "path": "input/challenges/image-notes/AUTHORING.md",
+            "quote": "실제 PTY에서 시작 명령·해답·정답/오답 제출, Ctrl+C 중단·재접속·종료 후",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/image-notes/authoring/validation.json",
+                "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true"
+              }
+            ],
+            "verdict": "작성 기록으로만 확인",
+            "reason": "validation.json에는 과거 검증 표시가 있다. 본 문장 검토자는 재실행하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 도구 실행이나 학습자 관찰은 수행하지 않았다. validation.json과 AUTHORING.md의 실행 주장은 기존 기록으로 인용했으며 독립 재현 결과로 제시하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: image-notes\n\n읽은 자료: `input/challenges/image-notes/challenge.toml`, `BRIEFING.md`, `README.md`만. 힌트·해설·구현은 아직 열지 않았다.\n\n모래시계는 작업 보드를 운영하며, 외부 안내용 파란 배너는 공개 가능하지만 보드 복구 코드와 운영 메모는 팀 안에 두어야 한다. 이미지에 보이지 않는 메모까지 함께 나갔다는 제보를 확인해 달라고 한다. 플레이어에게 공개 PNG와 배포 규칙을 제공하며, 먼저 규칙과 파일 형식·메타데이터를 살피도록 명령 예시를 준다. 내보내기 기록의 `asset_id`와 `revision`을 기준으로 이번 버전을 찾고, `state`가 `active`인 메모만 조사 대상으로 삼으라고 설명한다. 완료는 해당 버전의 활성 메모에 있는 복구 코드 전체를 제출하는 것이다.\n\n상황, 보호할 정보, 조사 이유, 파일과 시작 방법, 버전 식별 조건, 제출 목표가 본문에 있다. 코드나 특정 메타데이터 필드명을 정답처럼 미리 노출하지 않으면서 조사 범위를 좁힐 단서는 준다. 제보는 확인할 의심으로 표현되어 있고 유출을 사실로 단정하지 않는다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "ids": [
+      "T4",
+      "T8"
+    ],
+    "note": "화면 밖의 속성이라는 모호한 설명을 그림의 픽셀 외에 파일에 들어 있는 설명과 메모로 고쳤다. 공개 그림과 내부 속성, 배너 ID·버전 선택 조건은 유지했다.",
+    "evidence": [
+      {
+        "path": "challenges/image-notes/authoring/check.py",
+        "quote": "assert pixels(original) == pixels(stripped.read_bytes())"
+      }
+    ],
+    "decision": "기본 심사 통과와 별개로 부모가 추상적인 표현을 구체화했다. 픽셀·속성 제거 대조의 뜻은 바꾸지 않았다."
+  },
+  "changed_files": [
+    "challenges/image-notes/solve/README.md"
+  ],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

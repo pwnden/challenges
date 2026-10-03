@@ -1,8 +1,8 @@
 {
   "slug": "hash-lantern",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/hash-lantern/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/hash-lantern/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/hash-lantern/2026-10-04-review.md",
   "criteria": {
     "goal": {
       "level": 2,
@@ -201,7 +201,7 @@
     },
     "explanation": {
       "level": 3,
-      "reason": "hash-lantern-learner (4): 해설은 실제 비교 절차와 관찰 결과, 후보 대입 공격이라는 원인, 빠른 해시의 위험, 전용 느린 비밀번호 해시와 계정별 salt 및 로그인 시도 제한을 연결한다. 후보가 한정된 실습의 결과로 보안 주장 범위가 합리적이다.\nhash-lantern-evidence (4): 해설은 account 필드 해석, 후보별 실행, 일치 관찰, 결과, 사전 대입 원리, 빠른 SHA-256의 후보 비용, 보호 방법을 차례로 설명한다. 실제 대상은 salt=none의 단일 SHA-256과 제한된 여섯 후보이므로 그 결론을 일반 해시의 원문 복원이나 모든 암호 복구로 확대하지 않는다. 전용 해시, salt, 추측 난도, 로그인 횟수 제한을 권고해 행동과 방어를 연결한다.\nhash-lantern-designer (3): 해설은 조사 순서, 일치 후보, 후보 대입이라는 원리, 빠른 단일 SHA-256의 약점과 salt 및 전용 비밀번호 해시라는 보호 방안을 연결한다. 후보가 여섯 개뿐인 통제된 실험이라는 범위를 설명해 실제 비밀번호 전체가 빠르게 복구된다는 주장도 피한다.\nhash-lantern-alternative (3): The walkthrough gives the comparison steps, candidate result, brute-force term, reason a single fast SHA-256 is weak for password storage, and mitigations using a password-specific slow function, per-user salt, stronger passwords, and attempt limits. The conclusion remains appropriately limited to a short candidate list. It could make the boundary more explicit that a match proves equality to this stored record under the stated encoding and salt settings, rather than independently validating identity or proving the supplied list covers every possible prior password.\nhash-lantern-tooling (3): 해설은 확인 순서, 후보 일치 관찰, 사전 대입이라는 결론, 빠른 단일 SHA-256의 위험, 느린 전용 비밀번호 해시와 salt의 보호 효과 및 로그인 시도 제한을 연결한다. 이 문제는 로컬 후보 집합에 대한 해시 확인만 보이므로 실제 인증 서버 동작이나 일반적인 복구 가능성을 주장하지 않는다.",
+      "reason": "hash-lantern-learner (4): 해설은 실제 비교 절차와 관찰 결과, 후보 대입 공격이라는 원인, 빠른 해시의 위험, 전용 느린 비밀번호 해시와 계정별 salt 및 로그인 시도 제한을 연결한다. 후보가 한정된 실습의 결과로 보안 주장 범위가 합리적이다.\nhash-lantern-evidence (4): 해설은 account 필드 해석, 후보별 실행, 일치 관찰, 결과, 사전 대입 원리, 빠른 SHA-256의 후보 비용, 보호 방법을 차례로 설명한다. 실제 대상은 salt=none의 단일 SHA-256과 제한된 여섯 후보이므로 그 결론을 일반 해시의 원문 복원이나 모든 암호 복구로 확대하지 않는다. 전용 해시, salt, 추측 난도, 로그인 횟수 제한을 권고해 행동과 방어를 연결한다.\nhash-lantern-designer (3): 해설은 조사 순서, 일치 후보, 후보 대입이라는 원리, 빠른 단일 SHA-256의 약점과 salt 및 전용 비밀번호 해시라는 보호 방안을 연결한다. 후보가 여섯 개뿐인 통제된 실험이라는 범위를 설명해 실제 비밀번호 전체가 빠르게 복구된다는 주장도 피한다.\nhash-lantern-alternative (3): The walkthrough gives the comparison steps, candidate result, brute-force term, reason a single fast SHA-256 is weak for password storage, and mitigations using a password-specific slow function, per-user salt, stronger passwords, and attempt limits. The conclusion remains appropriately limited to a short candidate list. It could make the boundary more explicit that a match proves equality to this stored record under the stated encoding and salt settings, rather than independently validating identity or proving the supplied list covers every possible prior password.\nhash-lantern-tooling (3): 해설은 확인 순서, 후보 일치 관찰, 사전 대입이라는 결론, 빠른 단일 SHA-256의 위험, 느린 전용 비밀번호 해시와 salt의 보호 효과 및 로그인 시도 제한을 연결한다. 이 문제는 로컬 후보 집합에 대한 해시 확인만 보이므로 실제 인증 서버 동작이나 일반적인 복구 가능성을 주장하지 않는다.\n2026-10-04 문장 검토: 로그인 사건의 기록처럼 읽히던 첫 대사를 계정에 저장된 비밀번호 해시로 고쳤다. 여섯 후보 중 저장된 해시와 맞는 rainboat27을 실제 자료에서 확인했다.",
       "evidence": [
         {
           "path": "challenges/hash-lantern/solve/README.md",
@@ -269,5 +269,5 @@
       "improvement": "최초 구현 작업 트리 기준이라는 범위에 더해 실제 실행 로그나 결과 요약을 날짜별로 남겨 재현 정보를 보존한다."
     }
   },
-  "source_sha256": "e92f92d89265b872ab6bcabd5a36c5b1015467fafaf98473dbf7dc29b1300069"
+  "source_sha256": "b23e2ed89e4185bc32cb6ecec1aca36cda72e1d55db54e280db14124771b7666"
 }

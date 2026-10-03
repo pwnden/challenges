@@ -1,8 +1,8 @@
 {
   "slug": "quiet-route",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/quiet-route/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/quiet-route/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 shared-knowledge source reconciliation; original learning levels retained",
   "criteria": {
     "goal": {
       "level": 4,
@@ -379,5 +379,5 @@
       "improvement": "검증 기록에 해답·패치 검사별 실행 결과와 통과한 정상/거부 경로를 남기면 재현 범위를 더 쉽게 확인할 수 있다.\n실행 출력이 보존된 기록에서 선언된 해답, 패치 거부, 공개 기능 유지 및 정리 결과의 범위를 확인해 연결한다."
     }
   },
-  "source_sha256": "0d800dd59e80032e63f09fdb92ef32bf14a7d8391276baca59867f668842fac6"
+  "source_sha256": "828f638a247868fb2a847dc02986dc3e14ea593d312ba7fab3162776596820d0"
 }

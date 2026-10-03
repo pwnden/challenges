@@ -1,0 +1,994 @@
+{
+  "slug": "signed-delivery",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "287034b857757a55ab245e8a9a2eb81a172b5b9a739df54b08d239cfd1f12045",
+  "source_sha256_after": "641e76d0fe4e459921c379bf4b90c68a5cc28ecb95e2e1b61740bd4e37ff02d7",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "signed-delivery",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/signed-delivery/challenge.toml",
+          "input/challenges/signed-delivery/README.md",
+          "input/challenges/signed-delivery/AUTHORING.md",
+          "input/challenges/signed-delivery/hints/1.md",
+          "input/challenges/signed-delivery/hints/2.md",
+          "input/challenges/signed-delivery/solve/README.md",
+          "input/challenges/signed-delivery/files/sender-public.pem",
+          "input/challenges/signed-delivery/files/copy-a.txt",
+          "input/challenges/signed-delivery/files/copy-b.txt",
+          "input/challenges/signed-delivery/files/copy-c.txt",
+          "input/challenges/signed-delivery/files/trust-note.txt",
+          "input/challenges/signed-delivery/authoring/check.py",
+          "input/challenges/signed-delivery/solve/solve.sh",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/detached-signatures.md",
+          "input/docs/text-review.md"
+        ],
+        "first_pass": "의뢰인은 납품 문서 수신 담당자다. 서로 다른 사본과 과거·현재 승인 버전이 있어 이름이나 시각만으로 고르면 위험하다. 실습에서 신뢰하도록 전해진 발신자 공개키, 서명 파일, 사본과 승인 안내가 제공된다. 시작은 안내에서 배치·버전과 서명 관계를 읽고 공개키로 사본을 검증하는 것이다. 완료는 현재 승인본 원문의 SHA-256을 정해진 형식으로 제출하는 것이다. 어느 사본의 서명이 통과하는지는 첫 읽기에서 알 수 없다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "문서 수신자가 제공한 키·서명·사본으로 현재 사용할 승인 원문을 확인하는 플레이어 행동이 명시된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "승인 안내에서 이번에 사용할 배치와 버전을 먼저 확인하자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "과거 승인본이나 도착지가 바뀐 사본을 선택할 수 있다는 위험과 현재 버전을 확인할 필요가 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "파일 이름이나 수정 시각만 보고 고르면 예전 문서를 사용하거나 바뀐 도착지로 보낼 수 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "승인 안내로 버전을 선택한 뒤 서명을 검증하고 원문 해시를 계산하는 순서가 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "먼저 승인 안내를 읽고 현재 버전에 대응하는 서명을 고른다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "공개키·분리 서명·SHA-256 용어를 선수 문서가 설명하고, 문제 본문은 파일 이름과 역할에 연결한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "`files/delivery.sig`와 `files/delivery-v2.sig`는 버전별 RSA/SHA-256 분리 서명이다."
+              },
+              {
+                "path": "input/knowledge/detached-signatures.md",
+                "quote": "분리 서명은 문서와 서명을 서로 다른 파일에 담는 방식이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "서명 선택과 해시 안내는 신뢰 노트·사본·검증 구현과 맞는다. 직접 OpenSSL을 실행한 결과라고 주장하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Approved revision: 2."
+              },
+              {
+                "path": "input/challenges/signed-delivery/authoring/check.py",
+                "quote": "assert len(copies) == 3 and {p.name for p in copies if verify(p, public, signature)} == {'copy-c.txt'}"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "키를 신뢰한다는 실습 전제, 서명 검증이 보이는 범위, 현재 배치를 정하는 승인 안내를 별개 조건으로 둔다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다."
+              },
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "문서 내용이 원문과 같은지 확인할 수 있다. 하지만 과거 승인본도 유효한 서명을"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "파일, 승인 안내 읽기, 검증 명령, 결과 비교, 해시 계산 및 제출 형식까지 안내한다. 사본 간 실제 결과는 풀이 뒤 확인하도록 남긴다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "먼저 승인 안내를 읽고 현재 버전에 대응하는 서명을 고른다. 아래는 검증 형식이며"
+              },
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "검증된 원문의 해시를 `pwnden{64자리 소문자 SHA-256}` 형식으로 제출하자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "승인 버전 선택과 원문 검증을 능동형으로 안내하고, 제출값의 정확한 형식을 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "승인 안내에서 현재 사용할 버전을 확인하고, 공개키로 서명을 검증해 그 버전의 원문을 찾자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/signed-delivery/README.md",
+            "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Sender public key and approval policy delivered through the trusted lab channel."
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "실습의 신뢰 안내는 공개키 및 승인 정책이 trusted lab channel로 전달됐다고 명시한다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/README.md",
+            "quote": "`files/delivery.sig`와 `files/delivery-v2.sig`는 버전별 RSA/SHA-256 분리 서명이다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Signature: RSA-2048, SHA-256, PKCS#1 v1.5."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 1 signature: delivery.sig (previous genuine approval)."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 2 signature: delivery-v2.sig (current approval)."
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "승인 안내에 알고리즘과 각 revision 서명의 대응이 적혀 있다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "승인 안내는 LAB-17의 버전 2와 delivery-v2.sig를 지정한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Approved batch: LAB-17. Approved revision: 2."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "signature=delivery-v2.sig"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "제공 승인 노트가 현재 배치·버전과 서명 파일을 직접 지정한다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "과거 서명 delivery.sig에는 copy-b가, 현재 서명에는 copy-c가 통과한다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/authoring/check.py",
+                "quote": "assert len(copies) == 3 and {p.name for p in copies if verify(p, public, signature)} == {'copy-c.txt'}"
+              },
+              {
+                "path": "input/challenges/signed-delivery/authoring/check.py",
+                "quote": "assert {p.name for p in copies if verify(p, public, files / 'delivery.sig')} == {'copy-b.txt'}"
+              }
+            ],
+            "verdict": "검증 코드의 기대값과 일치, 독립 실행 미확인",
+            "reason": "작성자 검사 스크립트는 이 두 파일만 각각 통과하기를 요구한다. 이번 리뷰에서 서명을 직접 검증하지 않았다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "검증된 원문의 SHA-256은",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/authoring/check.py",
+                "quote": "native_hash = subprocess.check_output(['sha256sum', str(files / 'copy-c.txt')], text=True).split()[0]"
+              }
+            ],
+            "verdict": "작성자 체크와 일치, 독립 해시 미확인",
+            "reason": "작성자 검사 코드는 copy-c 파일의 해시를 사용한다. 본 리뷰는 명령을 실행해 해시를 재생성하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "독립 초보 학습자를 대상으로 실제 사용성 시험을 하지 않았다.",
+          "OpenSSL 서명 검증과 해시 명령을 실행하지 않았다. 파일 안내 및 작성자 검사 코드와 정적으로 대조했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: signed-delivery\n\n선수지식으로는 기본 터미널과 분리 서명의 공개키 검증을 안다. 의뢰인은 납품 문서를 받는 담당자다. 버전과 도착지가 다른 사본들이 섞여 있고, 과거 승인본도 유효한 서명이 있을 수 있으므로 현재 승인 안내에서 배치·버전을 먼저 정해야 한다. 제공 공개키는 이 실습에서 발신자 키로 신뢰한다고 전제한다.\n\n시작은 `trust-note.txt`를 읽어 현재 승인 배치와 버전을 확인한 뒤, 해당 서명 파일과 공개키로 각 사본을 검증하는 것이다. 사본 3개, 공개키, 두 버전의 분리 서명과 승인 안내가 제공된다. OpenSSL 검증 형식 및 `sha256sum` 사용법도 제시된다.\n\n완료는 현재 승인본의 원문을 찾아 원문 SHA-256을 `pwnden{64자리 소문자 SHA-256}` 형식으로 제출하는 것이다. 첫 읽기만으로는 어떤 사본이 어느 서명과 일치하는지 검증 결과를 알 수 없으며, 키·문서는 실습용이라고 범위를 명시한다.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "signed-delivery",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/contract.toml",
+          "input/challenges/signed-delivery/challenge.toml",
+          "input/challenges/signed-delivery/README.md",
+          "input/challenges/signed-delivery/BRIEFING.md",
+          "input/challenges/signed-delivery/hints/",
+          "input/challenges/signed-delivery/solve/",
+          "input/challenges/signed-delivery/AUTHORING.md",
+          "input/challenges/signed-delivery/authoring/",
+          "input/challenges/signed-delivery/vulnerable/",
+          "input/challenges/signed-delivery/patched/",
+          "input/challenges/signed-delivery/files/",
+          "input/files/",
+          "input/knowledge/selected required docs",
+          "input/docs/text-review.md",
+          "input/docs/authoring-standard.md"
+        ],
+        "first_pass": "문서 수신자는 다른 내용의 사본 중 현재 승인된 버전의 원본 바이트를 찾는다. 신뢰 노트/공개키/버전별 서명/사본/검증 명령/해시를 순서로 연결한다. 제출은 그 원문의 SHA-256이다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "수신자, 발신 승인, 사본 검증 및 해시 행동을 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/BRIEFING.md",
+                "quote": "승인 안내에서 이번에 사용할 배치와 버전을 먼저 확인하자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "도착지가 다른 사본을 현재 승인 내용에 맞춰 고르려는 이유가 명확하다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/BRIEFING.md",
+                "quote": "파일 이름이나 수정 시각만 보고 고르면 예전 문서를 사용하거나 바뀐 도착지로 보낼 수 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "유효한 옛 서명과 현 배치 적용 판단의 역할을 대조한다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/BRIEFING.md",
+                "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다. 서명으로는\n문서 내용이 원문과 같은지 확인할 수 있다. 하지만 과거 승인본도 유효한 서명을\n가지고 있으므로, 서명 검증에 성공한 문서라고 해서 이번 납품에 써도 되는 것은 아니다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "공개키 신뢰, RSA/SHA-256 분리 서명, openssl 검증과 바이트 해시가 설명된다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/BRIEFING.md",
+                "quote": "`files/delivery.sig`와 `files/delivery-v2.sig`는 버전별 RSA/SHA-256 분리 서명이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "신뢰 채널 진술은 lab 설정으로 한정되고 검증 조건/변조·다른 키 대조가 기록 코드에 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Sender public key and approval policy delivered through the trusted lab channel."
+              },
+              {
+                "path": "challenges/signed-delivery/authoring/check.py",
+                "quote": "assert not verify(changed, public, signature)"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "신뢰 설정(출처/현재 revision), 검증 가능한 동작, 역사적 서명 주의가 분리된다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/files/trust-note.txt",
+                "quote": "A valid signature on revision 1 does not make it the current approved delivery."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "시작 자료와 선택 순서, 실행 템플릿, 정확한 해시 제출 규칙이 완결되어 있다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/BRIEFING.md",
+                "quote": "먼저 승인 안내를 읽고 현재 버전에 대응하는 서명을 고른다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "사본 검증에서 해시 제출까지 평이하고 정확하다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/BRIEFING.md",
+                "quote": "사본은 편집하지 않는다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/signed-delivery/BRIEFING.md",
+            "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Sender public key and approval policy delivered through the trusted lab channel."
+              }
+            ],
+            "verdict": "충족",
+            "reason": "신뢰 채널을 전제로 하는 명시적 실습 설정이며 현실의 신뢰를 주장하지 않는다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/BRIEFING.md",
+            "quote": "서명으로는\n문서 내용이 원문과 같은지 확인할 수 있다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/authoring/check.py",
+                "quote": "assert not verify(changed, public, signature)"
+              },
+              {
+                "path": "challenges/signed-delivery/authoring/check.py",
+                "quote": "assert len(copies) == 3 and {p.name for p in copies if verify(p, public, signature)} == {'copy-c.txt'}\nassert {p.name for p in copies if verify(p, public, files / 'delivery.sig')} == {'copy-b.txt'}"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "신뢰 공개키와 revision별 서명을 문서 bytes에 검증하는 범위에서 주장하고 변조 대조를 둔다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "승인 안내는 LAB-17의 버전 2와 delivery-v2.sig를 지정한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Approved batch: LAB-17. Approved revision: 2."
+              },
+              {
+                "path": "challenges/signed-delivery/files/trust-note.txt",
+                "quote": "signature=delivery-v2.sig"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "승인 파일에 기재된 현재 대상 설정이다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "서명 검증 명령이나 authoring checks를 실제 실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# Evidence first pass — signed-delivery\n\n- 검토자: evidence / gpt-6-luna\n- 읽기 단계: manifest와 브리핑·본문·선수 지식만 확인. 힌트·해설·구현·배포 정책·검사 자료는 아직 열지 않음.\n- 원문 상황과 질문: 수신 담당자가 승인 안내 및 공개키/분리 서명으로 현재 배치의 원문 사본을 확인하고 SHA-256을 제출한다. 과거 유효 서명과 변조 사본이 함께 있음을 사전 고지하며, 신뢰 노트→버전 서명 선택→사본 검증→해시 순서다.\n- 시작점: 해당 문제의 자료와 명시된 선수 지식으로 조사 시작.\n- 완료 증거: 본문에 적힌 제출 형식/산출물에 따름. 실제 완료 관찰은 아직 없음.\n- 첫 패스 모호점: 구현 및 대조 확인 전이므로 기술 동작의 실현 여부는 미확인. 현실 사고의 사실성이나 별도 정상 대조군을 요구하지 않음.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "signed-delivery",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/signed-delivery/challenge.toml",
+          "input/challenges/signed-delivery/README.md",
+          "input/challenges/signed-delivery/files/trust-note.txt",
+          "input/challenges/signed-delivery/hints/1.md",
+          "input/challenges/signed-delivery/hints/2.md",
+          "input/challenges/signed-delivery/solve/README.md",
+          "input/challenges/signed-delivery/solve/solve.sh",
+          "input/challenges/signed-delivery/AUTHORING.md",
+          "input/challenges/signed-delivery/authoring/validation.json",
+          "input/docs/text-review.md",
+          "input/knowledge/catalog.toml"
+        ],
+        "first_pass": "온전한서명은 납품 수신 담당자다. 현재/과거 승인 문서와 변경 사본이 섞여 이름/시각만으로 잘못 선택할 위험이 있다. 제공한 공개키/분리서명과 승인 안내를 써 현재 버전을 고르고 원문을 검증해 SHA-256을 제출한다. 키 신뢰 전제와 도구 구문까지 본문에 있다. 선수지식은 터미널과 분리 서명이다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "플레이어의 승인 안내 확인, 공개키 서명 검증, 원문 해시 제출 행동과 각 파일 대상을 알 수 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "승인 안내에서 현재 사용할 버전을 확인하고, 공개키로 서명을 검증해 그 버전의 원문을 찾자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "잘못된 버전/변경 도착지의 납품 위험과 현재 승인 원문 확인 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "예전 문서를 사용하거나 바뀐 도착지로 보낼 수 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "서명 성공과 현재 승인 여부의 차이, 승인 안내를 먼저 확인할 이유가 분명하게 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "서명 검증에 성공한 문서라고 해서 이번 납품에 써도 되는 것은 아니다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "공개키, RSA/SHA-256 분리 서명, 바이트 검증과 해시를 자료 및 실제 OpenSSL 구문에 대응시킨다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "openssl dgst -sha256 -verify files/sender-public.pem -signature files/선택한서명 files/copy-a.txt"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "신뢰한 안내가 버전-서명 대응을 제시하며, 해설의 검증 결과와 문서 바이트 해시는 작성자 검증 스크립트와 자료 설정에 대응한다. 독립 실행으로 주장하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 2 signature: delivery-v2.sig (current approval)."
+              },
+              {
+                "path": "input/challenges/signed-delivery/solve/solve.sh",
+                "quote": "openssl dgst -sha256 -verify"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "발신자/키 출처 신뢰는 실습 전제로, 서명 성공은 내용 진위로, 현 버전 선택은 승인 안내로 분리한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "A valid signature on revision 1 does not make it the current approved delivery."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "분리서명 선수지식을 제공 명령 및 출력 해석으로 보충하고, 승인 버전 식별부터 제출 해시까지 단계화한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "먼저 승인 안내를 읽고 현재 버전에 대응하는 서명을 고른다."
+              },
+              {
+                "path": "input/challenges/signed-delivery/hints/1.md",
+                "quote": "같은 공개키와 그 서명을 사용해 세 사본을 각각 검증한다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문서 승인과 파일 검증의 차이를 자연스럽고 구체적인 한국어로 설명하며 과도하게 중첩된 조건문이 없다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/README.md",
+                "quote": "검증을 통과한 파일에 `sha256sum 파일경로`를 실행한다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/signed-delivery/README.md",
+            "quote": "발신자는 버전별로 문서를 승인하고",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 1 signature: delivery.sig (previous genuine approval)."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 2 signature: delivery-v2.sig (current approval)."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "실습 안내에서 버전별 승인 사실로 설정한다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/README.md",
+            "quote": "문서 내용이 원문과 같은지 확인할 수 있다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/solve/README.md",
+                "quote": "바이트 변경을 구분할 수 있다."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "trusted public key assumption is explicitly stated; claim is about byte integrity under that trust."
+          },
+          {
+            "path": "input/challenges/signed-delivery/README.md",
+            "quote": "서명 검증에 성공한 문서라고 해서 이번 납품에 써도 되는 것은 아니다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "A valid signature on revision 1 does not make it the current approved delivery."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "승인 시점 선택과 서명 유효성은 별개임을 신뢰 안내가 명시한다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "과거 서명 delivery.sig에는 copy-b가, 현재 서명에는 copy-c가 통과한다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/AUTHORING.md",
+                "quote": "현재 버전의 서명에는 현재 원문만 통과함을 확인한다."
+              },
+              {
+                "path": "input/challenges/signed-delivery/authoring/validation.json",
+                "quote": "\"passed\": true"
+              }
+            ],
+            "verdict": "작성자 검증 보고에 한정",
+            "reason": "문서의 실행 사실을 해당 실습 검증 기록의 보고로 다룬다. 독립 검증으로 표현하지 않는다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "검증된 원문의 SHA-256은",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/solve/solve.sh",
+                "quote": "digest=$(sha256sum \"${valid[0]}\" | cut -d ' ' -f 1)"
+              }
+            ],
+            "verdict": "절차 근거 확인",
+            "reason": "제출 해시는 검증된 유일 사본의 정확한 파일 바이트에서 계산하도록 되어 있다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/README.md",
+            "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Sender public key and approval policy delivered through the trusted lab channel."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "문서가 외부 실세계 검증이 아닌 실습상의 신뢰 전제를 밝힌다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "해설의 검증 결과/해시를 독립 재실행하지 않았다. AUTHORING/validation은 작성자 기록으로만 취급한다.",
+          "이 기록은 문장 검토이며 점수 재채점이 아니다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — signed-delivery\n\n## 원문 상황\n온전한서명은 납품 문서 수신 담당자다. 발신자는 버전별 문서에 별도 서명을 하고, 묶음에는 과거 승인본/현재 승인본/변경 사본이 있어 이름이나 시각만으로 선택하면 낡거나 잘못된 도착지로 보낼 수 있다. 발신자 공개키와 서명 자료, 승인 안내를 받아 현재 승인 문서를 확인한다.\n\n## 질문·접근·완료\n승인 안내에서 배치/버전을 식별하고 제공된 공개키로 서명을 검증해 원문을 골라 해당 원문의 SHA-256을 제출한다. 자료명, 신뢰 전제, openssl 명령 틀, 각 사본 비교, 해시 형식과 파일명 제외 지침을 준다. 선수지식은 terminal-commands, detached-signatures이고 document-authenticity를 가르친다.\n\n## 누락·모호성\n원문과 서명의 역할, 과거 유효 서명만으로 현재 버전임을 알 수 없다는 핵심 질문, 완료 조건이 명확하다. 공개키 출처를 실습에서 신뢰한다고 전제하고, 승인 안내에서 버전을 먼저 고르도록 연결한다. 시작 행동과 제출 계산이 구체적이다.\n"
+    },
+    {
+      "role": "alternative",
+      "report": {
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/signed-delivery/BRIEFING.md",
+          "input/challenges/signed-delivery/README.md",
+          "input/challenges/signed-delivery/hints/1.md",
+          "input/challenges/signed-delivery/hints/2.md",
+          "input/challenges/signed-delivery/solve/README.md",
+          "input/challenges/signed-delivery/files/trust-note.txt",
+          "input/challenges/signed-delivery/files/copy-a.txt",
+          "input/challenges/signed-delivery/files/copy-b.txt",
+          "input/challenges/signed-delivery/files/copy-c.txt",
+          "input/challenges/signed-delivery/authoring/check.py",
+          "input/challenges/signed-delivery/authoring/validation.json",
+          "challenges/signed-delivery/challenge.toml"
+        ],
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "수신 담당자, 발신자, 문서 사본·공개키·서명 및 수행 작업이 이름 붙는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/BRIEFING.md",
+                "quote": "승인 안내에서 현재 사용할 버전을 확인하고, 공개키로 서명을 검증해 그 버전의 원문을 찾자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "버전/도착지 혼선 및 잘못된 배송 위험, 현재 승인본을 확인할 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/BRIEFING.md",
+                "quote": "파일 이름이나 수정 시각만 보고 고르면 예전 문서를 사용하거나 바뀐 도착지로 보낼 수 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "유효한 과거 서명과 현재 적용 버전을 명시적으로 구별하고 안내를 먼저 확인한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/BRIEFING.md",
+                "quote": "서명 검증에 성공한 문서라고 해서 이번 납품에 써도 되는 것은 아니다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "공개키·RSA/SHA-256 분리 서명, 사본 검증과 해시 명령을 구체적으로 제시한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/BRIEFING.md",
+                "quote": "`files/delivery.sig`와 `files/delivery-v2.sig`는 버전별 RSA/SHA-256 분리 서명이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "수정 필요",
+            "reason": "해설의 일반화된 문장은 서명 성공이 승인 의미 자체를 증명한다고 읽힌다. 검증은 신뢰한 키로 바이트가 서명됐음을 보이고, 승인 의미와 현행성은 trust-note의 배치/버전 대응을 함께 써야 한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/solve/README.md",
+                "quote": "서명 성공은 해당 내용에 대한 발신자의 승인을 보여 준다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "본문에서 키 신뢰 가정을 명시하고, 과거 승인본의 유효성 및 현재 버전 판단을 별도로 둔다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/BRIEFING.md",
+                "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "현재 버전 안내·자료·검증 명령·SHA-256 제출 규칙이 본문에 있고 정답을 숨긴다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/BRIEFING.md",
+                "quote": "먼저 승인 안내를 읽고 현재 버전에 대응하는 서명을 고른다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "작업 순서를 자연스러운 동사로 설명하며 복잡한 조건도 문맥에서 구분된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/BRIEFING.md",
+                "quote": "검증을 통과한 파일에 `sha256sum 파일경로`를 실행한다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "서명 성공은 해당 내용에 대한 발신자의 승인을 보여 준다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 1 signature: delivery.sig (previous genuine approval)."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 2 signature: delivery-v2.sig (current approval)."
+              }
+            ],
+            "verdict": "실습의 버전별 안내와 함께 읽을 때 뒷받침",
+            "reason": "이 실습 trust-note가 실제 서명들을 승인 artifact로 명시한다. 단, 서명 알고리즘 일반의 성질만으로 승인 의미나 최신성을 증명하는 것은 아니다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "승인 안내는 LAB-17의 버전 2와 delivery-v2.sig를 지정한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Approved batch: LAB-17. Approved revision: 2."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "signature=delivery-v2.sig"
+              }
+            ],
+            "verdict": "뒷받침됨",
+            "reason": "배포된 신뢰 안내에 같은 배치, 버전 및 서명 파일이 직접 기재된다."
+          },
+          {
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "유효한 과거 승인본도 현재 제출값은 아니다.",
+            "kind": "추론",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "A valid signature on revision 1 does not make it the current approved delivery."
+              }
+            ],
+            "verdict": "뒷받침됨",
+            "reason": "trust-note는 이전 revision 서명이 현재 승인을 의미하지 않는다고 명시한다."
+          }
+        ],
+        "findings": [
+          {
+            "ids": [
+              "T5"
+            ],
+            "path": "input/challenges/signed-delivery/solve/README.md",
+            "quote": "서명 성공은 해당 내용에 대한 발신자의 승인을 보여 준다.",
+            "reason": "암호학적 검증 성공만으로 문서의 의미가 승인이라고 판별되지는 않는다. 여기서는 trust-note가 각 서명을 실제 승인본과 연결하므로 결론이 성립하지만, 문장만 일반 원리처럼 읽으면 signature validity와 승인 의미를 혼동할 수 있다.",
+            "suggestion": "“이 실습에서는 승인 안내가 버전별 승인 서명을 지정한다. 안내에 맞는 서명이 통과하면 해당 바이트가 그 승인본과 일치한다.”처럼 승인 근거를 trust-note에 연결한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 2 signature: delivery-v2.sig (current approval)."
+              },
+              {
+                "path": "input/challenges/signed-delivery/files/trust-note.txt",
+                "quote": "A valid signature on revision 1 does not make it the current approved delivery."
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "실행·OpenSSL 검증은 수행하지 않았다. 체크 스크립트와 trust-note, 배포 파일을 정적으로 대조하고 validation.json의 기록 상태만 읽었다."
+        ],
+        "slug": "signed-delivery",
+        "reviewer": "alternative",
+        "model": "gpt-6-luna",
+        "first_pass": "# Alternative-paths first pass — signed-delivery\n\nRead before hints, walkthrough, or implementation. Sources: BRIEFING.md only (including supplied resources/instructions).\n\n- Relationship: Onjeonhanseom receives delivery documents from a sender; asks the guild to select the currently approved copy from mixed historical/current/modified copies.\n- Desired decision: establish current batch/version from approval note first; use sender public key and matching detached signature to verify which copy is byte-identical to a signed original; hash that original and submit SHA-256.\n- Trust assumptions stated: public key's source is accepted as sender's for this exercise; private keys are not real operational keys. An old signed copy may still verify, so signature validity alone does not establish current approval.\n- Alternative readings to check later: “발신자에게 확인한 공개키” is treated as trusted by an explicit exercise premise, not independently proven provenance. “원문” could be understood as any signed copy; version note is necessary to scope it to current original. A valid detached signature authenticates bytes under the trusted key but does not prove freshness or destination correctness absent the approval note.\n- Missing at this stage: note contents, which signature maps to which version, which candidate copy passes each signature, and actual hash.\n"
+      },
+      "first_pass_artifact": "# Alternative-paths first pass — signed-delivery\n\nRead before hints, walkthrough, or implementation. Sources: BRIEFING.md only (including supplied resources/instructions).\n\n- Relationship: Onjeonhanseom receives delivery documents from a sender; asks the guild to select the currently approved copy from mixed historical/current/modified copies.\n- Desired decision: establish current batch/version from approval note first; use sender public key and matching detached signature to verify which copy is byte-identical to a signed original; hash that original and submit SHA-256.\n- Trust assumptions stated: public key's source is accepted as sender's for this exercise; private keys are not real operational keys. An old signed copy may still verify, so signature validity alone does not establish current approval.\n- Alternative readings to check later: “발신자에게 확인한 공개키” is treated as trusted by an explicit exercise premise, not independently proven provenance. “원문” could be understood as any signed copy; version note is necessary to scope it to current original. A valid detached signature authenticates bytes under the trusted key but does not prove freshness or destination correctness absent the approval note.\n- Missing at this stage: note contents, which signature maps to which version, which candidate copy passes each signature, and actual hash.\n"
+    },
+    {
+      "role": "tooling",
+      "report": {
+        "slug": "signed-delivery",
+        "reviewer": "tooling",
+        "model": "gpt-6-luna",
+        "scope": [
+          "docs/text-review.md",
+          "docs/contract.md",
+          "challenges/signed-delivery/BRIEFING.md",
+          "challenges/signed-delivery/README.md",
+          "challenges/signed-delivery/challenge.toml",
+          "knowledge/terminal-commands.md",
+          "knowledge/detached-signatures.md",
+          "challenges/signed-delivery/files/trust-note.txt",
+          "challenges/signed-delivery/authoring/check.py",
+          "challenges/signed-delivery/authoring/build.py",
+          "challenges/signed-delivery/hints/1.md",
+          "challenges/signed-delivery/hints/2.md",
+          "challenges/signed-delivery/solve/README.md",
+          "docs/cli-tooling.md",
+          "docs/player-content.md",
+          "docs/learning-map.md",
+          "challenges/signed-delivery/AUTHORING.md"
+        ],
+        "first_pass": "# Tooling first pass — signed-delivery\n\nScope read before hints/solve/implementation: `challenges/signed-delivery/BRIEFING.md`, `README.md` (player text and embedded prerequisite knowledge), `challenge.toml`, and `docs/text-review.md` (T1–T8 review standard). No hint, solve, authoring, implementation, validation, or quality result was used for this first pass.\n\n- Situation: recipient has several delivery copies, old and current approvals, and a modified copy; the trusted public key and detached signatures are supplied. Player should identify the current batch/version from the trust note, verify the corresponding signature against copies, and hash the verified original.\n- Declared starting ability: terminal commands and detached signatures; files and terminal; manifest lists `openssl` as CLI tool.\n- Initial tooling check: file paths and OpenSSL signature syntax are explicit, and SHA-256 output extraction is explained. README invokes `sha256sum`, but challenge.toml's `player.cli` lists only `openssl`; this appears to be a command/tool declaration mismatch to verify against terminal contract. Need inspect actual trust note, signature/copy pairing and solve/check sources later. The key's provenance is deliberately stipulated by the scenario.\n- Provisional T1–T8: T1 충족; T2 충족; T3 충족; T4 수정 필요 pending manifest/tool comparison (`sha256sum` omitted from declared CLI); T5 미확인 (fixtures and signature mapping not checked); T6 충족; T7 충족 pending tool feasibility; T8 충족.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "수신 담당자, 발신자의 문서, 사본과 서명 검증 행동이 특정된다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "온전한서명은 발신자에게 확인한 공개키와 문서별 서명 파일을 길드에 맡겼다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "오래된 승인본/변경본의 위험과 현재 승인본 선택 과제가 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "파일 이름이나 수정 시각만 보고 고르면 예전 문서를 사용하거나 바뀐 도착지로 보낼 수 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "현재 version 확인 후 서명 검증, then hash로 단계의 이유가 분리된다.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "승인 안내에서 이번에 사용할 배치와 버전을 먼저 확인하자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "실제 files, RSA/SHA-256 detached signature, OpenSSL invocation and SHA-256 output are named.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "`files/delivery.sig`와 `files/delivery-v2.sig`는 버전별 RSA/SHA-256 분리 서명이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "trust-note explicitly identifies revision 2 and its signature; authoring checker maps that signature to copy-c and older signature to copy-b.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Revision 2 signature: delivery-v2.sig (current approval)."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "Public key trust is stipulated for this exercise; current-version approval is separately derived from trusted approval note and signature validation.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "수정 필요",
+            "reason": "The visible terminal path needs `openssl` and `sha256sum`, but manifest CLI advertises only `openssl`; contract defines cli as the list of learner investigation commands, so metadata omits one explicit required command. Runtime availability itself is not proven absent.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "sha256sum 문서.txt`는 파일의 정확한 바이트를 해시하고 뒤에 파일명을 출력한다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "The procedural instructions use familiar verbs and explain the distinction between authentication and current approval.",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "현재 사용할 버전을"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/signed-delivery/README.md",
+            "quote": "`files/sender-public.pem`은 발신자의 공개키다. 이 실습에서는 키의 출처를 확인한 것으로 본다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/files/trust-note.txt",
+                "quote": "Sender public key and approval policy delivered through the trusted lab channel."
+              }
+            ],
+            "verdict": "충족: explicit lab assumption; no claim of external production key verification.",
+            "reason": "trust-note says key/policy were delivered via trusted lab channel and README states this is a scenario stipulation; supplied key is named in manifest."
+          },
+          {
+            "path": "challenges/signed-delivery/README.md",
+            "quote": "분리 서명은 문서와 서명을 서로 다른 파일에 담는 방식이다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/authoring/check.py",
+                "quote": "subprocess.run(['openssl', 'dgst', '-sha256', '-verify', str(public), '-signature', str(signature), str(document)], capture_output=True)"
+              }
+            ],
+            "verdict": "충족: command form is the check used by the prepared authoring checker.",
+            "reason": "authoring checker invokes this exact OpenSSL subcommand to test copies; signature algorithm and key type are described in trust note."
+          },
+          {
+            "path": "challenges/signed-delivery/README.md",
+            "quote": "`sha256sum 문서.txt`는 파일의 정확한 바이트를 해시하고 뒤에 파일명을 출력한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "sha256sum 문서.txt`는 파일의 정확한 바이트를 해시하고 뒤에 파일명을 출력한다."
+              },
+              {
+                "path": "challenges/signed-delivery/challenge.toml",
+                "quote": "cli = [\"openssl\"]"
+              },
+              {
+                "path": "docs/contract.md",
+                "quote": "`cli` is required in version 6 and contains up to 32 unique primary learner CLI command names."
+              }
+            ],
+            "verdict": "수정 필요: add sha256sum to declared cli inventory; do not claim terminal lacks it.",
+            "reason": "README and walkthrough require sha256sum; manifest CLI lists only openssl. Contract says cli declares learner commands, not full image inventory. This is a discoverability metadata gap, not proof the command is unavailable."
+          }
+        ],
+        "findings": [
+          {
+            "ids": [
+              "T7"
+            ],
+            "path": "challenges/signed-delivery/challenge.toml",
+            "quote": "cli = [\"openssl\"]",
+            "reason": "Player instructions use `sha256sum` as a required final command, but the manifest’s learner CLI list names only OpenSSL. The contract says CLI metadata lists commands learners use to investigate; omission makes declared tooling incomplete. This does not establish that the shell lacks sha256sum.",
+            "suggestion": "Declare `cli = [\"openssl\", \"sha256sum\"]` (or make the digest step use a declared command while preserving the instructed exact-byte hash).",
+            "evidence": [
+              {
+                "path": "challenges/signed-delivery/README.md",
+                "quote": "`sha256sum 문서.txt`는 파일의 정확한 바이트를 해시하고 뒤에 파일명을 출력한다."
+              },
+              {
+                "path": "docs/contract.md",
+                "quote": "`cli` is required in version 6 and contains up to 32 unique primary learner CLI command names."
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "Read-only static review of the supplied repository snapshot. No target service, player terminal, challenge command, test or verification process was executed. Runtime-only observations are therefore not independently confirmed.",
+          "Exact excerpts are checked against the snapshot files by the companion quote-validation script."
+        ]
+      },
+      "first_pass_artifact": "# Tooling first pass — signed-delivery\n\nScope read before hints/solve/implementation: `challenges/signed-delivery/BRIEFING.md`, `README.md` (player text and embedded prerequisite knowledge), `challenge.toml`, and `docs/text-review.md` (T1–T8 review standard). No hint, solve, authoring, implementation, validation, or quality result was used for this first pass.\n\n- Situation: recipient has several delivery copies, old and current approvals, and a modified copy; the trusted public key and detached signatures are supplied. Player should identify the current batch/version from the trust note, verify the corresponding signature against copies, and hash the verified original.\n- Declared starting ability: terminal commands and detached signatures; files and terminal; manifest lists `openssl` as CLI tool.\n- Initial tooling check: file paths and OpenSSL signature syntax are explicit, and SHA-256 output extraction is explained. README invokes `sha256sum`, but challenge.toml's `player.cli` lists only `openssl`; this appears to be a command/tool declaration mismatch to verify against terminal contract. Need inspect actual trust note, signature/copy pairing and solve/check sources later. The key's provenance is deliberately stipulated by the scenario.\n- Provisional T1–T8: T1 충족; T2 충족; T3 충족; T4 수정 필요 pending manifest/tool comparison (`sha256sum` omitted from declared CLI); T5 미확인 (fixtures and signature mapping not checked); T6 충족; T7 충족 pending tool feasibility; T8 충족.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "ids": [
+      "T4",
+      "T5",
+      "T6",
+      "T8"
+    ],
+    "note": "같은 신뢰한 공개키라는 어색한 표현을 제공받은 공개키로 고쳤다. 서명 성공만으로 업무 승인을 일반화하지 않고, 이 실습의 승인 안내가 지정한 버전·서명과의 일치로 설명했다.",
+    "evidence": [
+      {
+        "path": "challenges/signed-delivery/files/trust-note.txt",
+        "quote": "Revision 2 signature: delivery-v2.sig (current approval)."
+      }
+    ],
+    "decision": "추가 alternative의 승인 의미 범위 지적을 채택했다. tooling의 sha256sum 미선언을 도구 부재로 해석하지 않았다. docs/contract.md의 cli는 모든 명령이 아닌 primary learner 명령 목록이고 OpenSSL은 주된 서명 검증 도구다. 이번 문장 검토에서 manifest 변경은 하지 않았다."
+  },
+  "changed_files": [
+    "challenges/signed-delivery/solve/README.md"
+  ],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 5,
+    "reason": "부모가 확인한 문장 오류를 기본 심사에서 놓쳤거나 선수 설명에 이견이 있어 대안 풀이와 도구·환경 관점을 추가했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

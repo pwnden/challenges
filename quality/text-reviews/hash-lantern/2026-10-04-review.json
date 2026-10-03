@@ -1,0 +1,850 @@
+{
+  "slug": "hash-lantern",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "289f0ae47d5698ef9254a709b1367a3bbc18f5ab8cd2b9bb596ccbee77db8c22",
+  "source_sha256_after": "b23e2ed89e4185bc32cb6ecec1aca36cda72e1d55db54e280db14124771b7666",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "hash-lantern",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/hash-lantern/challenge.toml",
+          "input/challenges/hash-lantern/BRIEFING.md",
+          "input/challenges/hash-lantern/README.md",
+          "input/challenges/hash-lantern/files/account.txt",
+          "input/challenges/hash-lantern/files/candidates.txt",
+          "input/challenges/hash-lantern/solve/README.md",
+          "input/challenges/hash-lantern/AUTHORING.md",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/hashing.md",
+          "input/knowledge/candidate-cost.md"
+        ],
+        "first_pass": "백업 장치 소유자는 계정 기록과 후보 6개를 제공했다. account 파일의 저장 해시와 후보별 SHA-256 결과를 대조해 비밀번호를 찾고 pwnden{...}로 제출한다. cat, printf, 파이프와 sha256sum 사용법이 본문에 있다. 빠진 정보 없음.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "의뢰인, 장치, 계정 기록, 후보를 확인할 플레이어 행동이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/README.md",
+                "quote": "여섯 후보 중 어느 것이 이 계정의 비밀번호인지 확인해 보자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "로그인 복구라는 이유와 후보 비교라는 질문이 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "오래된 백업 장치에 다시 로그인하려고 한다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "저장 해시 설명에서 후보를 동일 방식으로 계산해 비교하는 절차로 자연스럽게 이어진다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/README.md",
+                "quote": "저장된 값과 비교할 수 있다. 이 장치는 SHA-256으로 계산한다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "해시와 SHA-256을 후보 입력/계정 저장값 비교 동작으로 풀어 설명하고 명령도 제공한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/README.md",
+                "quote": "printf '%s' '후보' | sha256sum"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "문제 본문은 기록 파일과 계산 결과의 비교를 요구하며 실제 실행 결과를 단정하지 않는다. 해설의 후보와 설명은 자료 및 작성자 검토 범위에 연결되어 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/solve/README.md",
+                "quote": "후보마다 `printf '%s' '후보' | sha256sum`을 실행한다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "약한 저장 방식은 실험의 대상이며 실제 비밀번호 보호 원칙은 지식/해설에서 별도로 설명한다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/hashing.md",
+                "quote": "실제 비밀번호 저장에는 후보 대입 비용을 높이는 전용 비밀번호 해시 함수와"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 터미널·해시 지식에 맞는 시작 명령, 비교할 값, 제출 모양이 주어진다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/README.md",
+                "quote": "찾은 비밀번호를 `pwnden{비밀번호}`로 감싸 제출하자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문장이 짧고 실제 조작을 익숙한 동사로 안내한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/README.md",
+                "quote": "출력 왼쪽의 64글자를 account.txt의 password_hash와 비교하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/hash-lantern/README.md",
+            "quote": "같은 비밀번호를 같은 방식으로 계산하면 같은 결과가 나오므로, 후보를 하나씩 계산해",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "input/knowledge/hashing.md",
+                "quote": "같은 입력은 같은 결과를 만들며"
+              },
+              {
+                "path": "input/challenges/hash-lantern/files/account.txt",
+                "quote": "algorithm=SHA-256"
+              }
+            ],
+            "verdict": "자료·선수지식 설명과 일치한다.",
+            "reason": "해시는 역변환 대신 후보 입력을 비교하는 방법이라는 한계를 포함해 설명한다."
+          },
+          {
+            "path": "input/challenges/hash-lantern/solve/README.md",
+            "quote": "일치하는 값은 `rainboat27`이다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/files/candidates.txt",
+                "quote": "rainboat27"
+              },
+              {
+                "path": "input/challenges/hash-lantern/AUTHORING.md",
+                "quote": "검증 풀이가 실제 이미지의 sha256sum을 호출해 유일한 후보와 선언한 제출 해시를 확인했다."
+              }
+            ],
+            "verdict": "작성자 검증 설명과 배포 파일에 연결된 해설 claim이다.",
+            "reason": "이번 검토에서는 명령을 실행하거나 학습자 성공을 주장하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "명령 실행 및 학습자 관찰은 수행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — hash-lantern\n\n의뢰인은 오래된 백업 장치에 다시 로그인하려 하지만 비밀번호를 기억하지 못한다. 후보 여섯 개와 계정 정보 파일을 받았다. 계정 정보에는 비밀번호 대신 SHA-256 해시가 있고, 후보를 같은 방식으로 계산해 저장값과 비교한다. `files/account.txt`와 `files/candidates.txt`를 `cat`으로 읽고 `printf '%s' '후보' | sha256sum`의 왼쪽 결과를 비교하면 된다. 일치한 원문 비밀번호를 `pwnden{...}` 형식으로 제출한다.\n\n선수지식은 `terminal-commands`, `hashing`이다. 본문만으로 입력을 줄바꿈 없이 해시해야 하는 점, 후보를 모두 비교할 수 있다는 점, 제출 형식은 분명하다. 누락 정보 없음.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "hash-lantern",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/hash-lantern/challenge.toml",
+          "challenges/hash-lantern/BRIEFING.md",
+          "challenges/hash-lantern/README.md",
+          "challenges/hash-lantern/AUTHORING.md",
+          "challenges/hash-lantern/files/account.txt",
+          "challenges/hash-lantern/files/candidates.txt",
+          "challenges/hash-lantern/solve/README.md",
+          "challenges/hash-lantern/solve/solve.py",
+          "challenges/hash-lantern/authoring/build.py",
+          "docs/text-review.md",
+          "docs/authoring-standard.md",
+          "docs/player-content.md",
+          "knowledge/terminal-commands.md",
+          "knowledge/hashing.md",
+          "evidence-first.md"
+        ],
+        "first_pass": "# First pass: hash-lantern\n\n**읽은 범위(첫 단계):** `input/challenges/hash-lantern/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 모루17은 오래된 백업 장치에 다시 로그인하려 하나 비밀번호를 잊었다. 예전 후보 여섯 개와 로그인 계정 기록이 남아 있다.\n- **질문:** 계정 기록에 저장된 해시를 후보들 중 어떤 값이 만들어내는가?\n- **시작:** `files/account.txt`와 `files/candidates.txt`를 `cat`으로 읽고 각 후보를 `printf '%s' ... | sha256sum`으로 계산해 저장 해시와 대조한다.\n- **완료:** 맞는 비밀번호를 `pwnden{...}` 형식으로 제출.\n- **불명확한 점:** 첫 단계 자료만 보면 기록에 후보와 같은 해시 방식이 적용됐다는 설명은 있으나 실제 파일의 내용은 아직 확인하지 않았다. 제출 형식은 명시적이다.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "모루17, 백업 장치 계정, 후보 여섯 개와 해시 대조 행동이 식별된다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/BRIEFING.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              },
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "잊은 비밀번호와 남은 후보·계정 기록이 조사 이유와 질문을 잇는다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/BRIEFING.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "해시 설명에서 후보 계산, 저장값 비교로 자연스럽게 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "SHA-256, salt, 후보 해시가 account.txt 및 printf/sha256sum 작업과 대응한다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              },
+              {
+                "path": "challenges/hash-lantern/files/account.txt",
+                "quote": "account=backup-reader"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설은 후보 비교로 확인한 범위를 말한다. 계정 자료·생성기·풀이가 알고리즘, UTF-8, salt 없음 및 유일 후보를 뒷받침한다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/solve/README.md",
+                "quote": "1. account.txt에서 계산 방식이 SHA-256인지 확인한다. UTF-8은 글자를 바이트로"
+              },
+              {
+                "path": "challenges/hash-lantern/solve/solve.py",
+                "quote": "\"\"\"Use the same sha256sum executable supplied to the player.\"\"\""
+              },
+              {
+                "path": "challenges/hash-lantern/authoring/build.py",
+                "quote": "\"\"\"Rebuild the unsalted-hash teaching evidence.\"\"\""
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "약한 저장 방식의 보안 교훈은 해설의 원리로 두고, 본문은 장치 설정을 문제 자료로 소개한다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              },
+              {
+                "path": "challenges/hash-lantern/solve/README.md",
+                "quote": "1. account.txt에서 계산 방식이 SHA-256인지 확인한다. UTF-8은 글자를 바이트로"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 도구·자료·구체적 계산법과 비교 대상, 제출 형식이 본문에 있다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/challenge.toml",
+                "quote": "slug = \"hash-lantern\""
+              },
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "짧고 행동 중심의 문장으로 계산·비교를 설명하며 기술 용어를 바로 풀어 쓴다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "백업 장치의 비밀번호를 잊어버렸어요. 예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요. 어떤 비밀번호가 맞는지 찾아 줄래요?"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/hash-lantern/README.md",
+            "quote": "같은 비밀번호를 같은 방식으로 계산하면 같은 결과가 나오므로, 후보를 하나씩 계산해\n저장된 값과 비교할 수 있다. 이 장치는 SHA-256으로 계산한다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "같은 비밀번호를 같은 방식으로 계산하면 같은 결과가 나오므로, 후보를 하나씩 계산해\n저장된 값과 비교할 수 있다. 이 장치는 SHA-256으로 계산한다."
+              }
+            ],
+            "verdict": "주어진 계정 기록에 대한 계산·대조 방법으로 타당하다.",
+            "reason": "주어진 계정 기록에 대한 계산·대조 방법으로 타당하다."
+          },
+          {
+            "path": "challenges/hash-lantern/solve/README.md",
+            "quote": "후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/solve/README.md",
+                "quote": "후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다."
+              }
+            ],
+            "verdict": "배포 자료에서 이 후보 목록만 대조한 결과로 범위가 한정되어 있다.",
+            "reason": "배포 자료에서 이 후보 목록만 대조한 결과로 범위가 한정되어 있다."
+          },
+          {
+            "path": "challenges/hash-lantern/solve/README.md",
+            "quote": "SHA-256처럼 빠른 계산을 한 번만 적용하면 많은 후보도 빠르게 비교할 수 있다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/solve/README.md",
+                "quote": "SHA-256처럼 빠른 계산을 한 번만 적용하면 많은 후보도 빠르게 비교할 수 있다."
+              }
+            ],
+            "verdict": "성능 수치·모든 비밀번호 복원 주장이 아니다. 다만 “많은”은 정량 범위를 주지 않는 일반 설명이다.",
+            "reason": "성능 수치·모든 비밀번호 복원 주장이 아니다. 다만 “많은”은 정량 범위를 주지 않는 일반 설명이다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "학습자 독립 관찰은 AUTHORING.md에서 대기 상태로 기록되어 있다. 이 검토에서 실행·성능 측정은 하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: hash-lantern\n\n**읽은 범위(첫 단계):** `input/challenges/hash-lantern/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 모루17은 오래된 백업 장치에 다시 로그인하려 하나 비밀번호를 잊었다. 예전 후보 여섯 개와 로그인 계정 기록이 남아 있다.\n- **질문:** 계정 기록에 저장된 해시를 후보들 중 어떤 값이 만들어내는가?\n- **시작:** `files/account.txt`와 `files/candidates.txt`를 `cat`으로 읽고 각 후보를 `printf '%s' ... | sha256sum`으로 계산해 저장 해시와 대조한다.\n- **완료:** 맞는 비밀번호를 `pwnden{...}` 형식으로 제출.\n- **불명확한 점:** 첫 단계 자료만 보면 기록에 후보와 같은 해시 방식이 적용됐다는 설명은 있으나 실제 파일의 내용은 아직 확인하지 않았다. 제출 형식은 명시적이다.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "hash-lantern",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/hash-lantern/challenge.toml",
+          "input/challenges/hash-lantern/BRIEFING.md",
+          "input/challenges/hash-lantern/README.md",
+          "input/challenges/hash-lantern/AUTHORING.md",
+          "input/challenges/hash-lantern/hints: none declared",
+          "input/challenges/hash-lantern/solve/README.md",
+          "input/challenges/hash-lantern/solve/solve.py",
+          "input/challenges/hash-lantern/files/account.txt",
+          "input/challenges/hash-lantern/files/candidates.txt",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/hashing.md"
+        ],
+        "first_pass": "모루17은 오래된 백업 장치에 다시 로그인하려 하지만 비밀번호를 잊었다. 예전 비밀번호 후보 여섯 개와 계정 정보가 남아 있다. 계정 정보에는 비밀번호 자체 대신 SHA-256 결과가 저장된다고 안내한다. 플레이어는 account.txt의 저장 해시와 후보 파일의 값을 확인하고 각 후보를 sha256sum으로 계산해 일치하는 것을 고르면 된다. 완료는 그 비밀번호를 pwnden{...} 형식으로 제출하는 것이다. 시작 명령, 필요한 자료, 비교 방법이 명시되어 있고 제출 형식도 알 수 있다. 비밀번호가 필요한 이유는 재로그인으로 제시된다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "행위자, 장치, 후보 파일과 해시 비교 행동이 식별된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "후보 하나의 SHA-256은 아래 명령의 `후보`를 실제 값으로 바꿔 확인한다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "재로그인하려는 상황과 잊은 비밀번호를 찾는 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "장치에는 비밀번호를 확인할 때 사용하는 계정 정보도 남아 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "계정 기록의 저장값을 후보별 계산 결과와 비교한다는 연결이 일관된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "같은 비밀번호를 같은 방식으로 계산하면 같은 결과가 나오므로, 후보를 하나씩 계산해"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "해시를 계산 결과로 풀어 설명하고 SHA-256 및 sha256sum을 실제 조작과 연결한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "장치는 계정 정보에 비밀번호 자체를 저장하지 않고 **해시**라는 계산 결과를 저장한다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "SHA-256·salt 없음·후보 일치는 입력 자료 및 해설 절차와 풀이 코드에서 확인된다. 과거 실행을 본 검토에서 재실행한 것으로 주장하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/solve/solve.py",
+                "quote": "assert account['algorithm'] == 'SHA-256' and account['encoding'] == 'UTF-8' and account['salt'] == 'none'"
+              },
+              {
+                "path": "input/challenges/hash-lantern/solve/README.md",
+                "quote": "후보마다 `printf '%s' '후보' | sha256sum`을 실행한다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "저장 형식의 취약성은 실험에서 확인할 사실로, 실제 보호 권고는 별도 항목으로 나뉜다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/hashing.md",
+                "quote": "실제 비밀번호 저장에는 후보 대입 비용을 높이는 전용 비밀번호 해시 함수와"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 지식, 자료, 명령, 비교 대상과 제출 형식이 주어지며 정답 후보를 본문에 공개하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/challenge.toml",
+                "quote": "requires = [\"terminal-commands\",\"hashing\"]"
+              },
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "찾은 비밀번호를 `pwnden{비밀번호}`로 감싸 제출하자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문장은 자연스럽고 계산·비교 행동을 구체적인 동사로 안내한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "출력 왼쪽의 64글자를 account.txt의 password_hash와 비교하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/hash-lantern/BRIEFING.md",
+            "quote": "이 장치는 SHA-256으로 계산한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/files/account.txt",
+                "quote": "algorithm=SHA-256"
+              },
+              {
+                "path": "input/challenges/hash-lantern/solve/solve.py",
+                "quote": "account['algorithm'] == 'SHA-256'"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "계정 자료와 풀이 전제가 같은 알고리즘을 명시한다."
+          },
+          {
+            "path": "input/challenges/hash-lantern/solve/README.md",
+            "quote": "후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/files/candidates.txt",
+                "quote": "rainboat27"
+              },
+              {
+                "path": "input/challenges/hash-lantern/solve/solve.py",
+                "quote": "for candidate in candidates:"
+              }
+            ],
+            "verdict": "범위 적절",
+            "reason": "해당 자료에서 후보 전부를 대조하는 풀이 절차를 설명한다."
+          },
+          {
+            "path": "input/challenges/hash-lantern/solve/README.md",
+            "quote": "일치하는 값은 `rainboat27`이다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/solve/solve.py",
+                "quote": "print('pwnden{' + matches[0] + '}')"
+              }
+            ],
+            "verdict": "작성자 해설의 정답 표기",
+            "reason": "사용자 본문에는 답을 노출하지 않는다. 본 검토에서 별도 실행은 하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 명령 실행이나 학습자 관찰은 수행하지 않았다. AUTHORING.md의 검증·리뷰 상태는 작성 기록으로만 취급했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: hash-lantern\n\n읽은 자료: `input/challenges/hash-lantern/challenge.toml`, `BRIEFING.md`, `README.md`만. 힌트·해설·구현은 아직 열지 않았다.\n\n모루17은 오래된 백업 장치에 다시 로그인하려 하지만 비밀번호를 잊었다. 예전 비밀번호 후보 여섯 개와 계정 정보가 남아 있다. 계정 정보에는 비밀번호 자체 대신 SHA-256 결과가 저장된다고 안내한다. 플레이어는 `account.txt`의 저장 해시와 후보 파일의 값을 확인하고 각 후보를 `sha256sum`으로 계산해 일치하는 것을 고르면 된다. 완료는 그 비밀번호를 `pwnden{...}` 형식으로 제출하는 것이다.\n\n시작 명령, 필요한 자료, 비교 방법이 명시되어 있어 시작점은 분명하다. 제출 형식도 알 수 있다. 여섯 개 후보 중 하나가 실제 계정 비밀번호라고 본문은 전제하지만, 자료를 보기 전에는 후보와 계정 정보 사이의 대응은 아직 확인할 수 없다. 사건에서 비밀번호가 필요한 이유는 재로그인으로 제시된다.\n"
+    },
+    {
+      "role": "alternative",
+      "report": {
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/hash-lantern/BRIEFING.md",
+          "input/challenges/hash-lantern/README.md",
+          "input/challenges/hash-lantern/solve/README.md",
+          "input/challenges/hash-lantern/authoring/build.py",
+          "input/challenges/hash-lantern/files/account.txt",
+          "input/challenges/hash-lantern/files/candidates.txt",
+          "input/challenges/hash-lantern/solve/solve.py",
+          "challenges/hash-lantern/challenge.toml"
+        ],
+        "criteria": {
+          "T1": {
+            "status": "수정 필요",
+            "reason": "첫 의뢰 메시지의 “로그인 기록”은 통상 과거 접속 이력을 뜻하지만 조사 자료는 비밀번호 검증용 계정 정보다. 바로 뒤 본문이 이를 좁히지만 첫 문장은 잘못된 자료 유형을 예상시킨다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "비밀번호 복구 요청, 후보 목록과 저장 해시 비교가 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "기록의 해시와 일치하는 비밀번호를 찾아 제출하자."
+              }
+            ]
+          },
+          "T3": {
+            "status": "수정 필요",
+            "reason": "메시지의 “로그인 기록”과 뒤의 “계정 정보”가 서로 다른 자료 종류를 가리키는 듯 읽힌다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "장치에는 비밀번호를 확인할 때 사용하는 계정 정보도 남아 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "본문은 해시/SHA-256과 후보별 계산·저장값 비교를 지정하고 account.txt가 UTF-8 및 salt=none을 제공한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/files/account.txt",
+                "quote": "encoding=UTF-8"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "SHA-256, UTF-8, salt 부재, 저장 해시 및 후보값이 파일로 제공된다. 풀이의 일치 결과는 같은 바이트 입력을 비교한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/files/account.txt",
+                "quote": "password_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "본문은 계정의 해시 저장 사실과 일반 해시의 동작을 설명하고, 해설에서 실제 후보 실험과 실제 비밀번호 저장 권고를 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/README.md",
+                "quote": "실제 비밀번호 저장에는 후보 대입 비용을 높이는 전용 비밀번호 해시 함수와"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "여섯 후보·두 파일·명령·제출 형식과 필요한 SHA-256 개념이 제공된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "후보 하나의 SHA-256은 아래 명령의 `후보`를 실제 값으로 바꿔 확인한다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "수정 필요",
+            "reason": "“로그인 기록”은 흔히 접속 시각/성공 실패 기록으로 이해되어 대사와 자료 목록의 자연스러운 연결을 방해한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/hash-lantern/BRIEFING.md",
+            "quote": "장치는 계정 정보에 비밀번호 자체를 저장하지 않고 **해시**라는 계산 결과를 저장한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/files/account.txt",
+                "quote": "password_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f"
+              },
+              {
+                "path": "input/challenges/hash-lantern/files/account.txt",
+                "quote": "algorithm=SHA-256"
+              }
+            ],
+            "verdict": "뒷받침됨",
+            "reason": "배포된 account.txt identifies a stored password_hash and SHA-256 algorithm."
+          },
+          {
+            "path": "input/challenges/hash-lantern/solve/README.md",
+            "quote": "일치하는 값은 `rainboat27`이다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/files/candidates.txt",
+                "quote": "rainboat27"
+              },
+              {
+                "path": "input/challenges/hash-lantern/solve/solve.py",
+                "quote": "result = subprocess.run(['sha256sum'], input=candidate.encode(), capture_output=True, check=True, timeout=5)"
+              }
+            ],
+            "verdict": "정적 자료와 풀이 구현이 뒷받침",
+            "reason": "해설은 UTF-8 후보 바이트를 sha256sum에 공급하고 password_hash와 비교하도록 작성됐다. 실행 결과 자체는 여기서 재현하지 않았다."
+          }
+        ],
+        "findings": [
+          {
+            "ids": [
+              "T1",
+              "T3",
+              "T8"
+            ],
+            "path": "input/challenges/hash-lantern/BRIEFING.md",
+            "quote": "예전에 쓰던 비밀번호 여섯 개와 장치의 로그인 기록은 남아 있어요.",
+            "reason": "일반적으로 “로그인 기록”은 로그인 사건의 이력을 뜻한다. 실제 자료는 로그인 이력이 아니라 계정의 SHA-256 비밀번호 해시이며 다음 문단이 용어를 바꾸어 설명한다.",
+            "suggestion": "“예전에 쓰던 비밀번호 여섯 개와 장치의 계정 정보는 남아 있어요.” 또는 “비밀번호 대조에 쓰는 계정 정보”로 자료 유형을 맞춘다.",
+            "evidence": [
+              {
+                "path": "input/challenges/hash-lantern/BRIEFING.md",
+                "quote": "장치에는 비밀번호를 확인할 때 사용하는 계정 정보도 남아 있다."
+              },
+              {
+                "path": "input/challenges/hash-lantern/files/account.txt",
+                "quote": "password_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f"
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "실행하지 않았다. static account/candidate files and solve script were read; exact matching output was not independently rerun."
+        ],
+        "slug": "hash-lantern",
+        "reviewer": "alternative",
+        "model": "gpt-6-luna",
+        "first_pass": "# Alternative-paths first pass — hash-lantern\n\nRead before hints, walkthrough, or implementation. Sources: BRIEFING.md only (including supplied resources/instructions).\n\n- Relationship: moru17 wants help regaining access to an old backup device; supplies six remembered prior passwords and account records.\n- Protected/target data: the account record stores a password hash rather than the password; goal is to identify which supplied candidate matches.\n- Task/evidence: read account and candidates, SHA-256 each candidate exactly (without added newline), compare the 64-character output with stored password hash, submit matching password wrapped as flag.\n- Alternative readings to check later: “로그인 기록” in the user's message can mean login history, while body says account information used to check a password; could falsely imply historical login events. “이 장치는 SHA-256으로 계산한다” can be read as a specific single SHA-256 of candidate, but exact encoding/normalization/storage format is not stated yet. Six candidates likely finite exhaustive set, but only if file contents and hash match as described.\n- Missing at this stage: actual stored hash and candidate values; whether stored record includes algorithm/format details; exact input byte convention (command suggests no newline).\n"
+      },
+      "first_pass_artifact": "# Alternative-paths first pass — hash-lantern\n\nRead before hints, walkthrough, or implementation. Sources: BRIEFING.md only (including supplied resources/instructions).\n\n- Relationship: moru17 wants help regaining access to an old backup device; supplies six remembered prior passwords and account records.\n- Protected/target data: the account record stores a password hash rather than the password; goal is to identify which supplied candidate matches.\n- Task/evidence: read account and candidates, SHA-256 each candidate exactly (without added newline), compare the 64-character output with stored password hash, submit matching password wrapped as flag.\n- Alternative readings to check later: “로그인 기록” in the user's message can mean login history, while body says account information used to check a password; could falsely imply historical login events. “이 장치는 SHA-256으로 계산한다” can be read as a specific single SHA-256 of candidate, but exact encoding/normalization/storage format is not stated yet. Six candidates likely finite exhaustive set, but only if file contents and hash match as described.\n- Missing at this stage: actual stored hash and candidate values; whether stored record includes algorithm/format details; exact input byte convention (command suggests no newline).\n"
+    },
+    {
+      "role": "tooling",
+      "report": {
+        "slug": "hash-lantern",
+        "reviewer": "tooling",
+        "model": "gpt-6-luna",
+        "scope": [
+          "docs/text-review.md",
+          "docs/contract.md",
+          "challenges/hash-lantern/BRIEFING.md",
+          "challenges/hash-lantern/README.md",
+          "challenges/hash-lantern/challenge.toml",
+          "knowledge/terminal-commands.md",
+          "knowledge/hashing.md",
+          "challenges/hash-lantern/files/account.txt",
+          "challenges/hash-lantern/files/candidates.txt",
+          "challenges/hash-lantern/solve/README.md",
+          "docs/cli-tooling.md",
+          "docs/player-content.md",
+          "docs/learning-map.md",
+          "challenges/hash-lantern/AUTHORING.md",
+          "challenges/hash-lantern/authoring/build.py"
+        ],
+        "first_pass": "# Tooling first pass — hash-lantern\n\nScope read before hints/solve/implementation: `challenges/hash-lantern/BRIEFING.md`, `README.md` (player text and embedded prerequisite knowledge), `challenge.toml`, and `docs/text-review.md` (T1–T8 review standard). No hint, solve, authoring, implementation, validation, or quality result was used for this first pass.\n\n- Situation: a user forgot an old backup-device password and provides six historical candidates plus account data containing the password hash. Player should compute SHA-256 for each candidate, compare with recorded digest, and wrap the matching password in the stated flag form.\n- Declared starting ability: terminal commands and hashing; file/terminal access, `sha256sum`.\n- Initial tooling check: exact file names, commands, digest width, comparison and submission syntax are given. Need inspect account/candidate fixture to confirm fields, candidate count, digest algorithm, newline handling and whether the visible data actually supports the stated task. Manifest names both files and tool.\n- Provisional T1–T8: T1 충족; T2 충족; T3 충족; T4 충족; T5 미확인 (prepared files not yet checked); T6 충족; T7 충족; T8 충족.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "자료를 제공한 사람, 장치 계정 자료와 후보 자료가 명확하다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "장치에는 비밀번호를 확인할 때 사용하는 계정 정보도 남아 있다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "잊은 암호를 계정 hash와 후보 여섯 개로 확인한다는 질문이 명확하다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "여섯 후보 중 어느 것이 이 계정의 비밀번호인지 확인해 보자."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "SHA-256 계산→저장 해시 비교→제출 형식 순서가 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "출력 왼쪽의 64글자를 account.txt의 password_hash와 비교하자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "실제 배포 파일, field, encoding/hash command를 구체적으로 명시한다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "`files/account.txt`: 계정 이름, 해시 방식과 저장된 비밀번호 해시."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "account/candidate fixtures의 algorithm, encoding, salt, hash 및 여섯 후보가 본문 안내와 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/files/account.txt",
+                "quote": "algorithm=SHA-256\nencoding=UTF-8\nsalt=none"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "일반 해시가 복구 수단이 아니라 후보 확인 수단임을 설명하며 실험의 범위를 제한한다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "해시는 원문으로 되돌리는 변환을 제공하지 않는다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 요구인 터미널과 해시만으로 시작할 수 있고 단계별 명령·완료 형식이 제공된다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "printf '%s' '후보' | sha256sum"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "짧고 자연스러운 지시이며 기술어를 곧바로 풀어 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/README.md",
+                "quote": "후보 하나의 SHA-256은 아래 명령의 `후보`를 실제 값으로 바꿔 확인한다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/hash-lantern/README.md",
+            "quote": "이 장치는 SHA-256으로 계산한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/files/account.txt",
+                "quote": "algorithm=SHA-256\nencoding=UTF-8\nsalt=none"
+              }
+            ],
+            "verdict": "충족: 자료 및 solve assumptions와 일치한다.",
+            "reason": "account.txt algorithm field is SHA-256; solve script asserts SHA-256, UTF-8, salt=none before candidate comparison."
+          },
+          {
+            "path": "challenges/hash-lantern/README.md",
+            "quote": "후보 비밀번호 여섯 개.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/files/candidates.txt",
+                "quote": "mintmoon42\nriverlamp8\nrainboat27\nquietdock6\ncedarstep3\npaperkite9"
+              }
+            ],
+            "verdict": "충족: supplied candidate file count matches the text.",
+            "reason": "candidates.txt has six lines; build script declares the same six candidates."
+          },
+          {
+            "path": "challenges/hash-lantern/README.md",
+            "quote": "같은 비밀번호를 같은 방식으로 계산하면 같은 결과가 나오므로",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/hash-lantern/solve/solve.py",
+                "quote": "result = subprocess.run(['sha256sum'], input=candidate.encode(), capture_output=True, check=True, timeout=5)"
+              }
+            ],
+            "verdict": "충족: described comparison exactly matches intended method.",
+            "reason": "Solve script sends each candidate without trailing newline to sha256sum and compares its digest with password_hash."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "Read-only static review of the supplied repository snapshot. No target service, player terminal, challenge command, test or verification process was executed. Runtime-only observations are therefore not independently confirmed.",
+          "Exact excerpts are checked against the snapshot files by the companion quote-validation script."
+        ]
+      },
+      "first_pass_artifact": "# Tooling first pass — hash-lantern\n\nScope read before hints/solve/implementation: `challenges/hash-lantern/BRIEFING.md`, `README.md` (player text and embedded prerequisite knowledge), `challenge.toml`, and `docs/text-review.md` (T1–T8 review standard). No hint, solve, authoring, implementation, validation, or quality result was used for this first pass.\n\n- Situation: a user forgot an old backup-device password and provides six historical candidates plus account data containing the password hash. Player should compute SHA-256 for each candidate, compare with recorded digest, and wrap the matching password in the stated flag form.\n- Declared starting ability: terminal commands and hashing; file/terminal access, `sha256sum`.\n- Initial tooling check: exact file names, commands, digest width, comparison and submission syntax are given. Need inspect account/candidate fixture to confirm fields, candidate count, digest algorithm, newline handling and whether the visible data actually supports the stated task. Manifest names both files and tool.\n- Provisional T1–T8: T1 충족; T2 충족; T3 충족; T4 충족; T5 미확인 (prepared files not yet checked); T6 충족; T7 충족; T8 충족.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "ids": [
+      "T1",
+      "T3",
+      "T4",
+      "T8"
+    ],
+    "note": "로그인 사건의 기록처럼 읽히던 첫 대사를 계정에 저장된 비밀번호 해시로 고쳤다. 여섯 후보 중 저장된 해시와 맞는 rainboat27을 실제 자료에서 확인했다.",
+    "evidence": [
+      {
+        "path": "challenges/hash-lantern/files/account.txt",
+        "quote": "password_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f"
+      }
+    ],
+    "decision": "기본 심사 통과를 그대로 채택하지 않았다. 부모가 확인한 자료 이름 불일치와 추가 alternative 지적을 반영했다."
+  },
+  "changed_files": [
+    "challenges/hash-lantern/BRIEFING.md",
+    "challenges/hash-lantern/README.md"
+  ],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 5,
+    "reason": "부모가 확인한 문장 오류를 기본 심사에서 놓쳤거나 선수 설명에 이견이 있어 대안 풀이와 도구·환경 관점을 추가했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

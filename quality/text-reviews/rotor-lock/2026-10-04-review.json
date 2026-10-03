@@ -1,0 +1,907 @@
+{
+  "slug": "rotor-lock",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "624f4bf7e14bc1971ac195039362a8840f9b042390743943d8de21d3e346ee27",
+  "source_sha256_after": "d1c0e3d76a35279928eac0f95c53b954aa6be713e72c3cb6d4b8c6e04b01cf16",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "rotor-lock",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/rotor-lock/challenge.toml",
+          "input/challenges/rotor-lock/README.md",
+          "input/challenges/rotor-lock/AUTHORING.md",
+          "input/challenges/rotor-lock/hints/1.md",
+          "input/challenges/rotor-lock/hints/2.md",
+          "input/challenges/rotor-lock/solve/README.md",
+          "input/challenges/rotor-lock/files/checker.py",
+          "input/challenges/rotor-lock/solve/solve.py",
+          "input/knowledge/program-reading.md",
+          "input/docs/text-review.md"
+        ],
+        "first_pass": "의뢰인은 오래된 보관함 관리자다. 장치는 정상이나 비밀번호를 잃어 잠금장치를 열 수 없으며 입력 검사 코드 한 파일이 제공된다. 선수지식은 Python의 함수·반복·조건 흐름, 바이트 및 기본 비트 연산이며 본문이 필요한 용어와 실행법을 설명한다. 시작은 성공 비교와 encode 변환을 읽는 것이고, 완료는 unlocked를 출력하는 전체 입력을 복원해 제출하는 것이다. 첫 읽기에서는 입력을 역산하지 않았다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "관리자가 코드 분석을 맡기고 풀이자는 제공된 검사기의 입력 과정을 따라가도록 대상과 행동을 특정한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "관리자는 입력한 비밀번호가 맞는지 판단하는 검사 코드 한 파일을 확보했다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "비밀번호 분실 때문에 보관함을 열 수 없다는 상황과 복원할 질문이 직접 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "이전에 사용하던 비밀번호가 남아 있지 않아 보관함을 열 수 없는 상황이다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "검사기의 변환 단계와 TARGET 비교값, 성공·실패 결과가 순차적으로 설명된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "바이트·XOR·이동·회전 등 핵심 용어를 본문에서 풀이하고 변환 코드 위치까지 알려 준다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "`^`는 XOR, `<<`와 `>>`는 비트 이동, `%`는 나머지 연산이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "검사기 변환식과 TARGET 비교, 출력 결과에 관한 해설은 제공된 코드와 정적으로 대조된다. 실제 실행은 하지 않았다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "print(\"unlocked\")"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "관리자의 보관함 접근 목표와 검사기가 출력하는 결과를 구별해 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "검사기가 `unlocked`를 출력하는 입력 문자열을 찾아 제출하자."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "파일 경로, 읽을 함수, 준비된 Python 실행법, 성공 판정과 전체 제출 문자열 형식이 제공된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "파일에서 `main`의 비교 부분을 먼저 찾고, 그 앞에서 호출하는 `encode`를 읽어 보자."
+              },
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "위 예시 입력에는 `locked`가 나온다. 복원한 문자열을 같은 위치에 넣어 실행했을 때"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "연산을 숫자 변환과 비교 흐름으로 풀어 설명하며, 독자가 직접 할 행동이 명료하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "관리자가 보낸 `files/checker.py`가 그 검사기다. 코드를 읽고 입력이 어떤 과정을 거쳐"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "인코딩된 입력 바이트 목록을 TARGET과 비교한다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "입력이 맞으면 `unlocked`, 틀리면 `locked`가 출력된다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "print(\"unlocked\")"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "print(\"locked\", file=sys.stderr)"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "두 비교 결과의 출력 문자열이 본문 설명과 같다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/hints/2.md",
+            "quote": "`previous`는 앞선 입력이 아니라 앞선 출력이다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "previous = ((mixed << shift) | (mixed >> (8 - shift))) & 0xFF"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "각 단계가 계산한 출력값을 다음 회차의 previous로 사용한다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/solve/README.md",
+            "quote": "첫 번째 출력은 `9`, 회전량은 `1`이다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "9, 120, 219, 92, 215, 75, 200, 40,"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "shift = index % 7 + 1"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "TARGET[0]은 9이고 첫 인덱스의 회전량은 1이다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/solve/README.md",
+            "quote": "복원된 플래그는 **`pwnden{rotate_then_xor_then_check}`**다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/solve/solve.py",
+                "quote": "flag = decoded.decode(\"utf-8\")"
+              },
+              {
+                "path": "input/challenges/rotor-lock/solve/solve.py",
+                "quote": "if accepted.returncode != 0 or accepted.stdout.strip() != b\"unlocked\":"
+              }
+            ],
+            "verdict": "작성자 해설 코드와 일치, 독립 실행 미확인",
+            "reason": "복호화 스크립트는 복원 문자열을 검사기에 넣고 unlocked를 요구한다. 이번 리뷰에서는 실행하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "독립 초보 학습자를 대상으로 실제 사용성 시험을 하지 않았다.",
+          "검사기나 풀이 스크립트를 실행하지 않았다. 동작은 소스의 정적 대조로 확인했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: rotor-lock\n\n선수지식으로는 Python 함수·반복·조건 흐름을 읽고 바이트 및 XOR·비트 이동을 다루는 능력을 선언한다. 의뢰인은 오래된 보관함을 인수한 관리자다. 정상 작동하는 잠금장치의 이전 비밀번호를 잃어 열 수 없고, 입력 검사 코드 한 파일을 확보했다.\n\n시작은 `files/checker.py`에서 성공 비교를 확인한 뒤 `encode`가 입력을 어떻게 바꾸는지 따라가는 것이다. 파일 설명은 입력이 숫자로 변환되고 연산 후 TARGET 숫자 목록과 비교된다고 한다. 입력이 맞으면 `unlocked`, 틀리면 `locked`가 출력된다는 안내와 Python 실행 예가 제공된다. 필요한 용어로 바이트 범위, XOR, 좌우 이동, 나머지, 16진수, 마스킹, 비트 회전이 설명되어 있다.\n\n완료는 검사기가 `unlocked`를 출력하는 전체 `pwnden{...}` 문자열을 복원해 제출하는 것이다. 복원에 필요한 비교값과 변환 코드가 제공된다고 명시되지만, 첫 읽기에서는 이를 역산하지 않았다.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "rotor-lock",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/contract.toml",
+          "input/challenges/rotor-lock/challenge.toml",
+          "input/challenges/rotor-lock/README.md",
+          "input/challenges/rotor-lock/BRIEFING.md",
+          "input/challenges/rotor-lock/hints/",
+          "input/challenges/rotor-lock/solve/",
+          "input/challenges/rotor-lock/AUTHORING.md",
+          "input/challenges/rotor-lock/authoring/",
+          "input/challenges/rotor-lock/vulnerable/",
+          "input/challenges/rotor-lock/patched/",
+          "input/challenges/rotor-lock/files/",
+          "input/files/",
+          "input/knowledge/selected required docs",
+          "input/docs/text-review.md",
+          "input/docs/authoring-standard.md"
+        ],
+        "first_pass": "관리자는 기존 암호를 모르는 보관함의 checker.py를 제공한다. 설명은 입력-변환-TARGET 비교를 알리고, Python 함수/반복·byte/bit 기본 개념 및 테스트 방법을 준다. 성공 출력 문자열 제출이 완료 기준이다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "검사기 입력과 비교 목록, 출력 결과 및 복원 행동이 구체적이다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를\n저장된 숫자 목록과 비교한다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "암호 분실로 보관함을 열지 못한다는 조사 이유와 accepted input 질문이 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "이전에 사용하던 비밀번호가 남아 있지 않아 보관함을 열 수 없는 상황이다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "원본 비밀번호가 코드에 없다는 말과 변환 및 비교값 공개가 모순 없이 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "원래 비밀번호는 코드에 적혀 있지 않지만,\n**입력을 바꾸는 방법과 최종 비교값**은 함께 남아 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "주요 기호와 바이트 범위/회전 정의, 코드 탐색 위치 및 커맨드가 제공된다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "코드의 `^`는 XOR, `<<`와 `>>`는 비트 이동, `%`는 나머지 연산이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "`locked`/`unlocked` 주장은 직접 실행 관찰 주장이 아니고 encode/Main 구현과 정합하다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:\n        print(\"unlocked\")"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "보관함 동작 설정과 검사기 코드의 입력 판정 설명을 분리한다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "def encode(value):"
+              }
+            ]
+          },
+          "T7": {
+            "status": "수정 필요",
+            "reason": "수치 연산의 역변환을 도출하는 작업은 선언된 선수 범위보다 넓으며 본문은 Python 코드 읽기를 구체적으로 선수 능력으로 선언하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/program-reading.md",
+                "quote": "입력 검사 코드를 읽을 때는 입력을 받는 부분, 반복과 조건, 성공 결과를 나눠 본다."
+              },
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "이 의뢰는 Python의 함수·반복문을 따라 읽는 능력과 바이트·비트 연산 지식이 필요한\n코드 분석 문제다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "입력-변환-비교를 간단한 흐름으로 설명하고 용어를 정의한다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를\n저장된 숫자 목록과 비교한다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "원래 비밀번호는 코드에 적혀 있지 않지만,\n**입력을 바꾸는 방법과 최종 비교값**은 함께 남아 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "TARGET = [\n    9, 120, 219, 92, 215, 75, 200, 40, 243, 122, 236, 79, 113, 105, 40, 89,"
+              },
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "def encode(value):\n    previous = 0xA7"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "체커는 원문 문자열 상수를 보관하지 않고 비교 배열과 결정적 변환을 보관한다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "위 예시 입력에는 `locked`가 나온다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "print(\"locked\", file=sys.stderr)\n    return 1"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "올바르지 않은 입력 분기의 기대 출력 설명으로 읽힌다; 실제 실행했다는 표현은 아니다."
+          }
+        ],
+        "findings": [
+          {
+            "ids": [
+              "T7"
+            ],
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "이 의뢰는 Python의 함수·반복문을 따라 읽는 능력과 바이트·비트 연산 지식이 필요한\n코드 분석 문제다.",
+            "reason": "선언된 설명은 여러 비트 연산을 정의하지만, 입력 코드에서 역변환 수식과 반복 의존 값을 알아내는 능력이 선수로 필요한지 학습 목표인지 구별하지 않는다. knowledge/program-reading은 함수·반복·조건을 읽는 정도만 정의한다.",
+            "suggestion": "선수 요구를 제한된 구체 능력(encode의 index, previous, rotate 및 TARGET 비교를 따라가기)으로 좁혀 지식 본문에 예시하거나, 역변환 도출을 학습 목표로 본문에서 단계적으로 안내한다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/program-reading.md",
+                "quote": "각 입력 위치와 비교값이 어떻게 연결되는지 따라간다."
+              },
+              {
+                "path": "challenges/rotor-lock/hints/1.md",
+                "quote": "저장된 바이트를 같은 횟수만큼 오른쪽으로 회전하면 `mixed`가 된다."
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "checker.py는 읽기만 했고 실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# Evidence first pass — rotor-lock\n\n- 검토자: evidence / gpt-6-luna\n- 읽기 단계: manifest와 브리핑·본문·선수 지식만 확인. 힌트·해설·구현·배포 정책·검사 자료는 아직 열지 않음.\n- 원문 상황과 질문: 오래된 보관함의 입력 검사 코드와 변환/비교값을 분석해 accepted string을 복원한다. checker.py, Python과 바이트/비트 기초가 명시된다. 목표는 출력 unlocked인 전체 문자열 제출.\n- 시작점: 해당 문제의 자료와 명시된 선수 지식으로 조사 시작.\n- 완료 증거: 본문에 적힌 제출 형식/산출물에 따름. 실제 완료 관찰은 아직 없음.\n- 첫 패스 모호점: 구현 및 대조 확인 전이므로 기술 동작의 실현 여부는 미확인. 현실 사고의 사실성이나 별도 정상 대조군을 요구하지 않음.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "rotor-lock",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/rotor-lock/challenge.toml",
+          "input/challenges/rotor-lock/README.md",
+          "input/challenges/rotor-lock/files/checker.py",
+          "input/challenges/rotor-lock/hints/1.md",
+          "input/challenges/rotor-lock/hints/2.md",
+          "input/challenges/rotor-lock/solve/README.md",
+          "input/challenges/rotor-lock/solve/solve.py",
+          "input/docs/text-review.md",
+          "input/knowledge/catalog.toml"
+        ],
+        "first_pass": "보관함 관리자가 비밀번호를 잃었고 입력검사 코드만 확보했다. 플레이어는 encode 변환과 TARGET 비교를 읽어 unlocked 입력을 복원하고 제출한다. 파일, 실행 명령과 출력 기준을 제공한다. 선수지식은 program-reading이며 바이트/비트 기초는 본문 지식으로 설명한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "검사 코드의 입력과 결과, 제출 문자열의 관계를 분명히 제시한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "검사기가 `unlocked`를 출력하는 입력 문자열을 찾아 제출하자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "보관함을 열지 못하는 상황과 입력을 복원해야 하는 조사 목적이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "이전에 사용하던 비밀번호가 남아 있지 않아 보관함을 열 수 없는 상황이다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "도입의 분실 비밀번호에서 확보된 검사 코드, 변환, 비교, 복원 목표로 순서가 자연스럽게 이어진다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "분석한 뒤 이 장치가 받아들이는 문자열을 복원해 보자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "비트 연산 기호와 한 바이트/회전 의미를 설명하고 실제 코드 탐색 순서를 알려 준다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "코드의 `^`는 XOR, `<<`와 `>>`는 비트 이동, `%`는 나머지 연산이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "설명한 XOR·회전·TARGET 비교는 코드와 맞으며 풀이 해설은 코드상 변환을 반대로 계산한다. 실행 성공은 주장하지 않고 풀이 문서에만 적힌 결과로 기록한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "previous = ((mixed << shift) | (mixed >> (8 - shift))) & 0xFF"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "비밀번호 분실은 배경 설정이며 코드의 정확한 허용 조건은 encode 출력과 TARGET 일치라고 명시한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "manifest의 program-reading 선수 조건과 본문 바이트/비트 선수 보충을 함께 제시하고 코드의 비교부부터 보도록 시작점을 제공한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "파일에서 `main`의 비교 부분을 먼저 찾고, 그 앞에서 호출하는 `encode`를 읽어 보자."
+              },
+              {
+                "path": "input/challenges/rotor-lock/challenge.toml",
+                "quote": "requires = [\"program-reading\"]"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "상황과 조작을 익숙한 말로 설명하며 비트 용어를 짧게 정의한다. 문장 구조 때문에 절차를 다시 해석할 필요가 없다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "복원한 문자열을 같은 위치에 넣어 실행했을 때"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "저장된 숫자 목록과 비교한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "for index, byte in enumerate(value):"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "문자열의 UTF-8 바이트를 반복 처리하고 결과 목록과 비교한다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "`^`는 XOR, `<<`와 `>>`는 비트 이동, `%`는 나머지 연산이다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "mixed = byte ^ ((0x53 + 13 * index) & 0xFF) ^ previous"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "shift = index % 7 + 1"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "연산자 설명은 코드의 사용과 일치한다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/solve/README.md",
+            "quote": "첫 번째 출력은 `9`, 회전량은 `1`이다. 8비트 오른쪽 회전 결과는 `132`다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "TARGET = [\n    9, 120, 219, 92, 215, 75, 200, 40, 243, 122, 236, 79, 113, 105, 40, 89,\n"
+              }
+            ],
+            "verdict": "해설 계산으로 한정",
+            "reason": "풀이 문서는 코드 상수에서 한 계산을 보여 주며, 독립 실행 주장으로 확대하지 않는다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/solve/README.md",
+            "quote": "첫 바이트 이후의 `previous`는 `TARGET[i - 1]`이다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "previous = ((mixed << shift) | (mixed >> (8 - shift))) & 0xFF"
+              },
+              {
+                "path": "input/challenges/rotor-lock/solve/solve.py",
+                "quote": "previous = encoded"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "앞선 반복의 인코딩 출력이 다음 반복의 previous가 된다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "스크립트 실행 및 학습자 관찰을 수행하지 않았다. 코드·해설만 대조했다.",
+          "해설에 정답 문자열이 포함되나 이는 solve 자료이며 본문에서 정답을 미리 노출하는 것으로 판정하지 않았다.",
+          "이 기록은 문장 검토이며 점수 재채점이 아니다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — rotor-lock\n\n## 원문 상황\n오래된 보관함을 인수한 관리자가 기존 비밀번호를 잃어 열지 못한다. 관리자는 입력이 맞는지 검사하는 코드 한 파일을 확보했으며, 입력을 숫자로 바꾸고 변환 결과를 목록과 비교한다고 한다.\n\n## 질문·접근·완료\n검사 코드를 읽고 입력 변환과 비교를 따라가, `unlocked`가 나오는 문자열 전체를 제출한다. 파일 경로와 함수/TARGET 역할, 맞고 틀릴 때 출력, Python 실행 예제를 준다. 선수지식은 program-reading이며 input-checks를 가르친다. 지식 설명은 함수·반복문 및 바이트/비트 연산을 명시해 시작 능력 범위를 넓게 설정한다.\n\n## 누락·모호성\n문제 목표와 제공물, 종료 조건은 분명하다. 다만 의뢰인은 Python 함수·반복문 능력을 전제로 한 것처럼 시작하지만 지식 문단은 실제 필요 능력이 비트 연산까지임을 추가한다. 지식은 XOR/이동/마스크/회전 개념을 풀어 말하고 코드 탐색 시작점과 실행 방법을 제공한다. 이후 힌트가 선수지식 대비 추론 단계를 보완하는지 대조한다.\n"
+    },
+    {
+      "role": "alternative",
+      "report": {
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/rotor-lock/README.md",
+          "input/challenges/rotor-lock/hints/1.md",
+          "input/challenges/rotor-lock/hints/2.md",
+          "input/challenges/rotor-lock/solve/README.md",
+          "input/challenges/rotor-lock/files/checker.py",
+          "input/challenges/rotor-lock/solve/solve.py",
+          "challenges/rotor-lock/challenge.toml"
+        ],
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "관리자·검사 코드·복원할 입력 및 검사 결과가 명시된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "검사기가 `unlocked`를 출력하는 입력 문자열을 찾아 제출하자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "보관함에 접근할 비밀번호를 잃었고 가진 검사기로 허용 입력을 복원한다는 이유가 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "이전에 사용하던 비밀번호가 남아 있지 않아 보관함을 열 수 없는 상황이다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "앞선 출력값과 앞선 입력을 구분하고 두 번째 힌트가 모호함을 해소한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/hints/2.md",
+                "quote": "`previous`는 앞선 입력이 아니라 앞선 출력이다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "수정 필요",
+            "reason": "설명은 입력 “글자”를 숫자로 바꾼다고 하지만 구현은 문자열을 UTF-8 바이트열로 인코딩해 바이트마다 변환한다. 한글/비ASCII 글자는 한 바이트와 같지 않을 수 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "풀이의 역변환 단계는 encode의 XOR·회전, TARGET 순환 사용과 일치한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "previous = ((mixed << shift) | (mixed >> (8 - shift))) & 0xFF"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "주어진 대상 리스트를 검사하는 구현 동작과 복원된 허용 문자열을 분리해 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "`program-reading` 선수 지식, 한 파일, 변환 설명, 실행 방법과 결과 판단이 제공된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "관리자가 보낸 `files/checker.py`가 그 검사기다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "수정 필요",
+            "reason": "“입력한 글자를 숫자로 바꾸고”는 자연스럽지만 이번 구현 단위가 문자인지 UTF-8 바이트인지 흐리게 한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/README.md",
+                "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를\n저장된 숫자 목록과 비교한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "for index, byte in enumerate(value):"
+              }
+            ],
+            "verdict": "부분 뒷받침",
+            "reason": "숫자 목록 비교는 맞지만 변환 단위는 문자 codepoint가 아니라 UTF-8 인코딩의 각 바이트다."
+          },
+          {
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "입력이 맞으면 `unlocked`, 틀리면 `locked`가 출력된다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "print(\"unlocked\")"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "print(\"locked\", file=sys.stderr)"
+              }
+            ],
+            "verdict": "뒷받침됨",
+            "reason": "비교 성공/실패 분기가 각각 명시된 문자열을 출력한다."
+          }
+        ],
+        "findings": [
+          {
+            "ids": [
+              "T4",
+              "T8"
+            ],
+            "path": "input/challenges/rotor-lock/README.md",
+            "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를\n저장된 숫자 목록과 비교한다.",
+            "reason": "checker.py는 입력 문자열을 UTF-8로 encode한 뒤 각 byte에 변환을 적용한다. “글자”는 비ASCII 문자의 처리 단위가 문자 자체인 것처럼 읽힐 수 있다.",
+            "suggestion": "“검사기는 입력을 UTF-8 바이트로 바꾼 뒤 바이트마다 몇 가지 연산을 거쳐 저장된 숫자 목록과 비교한다.”로 기술 단위를 맞춘다.",
+            "evidence": [
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              },
+              {
+                "path": "input/challenges/rotor-lock/files/checker.py",
+                "quote": "for index, byte in enumerate(value):"
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "실행하지 않았다. checker.py와 solve.py를 정적으로 대조했다."
+        ],
+        "slug": "rotor-lock",
+        "reviewer": "alternative",
+        "model": "gpt-6-luna",
+        "first_pass": "# Alternative-paths first pass — rotor-lock\n\nRead before hints, walkthrough, or implementation. Sources: README.md only (the snapshot has no BRIEFING.md).\n\n- Relationship: a caretaker who inherited an old storage box asks the guild to analyze its lock checker; the box is unavailable because its previous password is lost.\n- Data and task: one file `files/checker.py` checks input by transforming characters to numbers, doing operations, then comparing a numeric list. Recover an accepted string; successful program output is `unlocked`; submit full string as flag.\n- Alternative readings to check later: “이 장치가 받아들이는 문자열” could mean any equivalently accepted input if the transformation is non-injective, not uniquely the original password; task wisely defines success by checker output. “입력한 글자” might imply Unicode characters while byte/bit explanation later may constrain input; need ensure declared prerequisites cover that.\n- Missing at this stage: exact transform, target values, whether multiple strings satisfy it, expected charset/length, and concrete verification path beyond running Python.\n"
+      },
+      "first_pass_artifact": "# Alternative-paths first pass — rotor-lock\n\nRead before hints, walkthrough, or implementation. Sources: README.md only (the snapshot has no BRIEFING.md).\n\n- Relationship: a caretaker who inherited an old storage box asks the guild to analyze its lock checker; the box is unavailable because its previous password is lost.\n- Data and task: one file `files/checker.py` checks input by transforming characters to numbers, doing operations, then comparing a numeric list. Recover an accepted string; successful program output is `unlocked`; submit full string as flag.\n- Alternative readings to check later: “이 장치가 받아들이는 문자열” could mean any equivalently accepted input if the transformation is non-injective, not uniquely the original password; task wisely defines success by checker output. “입력한 글자” might imply Unicode characters while byte/bit explanation later may constrain input; need ensure declared prerequisites cover that.\n- Missing at this stage: exact transform, target values, whether multiple strings satisfy it, expected charset/length, and concrete verification path beyond running Python.\n"
+    },
+    {
+      "role": "tooling",
+      "report": {
+        "slug": "rotor-lock",
+        "reviewer": "tooling",
+        "model": "gpt-6-luna",
+        "scope": [
+          "docs/text-review.md",
+          "docs/contract.md",
+          "challenges/rotor-lock/README.md",
+          "challenges/rotor-lock/challenge.toml",
+          "knowledge/program-reading.md",
+          "knowledge/input-checks.md",
+          "challenges/rotor-lock/files/checker.py",
+          "challenges/rotor-lock/hints/1.md",
+          "challenges/rotor-lock/hints/2.md",
+          "challenges/rotor-lock/solve/README.md",
+          "docs/cli-tooling.md",
+          "docs/player-content.md",
+          "docs/learning-map.md",
+          "challenges/rotor-lock/AUTHORING.md"
+        ],
+        "first_pass": "# Tooling first pass — rotor-lock\n\nScope read before hints/solve/implementation: `challenges/rotor-lock/README.md` (only player-facing file present; no separate BRIEFING.md), `challenge.toml`, and `docs/text-review.md` (T1–T8 review standard). No hint, solve, authoring, implementation, validation, or quality result was used for this first pass.\n\n- Situation: an administrator asks the guild to recover a string accepted by a checker. The only supplied file is `files/checker.py`; the README says to trace `encode`, compare with `TARGET`, and test a candidate with Python until `unlocked` appears.\n- Declared starting ability: program reading; Python 3. The README additionally names XOR, bit shifts, modulo, byte bounds and bit rotation and provides a command to run the checker.\n- Initial tooling check: file, interpreter and exact invocation are explicit. Need inspect the checker and prerequisites knowledge file to determine whether the named operations are adequately covered by declared `program-reading`, and whether challenge file content actually has the described function/comparison. No BRIEFING.md exists in the snapshot, so the README is the first-pass narrative.\n- Provisional T1–T8: T1 충족; T2 충족; T3 충족; T4 충족; T5 미확인 (checker not yet examined); T6 충족; T7 미확인 (declared `program-reading` coverage vs bitwise concepts needs docs/source check); T8 충족.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "의뢰 관리자, 잠금 검사 코드, 해야 할 역산 행동이 특정된다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "관리자는 입력한 비밀번호가 맞는지 판단하는 검사 코드 한 파일을 확보했다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "잠금장치가 입력을 받아들이는지 복원해야 하는 이유와 성공 조건이 제공된다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "검사기가 `unlocked`를 출력하는 입력 문자열을 찾아 제출하자."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "encode의 처리와 TARGET 비교라는 단서가 연결되며 숨은 풀이 단계를 요구하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "함께 남아 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "checker.py, encode, TARGET, Python command와 byte/bit operator를 실물에 대응한다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "`TARGET`은 변형 결과와 비교하는 숫자 목록이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "체커의 CLI 입력, encode bytes→rotated output 및 equality check가 README 설명과 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "검사기 동작 설명과 복원 가능성은 코드에 있는 정적 조건으로 제시한다. 실행 성공을 이미 관찰했다고 하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "원래 비밀번호는 코드에 적혀 있지 않지만,"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "Python 실행 파일, exact path, invocation, expected output are present; README supplies operator definitions beyond the required general program-reading ability.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "준비된 터미널에는 검사기를 실행할 Python이 있다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "동작을 자연스러운 동사로 순서대로 제시하며 필요한 bit terms를 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/README.md",
+                "quote": "파일에서 `main`의 비교 부분을 먼저 찾고, 그 앞에서 호출하는 `encode`를 읽어 보자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/rotor-lock/README.md",
+            "quote": "저장된 숫자 목록과 비교한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+              }
+            ],
+            "verdict": "충족: summary matches exact implementation.",
+            "reason": "checker takes argv text, UTF-8 encodes to bytes, applies encode, and compares the resulting list to TARGET."
+          },
+          {
+            "path": "challenges/rotor-lock/README.md",
+            "quote": "`^`는 XOR, `<<`와 `>>`는 비트 이동, `%`는 나머지 연산이다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "mixed = byte ^ ((0x53 + 13 * index) & 0xFF) ^ previous"
+              }
+            ],
+            "verdict": "충족: operator descriptions fit the code and prerequisite notes.",
+            "reason": "Checker uses ^, shifts, modulo, and masks; provided knowledge explains bitwise roles and byte range."
+          },
+          {
+            "path": "challenges/rotor-lock/README.md",
+            "quote": "`unlocked`가 나오면 성공이다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/rotor-lock/files/checker.py",
+                "quote": "print(\"unlocked\")"
+              }
+            ],
+            "verdict": "충족: documented success condition matches main().",
+            "reason": "checker prints unlocked only when encoded UTF-8 bytes equal TARGET."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "Read-only static review of the supplied repository snapshot. No target service, player terminal, challenge command, test or verification process was executed. Runtime-only observations are therefore not independently confirmed.",
+          "Exact excerpts are checked against the snapshot files by the companion quote-validation script."
+        ]
+      },
+      "first_pass_artifact": "# Tooling first pass — rotor-lock\n\nScope read before hints/solve/implementation: `challenges/rotor-lock/README.md` (only player-facing file present; no separate BRIEFING.md), `challenge.toml`, and `docs/text-review.md` (T1–T8 review standard). No hint, solve, authoring, implementation, validation, or quality result was used for this first pass.\n\n- Situation: an administrator asks the guild to recover a string accepted by a checker. The only supplied file is `files/checker.py`; the README says to trace `encode`, compare with `TARGET`, and test a candidate with Python until `unlocked` appears.\n- Declared starting ability: program reading; Python 3. The README additionally names XOR, bit shifts, modulo, byte bounds and bit rotation and provides a command to run the checker.\n- Initial tooling check: file, interpreter and exact invocation are explicit. Need inspect the checker and prerequisites knowledge file to determine whether the named operations are adequately covered by declared `program-reading`, and whether challenge file content actually has the described function/comparison. No BRIEFING.md exists in the snapshot, so the README is the first-pass narrative.\n- Provisional T1–T8: T1 충족; T2 충족; T3 충족; T4 충족; T5 미확인 (checker not yet examined); T6 충족; T7 미확인 (declared `program-reading` coverage vs bitwise concepts needs docs/source check); T8 충족.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "ids": [
+      "T4",
+      "T7",
+      "T8"
+    ],
+    "note": "검사기의 처리 단위를 글자 대신 문자열에서 변환한 바이트로 설명했다. 함수·반복문 읽기는 선수 능력이고 역변환 도출은 이번 과업임을 분리했다. 정상 문자열과 추가 글자가 붙은 오답을 실제 검사기에 대조했다.",
+    "evidence": [
+      {
+        "path": "challenges/rotor-lock/files/checker.py",
+        "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:"
+      },
+      {
+        "path": "challenges/rotor-lock/files/checker.py",
+        "quote": "for index, byte in enumerate(value):"
+      }
+    ],
+    "decision": "evidence의 선수 능력과 과업 구분 지적은 문장 명확화에 반영했다. 역변환 수식 자체를 선수 지식이나 기본 본문의 정답으로 추가하지 않았다. 추가 alternative의 바이트 단위 지적도 채택했다."
+  },
+  "changed_files": [
+    "challenges/rotor-lock/README.md"
+  ],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 5,
+    "reason": "부모가 확인한 문장 오류를 기본 심사에서 놓쳤거나 선수 설명에 이견이 있어 대안 풀이와 도구·환경 관점을 추가했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

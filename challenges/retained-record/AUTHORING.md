@@ -7,8 +7,9 @@
 
 - 분야: `digital-forensics`, 주제: `forensics-event-reconstruction`, category: `forensics`.
 - teaches: 목록 필터·문서 상태와 본문 보관을 구분해 백업의 공개 범위를 확인한다.
-- requires `terminal-commands`, `sqlite-records`: 테이블·열·ID·조건·연결·버전 순서의
-  범위만 브리핑에 설명한다. Python과 디스크 포렌식은 선수 지식이 아니다.
+- requires `terminal-commands`, `sqlite-records`, `retained-data`: 테이블·열·ID·조건·연결·버전 순서와
+  목록에서 빠진 자료도 백업에 남을 수 있다는 내용을 브리핑에 설명한다.
+  Python과 디스크 포렌식은 선수 지식이 아니다.
 - 대상: 안내된 SQL 문법으로 표를 읽는 초급자. 난도 2 초급을 제안한다.
   목록·상태·변경 본문을 연결하며 쿼리와 버전 선택이 입문보다 한 단계 더 필요하다.
 

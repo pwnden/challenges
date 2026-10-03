@@ -1,0 +1,613 @@
+{
+  "slug": "retained-record",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "cf434c6f90555681bc80ad5aefdaea47a14d409cdbe58915ab3fd82b9d71557d",
+  "source_sha256_after": "0992ae4a54a0e5314087f6dce98e43a2fe2a9315810861caa7cbad4cce5b5fa5",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "retained-record",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/retained-record/challenge.toml",
+          "input/challenges/retained-record/README.md",
+          "input/challenges/retained-record/AUTHORING.md",
+          "input/challenges/retained-record/hints/1.md",
+          "input/challenges/retained-record/hints/2.md",
+          "input/challenges/retained-record/solve/README.md",
+          "input/challenges/retained-record/authoring/build.py",
+          "input/challenges/retained-record/authoring/check.py",
+          "input/challenges/retained-record/solve/solve.sh",
+          "input/challenges/retained-record/files/visible-documents.csv",
+          "input/challenges/retained-record/files/backup-note.txt",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/sqlite-records.md",
+          "input/knowledge/retained-data.md",
+          "input/docs/text-review.md"
+        ],
+        "first_pass": "의뢰인은 팀 작업 보드의 문서 관리자다. 삭제한 복구 절차가 화면 목록에서 사라진 뒤에도 동시점 SQLite 백업에 담당자 전용 코드가 남았는지 조사한다. 선수지식에 SQLite 읽기·조인이 있고 시작 명령이 제시된다. 제공된 CSV와 조치 메모가 대상 제목·승인 상태·조사 범위를 알려 준다. 완료는 같은 문서의 마지막 승인 본문을 찾아 코드를 제출하는 것이다. 실제 ID와 스키마, 버전 본문은 DB 확인이 필요하며 삭제 영역 복구는 범위 밖이다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "의뢰인과 화면 목록·백업 자료·대상 문서의 관계, 플레이어가 비교해야 할 행동을 밝힌다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "목록과 백업을 비교하고, 보드 복구 절차 문서의 마지막 승인 본문에 남은 코드를 찾자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "문서에 담당자 전용 코드가 있었고 목록에서 사라진 것을 본문 삭제로 볼 수 있는지라는 구체적인 우려다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "목록에서 문서를 숨겨도 데이터베이스에는 본문이 남아 있을 수 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "화면 목록은 active만 보여 주고 백업은 저장 행을 담는다는 차이와 승인 버전 선택 과정이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "본문이고 `draft`면 미승인 초안이다. 삭제 문서는 여럿일 수 있고 가장 큰 버전이"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "SQLite의 상태, publication 값, 문서 제목을 구체적으로 제시하고 초심자가 스키마에서 열을 확인하도록 안내한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "문서 제목은 `Board recovery procedure`다. `publication`이 `published`면 승인된"
+              },
+              {
+                "path": "input/knowledge/sqlite-records.md",
+                "quote": "실제 테이블과 열은 `.schema` 결과에서 확인한다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "백업 시점과 저장 행이라는 범위가 명시되고, 본문 문장은 데이터 생성 코드·대조 검사로 확인된다. 실제로 명령을 실행했다는 주장은 하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "db.execute('UPDATE documents SET status = \"deleted\" WHERE id = 26')"
+              },
+              {
+                "path": "input/challenges/retained-record/solve/README.md",
+                "quote": "이번 결과는 해당 백업 시점의 행에 대한 증거이며 이후 시스템의 삭제 상태를"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "담당자만 보관해야 한다는 원칙과 삭제 상태·본문 보관이라는 구현 자료를 분리한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "담당자만 보관해야 할 코드가 들어 있다. 도토리장은 이 문서를 일반 문서 목록에서"
+              },
+              {
+                "path": "input/challenges/retained-record/files/backup-note.txt",
+                "quote": "이번 조사는 이 SQLite 백업의 저장된 행을 확인하는 범위다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "명령·파일·대상 제목·published 상태·읽기 전용 경계와 제출할 승인 본문을 충분히 제시한다. 발견 결과는 본문에 미리 노출하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "준비된 SQLite 도구로 원본을 읽기 전용으로 확인하자."
+              },
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "보드 복구 절차의 마지막 승인 본문에서 찾은 `pwnden{...}` 코드를 제출하자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "목록에서 사라짐과 본문 삭제를 구분해 자연스러운 말로 설명하고, 실제 쿼리 작업을 짧은 행동문으로 안내한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "목록에서 문서가 사라지자 본문도 지웠다고 생각했다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/retained-record/README.md",
+            "quote": "문서 제목은 `Board recovery procedure`다. `publication`이 `published`면 승인된",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "publication TEXT NOT NULL CHECK(publication IN ('published','draft'))"
+              },
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "(26, 3, 'draft', 'Unapproved draft code: pwnden{draft_is_not_published}')"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "스키마와 생성 데이터가 두 상태를 구분한다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "문서 26은 deleted지만 세 버전이 남아 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "(26, 'Board recovery procedure', 'active')"
+              },
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "(26, 3, 'draft', 'Unapproved draft code: pwnden{draft_is_not_published}')"
+              },
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "db.execute('UPDATE documents SET status = \"deleted\" WHERE id = 26')"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "초기 active 행을 deleted로 바꾸고 세 revision을 만들어 배포 파일을 생성한다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "문서 40의 버전 99는 대상이 다르다. 문서 26의 마지막 승인본인 버전 2에",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "(26, 2, 'published', 'Internal board recovery code: ' + KEY)"
+              },
+              {
+                "path": "input/challenges/retained-record/authoring/build.py",
+                "quote": "KEY = 'pwnden{hidden_rows_remain_in_backup}'"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "코드가 해당 제목·버전의 승인 본문에 명시한 키를 넣는다. 본 리뷰에서는 SQLite를 조회해 결과를 재현하지 않았다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "본문을 제거한 대조 DB에서는 같은 조회로 코드가 나오지 않는다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/authoring/check.py",
+                "quote": "assert subprocess.check_output(['sqlite3', '-readonly', str(control), query]) == b''"
+              }
+            ],
+            "verdict": "작성자 검사 코드와 일치, 독립 실행 미확인",
+            "reason": "체크 스크립트는 대조 DB의 빈 결과를 assertion으로 요구한다. 실행 성공으로 확대하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "SQLite 백업은 바이너리라 첫 패스에서 내용 자체를 조회하지 않았다. DB 생성 코드와 작성자 대조 검사로 텍스트 주장을 대조했다.",
+          "독립 초보 학습자를 대상으로 실제 사용성 시험을 하지 않았다.",
+          "명령 및 검사를 실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: retained-record\n\n선수지식으로는 기본 터미널과 SQLite 표·행·열·조회·조인을 안다. 의뢰인은 팀 작업 보드의 문서 관리자다. 복구 절차 문서에 담당자 전용 코드가 있었고, 삭제 버튼으로 목록에서 사라진 뒤 본문도 없어졌는지 확신하지 못한다. 조사 범위는 같은 시점에 내보낸 화면 목록과 SQLite 백업의 저장된 행이다.\n\n시작은 CSV 목록과 조치 메모를 읽고 SQLite를 읽기 전용으로 열어 테이블과 스키마를 확인하는 것이다. 백업 메모는 보드 복구 절차와 오래된 테스트 문서가 삭제 상태라고 하며, 조사 대상 제목을 `Board recovery procedure`로 특정한다. `publication=published`는 승인 본문, `draft`는 미승인 초안이라고 안내한다. SQLite DB는 제공되어 있으나 바이너리라 내용을 첫 읽기에서 직접 확인하지 않았다.\n\n완료는 목록과 백업을 비교하고 해당 문서의 마지막 승인 본문에서 코드를 찾아 제출하는 것이다. 문서의 실제 ID·테이블/열 구조·버전별 본문은 스키마와 행을 읽어야 알 수 있으며, 안내는 디스크 삭제 영역 복구를 요구하지 않는다고 경계를 정한다.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "retained-record",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/contract.toml",
+          "input/challenges/retained-record/challenge.toml",
+          "input/challenges/retained-record/README.md",
+          "input/challenges/retained-record/BRIEFING.md",
+          "input/challenges/retained-record/hints/",
+          "input/challenges/retained-record/solve/",
+          "input/challenges/retained-record/AUTHORING.md",
+          "input/challenges/retained-record/authoring/",
+          "input/challenges/retained-record/vulnerable/",
+          "input/challenges/retained-record/patched/",
+          "input/challenges/retained-record/files/",
+          "input/files/",
+          "input/knowledge/selected required docs",
+          "input/docs/text-review.md",
+          "input/docs/authoring-standard.md"
+        ],
+        "first_pass": "작업 보드 담당자는 목록에서 삭제한 복구절차 문서와 같은 시점 SQLite 백업의 잔존 여부를 묻는다. CSV/백업 메모/DB를 read-only로 대조하고 제목·deleted 상태·published·버전을 식별해 마지막 승인 본문 코드를 제출한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "삭제 문서 상태와 DB 백업을 비교하는 행위자 및 자료가 식별된다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/README.md",
+                "quote": "도토리장은 같은 시점의 목록과 SQLite 백업을 길드에 맡기고, 삭제 조치 후에도\n내부 복구 코드가 남았는지 조사해 달라고 요청했다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "담당자 전용 코드가 남았는지, 삭제 안내가 타당한지 질문한다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/README.md",
+                "quote": "삭제했다고 안내해도 되는지 확인하고 싶어요."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "화면 목록과 백업 행의 의미를 혼동하지 않고 조사 범위를 같은 시점으로 둔다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/files/backup-note.txt",
+                "quote": "이번 조사는 이 SQLite 백업의 저장된 행을 확인하는 범위다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "SQLite 테이블/상태/연결/버전 구분과 read-only 명령을 구체적으로 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/README.md",
+                "quote": "문서 제목은 `Board recovery procedure`다. `publication`이 `published`면 승인된\n본문이고 `draft`면 미승인 초안이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "본문은 잔존을 사실로 단정하지 않고 백업/메모의 조건부 범위가 명시된다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/files/backup-note.txt",
+                "quote": "교육용 작업 보드의 DB와 화면용 문서 목록을 같은 시점에 내보냈다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "삭제 조치에 대한 당사자 생각과 DB상 가능한 잔존, 실제 조회 결론을 나눈다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/files/backup-note.txt",
+                "quote": "이번 조사는 이 SQLite 백업의 저장된 행을 확인하는 범위다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "첫 명령, 대상 문서, 승인 필드 및 마지막 승인본의 기준과 산출물이 충분하다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/README.md",
+                "quote": "이번 조사는 저장된 행을 확인하며 디스크의 삭제 영역을 복구할 필요는 없다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "목록/행, 게시 승인 상태를 명료하고 자연스럽게 쓴다.",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/README.md",
+                "quote": "삭제 문서는 여럿일 수 있고 가장 큰 버전이\n항상 승인본인 것은 아니다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/retained-record/README.md",
+            "quote": "목록에서 문서를 숨겨도 데이터베이스에는 본문이 남아 있을 수 있다.",
+            "kind": "의심",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/files/backup-note.txt",
+                "quote": "이번 조사는 이 SQLite 백업의 저장된 행을 확인하는 범위다."
+              }
+            ],
+            "verdict": "충족",
+            "reason": "가능성으로만 표현하며 백업 한계를 제시한다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "문서 26은 deleted지만 세 버전이 남아 있다. 최신 버전 3은 draft이고 다른 삭제\n문서 40의 버전 99는 대상이 다르다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/authoring/check.py",
+                "quote": "assert list(db.execute('SELECT id FROM documents WHERE status = \"deleted\" ORDER BY id')) == [(26,), (40,)]"
+              },
+              {
+                "path": "challenges/retained-record/authoring/check.py",
+                "quote": "    latest = db.execute('SELECT body FROM revisions WHERE document_id = 26 ORDER BY version DESC LIMIT 1').fetchone()[0]\n    assert 'draft_is_not_published' in latest and KEY not in latest\n    global_latest = db.execute('SELECT r.body FROM documents d JOIN revisions r ON r.document_id = d.id WHERE d.status = \"deleted\" ORDER BY r.version DESC LIMIT 1').fetchone()[0]\n    assert 'unrelated_deleted_board' in global_latest and KEY not in global_latest"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "저장된 데이터 검사기는 대상 삭제 문서, 최신 초안, 다른 문서의 최대 버전을 서로 구분한다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "본문을 제거한 대조 DB에서는 같은 조회로 코드가 나오지 않는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/retained-record/authoring/check.py",
+                "quote": "assert subprocess.check_output(['sqlite3', '-readonly', str(control), query]) == b''"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "정리된 복제 DB의 동일 조회 결과를 검사하는 authoring 대조 근거다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "SQLite 백업 내용은 실행하지 않고 제공된 read-only 스냅샷 자료 및 authoring 검증 코드로만 확인했다."
+        ]
+      },
+      "first_pass_artifact": "# Evidence first pass — retained-record\n\n- 검토자: evidence / gpt-6-luna\n- 읽기 단계: manifest와 브리핑·본문·선수 지식만 확인. 힌트·해설·구현·배포 정책·검사 자료는 아직 열지 않음.\n- 원문 상황과 질문: 작업 보드 관리자가 문서 삭제 후 목록과 SQLite 백업에 복구 코드가 남았는지 확인해 달라고 한다. 목록 CSV, DB, 조치 메모와 읽기 전용 SQLite 명령이 제공된다. 문서 제목/승인 상태/버전이 구별되어야 함을 예고한다.\n- 시작점: 해당 문제의 자료와 명시된 선수 지식으로 조사 시작.\n- 완료 증거: 본문에 적힌 제출 형식/산출물에 따름. 실제 완료 관찰은 아직 없음.\n- 첫 패스 모호점: 구현 및 대조 확인 전이므로 기술 동작의 실현 여부는 미확인. 현실 사고의 사실성이나 별도 정상 대조군을 요구하지 않음.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "retained-record",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/retained-record/challenge.toml",
+          "input/challenges/retained-record/README.md",
+          "input/challenges/retained-record/files/backup-note.txt",
+          "input/challenges/retained-record/files/visible-documents.csv",
+          "input/challenges/retained-record/hints/1.md",
+          "input/challenges/retained-record/hints/2.md",
+          "input/challenges/retained-record/solve/README.md",
+          "input/challenges/retained-record/solve/solve.sh",
+          "input/challenges/retained-record/AUTHORING.md",
+          "input/challenges/retained-record/authoring/validation.json",
+          "input/docs/text-review.md",
+          "input/knowledge/catalog.toml"
+        ],
+        "first_pass": "도토리장은 팀 보드 문서를 관리하며 복구 문서에 담당자 코드가 있고 목록에서 제거했으나 백업 본문까지 지워졌는지 확인을 의뢰한다. 동일 시점의 목록/SQLite/조치 노트와 조회 전용 도구를 제공한다. 조사 대상 제목, published/draft 의미와 버전 오판 위험을 설명하고 마지막 승인 본문에서 코드 제출을 목표로 한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "플레이어가 목록과 백업 DB를 비교하고 문서 본문/상태/버전을 조회하는 행동이 명확하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "목록과 백업을 비교하고, 보드 복구 절차 문서의 마지막 승인 본문에 남은 코드를 찾자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "담당자 전용 코드, 삭제에 대한 운영자의 생각, 백업 잔존 여부가 조사 질문으로 이어진다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "목록에서 문서가 사라지자 본문도 지웠다고 생각했다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "목록에서 숨기는 것과 데이터베이스 본문 보관을 명시적으로 구분하며 같은 시점 자료의 관계를 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "목록에서 문서를 숨겨도 데이터베이스에는 본문이 남아 있을 수 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "SQLite, 테이블/열, publication 상태 및 문서별 version을 실제 조회 절차와 연결한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "`publication`이 `published`면 승인된"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설은 특정 백업 시점의 보관 행에 범위를 한정하며 작성자 검사 기록과 SQL 자료를 근거로 대응한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/solve/README.md",
+                "quote": "이번 결과는 해당 백업 시점의 행에 대한 증거이며"
+              },
+              {
+                "path": "input/challenges/retained-record/solve/solve.sh",
+                "quote": "WHERE d.status = \"deleted\" AND d.title = \"Board recovery procedure\" AND r.publication = \"published\""
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "목록의 active 표시/논리 삭제 상태와 저장 본문 잔존을 별개로 설명하며, 의뢰인의 생각은 생각으로 표현된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/files/backup-note.txt",
+                "quote": "화면은 status가 active인 문서만 보여 준다."
+              },
+              {
+                "path": "input/challenges/retained-record/solve/README.md",
+                "quote": "목록의 필터와 저장된 본문의 보관 상태는 다르다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "수정 필요",
+            "reason": "플레이어 본문은 필요한 SQLite 절차를 제공하고 발견까지 연결하지만, manifest는 retained-data를 선수개념으로 선언하고 AUTHORING의 선수 지식 목록은 그 항목을 빠뜨려 작성 기준이 서로 맞지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "조사할 문서와 승인 상태를 먼저 고른 뒤 버전을 비교하자."
+              },
+              {
+                "path": "input/challenges/retained-record/solve/README.md",
+                "quote": "최신 버전 3은 draft이고"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "질문과 안내가 자연스러운 구어체이며 논리 삭제·보관 같은 기술 용어를 바로 주변 문장으로 풀어 준다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "삭제했다고 안내해도 되는지 확인하고 싶어요."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/retained-record/README.md",
+            "quote": "목록에서 문서를 숨겨도 데이터베이스에는 본문이 남아 있을 수 있다.",
+            "kind": "의심",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/solve/README.md",
+                "quote": "목록의 필터와 저장된 본문의 보관 상태는 다르다."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "가능성으로 제시하고 해당 백업 조사로 확인하게 한다."
+          },
+          {
+            "path": "input/challenges/retained-record/README.md",
+            "quote": "`publication`이 `published`면 승인된",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/files/backup-note.txt",
+                "quote": "승인 상태: publication=published. draft는 아직 적용되지 않은 초안이다."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "백업 제공자의 상태 정의와 일치한다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "최신 버전 3은 draft이고",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/solve/README.md",
+                "quote": "문서 26은 deleted지만 세 버전이 남아 있다."
+              }
+            ],
+            "verdict": "해설 보고로 한정",
+            "reason": "본문은 특정 DB 스냅샷 관찰을 보고한다. 독립 재실행 관찰로 승격하지 않는다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "버전 번호는 문서 안에서 비교하고 승인 상태도 확인해야 한다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/solve/solve.sh",
+                "quote": "ORDER BY r.version DESC LIMIT 1;"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "해답 조회가 문서 식별과 승인 상태를 필터링한 뒤 버전을 정렬한다."
+          },
+          {
+            "path": "input/challenges/retained-record/solve/README.md",
+            "quote": "목록의 필터와 저장된 본문의 보관 상태는 다르다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/AUTHORING.md",
+                "quote": "상태로 바꾼 뒤 화면용 목록을 조회한다."
+              },
+              {
+                "path": "input/challenges/retained-record/authoring/validation.json",
+                "quote": "\"passed\": true"
+              }
+            ],
+            "verdict": "자료 제작 설명에 한정",
+            "reason": "작성 설정/검증 보고로 제시되며 일반 SQLite 삭제 동작으로 확대하지 않는다."
+          }
+        ],
+        "findings": [
+          {
+            "ids": [
+              "T7"
+            ],
+            "path": "input/challenges/retained-record/AUTHORING.md",
+            "quote": "requires `terminal-commands`, `sqlite-records`: 테이블·열·ID·조건·연결·버전 순서의",
+            "reason": "manifest는 retained-data를 requires에 포함하지만 작성 기록에는 terminal-commands와 sqlite-records만 열거되어 있다. 플레이어 README는 개념을 설명하므로 시작 가능 여부는 충족하지만, 작성 문서의 선수지식 계약을 정합적으로 검토하기 어렵다.",
+            "suggestion": "AUTHORING의 requires 목록에 retained-data를 반영하거나, manifest의 선언을 작성 의도에 맞게 조정한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/retained-record/AUTHORING.md",
+                "quote": "requires `terminal-commands`, `sqlite-records`: 테이블·열·ID·조건·연결·버전 순서의"
+              },
+              {
+                "path": "input/challenges/retained-record/challenge.toml",
+                "quote": "requires = [\"terminal-commands\",\"sqlite-records\",\"retained-data\"]"
+              },
+              {
+                "path": "input/challenges/retained-record/README.md",
+                "quote": "SQLite 파일에는 표인 테이블이 들어 있다."
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "snapshot.sqlite는 읽기 전용 자료로 보았으며 독립 SQL 실행/학습자 실행을 하지 않았다. 관찰 관련 해설 문구는 작성자 보고에 한정한다.",
+          "이 기록은 문장 검토이며 점수 재채점이 아니다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — retained-record\n\n## 원문 상황\n도토리장은 팀 작업 보드 문서 관리자다. 복구 절차 문서에는 담당자만 보관할 코드가 있고, 목록에서 삭제했으나 본문까지 삭제됐는지 확신하지 못한다. 삭제 뒤 만든 같은 시점의 목록과 SQLite 백업을 길드에 제공해 내부 복구 코드가 남았는지 확인하도록 했다.\n\n## 질문·접근·완료\n목록과 백업을 비교하여 보드 복구 절차 문서의 마지막 승인 본문에서 코드를 찾는 것이 질문/완료다. 세 파일의 의미, 조회 전용 SQLite 명령, 제목과 publication 상태 의미, 초안/승인본 구별, 버전이 최신이라는 이유만으로 승인본이라 볼 수 없다는 점을 제공한다. 선수지식은 terminal-commands, sqlite-records, retained-data이고 historical-retention을 가르친다.\n\n## 누락·모호성\n대상 자료·보호 이유·삭제 후 잔존 질문·도구·완료 증거가 명확하다. 먼저 목록/조치 기록을 보고 테이블·스키마를 확인하는 순서가 제공된다. 일반 텍스트의 저장 행을 조사하며 디스크 삭제 영역 복구가 필요 없다는 범위도 명시한다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "ids": [
+      "T7"
+    ],
+    "note": "작성 기록의 선수 지식 목록에 manifest의 retained-data 선언을 반영했다. 문서 26의 published 버전 2와 논리 삭제 상태를 실제 DB에서 확인했다.",
+    "evidence": [
+      {
+        "path": "challenges/retained-record/challenge.toml",
+        "quote": "requires = [\"terminal-commands\",\"sqlite-records\",\"retained-data\"]"
+      }
+    ],
+    "decision": "designer의 문서 계약 불일치 지적을 채택했다. 파일·SQL·정답을 바꾸지 않았다."
+  },
+  "changed_files": [
+    "challenges/retained-record/AUTHORING.md"
+  ],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

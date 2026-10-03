@@ -1,8 +1,8 @@
 {
   "slug": "export-gap",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/export-gap/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/export-gap/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/export-gap/2026-10-04-review.md",
   "criteria": {
     "goal": {
       "level": 4,
@@ -15,7 +15,7 @@
         },
         {
           "path": "challenges/export-gap/README.md",
-          "quote": "요약 사본은 제목·소유자만 담을 수 있다.",
+          "quote": "기본 요약 사본에는 문서 ID·제목·소유자가 담기고 본문은 빠진다.",
           "kind": "source"
         },
         {
@@ -109,7 +109,7 @@
         },
         {
           "path": "challenges/export-gap/README.md",
-          "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+          "quote": "기본 요약 사본에는 문서 ID·제목·소유자가 담기고 본문은 빠진다. 상태가 200이어도 실제 본문이 제공됐는지",
           "kind": "source"
         }
       ],
@@ -141,7 +141,7 @@
         },
         {
           "path": "challenges/export-gap/README.md",
-          "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+          "quote": "기본 요약 사본에는 문서 ID·제목·소유자가 담기고 본문은 빠진다. 상태가 200이어도 실제 본문이 제공됐는지",
           "kind": "source"
         },
         {
@@ -201,7 +201,7 @@
     },
     "explanation": {
       "level": 4,
-      "reason": "export-gap-learner (4): 해설은 로그인 쿠키와 동일한 문서의 두 요청, 403과 summary의 본문 없는 200, 서비스 안내를 통해 확인하는 full 형식과 실제 응답 본문을 순서대로 연결한다. 이어서 export가 로그인만 확인하고 소유자를 확인하지 않은 원인, 전체 형식에 소유권 확인을 추가하는 보호법, summary와 자기 문서 기능을 유지하는 기준을 설명한다. 실습 서비스의 경계를 벗어난 보편적 사고 주장도 하지 않는다.\nexport-gap-evidence (4): 해설은 자기 문서 정상 흐름, 타인 조회 거부, summary의 본문 없는 성공, full 본문 유출을 순서대로 연결하고 로그인만 검사하고 문서 소유자를 검사하지 않은 원인을 설명한다. 수정 정책 및 정상 기능 유지도 명시해 관찰에서 보호 원리로 이어진다.\nexport-gap-designer (4): 해설은 기준선 이후 동일 문서의 두 경로를 대조하고 summary 200과 full 본문을 구분한다. 로그인만 확인하고 소유자를 비교하지 않은 원인을 밝히며 full에 소유권 검사 추가 및 공개 summary와 정상 기능 유지를 설명한다.",
+      "reason": "export-gap-learner (4): 해설은 로그인 쿠키와 동일한 문서의 두 요청, 403과 summary의 본문 없는 200, 서비스 안내를 통해 확인하는 full 형식과 실제 응답 본문을 순서대로 연결한다. 이어서 export가 로그인만 확인하고 소유자를 확인하지 않은 원인, 전체 형식에 소유권 확인을 추가하는 보호법, summary와 자기 문서 기능을 유지하는 기준을 설명한다. 실습 서비스의 경계를 벗어난 보편적 사고 주장도 하지 않는다.\nexport-gap-evidence (4): 해설은 자기 문서 정상 흐름, 타인 조회 거부, summary의 본문 없는 성공, full 본문 유출을 순서대로 연결하고 로그인만 검사하고 문서 소유자를 검사하지 않은 원인을 설명한다. 수정 정책 및 정상 기능 유지도 명시해 관찰에서 보호 원리로 이어진다.\nexport-gap-designer (4): 해설은 기준선 이후 동일 문서의 두 경로를 대조하고 summary 200과 full 본문을 구분한다. 로그인만 확인하고 소유자를 비교하지 않은 원인을 밝히며 full에 소유권 검사 추가 및 공개 summary와 정상 기능 유지를 설명한다.\n2026-10-04 문장 검토: summary 응답에 문서 ID도 포함된다는 실제 스키마를 반영했다. 본문이 빠진 summary와 본문을 반환하는 full의 차이는 유지했다.",
       "evidence": [
         {
           "path": "challenges/export-gap/solve/README.md",
@@ -274,5 +274,5 @@
       "improvement": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
     }
   },
-  "source_sha256": "016d2db9e8eaccad5c4a1864f2cd3061b358c7dae492fca9d087c971c329a239"
+  "source_sha256": "31eb5c1416117c1816a44c2fcd8d2a865598351390692d943dfd38cdb40565d8"
 }

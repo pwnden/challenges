@@ -1,8 +1,8 @@
 {
   "slug": "retained-record",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/retained-record/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/retained-record/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/retained-record/2026-10-04-review.md",
   "criteria": {
     "goal": {
       "level": 4,
@@ -186,7 +186,7 @@
     },
     "explanation": {
       "level": 4,
-      "reason": "retained-record-learner (4): 해설은 CSV와 스키마의 역할, 읽기 전용 질의, 대상 문서의 버전과 승인 상태, 혼동 가능한 두 오답을 연결해 답을 보여 준다. 논리 삭제 상태가 행과 본문을 보존한다는 원인을 설명하고 보관 정책 조정 및 코드 교체를 안내한다. 결론은 조사한 백업 시점으로 제한한다.\nretained-record-evidence (4): 해설은 CSV와 DB 상태 비교, 조회 방법, 실제 대상의 승인·초안·무관 행 차이, 논리 삭제의 원인, 보관 범위 조치 및 노출 코드 교체를 연결한다. 결론을 백업 시점 행에 한정해 과도한 현실 시스템 유출 주장도 막고, 제거 대조 DB를 언급한다.\nretained-record-designer (4): 해설은 조회 단계, 찾은 행, 최신 draft와 무관한 고버전의 반례, 논리 삭제로 인한 잔존 원인, 보관 정책 및 코드 교체 행동을 잇고 이번 백업 시점에서 말할 수 있는 범위도 제한한다. 본문 제거 대조 결과 역시 언급한다.",
+      "reason": "retained-record-learner (4): 해설은 CSV와 스키마의 역할, 읽기 전용 질의, 대상 문서의 버전과 승인 상태, 혼동 가능한 두 오답을 연결해 답을 보여 준다. 논리 삭제 상태가 행과 본문을 보존한다는 원인을 설명하고 보관 정책 조정 및 코드 교체를 안내한다. 결론은 조사한 백업 시점으로 제한한다.\nretained-record-evidence (4): 해설은 CSV와 DB 상태 비교, 조회 방법, 실제 대상의 승인·초안·무관 행 차이, 논리 삭제의 원인, 보관 범위 조치 및 노출 코드 교체를 연결한다. 결론을 백업 시점 행에 한정해 과도한 현실 시스템 유출 주장도 막고, 제거 대조 DB를 언급한다.\nretained-record-designer (4): 해설은 조회 단계, 찾은 행, 최신 draft와 무관한 고버전의 반례, 논리 삭제로 인한 잔존 원인, 보관 정책 및 코드 교체 행동을 잇고 이번 백업 시점에서 말할 수 있는 범위도 제한한다. 본문 제거 대조 결과 역시 언급한다.\n2026-10-04 문장 검토: 작성 기록의 선수 지식 목록에 manifest의 retained-data 선언을 반영했다. 문서 26의 published 버전 2와 논리 삭제 상태를 실제 DB에서 확인했다.",
       "evidence": [
         {
           "path": "challenges/retained-record/solve/README.md",
@@ -264,5 +264,5 @@
       "improvement": "배포 전 재검토에서 현 실행 기록의 대상 이미지 태그와 각 consumer 단계의 출력 요약을 함께 남기면 이후 재현 검토가 쉬워진다."
     }
   },
-  "source_sha256": "8ac5a8684b05340116a2fdcf4d75da458c05f0828e94e9f9cc8f00a69d9ab881"
+  "source_sha256": "0992ae4a54a0e5314087f6dce98e43a2fe2a9315810861caa7cbad4cce5b5fa5"
 }

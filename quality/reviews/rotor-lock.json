@@ -1,8 +1,8 @@
 {
   "slug": "rotor-lock",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/rotor-lock/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/rotor-lock/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/rotor-lock/2026-10-04-review.md",
   "criteria": {
     "goal": {
       "level": 3,
@@ -109,7 +109,7 @@
         },
         {
           "path": "challenges/rotor-lock/README.md",
-          "quote": "검사기는 입력한 글자를 숫자로 바꾸고 몇 가지 연산을 거친 결과를\n저장된 숫자 목록과 비교한다.",
+          "quote": "검사기는 입력한 문자열을 바이트 단위의 숫자로 바꾸고, 몇 가지 연산을 거친 결과를\n저장된 숫자 목록과 비교한다.",
           "kind": "source"
         },
         {
@@ -236,7 +236,7 @@
     },
     "explanation": {
       "level": 4,
-      "reason": "rotor-lock-learner (4): 해설은 변환을 식으로 정리하고, 역연산 순서와 실제 첫 바이트 계산을 보인 뒤 재현 코드, 제출값과 오답 확인을 제공한다. 마지막에 공개된 가역 변환은 비밀번호를 보호하지 못한다는 원리를 설명하며 실습에서 말할 수 있는 범위도 검사기의 공개된 비교값에 한정된다.\nrotor-lock-evidence (3): 해설은 변환 순서와 각 역연산, previous 값의 출처, 재현 코드, checker의 성공/실패 관찰 및 공개된 변환의 한계를 이어 설명한다. 단, 다른 형식의 입력이나 비 ASCII UTF-8 입력 경계는 다루지 않아 설명 범위는 의도한 플래그 복원에 집중되어 있다.\nrotor-lock-designer (4): 해설은 순방향 변환식을 변수로 분해하고, 회전과 XOR를 역으로 되돌리는 원리, 첫 바이트의 수치 예, 전체 재현 명령, 성공/실패 확인, 그리고 공개 변환이 비밀번호 보호가 되지 않는다는 결론을 연결한다.\nrotor-lock-alternative (4): 해설은 변환식, 역회전과 XOR 복원, 첫 바이트 계산, 전체 재현과 checker 확인을 연결하고, 공개된 변환과 결과는 비밀번호를 보호하지 못한다는 원리를 설명한다. 임의의 다른 입력을 전부 평가했다는 더 넓은 주장은 하지 않는다.\nrotor-lock-tooling (3): Walkthrough формализует прямое преобразование и его обратный порядок, вручную проходит первый байт, объясняет зависимости, даёт воспроизводимую программу и сверку с checker. Вывод ограничен: публичные преобразование и результат не защищают строку именно в этой конструкции. Абстрактная защита — не хранить секретную проверочную трансформацию в полностью обратимом публичном коде, но вариант безопасной архитектуры подробно не рассматривается.",
+      "reason": "rotor-lock-learner (4): 해설은 변환을 식으로 정리하고, 역연산 순서와 실제 첫 바이트 계산을 보인 뒤 재현 코드, 제출값과 오답 확인을 제공한다. 마지막에 공개된 가역 변환은 비밀번호를 보호하지 못한다는 원리를 설명하며 실습에서 말할 수 있는 범위도 검사기의 공개된 비교값에 한정된다.\nrotor-lock-evidence (3): 해설은 변환 순서와 각 역연산, previous 값의 출처, 재현 코드, checker의 성공/실패 관찰 및 공개된 변환의 한계를 이어 설명한다. 단, 다른 형식의 입력이나 비 ASCII UTF-8 입력 경계는 다루지 않아 설명 범위는 의도한 플래그 복원에 집중되어 있다.\nrotor-lock-designer (4): 해설은 순방향 변환식을 변수로 분해하고, 회전과 XOR를 역으로 되돌리는 원리, 첫 바이트의 수치 예, 전체 재현 명령, 성공/실패 확인, 그리고 공개 변환이 비밀번호 보호가 되지 않는다는 결론을 연결한다.\nrotor-lock-alternative (4): 해설은 변환식, 역회전과 XOR 복원, 첫 바이트 계산, 전체 재현과 checker 확인을 연결하고, 공개된 변환과 결과는 비밀번호를 보호하지 못한다는 원리를 설명한다. 임의의 다른 입력을 전부 평가했다는 더 넓은 주장은 하지 않는다.\nrotor-lock-tooling (3): Walkthrough формализует прямое преобразование и его обратный порядок, вручную проходит первый байт, объясняет зависимости, даёт воспроизводимую программу и сверку с checker. Вывод ограничен: публичные преобразование и результат не защищают строку именно в этой конструкции. Абстрактная защита — не хранить секретную проверочную трансформацию в полностью обратимом публичном коде, но вариант безопасной архитектуры подробно не рассматривается.\n2026-10-04 문장 검토: 검사기의 처리 단위를 글자 대신 문자열에서 변환한 바이트로 설명했다. 함수·반복문 읽기는 선수 능력이고 역변환 도출은 이번 과업임을 분리했다. 정상 문자열과 추가 글자가 붙은 오답을 실제 검사기에 대조했다.",
       "evidence": [
         {
           "path": "challenges/rotor-lock/solve/README.md",
@@ -309,5 +309,5 @@
       "improvement": "문제전용작성기록에선언한이미지·실행날짜·역변환해답·정답/오답검사·정리결과를연결한다."
     }
   },
-  "source_sha256": "7c225caf5226aa4128b80ff7969b47728473ebf015d707d190f0e01301c6f41a"
+  "source_sha256": "40579a92a6660423c2cc65a11f4d3e6f93f3d253cca1d5a93526d687c9371577"
 }

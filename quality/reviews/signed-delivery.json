@@ -1,8 +1,8 @@
 {
   "slug": "signed-delivery",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/signed-delivery/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/signed-delivery/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/signed-delivery/2026-10-04-review.md",
   "criteria": {
     "goal": {
       "level": 4,
@@ -211,7 +211,7 @@
     },
     "explanation": {
       "level": 4,
-      "reason": "signed-delivery-learner (4): 해설은 실행 순서와 관찰 결과를 연결하고 과거 서명 성공이 현재 승인과 같지 않다는 이유를 설명한다. 해시만으로 신원을 증명하지 못하며 공개키 신뢰 전달도 필요하다는 한계와 개인키 불필요성을 다룬다.\nsigned-delivery-evidence (4): 해설은 안내·검증·해시 행동을 결과와 연결하고, 해시의 신원 한계와 키 전달 신뢰, 구버전의 현재 적용 한계를 명시한다.\nsigned-delivery-designer (4): 해설은 승인 안내와 두 버전의 검증 결과를 대조하고, 과거 승인본과 변경 사본을 구분한 뒤 검증 원문 해시로 제출하게 한다. 이어서 해시와 서명의 역할, 키 신뢰 경로 및 성공 결과가 현재 적용을 단독으로 증명하지 않는 범위를 설명한다.",
+      "reason": "signed-delivery-learner (4): 해설은 실행 순서와 관찰 결과를 연결하고 과거 서명 성공이 현재 승인과 같지 않다는 이유를 설명한다. 해시만으로 신원을 증명하지 못하며 공개키 신뢰 전달도 필요하다는 한계와 개인키 불필요성을 다룬다.\nsigned-delivery-evidence (4): 해설은 안내·검증·해시 행동을 결과와 연결하고, 해시의 신원 한계와 키 전달 신뢰, 구버전의 현재 적용 한계를 명시한다.\nsigned-delivery-designer (4): 해설은 승인 안내와 두 버전의 검증 결과를 대조하고, 과거 승인본과 변경 사본을 구분한 뒤 검증 원문 해시로 제출하게 한다. 이어서 해시와 서명의 역할, 키 신뢰 경로 및 성공 결과가 현재 적용을 단독으로 증명하지 않는 범위를 설명한다.\n2026-10-04 문장 검토: 같은 신뢰한 공개키라는 어색한 표현을 제공받은 공개키로 고쳤다. 서명 성공만으로 업무 승인을 일반화하지 않고, 이 실습의 승인 안내가 지정한 버전·서명과의 일치로 설명했다.",
       "evidence": [
         {
           "path": "challenges/signed-delivery/solve/README.md",
@@ -274,5 +274,5 @@
       "improvement": "자동 해답과 주요 대조군의 출력 결과를 날짜가 붙은 기록으로 남기면 실행 증거를 독립적으로 검토하기 쉽다."
     }
   },
-  "source_sha256": "92cc0f6ed036e7aa50170353d64c6fd717437225acab80ca175c3ae8d1e28c60"
+  "source_sha256": "641e76d0fe4e459921c379bf4b90c68a5cc28ecb95e2e1b61740bd4e37ff02d7"
 }

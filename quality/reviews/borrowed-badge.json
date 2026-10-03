@@ -1,8 +1,8 @@
 {
   "slug": "borrowed-badge",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/borrowed-badge/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/borrowed-badge/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 shared-knowledge source reconciliation; original learning levels retained",
   "criteria": {
     "goal": {
       "level": 4,
@@ -269,5 +269,5 @@
       "improvement": "향후 재설계된 snapshot에서 verify.py를 다시 실행하고 날짜·작업 트리 식별자를 기록해 현 상태와 연결한다.\n검증 실행의 날짜, 대상 revision 또는 이미지 digest, 명령별 결과를 별도 실행 기록으로 보존한다."
     }
   },
-  "source_sha256": "c95e21d117bed81c5e9ed83ff696f0f035dd1b9cc90382d542081b0e9707cfa3"
+  "source_sha256": "6cf063658313de8b9e9dfc56f644b70fe7f3c83bcc6ee2302d601b70dd5a9a62"
 }

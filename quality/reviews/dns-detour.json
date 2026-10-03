@@ -1,8 +1,8 @@
 {
   "slug": "dns-detour",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/dns-detour/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/dns-detour/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/dns-detour/2026-10-04-review.md",
   "criteria": {
     "goal": {
       "level": 3,
@@ -221,7 +221,7 @@
     },
     "explanation": {
       "level": 4,
-      "reason": "dns-detour-learner (3): 해설은 Q·대상 도메인 선택, 번호 순서 및 재전송 처리, 디코딩을 정답까지 재현하고 질의 이름에 담긴 값이 DNS 서버에 전달된다는 원리를 설명한다. 로컬 학습용 기록이며 현실 사고에서는 프로그램·서버와 다른 통신 자료도 확인해야 한다는 적용 범위도 밝힌다.\ndns-detour-evidence (4): 해설은 선택·중복 제거·순서·복원과 관찰된 데이터를 연결해 결론을 설명하고, 자료가 로컬 실험임을 밝히며 현실 사고 조사에는 추가 통신 맥락이 필요하다고 한계를 둔다.\ndns-detour-designer (4): 해설이 작업 순서를 요청 선택, 조각 기록, 재전송 중복 제거, 번호 순 연결, Base32 복원으로 구체화하고 결과 문자열 및 실행 예시를 제공한다. 이어 요청 이름에 자료를 붙이면 DNS 서버가 받는 이유를 설명하고, 실습 기록은 로컬 실험이며 실제 사고 판단에는 프로그램·서버·다른 통신 기록이 더 필요하다고 결론의 한계를 제시한다. 보호 방법도 DNS 서버 제한과 질의 이름 기록으로 연결한다.",
+      "reason": "dns-detour-learner (3): 해설은 Q·대상 도메인 선택, 번호 순서 및 재전송 처리, 디코딩을 정답까지 재현하고 질의 이름에 담긴 값이 DNS 서버에 전달된다는 원리를 설명한다. 로컬 학습용 기록이며 현실 사고에서는 프로그램·서버와 다른 통신 자료도 확인해야 한다는 적용 범위도 밝힌다.\ndns-detour-evidence (4): 해설은 선택·중복 제거·순서·복원과 관찰된 데이터를 연결해 결론을 설명하고, 자료가 로컬 실험임을 밝히며 현실 사고 조사에는 추가 통신 맥락이 필요하다고 한계를 둔다.\ndns-detour-designer (4): 해설이 작업 순서를 요청 선택, 조각 기록, 재전송 중복 제거, 번호 순 연결, Base32 복원으로 구체화하고 결과 문자열 및 실행 예시를 제공한다. 이어 요청 이름에 자료를 붙이면 DNS 서버가 받는 이유를 설명하고, 실습 기록은 로컬 실험이며 실제 사고 판단에는 프로그램·서버·다른 통신 기록이 더 필요하다고 결론의 한계를 제시한다. 보호 방법도 DNS 서버 제한과 질의 이름 기록으로 연결한다.\n2026-10-04 문장 검토: DNS가 요청하는 이름을 웹사이트에 한정하지 않고 서버의 도메인 이름으로 설명했다. 실제 로컬 A 질의의 이름 조각·순서·중복과 복원 결과를 확인했다.",
       "evidence": [
         {
           "path": "challenges/dns-detour/solve/README.md",
@@ -274,5 +274,5 @@
       "improvement": "날짜, 이미지 식별자, 자동 해답·정리 결과를 포함한 verify 실행 산출물을 기록으로 보존한다.\n배포 자료의 수정 뒤에도 현재 snapshot에 같은 검증이 적용됐는지 확인할 수 있도록 재실행 날짜와 입력 revision을 기록한다."
     }
   },
-  "source_sha256": "cab13433446653baf325a7b71e2d370ffa89ed81baea21fecbf7fb27f481a085"
+  "source_sha256": "b964d9e253922af40079c4d5c496cc0e1996246bed66afb7c8575d1ef4deb29c"
 }

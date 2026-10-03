@@ -1,8 +1,8 @@
 {
   "slug": "forgotten-shelf",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/forgotten-shelf/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
+  "reviewed_at": "2026-10-04",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/forgotten-shelf/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 shared-knowledge source reconciliation; original learning levels retained",
   "criteria": {
     "goal": {
       "level": 4,
@@ -229,5 +229,5 @@
       "improvement": "문제별 해답·패치·정리 결과를 해당 날짜와 실행 범위를 유지한 채 따로 남기면 재현 근거를 더 직접 확인할 수 있다.\n이 문제의 이미지/실행별로 취약 해답, 패치 공격 거부, 정상 경로, 정리의 결과를 날짜와 함께 별도 기록한다."
     }
   },
-  "source_sha256": "ea8fa46940337e1e83ad8f2ef9ce395464588764f8bb33ec316aabf1e65f580a"
+  "source_sha256": "cf886a61f39080cd70ddfa459f7a358efc5a37754397ad4d890af0e2405a3361"
 }
