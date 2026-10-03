@@ -1,0 +1,2082 @@
+{
+  "slug": "export-gap",
+  "input_sha256": "9eb1c32e95a1520e9db18c00215070b8483ea32d9ee8b8716ae0a6c58852a0e3",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "judge_count": 3,
+  "method": "criterion median",
+  "ballots": [
+    {
+      "judge_id": "export-gap-learner",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "learner-advocate",
+      "first_pass": "힌트와 해설을 보기 전 관찰 (learner-advocate)\n\n선언된 선수 지식은 터미널 명령, HTTP 요청/응답, 쿠키, curl JSON, 객체 소유권이다. 첫 행동이 구체적으로 제시되어 있어 로그인 쿠키 저장, 카탈로그 확인, 자기 문서 7 조회까지 시작할 수 있다. 이후 카탈로그의 ID·소유자·제목을 보고 다른 소유자의 문서 ID를 골라 같은 ID로 조회와 내보내기를 비교하라는 결정도 설명되어 있다. 추측할 명령 형식은 login과 export의 POST JSON이 있으나, 처음 본문에서 내보내기 응답에 담기는 필드/형식이 실제로 어떻게 나오는지는 GET / 안내와 관찰이 필요하다. 200 상태만으로 공개를 단정하지 말고 본문을 살펴보라는 안내는 상태와 내용의 혼동을 예방한다. 복구 코드는 잘못 허용된 내보내기 본문에서 찾으라고 한다. 첫 막힘 가능 지점은 해당 형식의 정확한 curl 명령과 JSON 경로를 스스로 구성해야 한다는 점이며, 선수 지식의 curl JSON과 jq로 시작할 수 있을 듯하나 실패 응답·정상 거부를 구별하는 기대값은 아직 구체적이지 않다. 제출 문자열 형식은 명시되어 있다.",
+      "review": {
+        "slug": "export-gap",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "export-gap-learner",
+        "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "의뢰와 목표가 문서 소유권 확인의 재사용 실패를 구체적으로 비교하게 하며, 성공 기준도 실제 잘못 공개된 본문에서 실행별 복구 코드를 확인하는 것으로 일치한다. 기본 조회, 목록, summary의 공개 필드와 full 본문을 구별하므로 목표 관찰이 가능하다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "요약 사본은 제목·소유자만 담을 수 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "본문은 접속 주소·계정·로그인 명령·목록·자기 문서 조회까지 실행 가능한 예를 주며, 선수 문서는 쿠키, POST JSON, jq, 소유권의 기초를 다룬다. 초급 학습자가 핵심 요청을 시작할 수 있다. 다만 다른 소유자의 ID와 `format=full`을 선택해 보내는 구체 명령은 힌트 2에서야 제공되고, 응답 경로 `.export.body`도 기본 본문에는 없다. GET /를 확인하거나 자료를 조합할 수는 있지만 초반에 스스로 연결할 부담이 남는다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "먼저 로그인 쿠키를 저장하고 목록과 자기 문서를 읽자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "`POST /api/exports`에 `{\"note_id\":문서ID}`를 보내면 기본 요약 사본을 요청한다.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/curl-json.md",
+                "quote": "`curl -H 'Content-Type: application/json' -d '{\"note_id\":3}' 주소`는 JSON 본문을\n보내는 POST 요청이다. `note_id`는 이 예제에서 작업 대상 문서의 ID를 뜻한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다."
+          },
+          "reasoning": {
+            "level": 4,
+            "reason": "난도 2의 초급 기준에 맞게 카탈로그에서 소유자를 식별하고, 같은 문서 ID로 GET과 POST를 대조하며, summary 200의 실제 본문 누락을 확인하고 full 본문의 노출을 확인한다. 상태 코드만으로 추론하지 말라는 지점과 문서 형식 차이가 오답을 줄이는 단서다. 힌트는 ID와 형식을 단계적으로 공개하며 판단 구조를 보강한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을\n비교하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "자동 해답은 미인증 요청과 자기 자료의 정상 동작을 먼저 확인한 뒤 타인 자료의 403 조회, 본문 없는 summary 200, full 응답의 실제 제출 코드 형식을 비교한다. 수정 검사도 자기 문서 조회/full, 타인 summary와 full 거부, 본문 소유자 조작, 잘못된 JSON/ID/형식, 없는 ID, 위조 쿠키를 검사하고 정상 기능을 유지한다. 정적 파일 대조가 적용되지 않는 API 과제에서 `artifact_controls=false`는 결함으로 볼 필요가 없다. 다만 이 심사에서 검사를 실행하지 않았으므로 코드는 대조 범위 근거이지 새 실행 결과가 아니다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/solve/solve.sh",
+                "quote": "test \"$(request -b \"$work/cookies\" \"$base/api/notes/42\")\" = 403",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/solve.sh",
+                "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/reply.json\" >/dev/null",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "'{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 4,
+            "reason": "기본 설명은 취약한 format 값이나 정답을 직접 말하지 않고 비교할 작업과 상태/본문 구분을 안내한다. 첫 힌트는 비교 대상과 본문 유무 관찰을 알려 주고, 둘째는 막힐 수 있는 다른 소유자 ID·full 입력·jq 경로를 제공한다. 답 코드 자체를 알려 주지 않아 도움의 단계가 해설과 분리된다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "같은 문서 ID에",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "`jq -r '.export.body'`로 실제 내용을 읽는다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 로그인 쿠키와 동일한 문서의 두 요청, 403과 summary의 본문 없는 200, 서비스 안내를 통해 확인하는 full 형식과 실제 응답 본문을 순서대로 연결한다. 이어서 export가 로그인만 확인하고 소유자를 확인하지 않은 원인, 전체 형식에 소유권 확인을 추가하는 보호법, summary와 자기 문서 기능을 유지하는 기준을 설명한다. 실습 서비스의 경계를 벗어난 보편적 사고 주장도 하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를\n비교하지 않았다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "수정한 서버는 full 내보내기에도 소유권을 확인해 문서 42의 본문을 거부한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "목록과 같은 공개 항목만 담는 summary는 계속 허용한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "현재 심사에서는 실행하지 않았다. 스냅샷에 포함된 과거 작성자 검증은 2026-10-02 20:56:32 UTC의 기록으로, 해답·패치·정리 및 소비자 실행·검증·중지와 PTY 요청·제출·중단·재접속·재시작을 통과했다고 기록한다. 이 기록은 재현 근거지만 작성자 기록이며 이번 검토의 독립 실행으로 간주하지 않는다. 원본 보존도 함께 기록되어 있다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\"",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"author_solution_patch_cleanup\": true,",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true,",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다."
+          },
+          "browser": {
+            "level": null,
+            "reason": "현재 문제의 검색·선택부터 브라우저에서 환경 준비, 터미널 풀이, 정답/오답 제출, 종료까지 확인한 브라우저 세션 기록이 없다. 기존 PTY 검증은 이 항목을 대체하지 않는다.",
+            "evidence": [],
+            "improvement": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "선언된 초급자의 독립 풀이 시간·막힌 단계·힌트 사용·원리 이해를 기록한 세션은 확인되지 않았다. 작성자 검증과 현재 모델의 읽기 심사는 학습자 풀이가 아니다.",
+            "evidence": [],
+            "improvement": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "export-gap-evidence",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "evidence-examiner",
+      "first_pass": "first_pass: evidence-examiner 관점에서 시작 지점은 README의 제공된 로그인, catalog, 자기 문서 GET 예시다. 이후 catalog에서 다른 소유자의 ID를 식별해 동일 ID로 notes GET과 exports POST를 수행하고 상태뿐 아니라 응답 본문을 비교하라는 흐름이 본문에 있다. 따라서 유효한 증거는 본인 자료의 정상 응답, 타인 자료 일반 조회의 거부, 타인 자료 내보내기의 실제 반환 본문에 담긴 민감 복구 코드다. 단순 200, 열린 포트, 제목/소유자만 포함한 요약은 비밀 유출의 증거가 되지 않는다. 본문은 요약 사본이 제목·소유자만 담을 수 있다고 먼저 말해 반환 내용이 적절한지 점검하도록 주의를 주지만, 복구 코드가 나타나는 구체적 반환 필드나 오답/거부 응답 대조는 아직 제시하지 않는다. API 요청 둘을 비교하라는 목표는 명확하며 자기 문서 확인이 정상 대조 역할을 한다. 실제 민감 자료 유출과 정상 요약의 경계가 본문 안내대로 응답에서 확인 가능한지 추가 자료에서 대조해야 한다.",
+      "review": {
+        "slug": "export-gap",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "export-gap-evidence",
+        "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "운영자의 검증 의뢰가 같은 타인 문서에 대한 두 작업 비교와 민감 값 회수로 이어지고, 목표 및 해설은 조회 403과 full 내보내기의 실제 본문을 대조하도록 구체화한다. 단순 성공 상태가 아니라 유출 본문 자체를 완료 증거로 삼는다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "일반 조회는 403이다. 기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "계정, 주소, 목록과 조회 API, 로그인 및 본인 자료 요청 예시가 제공되고 선수 개념으로 curl/JSON/쿠키를 설명한다. 다만 본문이 full 형식 존재와 해당 선택 필드를 미리 지정하지 않아 시작 정보만으로는 어떤 내보내기 값이 본문을 포함하는지 API 안내에서 추가 확인해야 한다. 이는 요구된 관찰을 남기지만 실제 환경에서 화면 안내를 확인할 작은 탐색을 요구한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "`POST /api/exports`에 `{\"note_id\":문서ID}`를 보내면 기본 요약 사본을 요청한다.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/curl-json.md",
+                "quote": "로그인 응답의 쿠키를 저장하려면 `-c cookies.txt`, 이후 요청에 보내려면",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/challenge.toml",
+                "quote": "requires = [\"terminal-commands\",\"http-messages\",\"http-cookies\",\"curl-json\",\"object-ownership\"]",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 4,
+            "reason": "난도 2 초급에 맞게 목록에서 타인 소유자의 ID를 연결하고 같은 자원의 조회/내보내기 결과를 비교한 뒤 상태와 본문, redacted 여부를 분리해 판단한다. 자기 자료 정상 동작 및 타인 문서의 200 summary를 오답 대조로 두고 full 요청의 실제 민감 본문을 확인해야 하므로 상태 코드 하나만 보고 추론할 수 없다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "staff의 문서 ID는 42다. 로그인 쿠키를 보내면서 내보내기의 JSON 본문을",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "대상 동작은 본인 소유 문서, 타인 일반 조회, 타인 기본 summary, 타인 full을 서로 비교할 수 있고 patched 검사에는 정상 self read/export, self full, other summary 유지와 타인 full 거부가 있다. 본문 또한 title/owner만의 요약과 실제 body를 명시적으로 구분해 200 오탐을 막는다. 패치 검사는 body 제거뿐 아니라 owner 위조, 미인증/위조 쿠키, 잘못된 형식도 다룬다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "test \"$(request -b \"$work/cookies\" -H 'Content-Type: application/json' -d '{\"note_id\":7,\"format\":\"full\"}' \"$base/api/exports\")\" = 200",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "for body in '{\"note_id\":42,\"format\":\"full\"}' '{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'; do",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 4,
+            "reason": "첫 힌트는 ID에 대한 두 엔드포인트 비교와 상태 이외의 redacted/body 관찰로 오탐 가능성을 줄이고, 둘째 힌트는 막혔을 때 실제 full 형식과 jq 추출 위치를 알려준다. 브리핑이 타인 자료의 유출 값을 직접 제공하지 않으며 정답은 실제 인스턴스 본문에서 얻는다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "`jq -r '.export.body'`로 실제 내용을 읽는다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 자기 문서 정상 흐름, 타인 조회 거부, summary의 본문 없는 성공, full 본문 유출을 순서대로 연결하고 로그인만 검사하고 문서 소유자를 검사하지 않은 원인을 설명한다. 수정 정책 및 정상 기능 유지도 명시해 관찰에서 보호 원리로 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 4,
+            "reason": "이번 심사 중 재실행하지 않았으며 이를 현재 실행으로 취급하지 않는다. 날짜가 있는 2026-10-02 기록에는 PTY 해답 제출·중단/재접속/초기화 검증과 실제 검증기 통과가 기록되어 있고 2026-10-03 작성 기록은 해답, 패치, 소비자 실행 검증을 별도로 보고한다. 문제 전용 패치 테스트도 타인 full 거부 및 정상 기능 유지를 포함한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\",",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true,",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/AUTHORING.md",
+                "quote": "2026-10-03 Codex 작성. 의뢰·계정·문서 소유자·작업과 오류 상태의 의미를 대조했다.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": ""
+          },
+          "browser": {
+            "level": null,
+            "reason": "현재 문제를 브라우저에서 검색하고 환경 준비부터 제출·종료까지 수행한 세션 근거를 제공된 자료에서 확인하지 못했다. 작성 기록의 PTY 확인은 브라우저 전체 풀이를 입증하지 않는다.",
+            "evidence": [],
+            "improvement": "실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "대상 수준 독립 학습자의 풀이 시간, 막힌 단계, 힌트 사용, 원리 이해 세션 기록이 없다. 자동 해답과 작성자 관찰은 독립 학습자 증거가 아니다.",
+            "evidence": [],
+            "improvement": "선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "export-gap-designer",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "learning-designer",
+      "first_pass": "README는 guest 로그인 후 catalog와 자기 문서 ID 7을 조회하게 하므로, 목록에서 운영자 소유 문서를 골라 GET /api/notes/{id}와 POST /api/exports를 같은 세션으로 비교하는 시작 절차는 정해져 있다. export 본문에 민감한 코드가 포함되는지 응답 상태뿐 아니라 본문과 자기 문서 응답을 대조해야 한다는 점도 README가 알려 준다. 이 비교는 권한 검사를 읽기와 내보내기 경로마다 따로 해야 하는지 보여 주도록 설계됐다.\n\n교육 설계 관점에서 첫 선택은 catalog의 다른 소유자 ID를 찾아 동일 대상으로 두 요청을 하는 것이다. curl, JSON, 쿠키의 최소 조작은 선수 지식에서 제공되고 README에는 로그인 명령까지 제시되어 있어 이 부분이 핵심 난도는 아니다. 다만 예시가 자기 문서 ID 7의 직접 조회만 보여주고 export 호출 문법은 설명형으로만 제시하므로 POST 명령 구성은 학습자가 기존 JSON 예시와 endpoint 설명을 연결해야 한다. 요약 사본은 제목·소유자만 담을 수 있다고 본문이 말하지만 실제로 코드 유출이 발생할 수 있는 조건은 아직 불명확하다. 준비 명령이 로그인/기준선까지 정해 주지만, 대상 선택과 응답 비교는 남아 있다.",
+      "review": {
+        "slug": "export-gap",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "export-gap-designer",
+        "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "의뢰와 완료 증거가 같은 권한 경계 비교에 연결된다. staff 문서는 guest에게 비공개여야 하며 GET과 export에서 실제 본문 노출을 비교해 복구 코드를 찾게 한다. 서비스 안내의 full이 본문을 담으므로 제출물은 관찰과 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/vulnerable/app.py",
+                "quote": "'export_formats': {'summary': 'Metadata only (default)', 'full': 'Includes document body'}",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "선수 지식은 curl·JSON·쿠키·HTTP 상태를 설명하고 본문은 계정, 주소, endpoint와 로그인/조회 기준선을 제공한다. 학습자는 catalog에서 타인 ID를 선택해 export POST를 구성해야 하며 실제 curl 문법은 선수 예시에서 연결해야 한다. 약간의 구성 부담은 남는다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "{\"note_id\":문서ID}",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/curl-json.md",
+                "quote": "보내는 POST 요청이다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "POST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+          },
+          "reasoning": {
+            "level": 4,
+            "reason": "자기 문서 기준선 이후 catalog에서 타인 문서를 골라 같은 ID의 일반 조회와 export를 비교한다. 상태 200만으로 본문 노출을 판단하지 않고 summary의 redacted 및 body 유무를 확인하여 상태와 데이터 공개를 혼동하는 오답도 가려낸다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "검사는 자기 문서 조회/full과 타인 조회 403, 타인 summary의 본문 부재, 취약 타인 full을 구분한다. 패치 검사는 정상 기능을 보존하며 타인 full과 본문 소유자 조작, 잘못된 형식·JSON·ID, 비로그인/위조 쿠키를 차단한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/body\" >/dev/null",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "for body in '{\"note_id\":42,\"format\":\"full\"}' '{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'; do",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/vulnerable/app.py",
+                "quote": "if not export_allowed(note, user):\n                return self.reply(403, {'error': 'not_owner'})",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 4,
+            "reason": "첫 힌트는 동일 ID 두 작업과 본문 검사를 환기하고, 둘째는 ID 42와 full 형식 필드를 알려 준다. 요청 구성의 막힘은 풀어주되 응답 확인과 원인 설명은 남겨둔 단계적 힌트다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "`GET /api/notes/ID`와 `POST /api/exports`를 각각 보내 보자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 기준선 이후 동일 문서의 두 경로를 대조하고 summary 200과 full 본문을 구분한다. 로그인만 확인하고 소유자를 비교하지 않은 원인을 밝히며 full에 소유권 검사 추가 및 공개 summary와 정상 기능 유지를 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "목록과 같은 공개 항목만 담는 summary는 계속 허용한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "과거 작성 기록은 2026-10-03에 해답, 패치, 정상 기능 및 consumer validate/run/verify/stop을 검사했고 PTY에서 요청부터 종료와 원본 보존까지 했다고 기록한다. validation은 2026-10-02 UTC의 passed 결과다. 이는 과거 실행이지 이번 재실행은 아니며 패치 스크립트 로그가 없어 3이다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/AUTHORING.md",
+                "quote": "실제 PTY의 요청·해답·정답/오답 제출·중단·재접속·종료 후 초기화와 원본 보존을",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\"",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+          },
+          "browser": {
+            "level": null,
+            "reason": "문제 선택부터 환경 준비, 풀이, 정답/오답 제출 및 종료까지 확인한 브라우저 세션 기록이 없다. PTY 검증은 이를 대신하지 않는다.",
+            "evidence": [],
+            "improvement": "실제 브라우저 전체 풀이 세션을 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "해설 없이 푼 대상 수준 독립 학습자의 시간, 막힘, 힌트 사용과 원리 이해 기록이 없다. 작성자 해답은 독립 세션 근거가 아니다.",
+            "evidence": [],
+            "improvement": "초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+          }
+        }
+      }
+    }
+  ],
+  "distribution": {
+    "goal": {
+      "levels": {
+        "export-gap-learner": 4,
+        "export-gap-evidence": 4,
+        "export-gap-designer": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "starting_context": {
+      "levels": {
+        "export-gap-learner": 3,
+        "export-gap-evidence": 3,
+        "export-gap-designer": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "reasoning": {
+      "levels": {
+        "export-gap-learner": 4,
+        "export-gap-evidence": 4,
+        "export-gap-designer": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "controls": {
+      "levels": {
+        "export-gap-learner": 4,
+        "export-gap-evidence": 4,
+        "export-gap-designer": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "hints": {
+      "levels": {
+        "export-gap-learner": 4,
+        "export-gap-evidence": 4,
+        "export-gap-designer": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "explanation": {
+      "levels": {
+        "export-gap-learner": 4,
+        "export-gap-evidence": 4,
+        "export-gap-designer": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "execution": {
+      "levels": {
+        "export-gap-learner": 3,
+        "export-gap-evidence": 4,
+        "export-gap-designer": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "browser": {
+      "levels": {
+        "export-gap-learner": null,
+        "export-gap-evidence": null,
+        "export-gap-designer": null
+      },
+      "unverified_judges": 3,
+      "proposed_median": null,
+      "needs_adjudication": false
+    },
+    "learner": {
+      "levels": {
+        "export-gap-learner": null,
+        "export-gap-evidence": null,
+        "export-gap-designer": null
+      },
+      "unverified_judges": 3,
+      "proposed_median": null,
+      "needs_adjudication": false
+    }
+  },
+  "needs_adjudication": [],
+  "summary": {
+    "slug": "export-gap",
+    "points": 75.0,
+    "reviewed_weight": 80,
+    "pending": [
+      "browser",
+      "learner"
+    ],
+    "improvements": [
+      {
+        "criterion": "starting_context",
+        "action": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다.\nPOST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+      },
+      {
+        "criterion": "execution",
+        "action": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+      },
+      {
+        "criterion": "browser",
+        "action": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다.\n실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다.\n실제 브라우저 전체 풀이 세션을 기록한다."
+      },
+      {
+        "criterion": "learner",
+        "action": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다.\n선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다.\n초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+      }
+    ]
+  },
+  "adjudications": {},
+  "first_pass_records": {
+    "learner": {
+      "saved_text": "힌트와 해설을 보기 전 관찰 (learner-advocate)\n\n선언된 선수 지식은 터미널 명령, HTTP 요청/응답, 쿠키, curl JSON, 객체 소유권이다. 첫 행동이 구체적으로 제시되어 있어 로그인 쿠키 저장, 카탈로그 확인, 자기 문서 7 조회까지 시작할 수 있다. 이후 카탈로그의 ID·소유자·제목을 보고 다른 소유자의 문서 ID를 골라 같은 ID로 조회와 내보내기를 비교하라는 결정도 설명되어 있다. 추측할 명령 형식은 login과 export의 POST JSON이 있으나, 처음 본문에서 내보내기 응답에 담기는 필드/형식이 실제로 어떻게 나오는지는 GET / 안내와 관찰이 필요하다. 200 상태만으로 공개를 단정하지 말고 본문을 살펴보라는 안내는 상태와 내용의 혼동을 예방한다. 복구 코드는 잘못 허용된 내보내기 본문에서 찾으라고 한다. 첫 막힘 가능 지점은 해당 형식의 정확한 curl 명령과 JSON 경로를 스스로 구성해야 한다는 점이며, 선수 지식의 curl JSON과 jq로 시작할 수 있을 듯하나 실패 응답·정상 거부를 구별하는 기대값은 아직 구체적이지 않다. 제출 문자열 형식은 명시되어 있다.\n",
+      "matches_wrapper": true
+    },
+    "evidence": {
+      "saved_text": "first_pass: evidence-examiner 관점에서 시작 지점은 README의 제공된 로그인, catalog, 자기 문서 GET 예시다. 이후 catalog에서 다른 소유자의 ID를 식별해 동일 ID로 notes GET과 exports POST를 수행하고 상태뿐 아니라 응답 본문을 비교하라는 흐름이 본문에 있다. 따라서 유효한 증거는 본인 자료의 정상 응답, 타인 자료 일반 조회의 거부, 타인 자료 내보내기의 실제 반환 본문에 담긴 민감 복구 코드다. 단순 200, 열린 포트, 제목/소유자만 포함한 요약은 비밀 유출의 증거가 되지 않는다. 본문은 요약 사본이 제목·소유자만 담을 수 있다고 먼저 말해 반환 내용이 적절한지 점검하도록 주의를 주지만, 복구 코드가 나타나는 구체적 반환 필드나 오답/거부 응답 대조는 아직 제시하지 않는다. API 요청 둘을 비교하라는 목표는 명확하며 자기 문서 확인이 정상 대조 역할을 한다. 실제 민감 자료 유출과 정상 요약의 경계가 본문 안내대로 응답에서 확인 가능한지 추가 자료에서 대조해야 한다.\n",
+      "matches_wrapper": true
+    },
+    "designer": {
+      "saved_text": "README는 guest 로그인 후 catalog와 자기 문서 ID 7을 조회하게 하므로, 목록에서 운영자 소유 문서를 골라 GET /api/notes/{id}와 POST /api/exports를 같은 세션으로 비교하는 시작 절차는 정해져 있다. export 본문에 민감한 코드가 포함되는지 응답 상태뿐 아니라 본문과 자기 문서 응답을 대조해야 한다는 점도 README가 알려 준다. 이 비교는 권한 검사를 읽기와 내보내기 경로마다 따로 해야 하는지 보여 주도록 설계됐다.\n\n교육 설계 관점에서 첫 선택은 catalog의 다른 소유자 ID를 찾아 동일 대상으로 두 요청을 하는 것이다. curl, JSON, 쿠키의 최소 조작은 선수 지식에서 제공되고 README에는 로그인 명령까지 제시되어 있어 이 부분이 핵심 난도는 아니다. 다만 예시가 자기 문서 ID 7의 직접 조회만 보여주고 export 호출 문법은 설명형으로만 제시하므로 POST 명령 구성은 학습자가 기존 JSON 예시와 endpoint 설명을 연결해야 한다. 요약 사본은 제목·소유자만 담을 수 있다고 본문이 말하지만 실제로 코드 유출이 발생할 수 있는 조건은 아직 불명확하다. 준비 명령이 로그인/기준선까지 정해 주지만, 대상 선택과 응답 비교는 남아 있다.\n",
+      "matches_wrapper": true
+    }
+  },
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "triggers": [],
+    "initial_summary": {
+      "slug": "export-gap",
+      "points": 75.0,
+      "reviewed_weight": 80,
+      "pending": [
+        "browser",
+        "learner"
+      ],
+      "improvements": [
+        {
+          "criterion": "starting_context",
+          "action": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다.\nPOST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+        },
+        {
+          "criterion": "execution",
+          "action": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+        },
+        {
+          "criterion": "browser",
+          "action": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다.\n실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다.\n실제 브라우저 전체 풀이 세션을 기록한다."
+        },
+        {
+          "criterion": "learner",
+          "action": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다.\n선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다.\n초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+        }
+      ]
+    },
+    "initial_needs_adjudication": [],
+    "initial_result": {
+      "candidate": {
+        "slug": "export-gap",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "Panel median: export-gap-designer, export-gap-evidence, export-gap-learner",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "export-gap-learner (4): 의뢰와 목표가 문서 소유권 확인의 재사용 실패를 구체적으로 비교하게 하며, 성공 기준도 실제 잘못 공개된 본문에서 실행별 복구 코드를 확인하는 것으로 일치한다. 기본 조회, 목록, summary의 공개 필드와 full 본문을 구별하므로 목표 관찰이 가능하다.\nexport-gap-evidence (4): 운영자의 검증 의뢰가 같은 타인 문서에 대한 두 작업 비교와 민감 값 회수로 이어지고, 목표 및 해설은 조회 403과 full 내보내기의 실제 본문을 대조하도록 구체화한다. 단순 성공 상태가 아니라 유출 본문 자체를 완료 증거로 삼는다.\nexport-gap-designer (4): 의뢰와 완료 증거가 같은 권한 경계 비교에 연결된다. staff 문서는 guest에게 비공개여야 하며 GET과 export에서 실제 본문 노출을 비교해 복구 코드를 찾게 한다. 서비스 안내의 full이 본문을 담으므로 제출물은 관찰과 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "요약 사본은 제목·소유자만 담을 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "일반 조회는 403이다. 기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/vulnerable/app.py",
+                "quote": "'export_formats': {'summary': 'Metadata only (default)', 'full': 'Includes document body'}",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "export-gap-learner (3): 본문은 접속 주소·계정·로그인 명령·목록·자기 문서 조회까지 실행 가능한 예를 주며, 선수 문서는 쿠키, POST JSON, jq, 소유권의 기초를 다룬다. 초급 학습자가 핵심 요청을 시작할 수 있다. 다만 다른 소유자의 ID와 `format=full`을 선택해 보내는 구체 명령은 힌트 2에서야 제공되고, 응답 경로 `.export.body`도 기본 본문에는 없다. GET /를 확인하거나 자료를 조합할 수는 있지만 초반에 스스로 연결할 부담이 남는다.\nexport-gap-evidence (3): 계정, 주소, 목록과 조회 API, 로그인 및 본인 자료 요청 예시가 제공되고 선수 개념으로 curl/JSON/쿠키를 설명한다. 다만 본문이 full 형식 존재와 해당 선택 필드를 미리 지정하지 않아 시작 정보만으로는 어떤 내보내기 값이 본문을 포함하는지 API 안내에서 추가 확인해야 한다. 이는 요구된 관찰을 남기지만 실제 환경에서 화면 안내를 확인할 작은 탐색을 요구한다.\nexport-gap-designer (3): 선수 지식은 curl·JSON·쿠키·HTTP 상태를 설명하고 본문은 계정, 주소, endpoint와 로그인/조회 기준선을 제공한다. 학습자는 catalog에서 타인 ID를 선택해 export POST를 구성해야 하며 실제 curl 문법은 선수 예시에서 연결해야 한다. 약간의 구성 부담은 남는다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "먼저 로그인 쿠키를 저장하고 목록과 자기 문서를 읽자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "`POST /api/exports`에 `{\"note_id\":문서ID}`를 보내면 기본 요약 사본을 요청한다.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/curl-json.md",
+                "quote": "`curl -H 'Content-Type: application/json' -d '{\"note_id\":3}' 주소`는 JSON 본문을\n보내는 POST 요청이다. `note_id`는 이 예제에서 작업 대상 문서의 ID를 뜻한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/curl-json.md",
+                "quote": "로그인 응답의 쿠키를 저장하려면 `-c cookies.txt`, 이후 요청에 보내려면",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/challenge.toml",
+                "quote": "requires = [\"terminal-commands\",\"http-messages\",\"http-cookies\",\"curl-json\",\"object-ownership\"]",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "{\"note_id\":문서ID}",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/curl-json.md",
+                "quote": "보내는 POST 요청이다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다.\nPOST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+          },
+          "reasoning": {
+            "level": 4,
+            "reason": "export-gap-learner (4): 난도 2의 초급 기준에 맞게 카탈로그에서 소유자를 식별하고, 같은 문서 ID로 GET과 POST를 대조하며, summary 200의 실제 본문 누락을 확인하고 full 본문의 노출을 확인한다. 상태 코드만으로 추론하지 말라는 지점과 문서 형식 차이가 오답을 줄이는 단서다. 힌트는 ID와 형식을 단계적으로 공개하며 판단 구조를 보강한다.\nexport-gap-evidence (4): 난도 2 초급에 맞게 목록에서 타인 소유자의 ID를 연결하고 같은 자원의 조회/내보내기 결과를 비교한 뒤 상태와 본문, redacted 여부를 분리해 판단한다. 자기 자료 정상 동작 및 타인 문서의 200 summary를 오답 대조로 두고 full 요청의 실제 민감 본문을 확인해야 하므로 상태 코드 하나만 보고 추론할 수 없다.\nexport-gap-designer (4): 자기 문서 기준선 이후 catalog에서 타인 문서를 골라 같은 ID의 일반 조회와 export를 비교한다. 상태 200만으로 본문 노출을 판단하지 않고 summary의 redacted 및 body 유무를 확인하여 상태와 데이터 공개를 혼동하는 오답도 가려낸다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을\n비교하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "staff의 문서 ID는 42다. 로그인 쿠키를 보내면서 내보내기의 JSON 본문을",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "export-gap-learner (4): 자동 해답은 미인증 요청과 자기 자료의 정상 동작을 먼저 확인한 뒤 타인 자료의 403 조회, 본문 없는 summary 200, full 응답의 실제 제출 코드 형식을 비교한다. 수정 검사도 자기 문서 조회/full, 타인 summary와 full 거부, 본문 소유자 조작, 잘못된 JSON/ID/형식, 없는 ID, 위조 쿠키를 검사하고 정상 기능을 유지한다. 정적 파일 대조가 적용되지 않는 API 과제에서 `artifact_controls=false`는 결함으로 볼 필요가 없다. 다만 이 심사에서 검사를 실행하지 않았으므로 코드는 대조 범위 근거이지 새 실행 결과가 아니다.\nexport-gap-evidence (4): 대상 동작은 본인 소유 문서, 타인 일반 조회, 타인 기본 summary, 타인 full을 서로 비교할 수 있고 patched 검사에는 정상 self read/export, self full, other summary 유지와 타인 full 거부가 있다. 본문 또한 title/owner만의 요약과 실제 body를 명시적으로 구분해 200 오탐을 막는다. 패치 검사는 body 제거뿐 아니라 owner 위조, 미인증/위조 쿠키, 잘못된 형식도 다룬다.\nexport-gap-designer (4): 검사는 자기 문서 조회/full과 타인 조회 403, 타인 summary의 본문 부재, 취약 타인 full을 구분한다. 패치 검사는 정상 기능을 보존하며 타인 full과 본문 소유자 조작, 잘못된 형식·JSON·ID, 비로그인/위조 쿠키를 차단한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/solve/solve.sh",
+                "quote": "test \"$(request -b \"$work/cookies\" \"$base/api/notes/42\")\" = 403",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/solve.sh",
+                "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/reply.json\" >/dev/null",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "'{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/README.md",
+                "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "test \"$(request -b \"$work/cookies\" -H 'Content-Type: application/json' -d '{\"note_id\":7,\"format\":\"full\"}' \"$base/api/exports\")\" = 200",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "for body in '{\"note_id\":42,\"format\":\"full\"}' '{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'; do",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/body\" >/dev/null",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/vulnerable/app.py",
+                "quote": "if not export_allowed(note, user):\n                return self.reply(403, {'error': 'not_owner'})",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 4,
+            "reason": "export-gap-learner (4): 기본 설명은 취약한 format 값이나 정답을 직접 말하지 않고 비교할 작업과 상태/본문 구분을 안내한다. 첫 힌트는 비교 대상과 본문 유무 관찰을 알려 주고, 둘째는 막힐 수 있는 다른 소유자 ID·full 입력·jq 경로를 제공한다. 답 코드 자체를 알려 주지 않아 도움의 단계가 해설과 분리된다.\nexport-gap-evidence (4): 첫 힌트는 ID에 대한 두 엔드포인트 비교와 상태 이외의 redacted/body 관찰로 오탐 가능성을 줄이고, 둘째 힌트는 막혔을 때 실제 full 형식과 jq 추출 위치를 알려준다. 브리핑이 타인 자료의 유출 값을 직접 제공하지 않으며 정답은 실제 인스턴스 본문에서 얻는다.\nexport-gap-designer (4): 첫 힌트는 동일 ID 두 작업과 본문 검사를 환기하고, 둘째는 ID 42와 full 형식 필드를 알려 준다. 요청 구성의 막힘은 풀어주되 응답 확인과 원인 설명은 남겨둔 단계적 힌트다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "같은 문서 ID에",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "`jq -r '.export.body'`로 실제 내용을 읽는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/1.md",
+                "quote": "`GET /api/notes/ID`와 `POST /api/exports`를 각각 보내 보자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/hints/2.md",
+                "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "export-gap-learner (4): 해설은 로그인 쿠키와 동일한 문서의 두 요청, 403과 summary의 본문 없는 200, 서비스 안내를 통해 확인하는 full 형식과 실제 응답 본문을 순서대로 연결한다. 이어서 export가 로그인만 확인하고 소유자를 확인하지 않은 원인, 전체 형식에 소유권 확인을 추가하는 보호법, summary와 자기 문서 기능을 유지하는 기준을 설명한다. 실습 서비스의 경계를 벗어난 보편적 사고 주장도 하지 않는다.\nexport-gap-evidence (4): 해설은 자기 문서 정상 흐름, 타인 조회 거부, summary의 본문 없는 성공, full 본문 유출을 순서대로 연결하고 로그인만 검사하고 문서 소유자를 검사하지 않은 원인을 설명한다. 수정 정책 및 정상 기능 유지도 명시해 관찰에서 보호 원리로 이어진다.\nexport-gap-designer (4): 해설은 기준선 이후 동일 문서의 두 경로를 대조하고 summary 200과 full 본문을 구분한다. 로그인만 확인하고 소유자를 비교하지 않은 원인을 밝히며 full에 소유권 검사 추가 및 공개 summary와 정상 기능 유지를 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를\n비교하지 않았다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "수정한 서버는 full 내보내기에도 소유권을 확인해 문서 42의 본문을 거부한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "목록과 같은 공개 항목만 담는 summary는 계속 허용한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/export-gap/solve/README.md",
+                "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "export-gap-learner (3): 현재 심사에서는 실행하지 않았다. 스냅샷에 포함된 과거 작성자 검증은 2026-10-02 20:56:32 UTC의 기록으로, 해답·패치·정리 및 소비자 실행·검증·중지와 PTY 요청·제출·중단·재접속·재시작을 통과했다고 기록한다. 이 기록은 재현 근거지만 작성자 기록이며 이번 검토의 독립 실행으로 간주하지 않는다. 원본 보존도 함께 기록되어 있다.\nexport-gap-evidence (4): 이번 심사 중 재실행하지 않았으며 이를 현재 실행으로 취급하지 않는다. 날짜가 있는 2026-10-02 기록에는 PTY 해답 제출·중단/재접속/초기화 검증과 실제 검증기 통과가 기록되어 있고 2026-10-03 작성 기록은 해답, 패치, 소비자 실행 검증을 별도로 보고한다. 문제 전용 패치 테스트도 타인 full 거부 및 정상 기능 유지를 포함한다.\nexport-gap-designer (3): 과거 작성 기록은 2026-10-03에 해답, 패치, 정상 기능 및 consumer validate/run/verify/stop을 검사했고 PTY에서 요청부터 종료와 원본 보존까지 했다고 기록한다. validation은 2026-10-02 UTC의 passed 결과다. 이는 과거 실행이지 이번 재실행은 아니며 패치 스크립트 로그가 없어 3이다.",
+            "evidence": [
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\"",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"author_solution_patch_cleanup\": true,",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true,",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/authoring/validation.json",
+                "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\",",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/AUTHORING.md",
+                "quote": "2026-10-03 Codex 작성. 의뢰·계정·문서 소유자·작업과 오류 상태의 의미를 대조했다.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/patched/test.sh",
+                "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/export-gap/AUTHORING.md",
+                "quote": "실제 PTY의 요청·해답·정답/오답 제출·중단·재접속·종료 후 초기화와 원본 보존을",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+          },
+          "browser": {
+            "level": null,
+            "reason": "export-gap-learner (None): 현재 문제의 검색·선택부터 브라우저에서 환경 준비, 터미널 풀이, 정답/오답 제출, 종료까지 확인한 브라우저 세션 기록이 없다. 기존 PTY 검증은 이 항목을 대체하지 않는다.\nexport-gap-evidence (None): 현재 문제를 브라우저에서 검색하고 환경 준비부터 제출·종료까지 수행한 세션 근거를 제공된 자료에서 확인하지 못했다. 작성 기록의 PTY 확인은 브라우저 전체 풀이를 입증하지 않는다.\nexport-gap-designer (None): 문제 선택부터 환경 준비, 풀이, 정답/오답 제출 및 종료까지 확인한 브라우저 세션 기록이 없다. PTY 검증은 이를 대신하지 않는다.",
+            "evidence": [],
+            "improvement": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다.\n실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다.\n실제 브라우저 전체 풀이 세션을 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "export-gap-learner (None): 선언된 초급자의 독립 풀이 시간·막힌 단계·힌트 사용·원리 이해를 기록한 세션은 확인되지 않았다. 작성자 검증과 현재 모델의 읽기 심사는 학습자 풀이가 아니다.\nexport-gap-evidence (None): 대상 수준 독립 학습자의 풀이 시간, 막힌 단계, 힌트 사용, 원리 이해 세션 기록이 없다. 자동 해답과 작성자 관찰은 독립 학습자 증거가 아니다.\nexport-gap-designer (None): 해설 없이 푼 대상 수준 독립 학습자의 시간, 막힘, 힌트 사용과 원리 이해 기록이 없다. 작성자 해답은 독립 세션 근거가 아니다.",
+            "evidence": [],
+            "improvement": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다.\n선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다.\n초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+          }
+        },
+        "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2"
+      },
+      "audit": {
+        "slug": "export-gap",
+        "input_sha256": "9eb1c32e95a1520e9db18c00215070b8483ea32d9ee8b8716ae0a6c58852a0e3",
+        "model": "gpt-6-luna",
+        "reasoning_effort": "low",
+        "judge_count": 3,
+        "method": "criterion median",
+        "ballots": [
+          {
+            "judge_id": "export-gap-learner",
+            "model": "gpt-6-luna",
+            "reasoning_effort": "low",
+            "lens": "learner-advocate",
+            "first_pass": "힌트와 해설을 보기 전 관찰 (learner-advocate)\n\n선언된 선수 지식은 터미널 명령, HTTP 요청/응답, 쿠키, curl JSON, 객체 소유권이다. 첫 행동이 구체적으로 제시되어 있어 로그인 쿠키 저장, 카탈로그 확인, 자기 문서 7 조회까지 시작할 수 있다. 이후 카탈로그의 ID·소유자·제목을 보고 다른 소유자의 문서 ID를 골라 같은 ID로 조회와 내보내기를 비교하라는 결정도 설명되어 있다. 추측할 명령 형식은 login과 export의 POST JSON이 있으나, 처음 본문에서 내보내기 응답에 담기는 필드/형식이 실제로 어떻게 나오는지는 GET / 안내와 관찰이 필요하다. 200 상태만으로 공개를 단정하지 말고 본문을 살펴보라는 안내는 상태와 내용의 혼동을 예방한다. 복구 코드는 잘못 허용된 내보내기 본문에서 찾으라고 한다. 첫 막힘 가능 지점은 해당 형식의 정확한 curl 명령과 JSON 경로를 스스로 구성해야 한다는 점이며, 선수 지식의 curl JSON과 jq로 시작할 수 있을 듯하나 실패 응답·정상 거부를 구별하는 기대값은 아직 구체적이지 않다. 제출 문자열 형식은 명시되어 있다.",
+            "review": {
+              "slug": "export-gap",
+              "rubric_version": 1,
+              "reviewed_at": "2026-10-03",
+              "reviewer": "export-gap-learner",
+              "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2",
+              "criteria": {
+                "goal": {
+                  "level": 4,
+                  "reason": "의뢰와 목표가 문서 소유권 확인의 재사용 실패를 구체적으로 비교하게 하며, 성공 기준도 실제 잘못 공개된 본문에서 실행별 복구 코드를 확인하는 것으로 일치한다. 기본 조회, 목록, summary의 공개 필드와 full 본문을 구별하므로 목표 관찰이 가능하다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "요약 사본은 제목·소유자만 담을 수 있다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "starting_context": {
+                  "level": 3,
+                  "reason": "본문은 접속 주소·계정·로그인 명령·목록·자기 문서 조회까지 실행 가능한 예를 주며, 선수 문서는 쿠키, POST JSON, jq, 소유권의 기초를 다룬다. 초급 학습자가 핵심 요청을 시작할 수 있다. 다만 다른 소유자의 ID와 `format=full`을 선택해 보내는 구체 명령은 힌트 2에서야 제공되고, 응답 경로 `.export.body`도 기본 본문에는 없다. GET /를 확인하거나 자료를 조합할 수는 있지만 초반에 스스로 연결할 부담이 남는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "먼저 로그인 쿠키를 저장하고 목록과 자기 문서를 읽자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "`POST /api/exports`에 `{\"note_id\":문서ID}`를 보내면 기본 요약 사본을 요청한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "knowledge/curl-json.md",
+                      "quote": "`curl -H 'Content-Type: application/json' -d '{\"note_id\":3}' 주소`는 JSON 본문을\n보내는 POST 요청이다. `note_id`는 이 예제에서 작업 대상 문서의 ID를 뜻한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/2.md",
+                      "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다."
+                },
+                "reasoning": {
+                  "level": 4,
+                  "reason": "난도 2의 초급 기준에 맞게 카탈로그에서 소유자를 식별하고, 같은 문서 ID로 GET과 POST를 대조하며, summary 200의 실제 본문 누락을 확인하고 full 본문의 노출을 확인한다. 상태 코드만으로 추론하지 말라는 지점과 문서 형식 차이가 오답을 줄이는 단서다. 힌트는 ID와 형식을 단계적으로 공개하며 판단 구조를 보강한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을\n비교하자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/1.md",
+                      "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "controls": {
+                  "level": 4,
+                  "reason": "자동 해답은 미인증 요청과 자기 자료의 정상 동작을 먼저 확인한 뒤 타인 자료의 403 조회, 본문 없는 summary 200, full 응답의 실제 제출 코드 형식을 비교한다. 수정 검사도 자기 문서 조회/full, 타인 summary와 full 거부, 본문 소유자 조작, 잘못된 JSON/ID/형식, 없는 ID, 위조 쿠키를 검사하고 정상 기능을 유지한다. 정적 파일 대조가 적용되지 않는 API 과제에서 `artifact_controls=false`는 결함으로 볼 필요가 없다. 다만 이 심사에서 검사를 실행하지 않았으므로 코드는 대조 범위 근거이지 새 실행 결과가 아니다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/solve/solve.sh",
+                      "quote": "test \"$(request -b \"$work/cookies\" \"$base/api/notes/42\")\" = 403",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/solve/solve.sh",
+                      "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/reply.json\" >/dev/null",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/patched/test.sh",
+                      "quote": "'{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/patched/test.sh",
+                      "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "hints": {
+                  "level": 4,
+                  "reason": "기본 설명은 취약한 format 값이나 정답을 직접 말하지 않고 비교할 작업과 상태/본문 구분을 안내한다. 첫 힌트는 비교 대상과 본문 유무 관찰을 알려 주고, 둘째는 막힐 수 있는 다른 소유자 ID·full 입력·jq 경로를 제공한다. 답 코드 자체를 알려 주지 않아 도움의 단계가 해설과 분리된다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/hints/1.md",
+                      "quote": "같은 문서 ID에",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/2.md",
+                      "quote": "`jq -r '.export.body'`로 실제 내용을 읽는다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "explanation": {
+                  "level": 4,
+                  "reason": "해설은 로그인 쿠키와 동일한 문서의 두 요청, 403과 summary의 본문 없는 200, 서비스 안내를 통해 확인하는 full 형식과 실제 응답 본문을 순서대로 연결한다. 이어서 export가 로그인만 확인하고 소유자를 확인하지 않은 원인, 전체 형식에 소유권 확인을 추가하는 보호법, summary와 자기 문서 기능을 유지하는 기준을 설명한다. 실습 서비스의 경계를 벗어난 보편적 사고 주장도 하지 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를\n비교하지 않았다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "수정한 서버는 full 내보내기에도 소유권을 확인해 문서 42의 본문을 거부한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "목록과 같은 공개 항목만 담는 summary는 계속 허용한다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "execution": {
+                  "level": 3,
+                  "reason": "현재 심사에서는 실행하지 않았다. 스냅샷에 포함된 과거 작성자 검증은 2026-10-02 20:56:32 UTC의 기록으로, 해답·패치·정리 및 소비자 실행·검증·중지와 PTY 요청·제출·중단·재접속·재시작을 통과했다고 기록한다. 이 기록은 재현 근거지만 작성자 기록이며 이번 검토의 독립 실행으로 간주하지 않는다. 원본 보존도 함께 기록되어 있다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/authoring/validation.json",
+                      "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\"",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/export-gap/authoring/validation.json",
+                      "quote": "\"author_solution_patch_cleanup\": true,",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/export-gap/authoring/validation.json",
+                      "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true,",
+                      "kind": "recorded-execution"
+                    }
+                  ],
+                  "improvement": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다."
+                },
+                "browser": {
+                  "level": null,
+                  "reason": "현재 문제의 검색·선택부터 브라우저에서 환경 준비, 터미널 풀이, 정답/오답 제출, 종료까지 확인한 브라우저 세션 기록이 없다. 기존 PTY 검증은 이 항목을 대체하지 않는다.",
+                  "evidence": [],
+                  "improvement": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다."
+                },
+                "learner": {
+                  "level": null,
+                  "reason": "선언된 초급자의 독립 풀이 시간·막힌 단계·힌트 사용·원리 이해를 기록한 세션은 확인되지 않았다. 작성자 검증과 현재 모델의 읽기 심사는 학습자 풀이가 아니다.",
+                  "evidence": [],
+                  "improvement": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다."
+                }
+              }
+            }
+          },
+          {
+            "judge_id": "export-gap-evidence",
+            "model": "gpt-6-luna",
+            "reasoning_effort": "low",
+            "lens": "evidence-examiner",
+            "first_pass": "first_pass: evidence-examiner 관점에서 시작 지점은 README의 제공된 로그인, catalog, 자기 문서 GET 예시다. 이후 catalog에서 다른 소유자의 ID를 식별해 동일 ID로 notes GET과 exports POST를 수행하고 상태뿐 아니라 응답 본문을 비교하라는 흐름이 본문에 있다. 따라서 유효한 증거는 본인 자료의 정상 응답, 타인 자료 일반 조회의 거부, 타인 자료 내보내기의 실제 반환 본문에 담긴 민감 복구 코드다. 단순 200, 열린 포트, 제목/소유자만 포함한 요약은 비밀 유출의 증거가 되지 않는다. 본문은 요약 사본이 제목·소유자만 담을 수 있다고 먼저 말해 반환 내용이 적절한지 점검하도록 주의를 주지만, 복구 코드가 나타나는 구체적 반환 필드나 오답/거부 응답 대조는 아직 제시하지 않는다. API 요청 둘을 비교하라는 목표는 명확하며 자기 문서 확인이 정상 대조 역할을 한다. 실제 민감 자료 유출과 정상 요약의 경계가 본문 안내대로 응답에서 확인 가능한지 추가 자료에서 대조해야 한다.",
+            "review": {
+              "slug": "export-gap",
+              "rubric_version": 1,
+              "reviewed_at": "2026-10-03",
+              "reviewer": "export-gap-evidence",
+              "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2",
+              "criteria": {
+                "goal": {
+                  "level": 4,
+                  "reason": "운영자의 검증 의뢰가 같은 타인 문서에 대한 두 작업 비교와 민감 값 회수로 이어지고, 목표 및 해설은 조회 403과 full 내보내기의 실제 본문을 대조하도록 구체화한다. 단순 성공 상태가 아니라 유출 본문 자체를 완료 증거로 삼는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "일반 조회는 403이다. 기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "starting_context": {
+                  "level": 3,
+                  "reason": "계정, 주소, 목록과 조회 API, 로그인 및 본인 자료 요청 예시가 제공되고 선수 개념으로 curl/JSON/쿠키를 설명한다. 다만 본문이 full 형식 존재와 해당 선택 필드를 미리 지정하지 않아 시작 정보만으로는 어떤 내보내기 값이 본문을 포함하는지 API 안내에서 추가 확인해야 한다. 이는 요구된 관찰을 남기지만 실제 환경에서 화면 안내를 확인할 작은 탐색을 요구한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "`POST /api/exports`에 `{\"note_id\":문서ID}`를 보내면 기본 요약 사본을 요청한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "knowledge/curl-json.md",
+                      "quote": "로그인 응답의 쿠키를 저장하려면 `-c cookies.txt`, 이후 요청에 보내려면",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/challenge.toml",
+                      "quote": "requires = [\"terminal-commands\",\"http-messages\",\"http-cookies\",\"curl-json\",\"object-ownership\"]",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "reasoning": {
+                  "level": 4,
+                  "reason": "난도 2 초급에 맞게 목록에서 타인 소유자의 ID를 연결하고 같은 자원의 조회/내보내기 결과를 비교한 뒤 상태와 본문, redacted 여부를 분리해 판단한다. 자기 자료 정상 동작 및 타인 문서의 200 summary를 오답 대조로 두고 full 요청의 실제 민감 본문을 확인해야 하므로 상태 코드 하나만 보고 추론할 수 없다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/1.md",
+                      "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/2.md",
+                      "quote": "staff의 문서 ID는 42다. 로그인 쿠키를 보내면서 내보내기의 JSON 본문을",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "controls": {
+                  "level": 4,
+                  "reason": "대상 동작은 본인 소유 문서, 타인 일반 조회, 타인 기본 summary, 타인 full을 서로 비교할 수 있고 patched 검사에는 정상 self read/export, self full, other summary 유지와 타인 full 거부가 있다. 본문 또한 title/owner만의 요약과 실제 body를 명시적으로 구분해 200 오탐을 막는다. 패치 검사는 body 제거뿐 아니라 owner 위조, 미인증/위조 쿠키, 잘못된 형식도 다룬다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/patched/test.sh",
+                      "quote": "test \"$(request -b \"$work/cookies\" -H 'Content-Type: application/json' -d '{\"note_id\":7,\"format\":\"full\"}' \"$base/api/exports\")\" = 200",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/patched/test.sh",
+                      "quote": "for body in '{\"note_id\":42,\"format\":\"full\"}' '{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'; do",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "hints": {
+                  "level": 4,
+                  "reason": "첫 힌트는 ID에 대한 두 엔드포인트 비교와 상태 이외의 redacted/body 관찰로 오탐 가능성을 줄이고, 둘째 힌트는 막혔을 때 실제 full 형식과 jq 추출 위치를 알려준다. 브리핑이 타인 자료의 유출 값을 직접 제공하지 않으며 정답은 실제 인스턴스 본문에서 얻는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/hints/1.md",
+                      "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/2.md",
+                      "quote": "`jq -r '.export.body'`로 실제 내용을 읽는다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "explanation": {
+                  "level": 4,
+                  "reason": "해설은 자기 문서 정상 흐름, 타인 조회 거부, summary의 본문 없는 성공, full 본문 유출을 순서대로 연결하고 로그인만 검사하고 문서 소유자를 검사하지 않은 원인을 설명한다. 수정 정책 및 정상 기능 유지도 명시해 관찰에서 보호 원리로 이어진다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "execution": {
+                  "level": 4,
+                  "reason": "이번 심사 중 재실행하지 않았으며 이를 현재 실행으로 취급하지 않는다. 날짜가 있는 2026-10-02 기록에는 PTY 해답 제출·중단/재접속/초기화 검증과 실제 검증기 통과가 기록되어 있고 2026-10-03 작성 기록은 해답, 패치, 소비자 실행 검증을 별도로 보고한다. 문제 전용 패치 테스트도 타인 full 거부 및 정상 기능 유지를 포함한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/authoring/validation.json",
+                      "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\",",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/export-gap/authoring/validation.json",
+                      "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true,",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/export-gap/AUTHORING.md",
+                      "quote": "2026-10-03 Codex 작성. 의뢰·계정·문서 소유자·작업과 오류 상태의 의미를 대조했다.",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/export-gap/patched/test.sh",
+                      "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+                      "kind": "recorded-execution"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "browser": {
+                  "level": null,
+                  "reason": "현재 문제를 브라우저에서 검색하고 환경 준비부터 제출·종료까지 수행한 세션 근거를 제공된 자료에서 확인하지 못했다. 작성 기록의 PTY 확인은 브라우저 전체 풀이를 입증하지 않는다.",
+                  "evidence": [],
+                  "improvement": "실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다."
+                },
+                "learner": {
+                  "level": null,
+                  "reason": "대상 수준 독립 학습자의 풀이 시간, 막힌 단계, 힌트 사용, 원리 이해 세션 기록이 없다. 자동 해답과 작성자 관찰은 독립 학습자 증거가 아니다.",
+                  "evidence": [],
+                  "improvement": "선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다."
+                }
+              }
+            }
+          },
+          {
+            "judge_id": "export-gap-designer",
+            "model": "gpt-6-luna",
+            "reasoning_effort": "low",
+            "lens": "learning-designer",
+            "first_pass": "README는 guest 로그인 후 catalog와 자기 문서 ID 7을 조회하게 하므로, 목록에서 운영자 소유 문서를 골라 GET /api/notes/{id}와 POST /api/exports를 같은 세션으로 비교하는 시작 절차는 정해져 있다. export 본문에 민감한 코드가 포함되는지 응답 상태뿐 아니라 본문과 자기 문서 응답을 대조해야 한다는 점도 README가 알려 준다. 이 비교는 권한 검사를 읽기와 내보내기 경로마다 따로 해야 하는지 보여 주도록 설계됐다.\n\n교육 설계 관점에서 첫 선택은 catalog의 다른 소유자 ID를 찾아 동일 대상으로 두 요청을 하는 것이다. curl, JSON, 쿠키의 최소 조작은 선수 지식에서 제공되고 README에는 로그인 명령까지 제시되어 있어 이 부분이 핵심 난도는 아니다. 다만 예시가 자기 문서 ID 7의 직접 조회만 보여주고 export 호출 문법은 설명형으로만 제시하므로 POST 명령 구성은 학습자가 기존 JSON 예시와 endpoint 설명을 연결해야 한다. 요약 사본은 제목·소유자만 담을 수 있다고 본문이 말하지만 실제로 코드 유출이 발생할 수 있는 조건은 아직 불명확하다. 준비 명령이 로그인/기준선까지 정해 주지만, 대상 선택과 응답 비교는 남아 있다.",
+            "review": {
+              "slug": "export-gap",
+              "rubric_version": 1,
+              "reviewed_at": "2026-10-03",
+              "reviewer": "export-gap-designer",
+              "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2",
+              "criteria": {
+                "goal": {
+                  "level": 4,
+                  "reason": "의뢰와 완료 증거가 같은 권한 경계 비교에 연결된다. staff 문서는 guest에게 비공개여야 하며 GET과 export에서 실제 본문 노출을 비교해 복구 코드를 찾게 한다. 서비스 안내의 full이 본문을 담으므로 제출물은 관찰과 일치한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/vulnerable/app.py",
+                      "quote": "'export_formats': {'summary': 'Metadata only (default)', 'full': 'Includes document body'}",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "starting_context": {
+                  "level": 3,
+                  "reason": "선수 지식은 curl·JSON·쿠키·HTTP 상태를 설명하고 본문은 계정, 주소, endpoint와 로그인/조회 기준선을 제공한다. 학습자는 catalog에서 타인 ID를 선택해 export POST를 구성해야 하며 실제 curl 문법은 선수 예시에서 연결해야 한다. 약간의 구성 부담은 남는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "{\"note_id\":문서ID}",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "knowledge/curl-json.md",
+                      "quote": "보내는 POST 요청이다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "POST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+                },
+                "reasoning": {
+                  "level": 4,
+                  "reason": "자기 문서 기준선 이후 catalog에서 타인 문서를 골라 같은 ID의 일반 조회와 export를 비교한다. 상태 200만으로 본문 노출을 판단하지 않고 summary의 redacted 및 body 유무를 확인하여 상태와 데이터 공개를 혼동하는 오답도 가려낸다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/README.md",
+                      "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/1.md",
+                      "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "controls": {
+                  "level": 4,
+                  "reason": "검사는 자기 문서 조회/full과 타인 조회 403, 타인 summary의 본문 부재, 취약 타인 full을 구분한다. 패치 검사는 정상 기능을 보존하며 타인 full과 본문 소유자 조작, 잘못된 형식·JSON·ID, 비로그인/위조 쿠키를 차단한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/patched/test.sh",
+                      "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/body\" >/dev/null",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/patched/test.sh",
+                      "quote": "for body in '{\"note_id\":42,\"format\":\"full\"}' '{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'; do",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/vulnerable/app.py",
+                      "quote": "if not export_allowed(note, user):\n                return self.reply(403, {'error': 'not_owner'})",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "hints": {
+                  "level": 4,
+                  "reason": "첫 힌트는 동일 ID 두 작업과 본문 검사를 환기하고, 둘째는 ID 42와 full 형식 필드를 알려 준다. 요청 구성의 막힘은 풀어주되 응답 확인과 원인 설명은 남겨둔 단계적 힌트다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/hints/1.md",
+                      "quote": "`GET /api/notes/ID`와 `POST /api/exports`를 각각 보내 보자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/hints/2.md",
+                      "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "explanation": {
+                  "level": 4,
+                  "reason": "해설은 기준선 이후 동일 문서의 두 경로를 대조하고 summary 200과 full 본문을 구분한다. 로그인만 확인하고 소유자를 비교하지 않은 원인을 밝히며 full에 소유권 검사 추가 및 공개 summary와 정상 기능 유지를 설명한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/export-gap/solve/README.md",
+                      "quote": "목록과 같은 공개 항목만 담는 summary는 계속 허용한다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "execution": {
+                  "level": 3,
+                  "reason": "과거 작성 기록은 2026-10-03에 해답, 패치, 정상 기능 및 consumer validate/run/verify/stop을 검사했고 PTY에서 요청부터 종료와 원본 보존까지 했다고 기록한다. validation은 2026-10-02 UTC의 passed 결과다. 이는 과거 실행이지 이번 재실행은 아니며 패치 스크립트 로그가 없어 3이다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/export-gap/AUTHORING.md",
+                      "quote": "실제 PTY의 요청·해답·정답/오답 제출·중단·재접속·종료 후 초기화와 원본 보존을",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/export-gap/authoring/validation.json",
+                      "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\"",
+                      "kind": "recorded-execution"
+                    }
+                  ],
+                  "improvement": "배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+                },
+                "browser": {
+                  "level": null,
+                  "reason": "문제 선택부터 환경 준비, 풀이, 정답/오답 제출 및 종료까지 확인한 브라우저 세션 기록이 없다. PTY 검증은 이를 대신하지 않는다.",
+                  "evidence": [],
+                  "improvement": "실제 브라우저 전체 풀이 세션을 기록한다."
+                },
+                "learner": {
+                  "level": null,
+                  "reason": "해설 없이 푼 대상 수준 독립 학습자의 시간, 막힘, 힌트 사용과 원리 이해 기록이 없다. 작성자 해답은 독립 세션 근거가 아니다.",
+                  "evidence": [],
+                  "improvement": "초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+                }
+              }
+            }
+          }
+        ],
+        "distribution": {
+          "goal": {
+            "levels": {
+              "export-gap-learner": 4,
+              "export-gap-evidence": 4,
+              "export-gap-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "starting_context": {
+            "levels": {
+              "export-gap-learner": 3,
+              "export-gap-evidence": 3,
+              "export-gap-designer": 3
+            },
+            "unverified_judges": 0,
+            "proposed_median": 3,
+            "needs_adjudication": false
+          },
+          "reasoning": {
+            "levels": {
+              "export-gap-learner": 4,
+              "export-gap-evidence": 4,
+              "export-gap-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "controls": {
+            "levels": {
+              "export-gap-learner": 4,
+              "export-gap-evidence": 4,
+              "export-gap-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "hints": {
+            "levels": {
+              "export-gap-learner": 4,
+              "export-gap-evidence": 4,
+              "export-gap-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "explanation": {
+            "levels": {
+              "export-gap-learner": 4,
+              "export-gap-evidence": 4,
+              "export-gap-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "execution": {
+            "levels": {
+              "export-gap-learner": 3,
+              "export-gap-evidence": 4,
+              "export-gap-designer": 3
+            },
+            "unverified_judges": 0,
+            "proposed_median": 3,
+            "needs_adjudication": false
+          },
+          "browser": {
+            "levels": {
+              "export-gap-learner": null,
+              "export-gap-evidence": null,
+              "export-gap-designer": null
+            },
+            "unverified_judges": 3,
+            "proposed_median": null,
+            "needs_adjudication": false
+          },
+          "learner": {
+            "levels": {
+              "export-gap-learner": null,
+              "export-gap-evidence": null,
+              "export-gap-designer": null
+            },
+            "unverified_judges": 3,
+            "proposed_median": null,
+            "needs_adjudication": false
+          }
+        },
+        "needs_adjudication": [],
+        "summary": {
+          "slug": "export-gap",
+          "points": 75.0,
+          "reviewed_weight": 80,
+          "pending": [
+            "browser",
+            "learner"
+          ],
+          "improvements": [
+            {
+              "criterion": "starting_context",
+              "action": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다.\nPOST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+            },
+            {
+              "criterion": "execution",
+              "action": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+            },
+            {
+              "criterion": "browser",
+              "action": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다.\n실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다.\n실제 브라우저 전체 풀이 세션을 기록한다."
+            },
+            {
+              "criterion": "learner",
+              "action": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다.\n선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다.\n초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+            }
+          ]
+        },
+        "adjudications": {},
+        "first_pass_records": {
+          "learner": {
+            "saved_text": "힌트와 해설을 보기 전 관찰 (learner-advocate)\n\n선언된 선수 지식은 터미널 명령, HTTP 요청/응답, 쿠키, curl JSON, 객체 소유권이다. 첫 행동이 구체적으로 제시되어 있어 로그인 쿠키 저장, 카탈로그 확인, 자기 문서 7 조회까지 시작할 수 있다. 이후 카탈로그의 ID·소유자·제목을 보고 다른 소유자의 문서 ID를 골라 같은 ID로 조회와 내보내기를 비교하라는 결정도 설명되어 있다. 추측할 명령 형식은 login과 export의 POST JSON이 있으나, 처음 본문에서 내보내기 응답에 담기는 필드/형식이 실제로 어떻게 나오는지는 GET / 안내와 관찰이 필요하다. 200 상태만으로 공개를 단정하지 말고 본문을 살펴보라는 안내는 상태와 내용의 혼동을 예방한다. 복구 코드는 잘못 허용된 내보내기 본문에서 찾으라고 한다. 첫 막힘 가능 지점은 해당 형식의 정확한 curl 명령과 JSON 경로를 스스로 구성해야 한다는 점이며, 선수 지식의 curl JSON과 jq로 시작할 수 있을 듯하나 실패 응답·정상 거부를 구별하는 기대값은 아직 구체적이지 않다. 제출 문자열 형식은 명시되어 있다.\n",
+            "matches_wrapper": true
+          },
+          "evidence": {
+            "saved_text": "first_pass: evidence-examiner 관점에서 시작 지점은 README의 제공된 로그인, catalog, 자기 문서 GET 예시다. 이후 catalog에서 다른 소유자의 ID를 식별해 동일 ID로 notes GET과 exports POST를 수행하고 상태뿐 아니라 응답 본문을 비교하라는 흐름이 본문에 있다. 따라서 유효한 증거는 본인 자료의 정상 응답, 타인 자료 일반 조회의 거부, 타인 자료 내보내기의 실제 반환 본문에 담긴 민감 복구 코드다. 단순 200, 열린 포트, 제목/소유자만 포함한 요약은 비밀 유출의 증거가 되지 않는다. 본문은 요약 사본이 제목·소유자만 담을 수 있다고 먼저 말해 반환 내용이 적절한지 점검하도록 주의를 주지만, 복구 코드가 나타나는 구체적 반환 필드나 오답/거부 응답 대조는 아직 제시하지 않는다. API 요청 둘을 비교하라는 목표는 명확하며 자기 문서 확인이 정상 대조 역할을 한다. 실제 민감 자료 유출과 정상 요약의 경계가 본문 안내대로 응답에서 확인 가능한지 추가 자료에서 대조해야 한다.\n",
+            "matches_wrapper": true
+          },
+          "designer": {
+            "saved_text": "README는 guest 로그인 후 catalog와 자기 문서 ID 7을 조회하게 하므로, 목록에서 운영자 소유 문서를 골라 GET /api/notes/{id}와 POST /api/exports를 같은 세션으로 비교하는 시작 절차는 정해져 있다. export 본문에 민감한 코드가 포함되는지 응답 상태뿐 아니라 본문과 자기 문서 응답을 대조해야 한다는 점도 README가 알려 준다. 이 비교는 권한 검사를 읽기와 내보내기 경로마다 따로 해야 하는지 보여 주도록 설계됐다.\n\n교육 설계 관점에서 첫 선택은 catalog의 다른 소유자 ID를 찾아 동일 대상으로 두 요청을 하는 것이다. curl, JSON, 쿠키의 최소 조작은 선수 지식에서 제공되고 README에는 로그인 명령까지 제시되어 있어 이 부분이 핵심 난도는 아니다. 다만 예시가 자기 문서 ID 7의 직접 조회만 보여주고 export 호출 문법은 설명형으로만 제시하므로 POST 명령 구성은 학습자가 기존 JSON 예시와 endpoint 설명을 연결해야 한다. 요약 사본은 제목·소유자만 담을 수 있다고 본문이 말하지만 실제로 코드 유출이 발생할 수 있는 조건은 아직 불명확하다. 준비 명령이 로그인/기준선까지 정해 주지만, 대상 선택과 응답 비교는 남아 있다.\n",
+            "matches_wrapper": true
+          }
+        }
+      }
+    },
+    "retained_reason": "큰 단계 차이·판정 충돌·최종 점수를 뒷받침하지 못하는 근거가 없고, 3명의 항목별 판단을 원문과 대조했다.",
+    "additional_findings": []
+  },
+  "parent_review": {
+    "reviewer": "Codex parent",
+    "reviewed_at": "2026-10-03",
+    "decision": "같은 타인 문서의 조회403, summary200·본문없음, full200·실제본문을 대조해 소유권 검사 누락을 입증한다. 단계 힌트와 정상/타인/위조/잘못된입력 패치 대조가 기준4의 오탐 경계를 다룬다. 첫 POST 구성은 선언된 curl·JSON 선수 능력과 실제 기능 안내를 연결하는 과제로 중앙값3을 수용한다.",
+    "roles_checked": [
+      "learner-advocate",
+      "evidence-examiner",
+      "learning-designer"
+    ],
+    "source_revision": "327f3a31c85cff70853f6437985996bf0b045a5a",
+    "limitations": [
+      "Same-model personas do not eliminate shared model bias.",
+      "No browser-session or learner-session was performed."
+    ]
+  },
+  "unresolved_after_parent_review": [],
+  "previous_review": {
+    "slug": "export-gap",
+    "rubric_version": 1,
+    "reviewed_at": "2026-10-03",
+    "reviewer": "Codex — 작성자 관점의 소스 검토",
+    "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2",
+    "criteria": {
+      "goal": {
+        "level": 3,
+        "reason": "의뢰 목표와 제출 증거가 연결되고 해설에서 보안 원리를 설명한다. 정답 제출만으로 학습자의 원리 이해까지 확인하지는 않는다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "::objective\n같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "## 같은 문서의 두 작업 비교\n\n브리핑의 명령으로 guest 계정의 쿠키를 저장한다. 자기 문서 7은 조회와\n내보내기가 모두 성공한다. 목록에는 staff의 문서 42도 있지만 제목과 소유자만\n공개되므로 목록에서 복구 코드를 읽을 수는 없다.\n\n```sh\ncurl -i -b cookies.txt http://app:8000/api/notes/42\ncurl -i -b cookies.txt -H 'Content-Type: application/json' \\\n  -d '{\"note_id\":42}' http://app:8000/api/exports\ncurl -sS http://app:8000/ | jq '.export_formats'\n```\n\n일반 조회는 403이다. 기본 summary는 200이어도 redacted가 true이며 본문이 없다.\n서비스 안내의 full 형식을 사용하면 취약한 서버가 s",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "starting_context": {
+        "level": 4,
+        "reason": "대상·자료와 시작 행동을 제공하고 curl, jq 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "::resources{title=\"실습 계정과 API\"}\n- 터미널의 서비스 주소는 `http://app:8000`이다.\n- 로그인은 `POST /api/login`, 계정은 `guest`, 비밀번호는 `lab-guest`다.\n- `GET /api/catalog`는 문서의 ID·소유자·제목만 보여 준다.\n- `GET /api/notes/문서ID`는 본문 조회다.\n- `POST /api/exports`에 `{\"note_id\":문서ID}`를 보내면 기본 요약 사본을 요청한다.\n- `GET /`에는 제공하는 작업과 내보내기 형식의 안내가 있다.\n\n먼저 로그인 쿠키를 저장하고 목록과 자기 문서를 읽자.\n\n```sh\ncurl -sS -c cookies.txt -H 'Content-Type: application/json' \\\n  -d '{\"username\":\"guest\",\"password\":\"lab-guest\"}' http://app:8000/api/login\ncurl -sS -b cookies.txt http://app:8000/api/catalog | jq .\ncurl -i ",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "::knowledge\n\n### 준비된 터미널 명령 사용하기\n\n터미널에는 한 줄의 명령을 입력하고 Enter를 누르면 된다. `files/`로 시작하는\n경로는 이 문제의 배포 파일을 가리킨다. 명령 예제의 파일명은 조사할 자료의 이름으로 바꿔 넣자.\n\n`printf '%s' 'hello'`는 줄바꿈 없이 `hello`를 출력한다.\n`|`는 왼쪽 출력물을 오른쪽 프로그램의 입력으로 전달한다.\n예를 들어 `printf '%s' 'hello' | sha256sum`은 정확히 다섯 글자를 해시한다.\n`hello` 뒤에 줄바꿈이 추가되면 해시도 달라진다.\n\n파일을 읽는 명령과 결과를 확인하는 명령은 문제의 전달받은 자료에 제공한다.\nCtrl+C는 오래 실행되는 명령을 중단하고, 위쪽 화살표는 이전 명령을 다시 가져온다.\n\n### Web 요청과 응답 읽기\n\n사이트에서 버튼을 누르거나 주소를 열면 브라우저는 서버에 **요청**을 보내고,\n서버는 상태와 내용을 담은 **응답**을 돌려준다. `GET`은 자료 조회에 흔히 쓰이는 요청 방식이다.\n\n예를 들어 `GET /help`는 도움말을",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "reasoning": {
+        "level": 4,
+        "reason": "자기/타인과 조회/내보내기를 교차 비교하고 summary 200을 유출로 오판하지 않아야 한다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "일반 조회는 403이다. 기본 summary는 200이어도 redacted가 true이며 본문이 없다.\n서비스 안내의 full 형식을 사용하면 취약한 서버가 staff 문서의 본문까지 반환한다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "controls": {
+        "level": 4,
+        "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/AUTHORING.md",
+            "quote": "200 상태의 본문 없는 정상 요약을 오탐으로 구분하는 판단을 추가한다. 잘못된\n형식·배열 형식 입력을 거부하고 full만 취약/수정 차이를 보이는지 검사한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/patched/test.sh",
+            "quote": "for body in '{\"note_id\":42,\"format\":\"full\"}' '{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'; do\n    test \"$(request -b \"$work/cookies\" -H 'Content-Type: application/json' -d \"$body\" \"$base/api/exports\")\" = 403\n    if grep -q 'pwnden{' \"$work/body\"; then exit 1; fi\ndone\nfor body in '{\"note_id\":\"42\"}' '{\"note_id\":true}' '{\"note_id\":42,\"format\":[]}' '{\"note_id\":42,\"format\":\"binary\"}' '[]' 'invalid'; do\n    test \"$(request -b \"$work/cookies\" -H 'Content-Type: application/json' -d \"$body\" \"$base/api/exports\")\" = 400\ndone\ntest \"$(request -b \"$work/",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "hints": {
+        "level": 3,
+        "reason": "기본 본문은 조사 시작점을 주고 실제 정답은 해설에 둔다. 첫 힌트는 필요한 비교를 돕는다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/hints/1.md",
+            "quote": "로그인한 사용자는 guest다. 목록의 문서 소유자와 비교하고, 같은 문서 ID에\n`GET /api/notes/ID`와 `POST /api/exports`를 각각 보내 보자.\n내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "explanation": {
+        "level": 4,
+        "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "## 같은 문서의 두 작업 비교\n\n브리핑의 명령으로 guest 계정의 쿠키를 저장한다. 자기 문서 7은 조회와\n내보내기가 모두 성공한다. 목록에는 staff의 문서 42도 있지만 제목과 소유자만\n공개되므로 목록에서 복구 코드를 읽을 수는 없다.\n\n```sh\ncurl -i -b cookies.txt http://app:8000/api/notes/42\ncurl -i -b cookies.txt -H 'Content-Type: application/json' \\\n  -d '{\"note_id\":42}' http://app:8000/api/exports\ncurl -sS http://app:8000/ | jq '.export_formats'\n```\n\n일반 조회는 403이다. 기본 summary는 200이어도 redacted가 true이며 본문이 없다.\n서비스 안내의 full 형식을 사용하면 취약한 서버가 staff 문서의 본문까지 반환한다.\n\n```sh\ncurl -sS -b cookies.txt -H 'Content-Type: application/json' \\\n  -d '{\"note_id\":42,\"format\":\"full\"}' http://app:8000/api/exports | jq -r '.export.body'\n```\n\n## 원인과 수정\n\n내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를\n비교하지 않았다. JSON의 문서 ID를 바꿔도 사용자 권한이 늘어나면 안 된다.\n수정한 서버는 full 내보내기에도 소유권을 확인해 문서 42의 본문을 거부한다.\n목록과 같은 공개 항목만 담는 summary는 계속 허용한다. 자기 문서 7의\n조회와 내보내기, 공개 목록·건강 검사는 유지된다. 각 작업의 정상 기능과 보호\n경계를 함께 검사해야 한다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "execution": {
+        "level": 3,
+        "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/authoring/validation.json",
+            "quote": "{\n  \"slug\": \"export-gap\",\n  \"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\",\n  \"artifact_controls\": false,\n  \"author_solution_patch_cleanup\": true,\n  \"consumer_validate_run_verify_stop\": true,\n  \"real_pty_solution_submission_interrupt_reattach_restart\": true,\n  \"original_preserved\": true,\n  \"total_validation_seconds\": 48.54,\n  \"distribution_bytes\": 0,\n  \"passed\": true\n}",
+            "kind": "recorded-execution"
+          }
+        ],
+        "improvement": ""
+      },
+      "browser": {
+        "level": null,
+        "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
+        "evidence": [],
+        "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+      },
+      "learner": {
+        "level": null,
+        "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
+        "evidence": [],
+        "improvement": "난도 2 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+      }
+    }
+  },
+  "final_review": {
+    "slug": "export-gap",
+    "rubric_version": 1,
+    "reviewed_at": "2026-10-03",
+    "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/export-gap/2026-10-03-panel.json",
+    "criteria": {
+      "goal": {
+        "level": 4,
+        "reason": "export-gap-learner (4): 의뢰와 목표가 문서 소유권 확인의 재사용 실패를 구체적으로 비교하게 하며, 성공 기준도 실제 잘못 공개된 본문에서 실행별 복구 코드를 확인하는 것으로 일치한다. 기본 조회, 목록, summary의 공개 필드와 full 본문을 구별하므로 목표 관찰이 가능하다.\nexport-gap-evidence (4): 운영자의 검증 의뢰가 같은 타인 문서에 대한 두 작업 비교와 민감 값 회수로 이어지고, 목표 및 해설은 조회 403과 full 내보내기의 실제 본문을 대조하도록 구체화한다. 단순 성공 상태가 아니라 유출 본문 자체를 완료 증거로 삼는다.\nexport-gap-designer (4): 의뢰와 완료 증거가 같은 권한 경계 비교에 연결된다. staff 문서는 guest에게 비공개여야 하며 GET과 export에서 실제 본문 노출을 비교해 복구 코드를 찾게 한다. 서비스 안내의 full이 본문을 담으므로 제출물은 관찰과 일치한다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "요약 사본은 제목·소유자만 담을 수 있다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "일반 조회는 403이다. 기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/vulnerable/app.py",
+            "quote": "'export_formats': {'summary': 'Metadata only (default)', 'full': 'Includes document body'}",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "starting_context": {
+        "level": 3,
+        "reason": "export-gap-learner (3): 본문은 접속 주소·계정·로그인 명령·목록·자기 문서 조회까지 실행 가능한 예를 주며, 선수 문서는 쿠키, POST JSON, jq, 소유권의 기초를 다룬다. 초급 학습자가 핵심 요청을 시작할 수 있다. 다만 다른 소유자의 ID와 `format=full`을 선택해 보내는 구체 명령은 힌트 2에서야 제공되고, 응답 경로 `.export.body`도 기본 본문에는 없다. GET /를 확인하거나 자료를 조합할 수는 있지만 초반에 스스로 연결할 부담이 남는다.\nexport-gap-evidence (3): 계정, 주소, 목록과 조회 API, 로그인 및 본인 자료 요청 예시가 제공되고 선수 개념으로 curl/JSON/쿠키를 설명한다. 다만 본문이 full 형식 존재와 해당 선택 필드를 미리 지정하지 않아 시작 정보만으로는 어떤 내보내기 값이 본문을 포함하는지 API 안내에서 추가 확인해야 한다. 이는 요구된 관찰을 남기지만 실제 환경에서 화면 안내를 확인할 작은 탐색을 요구한다.\nexport-gap-designer (3): 선수 지식은 curl·JSON·쿠키·HTTP 상태를 설명하고 본문은 계정, 주소, endpoint와 로그인/조회 기준선을 제공한다. 학습자는 catalog에서 타인 ID를 선택해 export POST를 구성해야 하며 실제 curl 문법은 선수 예시에서 연결해야 한다. 약간의 구성 부담은 남는다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "먼저 로그인 쿠키를 저장하고 목록과 자기 문서를 읽자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "`POST /api/exports`에 `{\"note_id\":문서ID}`를 보내면 기본 요약 사본을 요청한다.",
+            "kind": "source"
+          },
+          {
+            "path": "knowledge/curl-json.md",
+            "quote": "`curl -H 'Content-Type: application/json' -d '{\"note_id\":3}' 주소`는 JSON 본문을\n보내는 POST 요청이다. `note_id`는 이 예제에서 작업 대상 문서의 ID를 뜻한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/hints/2.md",
+            "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+            "kind": "source"
+          },
+          {
+            "path": "knowledge/curl-json.md",
+            "quote": "로그인 응답의 쿠키를 저장하려면 `-c cookies.txt`, 이후 요청에 보내려면",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/challenge.toml",
+            "quote": "requires = [\"terminal-commands\",\"http-messages\",\"http-cookies\",\"curl-json\",\"object-ownership\"]",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "{\"note_id\":문서ID}",
+            "kind": "source"
+          },
+          {
+            "path": "knowledge/curl-json.md",
+            "quote": "보내는 POST 요청이다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다.\nPOST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+      },
+      "reasoning": {
+        "level": 4,
+        "reason": "export-gap-learner (4): 난도 2의 초급 기준에 맞게 카탈로그에서 소유자를 식별하고, 같은 문서 ID로 GET과 POST를 대조하며, summary 200의 실제 본문 누락을 확인하고 full 본문의 노출을 확인한다. 상태 코드만으로 추론하지 말라는 지점과 문서 형식 차이가 오답을 줄이는 단서다. 힌트는 ID와 형식을 단계적으로 공개하며 판단 구조를 보강한다.\nexport-gap-evidence (4): 난도 2 초급에 맞게 목록에서 타인 소유자의 ID를 연결하고 같은 자원의 조회/내보내기 결과를 비교한 뒤 상태와 본문, redacted 여부를 분리해 판단한다. 자기 자료 정상 동작 및 타인 문서의 200 summary를 오답 대조로 두고 full 요청의 실제 민감 본문을 확인해야 하므로 상태 코드 하나만 보고 추론할 수 없다.\nexport-gap-designer (4): 자기 문서 기준선 이후 catalog에서 타인 문서를 골라 같은 ID의 일반 조회와 export를 비교한다. 상태 200만으로 본문 노출을 판단하지 않고 summary의 redacted 및 body 유무를 확인하여 상태와 데이터 공개를 혼동하는 오답도 가려낸다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을\n비교하자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/hints/1.md",
+            "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/hints/2.md",
+            "quote": "staff의 문서 ID는 42다. 로그인 쿠키를 보내면서 내보내기의 JSON 본문을",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "controls": {
+        "level": 4,
+        "reason": "export-gap-learner (4): 자동 해답은 미인증 요청과 자기 자료의 정상 동작을 먼저 확인한 뒤 타인 자료의 403 조회, 본문 없는 summary 200, full 응답의 실제 제출 코드 형식을 비교한다. 수정 검사도 자기 문서 조회/full, 타인 summary와 full 거부, 본문 소유자 조작, 잘못된 JSON/ID/형식, 없는 ID, 위조 쿠키를 검사하고 정상 기능을 유지한다. 정적 파일 대조가 적용되지 않는 API 과제에서 `artifact_controls=false`는 결함으로 볼 필요가 없다. 다만 이 심사에서 검사를 실행하지 않았으므로 코드는 대조 범위 근거이지 새 실행 결과가 아니다.\nexport-gap-evidence (4): 대상 동작은 본인 소유 문서, 타인 일반 조회, 타인 기본 summary, 타인 full을 서로 비교할 수 있고 patched 검사에는 정상 self read/export, self full, other summary 유지와 타인 full 거부가 있다. 본문 또한 title/owner만의 요약과 실제 body를 명시적으로 구분해 200 오탐을 막는다. 패치 검사는 body 제거뿐 아니라 owner 위조, 미인증/위조 쿠키, 잘못된 형식도 다룬다.\nexport-gap-designer (4): 검사는 자기 문서 조회/full과 타인 조회 403, 타인 summary의 본문 부재, 취약 타인 full을 구분한다. 패치 검사는 정상 기능을 보존하며 타인 full과 본문 소유자 조작, 잘못된 형식·JSON·ID, 비로그인/위조 쿠키를 차단한다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/solve/solve.sh",
+            "quote": "test \"$(request -b \"$work/cookies\" \"$base/api/notes/42\")\" = 403",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/solve.sh",
+            "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/reply.json\" >/dev/null",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/patched/test.sh",
+            "quote": "'{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/patched/test.sh",
+            "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/README.md",
+            "quote": "요약 사본은 제목·소유자만 담을 수 있다. 상태가 200이어도 실제 본문이 제공됐는지",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/patched/test.sh",
+            "quote": "test \"$(request -b \"$work/cookies\" -H 'Content-Type: application/json' -d '{\"note_id\":7,\"format\":\"full\"}' \"$base/api/exports\")\" = 200",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/patched/test.sh",
+            "quote": "for body in '{\"note_id\":42,\"format\":\"full\"}' '{\"note_id\":42,\"format\":\"full\",\"owner\":\"guest\"}'; do",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/patched/test.sh",
+            "quote": "jq -e '.redacted == true and (.export | has(\"body\") | not)' \"$work/body\" >/dev/null",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/vulnerable/app.py",
+            "quote": "if not export_allowed(note, user):\n                return self.reply(403, {'error': 'not_owner'})",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "hints": {
+        "level": 4,
+        "reason": "export-gap-learner (4): 기본 설명은 취약한 format 값이나 정답을 직접 말하지 않고 비교할 작업과 상태/본문 구분을 안내한다. 첫 힌트는 비교 대상과 본문 유무 관찰을 알려 주고, 둘째는 막힐 수 있는 다른 소유자 ID·full 입력·jq 경로를 제공한다. 답 코드 자체를 알려 주지 않아 도움의 단계가 해설과 분리된다.\nexport-gap-evidence (4): 첫 힌트는 ID에 대한 두 엔드포인트 비교와 상태 이외의 redacted/body 관찰로 오탐 가능성을 줄이고, 둘째 힌트는 막혔을 때 실제 full 형식과 jq 추출 위치를 알려준다. 브리핑이 타인 자료의 유출 값을 직접 제공하지 않으며 정답은 실제 인스턴스 본문에서 얻는다.\nexport-gap-designer (4): 첫 힌트는 동일 ID 두 작업과 본문 검사를 환기하고, 둘째는 ID 42와 full 형식 필드를 알려 준다. 요청 구성의 막힘은 풀어주되 응답 확인과 원인 설명은 남겨둔 단계적 힌트다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/hints/1.md",
+            "quote": "같은 문서 ID에",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/hints/2.md",
+            "quote": "`jq -r '.export.body'`로 실제 내용을 읽는다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/hints/1.md",
+            "quote": "내보내기의 200만으로 본문 공개를 확정하지 말고 redacted와 body 존재를 확인한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/hints/1.md",
+            "quote": "`GET /api/notes/ID`와 `POST /api/exports`를 각각 보내 보자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/hints/2.md",
+            "quote": "`{\"note_id\":42,\"format\":\"full\"}`로 바꾸자.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "explanation": {
+        "level": 4,
+        "reason": "export-gap-learner (4): 해설은 로그인 쿠키와 동일한 문서의 두 요청, 403과 summary의 본문 없는 200, 서비스 안내를 통해 확인하는 full 형식과 실제 응답 본문을 순서대로 연결한다. 이어서 export가 로그인만 확인하고 소유자를 확인하지 않은 원인, 전체 형식에 소유권 확인을 추가하는 보호법, summary와 자기 문서 기능을 유지하는 기준을 설명한다. 실습 서비스의 경계를 벗어난 보편적 사고 주장도 하지 않는다.\nexport-gap-evidence (4): 해설은 자기 문서 정상 흐름, 타인 조회 거부, summary의 본문 없는 성공, full 본문 유출을 순서대로 연결하고 로그인만 검사하고 문서 소유자를 검사하지 않은 원인을 설명한다. 수정 정책 및 정상 기능 유지도 명시해 관찰에서 보호 원리로 이어진다.\nexport-gap-designer (4): 해설은 기준선 이후 동일 문서의 두 경로를 대조하고 summary 200과 full 본문을 구분한다. 로그인만 확인하고 소유자를 비교하지 않은 원인을 밝히며 full에 소유권 검사 추가 및 공개 summary와 정상 기능 유지를 설명한다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를\n비교하지 않았다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "수정한 서버는 full 내보내기에도 소유권을 확인해 문서 42의 본문을 거부한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "목록과 같은 공개 항목만 담는 summary는 계속 허용한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/export-gap/solve/README.md",
+            "quote": "기본 summary는 200이어도 redacted가 true이며 본문이 없다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "execution": {
+        "level": 3,
+        "reason": "export-gap-learner (3): 현재 심사에서는 실행하지 않았다. 스냅샷에 포함된 과거 작성자 검증은 2026-10-02 20:56:32 UTC의 기록으로, 해답·패치·정리 및 소비자 실행·검증·중지와 PTY 요청·제출·중단·재접속·재시작을 통과했다고 기록한다. 이 기록은 재현 근거지만 작성자 기록이며 이번 검토의 독립 실행으로 간주하지 않는다. 원본 보존도 함께 기록되어 있다.\nexport-gap-evidence (4): 이번 심사 중 재실행하지 않았으며 이를 현재 실행으로 취급하지 않는다. 날짜가 있는 2026-10-02 기록에는 PTY 해답 제출·중단/재접속/초기화 검증과 실제 검증기 통과가 기록되어 있고 2026-10-03 작성 기록은 해답, 패치, 소비자 실행 검증을 별도로 보고한다. 문제 전용 패치 테스트도 타인 full 거부 및 정상 기능 유지를 포함한다.\nexport-gap-designer (3): 과거 작성 기록은 2026-10-03에 해답, 패치, 정상 기능 및 consumer validate/run/verify/stop을 검사했고 PTY에서 요청부터 종료와 원본 보존까지 했다고 기록한다. validation은 2026-10-02 UTC의 passed 결과다. 이는 과거 실행이지 이번 재실행은 아니며 패치 스크립트 로그가 없어 3이다.",
+        "evidence": [
+          {
+            "path": "challenges/export-gap/authoring/validation.json",
+            "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\"",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/export-gap/authoring/validation.json",
+            "quote": "\"author_solution_patch_cleanup\": true,",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/export-gap/authoring/validation.json",
+            "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true,",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/export-gap/authoring/validation.json",
+            "quote": "\"verified_at_utc\": \"2026-10-02T20:56:32.038324+00:00\",",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/export-gap/AUTHORING.md",
+            "quote": "2026-10-03 Codex 작성. 의뢰·계정·문서 소유자·작업과 오류 상태의 의미를 대조했다.",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/export-gap/patched/test.sh",
+            "quote": "Normal note reads/exports preserved; other owners and invalid/unauthenticated requests rejected",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/export-gap/AUTHORING.md",
+            "quote": "실제 PTY의 요청·해답·정답/오답 제출·중단·재접속·종료 후 초기화와 원본 보존을",
+            "kind": "recorded-execution"
+          }
+        ],
+        "improvement": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+      },
+      "browser": {
+        "level": null,
+        "reason": "export-gap-learner (None): 현재 문제의 검색·선택부터 브라우저에서 환경 준비, 터미널 풀이, 정답/오답 제출, 종료까지 확인한 브라우저 세션 기록이 없다. 기존 PTY 검증은 이 항목을 대체하지 않는다.\nexport-gap-evidence (None): 현재 문제를 브라우저에서 검색하고 환경 준비부터 제출·종료까지 수행한 세션 근거를 제공된 자료에서 확인하지 못했다. 작성 기록의 PTY 확인은 브라우저 전체 풀이를 입증하지 않는다.\nexport-gap-designer (None): 문제 선택부터 환경 준비, 풀이, 정답/오답 제출 및 종료까지 확인한 브라우저 세션 기록이 없다. PTY 검증은 이를 대신하지 않는다.",
+        "evidence": [],
+        "improvement": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다.\n실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다.\n실제 브라우저 전체 풀이 세션을 기록한다."
+      },
+      "learner": {
+        "level": null,
+        "reason": "export-gap-learner (None): 선언된 초급자의 독립 풀이 시간·막힌 단계·힌트 사용·원리 이해를 기록한 세션은 확인되지 않았다. 작성자 검증과 현재 모델의 읽기 심사는 학습자 풀이가 아니다.\nexport-gap-evidence (None): 대상 수준 독립 학습자의 풀이 시간, 막힌 단계, 힌트 사용, 원리 이해 세션 기록이 없다. 자동 해답과 작성자 관찰은 독립 학습자 증거가 아니다.\nexport-gap-designer (None): 해설 없이 푼 대상 수준 독립 학습자의 시간, 막힘, 힌트 사용과 원리 이해 기록이 없다. 작성자 해답은 독립 세션 근거가 아니다.",
+        "evidence": [],
+        "improvement": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다.\n선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다.\n초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+      }
+    },
+    "source_sha256": "0d87922cd9cc0e87038a6cc4d352e8e64924c1f1740e96a33730a1a29d816aa2"
+  },
+  "final_summary": {
+    "slug": "export-gap",
+    "points": 75.0,
+    "reviewed_weight": 80,
+    "pending": [
+      "browser",
+      "learner"
+    ],
+    "improvements": [
+      {
+        "criterion": "starting_context",
+        "action": "본문에 export의 선택 형식과 응답에서 body를 확인하는 jq 예를 추가하거나, GET / 안내를 어디서 어떻게 읽을지 명시해 첫 시도에서 형식 선택을 연결할 수 있게 한다.\nPOST 예시 한 줄을 제공해 요청 작성 대신 문서 선택과 응답 비교에 주의를 둘 수 있게 한다."
+      },
+      {
+        "criterion": "execution",
+        "action": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
+      },
+      {
+        "criterion": "browser",
+        "action": "독립적인 브라우저 세션에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료까지 기록한다.\n실제 브라우저 세션에서 검색, 문제 선택, 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다.\n실제 브라우저 전체 풀이 세션을 기록한다."
+      },
+      {
+        "criterion": "learner",
+        "action": "초급 학습자가 해설을 닫고 독립 풀이한 시간·막힘·힌트 사용·원리 설명을 기록한다.\n선수 능력을 가진 독립 학습자가 해설 없이 풀이한 시간·막힘·힌트·이해 기록을 수집한다.\n초급 독립 학습자 세션을 기록해 시간과 막힘, 힌트, 원리 이해를 확인한다."
+      }
+    ]
+  }
+}
