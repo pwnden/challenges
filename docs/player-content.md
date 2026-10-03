@@ -94,6 +94,23 @@ renderer reads the sender as escaped text and applies its own fixed markup and
 styles. Author-supplied event handlers, CSS and other DOM attributes are ignored.
 Ordinary `>` quotations keep their general quotation style.
 
+### Person names in narrative
+
+Mark a person's first appearance in ordinary narrative with `:person[닉네임]`.
+Explain their relationship to the target in the same sentence:
+
+```markdown
+운영 담당자 :person[솔개로그]는 작업 보드 서버를 관리한다.
+```
+
+This is a subtle text-color cue. Keep the body font, size and weight, and write
+later appearances as plain text. Use the name as plain text inside the directive;
+bold, links, inline code and decorative labels are unnecessary. Message senders
+continue to use the existing `from` field. Authors declare the person explicitly;
+the consumer does not guess names from ordinary words. Consumers without this
+presentation hint retain the readable child text. This optional markup stays
+within the current Markdown contract.
+
 ### Briefing sections
 
 Use MDC blocks to declare the role of each part of the briefing. The platform
