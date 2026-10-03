@@ -1,0 +1,550 @@
+{
+  "slug": "midnight-trace",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "ba6f1ac6d2879aff58d5f6aed0f0f5488fa8ca8f1836a26503bc2eeb6a5c51c9",
+  "source_sha256_after": "c52545c9aedc1999d041f4232c8cf76e169fefb59d4e980a456be69387c63a92",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "midnight-trace",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/midnight-trace/challenge.toml",
+          "input/challenges/midnight-trace/README.md",
+          "input/challenges/midnight-trace/files/access.log",
+          "input/challenges/midnight-trace/files/audit.jsonl",
+          "input/challenges/midnight-trace/hints/1.md",
+          "input/challenges/midnight-trace/solve/README.md",
+          "input/challenges/midnight-trace/AUTHORING.md",
+          "input/challenges/midnight-trace/authoring/capture.py",
+          "input/knowledge/http-messages.md",
+          "input/knowledge/object-ownership.md",
+          "input/knowledge/transfer-evidence.md"
+        ],
+        "first_pass": "사이트 기록을 정리하는 의뢰인은 게스트 요청이 운영 자료에 닿은 듯한 기록이 실제 자료 전달인지 확인하려 한다. access.log는 요청자·주소·상태, audit.jsonl은 자료 소유자·실제 응답을 담고 있다. request_id로 두 파일을 연결해 guest 요청 중 성공했고 ops 자료 및 응답 복구 키가 확인되는 요청을 찾는다. 두 파일과 성공/거부 대조 조건, 제출할 키가 명확하다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "요청 주체와 두 기록에서 확인할 행위가 식별된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "두 기록을 함께 읽어 그때 있었던 일을 밝혀 보자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "타 계정 자료가 노출됐는지라는 확인 질문과 복구 키의 민감성이 제시된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "확인하려고 당시 기록을 길드에 맡겼다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "의심과 확인된 사건을 나누고 서로 다른 정렬의 기록을 ID로 연결하도록 한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "같은 요청은 두 파일에서 같은 `request_id`를 갖는다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "user, owner, status, response, request_id를 실제 기록의 필드와 의미에 대응한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "| `request_id` | 같은 요청을 두 기록에서 연결하는 고유 번호. |"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설은 ID, status, requester/owner, response를 각각 확인 근거로 제시하며 시각만으로 일반화하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/solve/README.md",
+                "quote": "이번 판단의 근거는 같은 요청 ID, 성공 상태, 서로 다른 요청자와 소유자, 실제 응답이다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "계정 소유권은 기대 원칙으로, 기록된 응답은 특정 요청 관찰로 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "이 사이트에는 게스트 계정 `guest`와 운영 계정 `ops`가 있다. 두 계정은 각자 소유한"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "텍스트/JSON 필드와 연결 기준을 설명하고 목표에 해당하는 키를 명시한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "이 값을 기준으로 요청 기록과 응답 내용을 연결해 보자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "상황과 구분 기준을 자연스럽게 설명하며 정보 필드를 표로 정리한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "복구 키가 여러 개 보이므로, 목표에 해당하는 요청의 값을 골라야 한다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/midnight-trace/README.md",
+            "quote": "이 자료는 실험용 사이트에서 실제 요청과 응답을 발생시켜 만든 학습용 기록이다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/authoring/capture.py",
+                "quote": "Capture small real HTTP exchanges from a deterministic local lab fixture."
+              },
+              {
+                "path": "input/challenges/midnight-trace/files/access.log",
+                "quote": "# Local lab HTTP capture. UTC timestamps; one request per JSON line."
+              }
+            ],
+            "verdict": "학습용 로컬 실험 자료라는 문구와 작성자 출처가 일치한다.",
+            "reason": "실제 외부/운영 사건 자료라고 확대 해석하지 않는다."
+          },
+          {
+            "path": "input/challenges/midnight-trace/solve/README.md",
+            "quote": "`req-205`는 게스트가 운영 계정의 자료를 성공적으로 읽은 요청이다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/files/access.log",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"user\": \"guest\", \"method\": \"GET\", \"path\": \"/exports/42\", \"status\": 200}"
+              },
+              {
+                "path": "input/challenges/midnight-trace/files/audit.jsonl",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"action\": \"export\", \"owner\": \"ops\", \"response\": {\"recovery_key\": \"pwnden{follow_the_request_not_the_clock}\"}}"
+              }
+            ],
+            "verdict": "정확한 두 로그 행의 상관관계로 뒷받침된다.",
+            "reason": "자료가 뒷받침하는 것은 해당 요청의 전달이며 이후 키 사용이나 실제 사람 신원은 아님을 해설도 밝힌다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "로그는 읽기만 했고 capture 스크립트를 실행하거나 재현하지 않았다.",
+          "실제 학습자 관찰은 수행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — midnight-trace\n\n의뢰인은 계정별 자료 보관 웹사이트의 기록에서 게스트가 운영 계정 자료에 접근한 듯한 흔적을 보고, 접근 시도인지 실제 자료 전달인지 구분하려 한다. 게스트와 운영 계정은 각자 소유 자료만 받아야 하며 자료에는 복구 키가 있다. 제공된 `access.log`는 요청자·주소·성공/거부, `audit.jsonl`은 자료 소유자와 실제 응답 내용을 보여 준다. 파일마다 기록 순서가 다르므로 `request_id`로 짝지어 guest 요청 중 ops 소유 자료가 실제 전송된 요청과 그 응답의 복구 키를 찾는다. 해당 키가 완료 증거다.\n\n선수지식은 `http-messages`, `object-ownership`. 본문에서 데이터 필드 해석, 연결 키, 정상/거부 기록 구분까지 설명되어 시작과 완료조건이 명확하다. 빠진 정보 없음.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "midnight-trace",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/midnight-trace/challenge.toml",
+          "challenges/midnight-trace/README.md",
+          "challenges/midnight-trace/AUTHORING.md",
+          "challenges/midnight-trace/files/access.log",
+          "challenges/midnight-trace/files/audit.jsonl",
+          "challenges/midnight-trace/hints/1.md",
+          "challenges/midnight-trace/solve/README.md",
+          "challenges/midnight-trace/solve/solve.py",
+          "challenges/midnight-trace/authoring/capture.py",
+          "docs/text-review.md",
+          "docs/authoring-standard.md",
+          "docs/player-content.md",
+          "knowledge/http-messages.md",
+          "knowledge/object-ownership.md",
+          "evidence-first.md"
+        ],
+        "first_pass": "# First pass: midnight-trace\n\n**읽은 범위(첫 단계):** `input/challenges/midnight-trace/challenge.toml`, `README.md`의 첫 `::knowledge` 앞까지. 이 문제에는 BRIEFING.md가 없다. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 사이트 기록 정리 담당자가 게스트 계정이 운영 계정 자료에 접근한 듯한 요청 기록을 발견해 실제 전달 여부를 조사 의뢰했다. 계정 자료에는 복구 키가 있다.\n- **질문:** 게스트가 운영 계정의 자료를 실제로 받아간 요청은 무엇이며 그 응답에 어떤 복구 키가 있었는가?\n- **시작:** `files/access.log`에서 요청자·경로·상태를 보고, `files/audit.jsonl`에서 요청 소유자·실제 응답 내용을 확인한다. 두 파일의 `request_id`로 짝짓는다.\n- **완료:** 목표 요청으로 확인된 게스트에게 전달된 복구 키를 `pwnden{...}` 형식으로 제출.\n- **불명확한 점:** 의뢰 문장은 접근 시도와 실제 수신을 구분하려는 질문이다. 제공 자료가 같은 여섯 요청을 다른 순서로 기록한다고 설명한다. 첫 단계에서 기록 실물의 값은 읽지 않았다.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "guest 요청자, ops 소유 자료, 두 로그와 request_id 연결 행동이 명시된다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "게스트가 운영 계정 자료를 받아 간 것 같아. 요청 기록은 있는데, 그때 실제로 뭘 받았는지까지 확인해 줄래?"
+              },
+              {
+                "path": "challenges/midnight-trace/files/access.log",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.447+00:00\", \"request_id\": \"req-201\", \"user\": \"ops\", \"method\": \"GET\", \"path\": \"/exports/7\", \"status\": 200}"
+              },
+              {
+                "path": "challenges/midnight-trace/files/audit.jsonl",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.452+00:00\", \"request_id\": \"req-206\", \"action\": \"export\", \"owner\": \"ops\", \"response\": {\"recovery_key\": \"pwnden{scheduled_backup_receipt}\"}}"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "접근 시도인지 실제 자료를 받은 것인지라는 질문과 복구 키 보호 이유가 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "게스트가 운영 계정 자료를 받아 간 것 같아. 요청 기록은 있는데, 그때 실제로 뭘 받았는지까지 확인해 줄래?"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "요청 로그와 실제 응답 기록의 서로 다른 역할, 같은 request_id로 연결하는 절차가 분명하다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "게스트가 운영 계정 자료를 받아 간 것 같아. 요청 기록은 있는데, 그때 실제로 뭘 받았는지까지 확인해 줄래?"
+              },
+              {
+                "path": "challenges/midnight-trace/hints/1.md",
+                "quote": "성공한 요청에서 요청자와 자료 소유자가 다른 경우를 찾아보자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "status와 응답 내용을 함께 보라는 설명이 요청·응답 및 소유권 필드에 구체적으로 대응한다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "게스트가 운영 계정 자료를 받아 간 것 같아. 요청 기록은 있는데, 그때 실제로 뭘 받았는지까지 확인해 줄래?"
+              },
+              {
+                "path": "challenges/midnight-trace/files/access.log",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.447+00:00\", \"request_id\": \"req-201\", \"user\": \"ops\", \"method\": \"GET\", \"path\": \"/exports/7\", \"status\": 200}"
+              },
+              {
+                "path": "challenges/midnight-trace/files/audit.jsonl",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.452+00:00\", \"request_id\": \"req-206\", \"action\": \"export\", \"owner\": \"ops\", \"response\": {\"recovery_key\": \"pwnden{scheduled_backup_receipt}\"}}"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "req-205 판단은 성공 상태, guest 요청자, ops 소유자, recovery_key 응답을 교차 확인한다. capture.py는 자료가 로컬 학습용 요청 기록임을 보인다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/solve/README.md",
+                "quote": "`req-205`는 게스트가 운영 계정의 자료를 성공적으로 읽은 요청이다."
+              },
+              {
+                "path": "challenges/midnight-trace/files/access.log",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.447+00:00\", \"request_id\": \"req-201\", \"user\": \"ops\", \"method\": \"GET\", \"path\": \"/exports/7\", \"status\": 200}"
+              },
+              {
+                "path": "challenges/midnight-trace/files/audit.jsonl",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.452+00:00\", \"request_id\": \"req-206\", \"action\": \"export\", \"owner\": \"ops\", \"response\": {\"recovery_key\": \"pwnden{scheduled_backup_receipt}\"}}"
+              },
+              {
+                "path": "challenges/midnight-trace/authoring/capture.py",
+                "quote": "\"\"\"Capture small real HTTP exchanges from a deterministic local lab fixture."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "소유자 본인 자료만 전달돼야 한다는 서술은 원칙이며, req-205의 실제 전달은 기록상 관찰로 나뉜다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "게스트가 운영 계정 자료를 받아 간 것 같아. 요청 기록은 있는데, 그때 실제로 뭘 받았는지까지 확인해 줄래?"
+              },
+              {
+                "path": "challenges/midnight-trace/solve/README.md",
+                "quote": "`req-205`는 게스트가 운영 계정의 자료를 성공적으로 읽은 요청이다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "파일 도구, 읽는 법, 조인 키, 성공·거부 조건과 제출 형식이 제공된다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/challenge.toml",
+                "quote": "slug = \"midnight-trace\""
+              },
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "게스트가 운영 계정 자료를 받아 간 것 같아. 요청 기록은 있는데, 그때 실제로 뭘 받았는지까지 확인해 줄래?"
+              },
+              {
+                "path": "challenges/midnight-trace/hints/1.md",
+                "quote": "성공한 요청에서 요청자와 자료 소유자가 다른 경우를 찾아보자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "“누가 요청했는지”와 “누구의 자료를 어떤 내용까지 보냈는지”로 추상적 로그 설명을 풀었다.",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "게스트가 운영 계정 자료를 받아 간 것 같아. 요청 기록은 있는데, 그때 실제로 뭘 받았는지까지 확인해 줄래?"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/midnight-trace/README.md",
+            "quote": "자료만 받아 갈 수 있어야 한다. 그런데 아직안잠은 게스트의 요청 가운데 운영 계정의\n자료에 접근한 듯한 기록을 발견했다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/README.md",
+                "quote": "자료만 받아 갈 수 있어야 한다. 그런데 아직안잠은 게스트의 요청 가운데 운영 계정의\n자료에 접근한 듯한 기록을 발견했다."
+              },
+              {
+                "path": "challenges/midnight-trace/files/access.log",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"user\": \"guest\", \"method\": \"GET\", \"path\": \"/exports/42\", \"status\": 200}"
+              },
+              {
+                "path": "challenges/midnight-trace/files/audit.jsonl",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"action\": \"export\", \"owner\": \"ops\", \"response\": {\"recovery_key\": \"pwnden{follow_the_request_not_the_clock}\"}}"
+              },
+              {
+                "path": "challenges/midnight-trace/authoring/capture.py",
+                "quote": "guarded = self.path.startswith(\"/secure-exports/\")"
+              }
+            ],
+            "verdict": "실제 프로덕션 사건 자료라고 주장하지 않는다. README는 이 구분을 명시한다.",
+            "reason": "실제 프로덕션 사건 자료라고 주장하지 않는다. README는 이 구분을 명시한다."
+          },
+          {
+            "path": "challenges/midnight-trace/solve/README.md",
+            "quote": "`req-205`는 게스트가 운영 계정의 자료를 성공적으로 읽은 요청이다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/solve/README.md",
+                "quote": "`req-205`는 게스트가 운영 계정의 자료를 성공적으로 읽은 요청이다."
+              }
+            ],
+            "verdict": "정확한 ID 조인·상태·응답에 기반하며 해당 기록 하나에 한정한다.",
+            "reason": "정확한 ID 조인·상태·응답에 기반하며 해당 기록 하나에 한정한다."
+          },
+          {
+            "path": "challenges/midnight-trace/solve/README.md",
+            "quote": "이 자료의 실험 사이트에는 소유자를 확인하는 경로와 확인이 빠진 이전 내보내기 경로가 함께 있었다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/midnight-trace/solve/README.md",
+                "quote": "이 자료의 실험 사이트에는 소유자를 확인하는 경로와 확인이 빠진 이전 내보내기 경로가 함께 있었다."
+              }
+            ],
+            "verdict": "제공 fixture 구현에 대한 설명이며 실제 서비스 일반화가 아니다.",
+            "reason": "제공 fixture 구현에 대한 설명이며 실제 서비스 일반화가 아니다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "문서에 BRIEFING.md가 없어 README.md가 브리핑 겸 학습 본문 역할을 한다. 실제 계정 사용·키 이후 사용은 해설도 입증 범위 밖이라고 명시한다. 검토자는 캡처를 실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: midnight-trace\n\n**읽은 범위(첫 단계):** `input/challenges/midnight-trace/challenge.toml`, `README.md`의 첫 `::knowledge` 앞까지. 이 문제에는 BRIEFING.md가 없다. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 사이트 기록 정리 담당자가 게스트 계정이 운영 계정 자료에 접근한 듯한 요청 기록을 발견해 실제 전달 여부를 조사 의뢰했다. 계정 자료에는 복구 키가 있다.\n- **질문:** 게스트가 운영 계정의 자료를 실제로 받아간 요청은 무엇이며 그 응답에 어떤 복구 키가 있었는가?\n- **시작:** `files/access.log`에서 요청자·경로·상태를 보고, `files/audit.jsonl`에서 요청 소유자·실제 응답 내용을 확인한다. 두 파일의 `request_id`로 짝짓는다.\n- **완료:** 목표 요청으로 확인된 게스트에게 전달된 복구 키를 `pwnden{...}` 형식으로 제출.\n- **불명확한 점:** 의뢰 문장은 접근 시도와 실제 수신을 구분하려는 질문이다. 제공 자료가 같은 여섯 요청을 다른 순서로 기록한다고 설명한다. 첫 단계에서 기록 실물의 값은 읽지 않았다.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "midnight-trace",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/midnight-trace/challenge.toml",
+          "input/challenges/midnight-trace/README.md",
+          "input/challenges/midnight-trace/AUTHORING.md",
+          "input/challenges/midnight-trace/hints/1.md",
+          "input/challenges/midnight-trace/solve/README.md",
+          "input/challenges/midnight-trace/solve/solve.py",
+          "input/challenges/midnight-trace/authoring/capture.py",
+          "input/challenges/midnight-trace/files/access.log",
+          "input/challenges/midnight-trace/files/audit.jsonl",
+          "input/knowledge/http-messages.md",
+          "input/knowledge/object-ownership.md",
+          "input/knowledge/transfer-evidence.md"
+        ],
+        "first_pass": "아직안잠은 사이트 기록에서 게스트가 운영 계정 자료에 접근한 듯한 로그를 발견한다. 계정별 자료 내보내기 기록 두 개를 request_id로 연결해 요청자와 상태, 자료 소유자 및 실제 응답을 확인한다. 목표는 게스트 guest가 운영 계정 ops의 자료를 성공적으로 받은 요청을 특정하고 그 요청의 복구 키를 제출하는 것이다. 기록별 역할, 여섯 요청이 섞인 사실과 연결 키가 안내되어 있다. 기록이 실험용 사이트의 실제 요청·응답을 발생시켜 만들었다는 표현은 후속 자료로 대조한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "요청자와 소유자라는 별개 역할 및 두 로그의 확인 작업이 명시된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "아직안잠이 보낸 `access.log`에는 요청 기록이, `audit.jsonl`에는 서버가 보낸 내용의"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "복구 키 보호 원칙과 실제 전달 여부를 확인하려는 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "자료에 접근한 듯한 기록을 발견했다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "두 파일의 순서가 다르므로 request_id로 연결한다는 관계가 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "파일마다 기록 순서가 다르다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "HTTP 상태와 기록 필드가 실제 조사 의미로 풀려 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "`status`가 `403`인 요청은 서버가 거부한 시도다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "req-205의 요청자·성공 상태와 대응 감사 응답이 자료에 직접 있으며 생성기 동작도 같은 기록 구조를 만든다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/files/access.log",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"user\": \"guest\", \"method\": \"GET\", \"path\": \"/exports/42\", \"status\": 200}"
+              },
+              {
+                "path": "input/challenges/midnight-trace/files/audit.jsonl",
+                "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"action\": \"export\", \"owner\": \"ops\", \"response\": {\"recovery_key\": \"pwnden{follow_the_request_not_the_clock}\"}}"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "계정별 자료 분리는 기대 조건이고, 기록은 성공·거부·자료 없음으로 실제 관찰을 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "이 사이트에는 게스트 계정 `guest`와 운영 계정 `ops`가 있다. 두 계정은 각자 소유한"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "필드 설명, 두 파일, 조인 키, 목표 계정과 제출 조건이 충분하며 정답을 본문에서 미리 노출하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/challenge.toml",
+                "quote": "requires = [\"http-messages\",\"object-ownership\"]"
+              },
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "복구 키는 `pwnden{...}` 형식이다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "상황 설명은 자연스럽고 요청·응답 기록을 일상 동사로 풀어 쓴다.",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/README.md",
+                "quote": "두 기록을 함께 읽어 그때 있었던 일을 밝혀 보자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/midnight-trace/README.md",
+            "quote": "이 자료는 실험용 사이트에서 실제 요청과 응답을 발생시켜 만든 학습용 기록이다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/authoring/capture.py",
+                "quote": "ThreadingHTTPServer((\"127.0.0.1\", 0), Handler)"
+              },
+              {
+                "path": "input/challenges/midnight-trace/authoring/capture.py",
+                "quote": "urlopen(request, timeout=5)"
+              }
+            ],
+            "verdict": "생성기와 부합",
+            "reason": "캡처 생성기 코드는 루프백 HTTP 서버로 요청하고 응답 기록을 만든다고 명시한다."
+          },
+          {
+            "path": "input/challenges/midnight-trace/solve/README.md",
+            "quote": "`req-205`는 게스트가 운영 계정의 자료를 성공적으로 읽은 요청이다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/files/access.log",
+                "quote": "\"user\": \"guest\""
+              },
+              {
+                "path": "input/challenges/midnight-trace/files/audit.jsonl",
+                "quote": "\"owner\": \"ops\""
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "같은 ID로 요청자, 성공 상태, 소유자가 연결된다."
+          },
+          {
+            "path": "input/challenges/midnight-trace/solve/README.md",
+            "quote": "복구 키가 기록됐다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/midnight-trace/files/audit.jsonl",
+                "quote": "\"response\": {\"recovery_key\": \"pwnden{follow_the_request_not_the_clock}\"}"
+              }
+            ],
+            "verdict": "범위 적절",
+            "reason": "이 요청의 기록된 응답 내용까지만 주장하며 이후 사용이나 실제 행위자 신원으로 확장하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 요청을 다시 발생시키거나 학습자 관찰은 수행하지 않았다. 기술 판단은 배포 로그와 정적 생성기 소스에 한정했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: midnight-trace\n\n읽은 자료: `input/challenges/midnight-trace/challenge.toml`, `README.md`만. 힌트·해설·구현은 아직 열지 않았다.\n\n아직안잠은 사이트 기록을 정리하며, 게스트가 운영 계정의 자료에 접근한 듯한 로그를 발견했다. 사이트는 각 계정이 소유한 자료만 내보내야 하며 자료에는 복구 키가 포함될 수 있다. 플레이어는 `access.log`에서 요청자와 요청 상태를, `audit.jsonl`에서 자료 소유자와 실제 응답 내용을 확인한다. 두 기록의 `request_id`를 연결해 게스트가 운영 계정 `ops` 자료를 실제로 받은 요청을 특정하고 그때 전달된 복구 키를 제출한다.\n\n기록별 역할과 연결 키, 성공/거부 요청이 섞였다는 점, 완료 조건이 제시된다. 본문은 여섯 요청 자료를 실제 요청·응답을 발생시켜 만든 기록이라고 말하지만 이 주장의 기술적 대조는 아직 하지 않았다. 시작은 두 파일을 읽는 것이며, CLI 도구는 선언되어 있지 않다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

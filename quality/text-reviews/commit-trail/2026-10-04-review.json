@@ -1,0 +1,527 @@
+{
+  "slug": "commit-trail",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "b5692f372a3e65a863323843fe33fd23426676d11e1a3dfd9c6fc692b314302a",
+  "source_sha256_after": "832be8c8fd791a88abf01fc9df796ff2f700e2fce155169d63f336ce24be06cc",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "commit-trail",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/commit-trail/challenge.toml",
+          "challenges/commit-trail/BRIEFING.md",
+          "challenges/commit-trail/README.md",
+          "challenges/commit-trail/hints/1.md",
+          "challenges/commit-trail/hints/2.md",
+          "challenges/commit-trail/solve/README.md",
+          "challenges/commit-trail/solve/solve.sh",
+          "challenges/commit-trail/files/release-note.txt",
+          "challenges/commit-trail/authoring/check.py",
+          "challenges/commit-trail/authoring/validation.json",
+          "challenges/commit-trail/AUTHORING.md",
+          "docs/text-review.md"
+        ],
+        "first_pass": "의뢰인: 흰돛, 동아리 일정 관리 예제 프로젝트를 공개 배포한 담당자.\n자료: 현재 파일과 `.git` 이력을 포함한 source.tar.gz, release-note.txt.\n동기: 운영 설정에서 지운 팀 복구 키가 배포 묶음의 과거 기록에 남았는지 확인하고, 이전 이름 및 교체 이력 중 이번 배포의 삭제 직전 키를 식별.\n시작 행동: 안내된 대로 묶음을 풀고 현재 파일, release note, git 기록·경로 변경을 살핀다.\n완료 조건: 설정 삭제 직전의 팀 복구 키 전체 제출.\n부족 정보: 본문은 사용할 터미널 명령과 조사 관점을 제공한다. Git 이력 해석 및 키 구별은 과제의 발견 항목이다. 선수지식: terminal-commands, git-history, retained-data.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "의뢰인, 배포 묶음, 현재 파일 및 이력을 조사할 플레이어 행동이 특정된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "현재 키가 없다는 관찰과 과거 이력에 남았는지 확인할 질문 및 키 교체 구분 이유가 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "있으므로 이번 배포에 쓰던 키를 구분해야 한다. 저장소는 여덟 커밋의 실습 자료다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "release note를 기준으로 이력 확인하라는 자료에서 순서 관계가 분명하다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "release.txt는 이번 배포의 버전과 삭제한 운영 설정의 경로를 기록한다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "Git 이력·경로·커밋 표현은 명령 예제와 지식에서 풀이 수준으로 설명된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "`git show 커밋ID:파일경로`는 해당 시점의 파일 내용을 읽는다. `커밋ID^`는 바로"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설의 배포 경로/키 교체/삭제 직전 설명이 배포 노트, 이력 검사와 풀이 스크립트의 경로 선택에 대응한다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/solve/README.md",
+                "quote": "release.txt는 lab-v2와 config/worker.env를 기록한다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "제보 및 이력 노출은 확인 과제로 표현되며 삭제 직전 상태는 조사 결과로 분리된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "과거 이력까지 조사하지는 못했다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "압축 해제부터 이력 조회까지 시작 행동이 제공되고 제출 대상/조건이 구체적이다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "아래 명령으로 별도 작업 폴더에 풀고 현재 설정과 이력을 확인할 수 있다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "능동 명령형으로 조사 절차를 안내하고 현재 삭제와 이력 잔존을 구별한다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "현재 파일이 없다는 사실과 이력에 값이 없다는 사실은 다르다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/commit-trail/README.md",
+            "quote": "배포 묶음에는 수정 이력을 관리하는 Git 저장소도 들어 있다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/files/release-note.txt",
+                "quote": "Git 기록도 묶음에 포함됐다."
+              }
+            ],
+            "verdict": "일치",
+            "reason": "Release note confirms .git is included and the bundle has no organizational repository/account link."
+          },
+          {
+            "path": "challenges/commit-trail/solve/README.md",
+            "quote": "release.txt는 lab-v2와 config/worker.env를 기록한다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/solve/solve.sh",
+                "quote": "path=$(sed -n 's/^private_config=//p' \"$repo/config/release.txt\")"
+              }
+            ],
+            "verdict": "일치",
+            "reason": "Solver reads private_config from release note and queries deletion history for that path; authoring check documents eight commits, rename, and post-rotation key."
+          },
+          {
+            "path": "challenges/commit-trail/solve/README.md",
+            "quote": "`RECOVERY_KEY`는 `pwnden{deleted_file_live_history}`다. Git에 저장된 객체가",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/solve/solve.sh",
+                "quote": "git -C \"$repo\" show \"$deleted^:$path\" | rg -o"
+              }
+            ],
+            "verdict": "일치",
+            "reason": "Script reads the parent of the deletion commit at the release-noted path. Static expected answer appears in walkthrough; no execution claim made."
+          },
+          {
+            "path": "challenges/commit-trail/solve/README.md",
+            "quote": "배포 묶음에도 들어갔으므로, 현재 파일만 검토한 배포에서는 내부 값이 남는다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/authoring/check.py",
+                "quote": "assert (KEY in history) == (label == 'release')"
+              }
+            ],
+            "verdict": "일치",
+            "reason": "Authoring check is included in scope and records checking current key absence, historical recovery, rename, and deletion predecessor; source archive itself was not unpacked or executed."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "선언된 선수 지식이 제시하는 관점에서 문서를 검토했으며 실제 학습자 실험으로 표현하지 않았다.",
+          "스냅샷의 코드·검사·명령은 데이터로 읽었다. 실행 성공을 주장하지 않는다.",
+          "T5 판정은 문서가 말하는 구현 동작을 소스 및 대조 자료에 대조한 것이며, 실행 결과 관찰 주장을 새로 만들지 않았다."
+        ]
+      },
+      "first_pass_artifact": "의뢰인: 흰돛, 동아리 일정 관리 예제 프로젝트를 공개 배포한 담당자.\n자료: 현재 파일과 `.git` 이력을 포함한 source.tar.gz, release-note.txt.\n동기: 운영 설정에서 지운 팀 복구 키가 배포 묶음의 과거 기록에 남았는지 확인하고, 이전 이름 및 교체 이력 중 이번 배포의 삭제 직전 키를 식별.\n시작 행동: 안내된 대로 묶음을 풀고 현재 파일, release note, git 기록·경로 변경을 살핀다.\n완료 조건: 설정 삭제 직전의 팀 복구 키 전체 제출.\n부족 정보: 본문은 사용할 터미널 명령과 조사 관점을 제공한다. Git 이력 해석 및 키 구별은 과제의 발견 항목이다. 선수지식: terminal-commands, git-history, retained-data.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "commit-trail",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "docs/text-review.md",
+          "challenges/commit-trail/challenge.toml",
+          "challenges/commit-trail/BRIEFING.md",
+          "knowledge/terminal-commands.md",
+          "knowledge/git-history.md",
+          "knowledge/retained-data.md",
+          "challenges/commit-trail/README.md",
+          "challenges/commit-trail/hints/1.md",
+          "challenges/commit-trail/hints/2.md",
+          "challenges/commit-trail/solve/README.md",
+          "challenges/commit-trail/solve/solve.sh",
+          "challenges/commit-trail/AUTHORING.md",
+          "challenges/commit-trail/files/release-note.txt",
+          "challenges/commit-trail/authoring/build.py",
+          "challenges/commit-trail/authoring/check.py",
+          "challenges/commit-trail/authoring/validation.json"
+        ],
+        "first_pass": "The operator says a deployment bundle includes a Git repository; current configuration has no key, but earlier history was not checked. We must map release version and renamed/replaced keys to the value immediately before deleting the settings file. Inputs are an archive and release note; suggested commands unpack it and inspect current state/history. Start questions: which release/path is intended, and how do rename and key rotation affect selection of the historical value? Prerequisites cover shell commands, Git history, and retained data.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "행위자, 자료, 요청 동작이 브리핑 및 제공 자료에서 확인된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": ":person[흰돛]은 동아리의 일정 관리 예제 프로젝트를 정리해 공개했다. 팀 복구 키는"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "보호할 데이터, 우려, 확인 과제와 제출 증거가 직접 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "이번 배포 정보와 이름 변경·키 교체 이력을 연결해, 설정 삭제 직전의 팀 복구 키를 찾자."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "앞뒤 문장에서 지칭하는 대상과 인과/의심 관계가 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "기술 용어를 구체 경로·필드·도구 동작과 연결하고, 선수 지식을 본문에서 제공한다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "release.txt는 이번 배포의 버전과 삭제한 운영 설정의 경로를 기록한다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "기술 설명은 구현/설정과 대조했고, 작성자 실행 기록은 이번 실행 관찰과 분리했다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/files/release-note.txt",
+                "quote": "Git 기록도 묶음에 포함됐다."
+              },
+              {
+                "path": "challenges/commit-trail/authoring/build.py",
+                "quote": "commit('Rotate recovery key for lab-v2; retire lab-v1 key')"
+              },
+              {
+                "path": "challenges/commit-trail/solve/solve.sh",
+                "quote": "git -C \"$repo\" show \"$deleted^:$path\" | rg -o 'pwnden\\{[^}]+\\}'"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "보호 원칙, 제보·의심, 구현 분기/설정이 다른 종류의 주장으로 표현된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "키가 없는 것은 확인했지만 과거 이력까지 조사하지는 못했다. 현재 파일과 과거 기록을"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "범위, 제공 자료, 접근 방법, 제출 형식이 제시되고 힌트/해설의 역할도 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/hints/1.md",
+                "quote": "release.txt의 이번 배포 경로를 기준으로 삭제 기록을 찾자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문장은 자연스러운 구어·능동형 중심이며 추상 용어가 조사 행동을 가리지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "파일 이름이 바뀌었다면 `git log --follow -- 경로`로 이전 이름의 이력을 이어서"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/commit-trail/README.md",
+            "quote": "배포 묶음에는 수정 이력을 관리하는 Git 저장소도 들어 있다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/files/release-note.txt",
+                "quote": "Git 기록도 묶음에 포함됐다."
+              },
+              {
+                "path": "challenges/commit-trail/authoring/build.py",
+                "quote": "git('init', '--quiet', '--template=', '--initial-branch=main')"
+              }
+            ],
+            "verdict": "배포물은 Git 기록을 포함하도록 구성됐다는 설정/산출물 설명이다.",
+            "reason": "release note가 배포 범위를 적고 작성 스크립트는 실제 repo 생성 방식을 보인다."
+          },
+          {
+            "path": "challenges/commit-trail/README.md",
+            "quote": "설정 파일의 이름 변경과 키 교체도 있었다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/authoring/build.py",
+                "quote": "commit('Rotate recovery key for lab-v2; retire lab-v1 key')"
+              },
+              {
+                "path": "challenges/commit-trail/authoring/build.py",
+                "quote": "git('mv', 'config/runtime.env', 'config/worker.env')"
+              }
+            ],
+            "verdict": "작성 스크립트에 lab-v2 키 교체와 runtime.env→worker.env 이동 순서가 명시된다.",
+            "reason": "시나리오 생성 코드의 timeline이 서술을 뒷받침한다."
+          },
+          {
+            "path": "challenges/commit-trail/README.md",
+            "quote": "키가 없는 것은 확인했지만 과거 이력까지 조사하지는 못했다. 현재 파일과 과거 기록을",
+            "kind": "의심",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/README.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              },
+              {
+                "path": "challenges/commit-trail/solve/solve.sh",
+                "quote": "deleted=$(git -C \"$repo\" log --diff-filter=D --format=%H -- \"$path\")"
+              }
+            ],
+            "verdict": "검증할 질문과 경로는 명시되어 있으며 본문에서 답을 단정하지 않는다.",
+            "reason": "의뢰 문장은 과거 값 노출을 제보로 설정하고 실제 조사로 남긴다."
+          },
+          {
+            "path": "challenges/commit-trail/solve/README.md",
+            "quote": "이전 lab-v1의 키는 교체된 값이다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/authoring/build.py",
+                "quote": "OLD_KEY = 'pwnden{retired_scheduler_key}'"
+              },
+              {
+                "path": "challenges/commit-trail/authoring/build.py",
+                "quote": "key = KEY if include_secret else 'EXAMPLE_ONLY'"
+              }
+            ],
+            "verdict": "작성 데이터에 old key와 lab-v2 key 교체가 분리 설정되어 있다.",
+            "reason": "저장소 생성 코드가 역사상 값의 구분을 설명한다."
+          },
+          {
+            "path": "challenges/commit-trail/AUTHORING.md",
+            "quote": "과거 키 회수를 실제 Git으로 확인한다. 처음부터 키를 넣지 않은 대조 이력에서는",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/AUTHORING.md",
+                "quote": "`authoring/check.py`는 여덟 커밋, 정상 현재 상태, 원격 부재, 현재 키 부재와"
+              },
+              {
+                "path": "challenges/commit-trail/AUTHORING.md",
+                "quote": "실행 기록은 `authoring/validation.json`에 있다."
+              }
+            ],
+            "verdict": "작성자 기록이 대조 검사를 했다고 보고한다.",
+            "reason": "현재 검토에서는 자동검사/해답을 실행하지 않았고 이전 실행 주장을 독립 관찰로 취급하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "입력 스냅샷의 문서·소스만 정적으로 읽었다. 문제 해답, 검사, 서비스 요청을 실행하지 않았다.",
+          "AUTHORING.md 또는 validation.json의 과거 실행 보고는 독립 재현/관찰로 취급하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: commit-trail\n\nThe operator says a deployment bundle includes a Git repository; current configuration has no key, but earlier history was not checked. We must map release version and renamed/replaced keys to the value immediately before deleting the settings file. Inputs are an archive and release note; suggested commands unpack it and inspect current state/history. Start questions: which release/path is intended, and how do rename and key rotation affect selection of the historical value? Prerequisites cover shell commands, Git history, and retained data.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "commit-trail",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "docs/text-review.md",
+          "challenges/commit-trail/README.md",
+          "challenges/commit-trail/hints/1.md",
+          "challenges/commit-trail/hints/2.md",
+          "challenges/commit-trail/solve/README.md",
+          "challenges/commit-trail/solve/solve.sh",
+          "challenges/commit-trail/AUTHORING.md",
+          "challenges/commit-trail/files/release-note.txt",
+          "knowledge/terminal-commands.md",
+          "knowledge/git-history.md",
+          "knowledge/retained-data.md"
+        ],
+        "first_pass": "흰돛은 공개 배포 전에 운영 설정을 삭제했고 현재 예제 파일에서 키가 사라진 것만 확인했다. 전달한 Git 이력에 키가 남았는지와 이번 배포에 해당하는 삭제 직전 값을 조사한다. 시작은 source.tar.gz와 release-note.txt이며 완료는 배포·이름 변경·키 교체 순서를 연결해 삭제 직전 키 전문을 제출하는 것이다. 본문은 이력이 여덟 커밋이라고 범위를 제시한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "문맥에서 의뢰인·대상·플레이어 행동을 식별할 수 있다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "보호 대상 또는 조사 이유와 답해야 할 질문이 본문에서 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "상황에서 조사 단계·관찰·결론으로 이어지는 관계가 명확하다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "기술 용어가 이 문제의 실제 자료와 기능 이름에 대응한다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "기술 설명의 근거는 코드·자료·검사 서술과 일치하며 주장 범위를 넘지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "운영 원칙, 미확인 제보, 구현 동작, 관찰 결론을 구분한다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "본문에서 시작 자료·접근법·목표·완료 증거를 알 수 있고 힌트와 해설이 행동에서 관찰로 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "한국어 문장이 자연스럽고 자료·기능의 명칭이 일관된다.",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/BRIEFING.md",
+                "quote": "비교해, 배포 묶음에서 내부 키를 찾아낼 수 있는지 확인해 달라고 의뢰했다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/commit-trail/solve/README.md",
+            "quote": "release.txt는 lab-v2와 config/worker.env를 기록한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/commit-trail/AUTHORING.md",
+                "quote": "이름 변경을 실제 Git --follow로 확인하고 삭제 직전에는 교체 후 키만 있음을"
+              }
+            ],
+            "verdict": "일치",
+            "reason": "해설의 주장 범위와 대상 코드 또는 작성자 기술 설명이 맞고, 실행한 결과로 과장하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "제공된 스냅샷의 본문·힌트·해설·기술 자료를 대조했다. 이 검토에서 대상 서비스를 새로 실행하지 않았다.",
+          "실제 학습자에게 풀이를 제시하거나 관찰하지 않았다.",
+          "release-note.txt 본문은 구체 버전과 경로를 싣지 않는다. Git 아카이브를 실행·추출해 그 세부값을 독립 검증하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# Designer first pass\n\n상황: 흰돛은 공개 배포 전에 운영 설정을 삭제했고 현재 예제 파일에 키가 없는 것만 확인했다. Git 이력에 내부 키가 남았는지, 이번 배포에 쓰던 값이 무엇인지 확인한다. 시작: source.tar.gz와 release-note.txt. 완료: 이름 변경·키 교체 이력과 배포 정보를 연결해 삭제 직전 키 제출. 누락: 확인한 현재 상태가 배포 묶음의 어떤 버전과 대응하는지는 release-note의 내용 및 이력 확인이 필요하다. 본문은 여덟 커밋으로 범위를 한정한다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

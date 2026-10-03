@@ -1,0 +1,518 @@
+{
+  "slug": "wrapped-secret",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "97ae78f7785888a56909aa22d03daedcd19dc5f0e37d3b577087223c06a84781",
+  "source_sha256_after": "6a0aa653c6d82b9b09f38aaa24bca5e73a21be71fab2a55c8330e5b4567026e0",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "wrapped-secret",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/wrapped-secret/challenge.toml",
+          "input/challenges/wrapped-secret/README.md",
+          "input/challenges/wrapped-secret/AUTHORING.md",
+          "input/challenges/wrapped-secret/solve/README.md",
+          "input/challenges/wrapped-secret/files/recovery.txt",
+          "input/challenges/wrapped-secret/solve/solve.py",
+          "input/knowledge/base64.md",
+          "input/docs/text-review.md"
+        ],
+        "first_pass": "의뢰인은 장비 복구 키를 파일로 내보낸 뒤 파일 표기가 읽기 어려워 비밀이 보호된다고 생각했으나, 다른 사람도 내려받을 수 있어 확인을 맡긴다. 내보내기 방식은 Base64로 명시되고 선수지식 자료와 본문이 예제 명령 및 파일 경로를 제공한다. 시작은 제공 파일을 같은 명령으로 복원하는 것이다. 완료는 복구 키를 원래 텍스트로 확보해 pwnden 형식으로 제출하는 것이며, 어떤 값인지는 첫 읽기에서 공개하지 않았다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "파일을 받은 의뢰인과 플레이어의 복원 행동, 제출 대상인 복구 키가 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "네가 받은 `files/recovery.txt`에는 복구 키를 Base64로 바꿔 적은 값이 들어 있다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "다른 사람이 다운로드할 수 있는 파일에서 원래 키를 읽을 수 있는지라는 조사 질문이 직접 제시된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "그런데 지금은 다른 사람도 그 파일을 내려받을 수 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "내보내기 표기, 전달된 파일, 복원 명령, 제출의 논리적 순서가 일치한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "내보내기 안내에는 ‘텍스트를 Base64로 저장한다’고 적혀 있다."
+              },
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "전달받은 자료를 원래 텍스트로 되돌려 복구 키를 확보하고 제출하자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "Base64가 데이터를 나타내는 공개 규칙이라는 정의, 실제 예제, 제공 도구 명령과 파일 경로가 있다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/base64.md",
+                "quote": "Base64는 바이트를 문자로 표시하는 공개 규칙이다."
+              },
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "준비된 터미널에는 값을 되돌리는 `base64` 명령이 있다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "인코딩 및 복원 관련 문장은 제공 방식·도구 설명과 일치한다. 값을 실제 디코딩해 출력했다고 주장하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/files/recovery.txt",
+                "quote": "cHduZGVue2VuY29kaW5nX2hhc19ub19zZWNyZXRfa2V5fQ=="
+              },
+              {
+                "path": "input/knowledge/base64.md",
+                "quote": "준비된 터미널에서 `base64 --decode 파일명`으로 내용을 복원할 수 있다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "읽기 어려운 외양이 보호를 뜻하지 않는다는 제보자의 생각을 확인 요청으로 제시하고, Base64는 공개 변환이라고 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "내보내기는 장비 안의 값을 별도 파일로 저장하는 기능이다."
+              },
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "내보내기 안내에는 ‘텍스트를 Base64로 저장한다’고 적혀 있다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "제공 파일, 실행 가능한 예제, 파일 입력 문법, 시작 폴더와 제출 형식을 제시한다. 선수 능력 범위를 넘는 스크립팅을 요구하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "파일을 읽을 때는 `base64 --decode 파일경로` 형태로 입력한다."
+              },
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "복구 키는 `pwnden{...}` 형식이다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "내보내기·내려받기·되돌리기·읽기 같은 쉬운 동사로 한 단계 과제를 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "전달받은 자료를 원래 텍스트로 되돌려 복구 키를 확보하고 제출하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/wrapped-secret/README.md",
+            "quote": "네가 받은 `files/recovery.txt`에는 복구 키를 Base64로 바꿔 적은 값이 들어 있다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/files/recovery.txt",
+                "quote": "cHduZGVue2VuY29kaW5nX2hhc19ub19zZWNyZXRfa2V5fQ=="
+              },
+              {
+                "path": "input/challenges/wrapped-secret/solve/solve.py",
+                "quote": "result = subprocess.run([\"base64\", \"--decode\", \"files/recovery.txt\"], check=True, capture_output=True, text=True)"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "자료의 표기와 해설이 실제 제공 파일을 같은 base64 디코딩 명령으로 처리한다."
+          },
+          {
+            "path": "input/challenges/wrapped-secret/solve/README.md",
+            "quote": "공개된 파일의 Base64 값을 되돌리자 복구 키가 그대로 나왔다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/solve/solve.py",
+                "quote": "flag = result.stdout.strip()"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "풀이 스크립트는 제공 파일을 base64 --decode로 복원하고 결과 문자열을 받도록 작성됐다. 실제 명령 실행을 보고하지 않는다."
+          },
+          {
+            "path": "input/challenges/wrapped-secret/solve/README.md",
+            "quote": "표시 방식의 변환은 정보를 주고받기 편하게 만든다. Base64 규칙은 공개돼 있으며,",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "input/knowledge/base64.md",
+                "quote": "Base64는 바이트를 문자로 표시하는 공개 규칙이다."
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "학습 자료에서 공개 규칙과 복원 도구를 설명한다."
+          },
+          {
+            "path": "input/challenges/wrapped-secret/solve/README.md",
+            "quote": "제출할 값은 `pwnden{encoding_has_no_secret_key}`다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/solve/solve.py",
+                "quote": "if re.fullmatch(r\"pwnden\\{[a-z_]+\\}\", flag) is None:"
+              }
+            ],
+            "verdict": "작성자 풀이 코드와 형식상 일치, 독립 실행 미확인",
+            "reason": "해설은 제출 문자열을 제시하고 스크립트는 복원값이 플래그 문법인지 확인하도록 작성됐다. 본 리뷰에서 복원값을 실행·관찰하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "독립 초보 학습자를 대상으로 실제 사용성 시험을 하지 않았다.",
+          "제공 값을 디코딩하거나 작성자 스크립트를 실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: wrapped-secret\n\n선수지식으로 Base64를 알고 있다. 의뢰인은 장비 복구 키를 내보낸 사람이다. 파일을 열자 알아보기 어려운 문자열이 보여 비밀이 보호됐다고 생각했지만, 다른 사람도 파일을 내려받을 수 있어 원래 값을 읽을 수 있는지 확인을 요청한다. 내보내기 안내는 텍스트를 Base64로 저장한다고 한다.\n\n시작은 제공된 `files/recovery.txt`의 값을 확인하고, 안내된 `base64 --decode 파일경로`로 원래 텍스트를 읽는 것이다. Base64 예시와 `printf`/파이프의 사용법이 제공되고 터미널 시작 폴더에 자료가 있다고 설명한다.\n\n완료는 원래 텍스트에서 복구 키를 확보해 `pwnden{...}` 형식으로 제출하는 것이다. 첫 읽기만으로는 복원 값 자체를 말하지 않으며, 제출값에 별도의 해시나 계산이 필요한지는 요구문상 없다.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "wrapped-secret",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/contract.toml",
+          "input/challenges/wrapped-secret/challenge.toml",
+          "input/challenges/wrapped-secret/README.md",
+          "input/challenges/wrapped-secret/BRIEFING.md",
+          "input/challenges/wrapped-secret/hints/",
+          "input/challenges/wrapped-secret/solve/",
+          "input/challenges/wrapped-secret/AUTHORING.md",
+          "input/challenges/wrapped-secret/authoring/",
+          "input/challenges/wrapped-secret/vulnerable/",
+          "input/challenges/wrapped-secret/patched/",
+          "input/challenges/wrapped-secret/files/",
+          "input/files/",
+          "input/knowledge/selected required docs",
+          "input/docs/text-review.md",
+          "input/docs/authoring-standard.md"
+        ],
+        "first_pass": "복구 키를 공개 접근 가능한 파일로 내보냈고 Base64라 사람이 못 읽을 거라 여겼던 상황이다. 본문은 파일, 인코딩 방식, decode 명령과 시작 폴더까지 주며 원문 복구 가능성을 질문하고 복구 키 제출을 요구한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "내보낸 파일의 다운로드 접근과 복호화가 아닌 역표현 확인 작업이 명료하다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "네가 받은 `files/recovery.txt`에는 복구 키를 Base64로 바꿔 적은 값이 들어 있다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "다른 이용자가 접근 가능한 복구 키 파일에서 원문을 읽을 수 있는지 직접 묻는다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "다른 사람도 원래 값을 읽을 수 있나요?"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "당사자가 보인 가정과 Base64 공개 변환 규칙이 구분되어 있다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "내보내기 안내에는 ‘텍스트를 Base64로 저장한다’고 적혀 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "Base64 및 파일 기반 decode 명령, 예시가 구체적이다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "`base64 --decode 파일경로` 형태로 입력한다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "정적 파일과 변환 설명만 주장; 재현 실행 주장은 없고 Base64 선수지식과 파일 내용 대응됨.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/files/recovery.txt",
+                "quote": "cHduZGVue2VuY29kaW5nX2hhc19ub19zZWNyZXRfa2V5fQ=="
+              },
+              {
+                "path": "input/knowledge/base64.md",
+                "quote": "Base64는 바이트를 문자로 표시하는 공개 규칙이다."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "사용자 의심은 질문으로 남기고 인코딩과 기밀성의 차이는 knowledge가 설명한다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/encoding-secrecy.md",
+                "quote": "복원 규칙이 공개돼 있고 별도의 비밀이 없다면 표현을 바꾸는 것만으로 기밀성이 생기지는 않는다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "자료 위치, 도구, 파일 읽기 방법, 시작 위치, 제출 완료 증거를 준다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "터미널은 이번 의뢰의 자료가 있는 폴더에서 시작한다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "짧고 자연스러운 대화와 설명이며 낯선 문자열의 이유가 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "내보내기는 장비 안의 값을 별도 파일로 저장하는 기능이다. 파일을 열자 알아보기\n어려운 문자열이 나왔다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/wrapped-secret/README.md",
+            "quote": "네가 받은 `files/recovery.txt`에는 복구 키를 Base64로 바꿔 적은 값이 들어 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/files/recovery.txt",
+                "quote": "cHduZGVue2VuY29kaW5nX2hhc19ub19zZWNyZXRfa2V5fQ=="
+              },
+              {
+                "path": "input/knowledge/encoding-secrecy.md",
+                "quote": "Base64나 Base32처럼 공개된 변환 규칙은 데이터를 다른 문자로 표현한다."
+              }
+            ],
+            "verdict": "충족",
+            "reason": "제공한 값은 공개 Base64 텍스트 표현이다; 읽기 전용 정적 자료와 설명이 대응한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "recovery.txt는 실행 없이 문자열과 지식 설명으로만 확인했다."
+        ]
+      },
+      "first_pass_artifact": "# Evidence first pass — wrapped-secret\n\n- 검토자: evidence / gpt-6-luna\n- 읽기 단계: manifest와 브리핑·본문·선수 지식만 확인. 힌트·해설·구현·배포 정책·검사 자료는 아직 열지 않음.\n- 원문 상황과 질문: 공유 가능한 복구 키 파일의 Base64 문자열이 원문을 숨기는지 확인한다. 파일, Base64 인코딩 정보, 디코딩 명령/예시와 제출 형식이 제공된다.\n- 시작점: 해당 문제의 자료와 명시된 선수 지식으로 조사 시작.\n- 완료 증거: 본문에 적힌 제출 형식/산출물에 따름. 실제 완료 관찰은 아직 없음.\n- 첫 패스 모호점: 구현 및 대조 확인 전이므로 기술 동작의 실현 여부는 미확인. 현실 사고의 사실성이나 별도 정상 대조군을 요구하지 않음.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "wrapped-secret",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/wrapped-secret/challenge.toml",
+          "input/challenges/wrapped-secret/README.md",
+          "input/challenges/wrapped-secret/files/recovery.txt",
+          "input/challenges/wrapped-secret/solve/README.md",
+          "input/challenges/wrapped-secret/solve/solve.py",
+          "input/challenges/wrapped-secret/AUTHORING.md",
+          "input/docs/text-review.md",
+          "input/knowledge/catalog.toml",
+          "input/knowledge/base64.md",
+          "input/challenges/wrapped-secret/solve/README.md"
+        ],
+        "first_pass": "moru17은 장비 복구 키를 파일로 내보냈고, 읽기 어려운 문자열이라 타인이 못 읽을 것이라 생각한다. 누구나 다운로드 가능한 상황에서 Base64 표기가 원래 값을 숨기는지 확인해 달라는 의뢰다. 복구 규칙, 파일 위치, 준비된 명령과 제출 목적이 주어져 있다. 선수지식은 Base64다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "파일 제공자, 플레이어, recovery.txt 입력과 복구 키 출력/제출이 명확하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "전달받은 자료를 원래 텍스트로 되돌려 복구 키를 확보하고 제출하자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "복구 키의 비밀성, 다운로드 가능성, 표기 변환으로 읽을 수 없는지에 관한 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "이 파일에서 원래 복구 키를 읽어 낼 수 있는지 확인해 달라며 길드에 파일을 보냈다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "파일 공개, 알아보기 어려운 표시, 내보내기 안내(Base64), 복원 관찰이 인과 순서로 제시된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "내보내기 안내에는 ‘텍스트를 Base64로 저장한다’고 적혀 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "Base64는 실제 파일에 쓰인 문자 표현 변환으로 설명되며, 암호화/보호 기능이라고 잘못 부르지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "Base64는 데이터를 정해진 문자들로 나타내는 방식이다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "정적 claim은 파일 및 solve 절차와 일치한다. 실행 성공 주장은 본문에서 하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "네가 받은 `files/recovery.txt`에는 복구 키를 Base64로 바꿔 적은 값이 들어 있다."
+              },
+              {
+                "path": "input/challenges/wrapped-secret/solve/solve.py",
+                "quote": "result = subprocess.run([\"base64\", \"--decode\", \"files/recovery.txt\"], check=True, capture_output=True, text=True)"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "인물의 믿음은 믿음으로 서술하고, 공개 접근 가능성은 별도 사실로 놓은 뒤 복원 가능성을 질문한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "moru17은 다른 사람도 원래 복구 키를 읽지 못할 거라고 생각했다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 Base64 지식을 manifest로 선언하고 본문에 원리/예제/파일 사용법을 제공한다. walkthrough도 존재하며 파일 읽기→복원 명령→출력 관찰→복구 키 노출 결론을 잇는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "파일을 읽을 때는 `base64 --decode 파일경로` 형태로 입력한다."
+              },
+              {
+                "path": "input/challenges/wrapped-secret/challenge.toml",
+                "quote": "requires = [\"base64\"]"
+              },
+              {
+                "path": "input/challenges/wrapped-secret/solve/README.md",
+                "quote": "공개된 파일의 Base64 값을 되돌리자 복구 키가 그대로 나왔다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "일상적 표현으로 의뢰 동기를 제시하고 변환/복원 용어를 구체적인 예제로 뒷받침한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "열면 이상한 글자만 나와서 괜찮을 줄 알았는데… 다른 사람도 원래 값을 읽을 수 있나요?"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/wrapped-secret/README.md",
+            "quote": "이 파일에서 원래 복구 키를 읽어 낼 수 있는지 확인해 달라며 길드에 파일을 보냈다.",
+            "kind": "의심",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/README.md",
+                "quote": "내보내기 안내에는 ‘텍스트를 Base64로 저장한다’고 적혀 있다."
+              },
+              {
+                "path": "input/challenges/wrapped-secret/files/recovery.txt",
+                "quote": "cHduZGVue2VuY29kaW5nX2hhc19ub19zZWNyZXRfa2V5fQ=="
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "본문은 검증할 질문으로 둔다. 제공된 representation and decoder instruction supply the path; no learner execution is asserted."
+          },
+          {
+            "path": "input/challenges/wrapped-secret/README.md",
+            "quote": "Base64는 데이터를 정해진 문자들로 나타내는 방식이다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/solve/solve.py",
+                "quote": "[\"base64\", \"--decode\", \"files/recovery.txt\"]"
+              },
+              {
+                "path": "input/challenges/wrapped-secret/solve/solve.py",
+                "quote": "base64\", \"--decode\""
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "변환과 역변환 실행 예제/해답이 설명과 합치한다."
+          },
+          {
+            "path": "input/challenges/wrapped-secret/README.md",
+            "quote": "준비된 터미널에는 값을 되돌리는 `base64` 명령이 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/wrapped-secret/solve/solve.py",
+                "quote": "subprocess.run([\"base64\", \"--decode\", \"files/recovery.txt\"]"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "선언한 도구와 해답 호출이 일치한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "파일 디코딩 명령은 실행하지 않았고 학습자 성공을 주장하지 않는다.",
+          "solve README는 manifest가 지정한 walkthrough로 목록에 있지만 해당 폴더에는 존재하지 않아 scope에 넣지 못했다. AUTHORING.md를 통해 작성된 의도/검증기술만 대조했다.",
+          "이 기록은 문장 검토이며 점수 재채점이 아니다.",
+          "자체판정교정: 이전 검토에서 solve/README.md가 없다고 기록했으나, snapshot 경로를 다시 확인해 해당 파일이 존재함을 확인했다. 이에 T7을 충족으로 바꾸고 부재 finding을 제거했다. first_pass 원문은 첫 검토 시점 기록이므로 보존했다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — wrapped-secret\n\n## 원문 상황\nmoru17은 장비 복구 키를 파일로 내보냈고, 알아보기 어려운 문자열이라 타인이 원래 값을 못 읽을 것이라 생각했다. 그러나 다른 사람도 파일을 내려받을 수 있어, 파일에서 원래 키를 읽을 수 있는지 확인을 요청한다. 안내는 이를 Base64 텍스트로 저장한다고 한다.\n\n## 질문·접근·완료\n제공된 recovery.txt의 Base64 값을 원래 텍스트로 되돌려 복구 키를 제출한다. 파일 도구, 변환 방식, base64 명령 및 실행 예제를 제공한다. 선수지식은 base64이며 encoding-secrecy를 가르친다.\n\n## 누락·모호성\n위협 주체(다운로드 가능한 타인), 파일 접근, 조사 질문과 제출값이 구체적이다. 첫 행동은 파일을 읽고 알려준 복원 도구를 적용하는 것으로 본문에서 바로 이해 가능하다. Base64를 암호화와 혼동하지 않게 질문 및 설명이 표현돼 있다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

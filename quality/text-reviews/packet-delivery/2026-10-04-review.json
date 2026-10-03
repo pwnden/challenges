@@ -1,0 +1,580 @@
+{
+  "slug": "packet-delivery",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "6bf534128b5ccf75ff0a038b3751f8d2e953a8c352c9d87701e066aa7dd41b92",
+  "source_sha256_after": "241938db3da35548d03ac4e29d112345fd04799affa451fb9dbbf661f842650e",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "packet-delivery",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/packet-delivery/challenge.toml",
+          "input/challenges/packet-delivery/BRIEFING.md",
+          "input/challenges/packet-delivery/README.md",
+          "input/challenges/packet-delivery/files/public-list.txt",
+          "input/challenges/packet-delivery/hints/1.md",
+          "input/challenges/packet-delivery/hints/2.md",
+          "input/challenges/packet-delivery/solve/README.md",
+          "input/challenges/packet-delivery/AUTHORING.md",
+          "input/challenges/packet-delivery/authoring/check.py",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/file-paths.md",
+          "input/knowledge/packet-streams.md"
+        ],
+        "first_pass": "자료 전송 담당자는 공개 안내만 가야 하는 테스트 수신자에게 내부 문서도 갔다는 제보를 확인한다. 공개 목록과 세 HTTP 대화가 든 합성 PCAP을 받아 요청 확인, HTTP 객체 복원, receipt의 batch/revision/status를 공개 목록과 비교, 선택한 묶음에서 비공개 문서를 읽는 순서다. 폐기 버전은 빼고 복구 코드를 제출한다. 완전한 시작 명령과 대상 버전 조건이 모두 설명되어 있다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "담당자·테스트 수신자·파일 전송이라는 주체와 행동을 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/README.md",
+                "quote": ":person[새벽전송]은 자료 전송 서비스를 점검하는 담당자다. 테스트 수신자는 공개 안내만"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "내부 자료가 수신자에게 실제로 갔는지 확인하려는 목적이다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/README.md",
+                "quote": "요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "제보는 의심이며 요청 주소와 복원된 본문을 구분해 확인하도록 이어진다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/README.md",
+                "quote": "요청 주소만으로는 실제로 받은 파일의 내용을 알 수 없다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "PCAP, TCP 조각, HTTP 객체, 압축 영수증과 필드의 동작을 선수 지식 수준으로 정의한다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/packet-streams.md",
+                "quote": "분석기는 순서 번호로 조각을 연결해 대화를 재조립한다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "실제 전송 포함 주장은 합성 로컬 HTTP 바이트에서 만든 PCAP이라는 범위로 제한된다. 검사 코드는 응답 바이트와 내보낸 객체를 비교하도록 되어 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/authoring/check.py",
+                "quote": "assert set(packages.values()) == expected"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "공개/비공개 자료는 운영 원칙이고 전달 여부는 캡처에서 확인할 질문으로 표현한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/files/public-list.txt",
+                "quote": "Staff-only: internal recovery procedures and codes."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "명령어·파일경로·패킷 지식에 맞춰 시작 명령부터 복원/버전 선택/제출까지 안내한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/README.md",
+                "quote": "각 묶음의 public/receipt.json을 `tar -xzOf 묶음파일 public/receipt.json | jq .`로"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "요청 목록, 파일 복원, 실제 내용 확인을 직접적인 동사로 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/README.md",
+                "quote": "읽고 공개 목록에 적힌 배치·버전·상태와 대조하자. 해당 묶음에서 공개 목록에 없는"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/packet-delivery/README.md",
+            "quote": "이 PCAP은 로컬 테스트 HTTP 서버의 실제 요청·응답 바이트를 바탕으로 만든",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/AUTHORING.md",
+                "quote": "`authoring/build.py`는 localhost stdlib HTTP 서버에서 실제 요청·응답을 얻는다."
+              },
+              {
+                "path": "input/challenges/packet-delivery/files/public-list.txt",
+                "quote": "Source: synthetic teaching PCAP made from actual localhost HTTP request/response bytes."
+              }
+            ],
+            "verdict": "합성 자료와 생성 근거를 분명히 밝힌다.",
+            "reason": "외부 사용자나 사건 캡처라고 주장하지 않는다."
+          },
+          {
+            "path": "input/challenges/packet-delivery/solve/README.md",
+            "quote": "TShark가 여러 TCP 조각을 재조립하면 전달된 압축 묶음을 읽을 수 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/knowledge/packet-streams.md",
+                "quote": "`tshark -r 자료.pcap --export-objects http,objects`를 실행하면 재조립된 HTTP"
+              },
+              {
+                "path": "input/challenges/packet-delivery/authoring/check.py",
+                "quote": "assert objects['notice.txt'] == NOTICE"
+              }
+            ],
+            "verdict": "설명된 오프라인 재조립 경로와 대응한다.",
+            "reason": "객체 내보내기 실행을 이번에 수행하지 않았다."
+          },
+          {
+            "path": "input/challenges/packet-delivery/solve/README.md",
+            "quote": "공개 목록이 요구하는 LAB-17의 승인 버전 2에 해당하는 파일을 골라",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/files/public-list.txt",
+                "quote": "Approved delivery: batch LAB-17, revision 2, status approved."
+              },
+              {
+                "path": "input/challenges/packet-delivery/authoring/check.py",
+                "quote": "assert receipt['batch'] == 'LAB-17'"
+              },
+              {
+                "path": "input/challenges/packet-delivery/authoring/check.py",
+                "quote": "assert receipt['status'] == ('approved' if receipt['revision'] == 2 else 'retired')"
+              }
+            ],
+            "verdict": "선택 조건은 공개 목록과 데이터 대조 로직에 맞는다.",
+            "reason": "실제 extraction 및 실행 결과를 보고하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "PCAP을 실행 도구로 열거나 패킷 객체를 추출하지 않았다.",
+          "실제 학습자 관찰은 수행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — packet-delivery\n\n의뢰인은 테스트 수신자에게 공개 안내만 보내야 하는데 내부 복구 절차와 코드가 함께 전달됐다는 제보를 확인하려 한다. 세 HTTP 대화와 공개 문서 목록이 든 교육용 합성 PCAP을 준다. 저장된 전송 기록만 분석한다. 요청 주소를 확인하고 tshark로 HTTP 객체를 복원한 뒤, 각 압축 묶음의 영수증에서 배치/버전/상태를 공개 목록과 비교해 대상 묶음을 고른다. 공개 목록 밖 문서가 실제로 응답에 들어 있는지 읽고, 폐기된 버전은 제외해 해당 비공개 문서의 복구 코드를 제출한다.\n\n선수지식은 `terminal-commands`, `file-paths`, `packet-streams`. 제공 명령이 PCAP 요청 조회, 객체 내보내기, 형식 확인 및 영수증 확인으로 이어진다. 같은 URL에서 여러 버전이 나오는 문제와 조각 재조립도 설명한다. 누락 정보 없음.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "packet-delivery",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/packet-delivery/challenge.toml",
+          "challenges/packet-delivery/BRIEFING.md",
+          "challenges/packet-delivery/README.md",
+          "challenges/packet-delivery/AUTHORING.md",
+          "challenges/packet-delivery/files/public-list.txt",
+          "challenges/packet-delivery/hints/1.md",
+          "challenges/packet-delivery/hints/2.md",
+          "challenges/packet-delivery/solve/README.md",
+          "challenges/packet-delivery/solve/solve.sh",
+          "challenges/packet-delivery/authoring/build.py",
+          "challenges/packet-delivery/authoring/check.py",
+          "challenges/packet-delivery/authoring/validation.json",
+          "docs/text-review.md",
+          "docs/authoring-standard.md",
+          "docs/player-content.md",
+          "knowledge/terminal-commands.md",
+          "knowledge/file-paths.md",
+          "knowledge/packet-streams.md",
+          "evidence-first.md"
+        ],
+        "first_pass": "# First pass: packet-delivery\n\n**읽은 범위(첫 단계):** `input/challenges/packet-delivery/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 사이트 기록의 게스트 요청에 운영 계정 자료 접근 흔적이 있어 실제 응답 내용을 확인한다. 자료에 운영 복구 키가 포함될 수 있다.\n- **질문:** 게스트 요청 중 운영 계정 자료가 실제로 전달된 것이 있는가? 있다면 어느 요청이고 응답에 포함된 키는 무엇인가?\n- **시작:** `access.log`와 `audit.jsonl`을 함께 읽는다. 전자는 요청 계정·주소·서버 상태를, 후자는 자료 소유자와 실제 전송 내용을 기록한다고 설명한다. 두 파일의 요청 식별자로 연결한다.\n- **완료:** 조건에 맞는 요청의 키를 `pwnden{...}`로 제출.\n- **불명확한 점:** 거부 요청과 정상 내보내기도 섞여 있으며 복구 키가 여럿이라는 점이 명시되어 있다. 실제 자료 내용과 어떤 기록이 대응하는지는 확인 전이다.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "새벽전송과 테스트 수신자, PCAP·공개 목록, 복원 및 대조 행동을 식별할 수 있다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/BRIEFING.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              },
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "내부 복구자료 공개 제보가 출발점이고 실제 전달 여부를 확인하는 질문으로 제한된다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/BRIEFING.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "요청 URL, 복원 객체, 영수증의 버전과 공개 목록, 내부 문서 확인이 순서대로 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              },
+              {
+                "path": "challenges/packet-delivery/hints/1.md",
+                "quote": "`--export-objects http,objects`는 TCP 조각을 이어 붙인 전송 파일을 저장한다."
+              },
+              {
+                "path": "challenges/packet-delivery/hints/2.md",
+                "quote": "각 묶음의 public/receipt.json을 읽는다. batch=LAB-17, revision=2, status=approved인"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "PCAP/TCP 재조립 및 HTTP 객체 내보내기를 저장 캡처에 대한 구체적 동작으로 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              },
+              {
+                "path": "challenges/packet-delivery/AUTHORING.md",
+                "quote": "새벽전송은 테스트 전송 담당자다. URL 목록만으로는 내부 자료 포함 여부를"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "합성 PCAP이라는 범위를 밝히며 실제 localhost HTTP 바이트와 복원 객체·누락 조각 대조를 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              },
+              {
+                "path": "challenges/packet-delivery/authoring/build.py",
+                "quote": "\"\"\"Use real localhost HTTP bytes to construct a small synthetic Ethernet PCAP.\"\"\""
+              },
+              {
+                "path": "challenges/packet-delivery/authoring/check.py",
+                "quote": "from build import build, capture, checksum, DOCUMENT, KEY, NOTICE, OLD_DOCUMENT"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "공개 범위는 목록의 원칙, 실제 전달 여부는 PCAP에서 복원한 내용 관찰로 표현한다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/files/public-list.txt",
+                "quote": "Approved delivery: batch LAB-17, revision 2, status approved."
+              },
+              {
+                "path": "challenges/packet-delivery/solve/README.md",
+                "quote": "세 HTTP 요청 중 /notice.txt는 안내이고 /delivery.tar.gz는 두 번 내려온다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "준비된 도구 명령, 빈 폴더, receipt 선택 키, 제출 문서가 순서대로 제시된다. 선수 지식은 manifest에 선언되고 README에서 설명된다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/challenge.toml",
+                "quote": "slug = \"packet-delivery\""
+              },
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              },
+              {
+                "path": "challenges/packet-delivery/hints/1.md",
+                "quote": "`--export-objects http,objects`는 TCP 조각을 이어 붙인 전송 파일을 저장한다."
+              },
+              {
+                "path": "challenges/packet-delivery/hints/2.md",
+                "quote": "각 묶음의 public/receipt.json을 읽는다. batch=LAB-17, revision=2, status=approved인"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "요청 주소와 전송 내용의 차이를 직접 말하며 합성 캡처의 현실성을 과장하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "공개 안내만 보내야 하는데 내부 문서도 묶였다는 제보가 있어요. 요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/packet-delivery/README.md",
+            "quote": "이 PCAP은 로컬 테스트 HTTP 서버의 실제 요청·응답 바이트를 바탕으로 만든\n합성 패킷이다. 실제 사용자나 외부 서버의 통신을 수집한 기록은 아니다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "이 PCAP은 로컬 테스트 HTTP 서버의 실제 요청·응답 바이트를 바탕으로 만든\n합성 패킷이다. 실제 사용자나 외부 서버의 통신을 수집한 기록은 아니다."
+              }
+            ],
+            "verdict": "출처와 한계를 바로 명시해 실제 외부 사고로 오해할 여지가 낮다.",
+            "reason": "출처와 한계를 바로 명시해 실제 외부 사고로 오해할 여지가 낮다."
+          },
+          {
+            "path": "challenges/packet-delivery/README.md",
+            "quote": "같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/README.md",
+                "quote": "같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다."
+              }
+            ],
+            "verdict": "제공 캡처 설계와 선택 지침이 대응한다.",
+            "reason": "제공 캡처 설계와 선택 지침이 대응한다."
+          },
+          {
+            "path": "challenges/packet-delivery/solve/README.md",
+            "quote": "암호화되지 않은 HTTP 전송이 완전한 캡처에 남으면 재조립해 본문을 읽을 수 있다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/packet-delivery/solve/README.md",
+                "quote": "암호화되지 않은 HTTP 전송이 완전한 캡처에 남으면 재조립해 본문을 읽을 수 있다."
+              }
+            ],
+            "verdict": "완전한 캡처라는 조건과 합성 오프라인 자료 범위가 명시되어 과도한 무조건 주장이 아니다.",
+            "reason": "완전한 캡처라는 조건과 합성 오프라인 자료 범위가 명시되어 과도한 무조건 주장이 아니다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "이 검토는 PCAP을 열거나 tshark 실행을 하지 않았다. check.py와 validation.json은 저장된 작성자 검사 근거이지 새 실행 관찰로 표현하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: packet-delivery\n\n**읽은 범위(첫 단계):** `input/challenges/packet-delivery/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 사이트 기록의 게스트 요청에 운영 계정 자료 접근 흔적이 있어 실제 응답 내용을 확인한다. 자료에 운영 복구 키가 포함될 수 있다.\n- **질문:** 게스트 요청 중 운영 계정 자료가 실제로 전달된 것이 있는가? 있다면 어느 요청이고 응답에 포함된 키는 무엇인가?\n- **시작:** `access.log`와 `audit.jsonl`을 함께 읽는다. 전자는 요청 계정·주소·서버 상태를, 후자는 자료 소유자와 실제 전송 내용을 기록한다고 설명한다. 두 파일의 요청 식별자로 연결한다.\n- **완료:** 조건에 맞는 요청의 키를 `pwnden{...}`로 제출.\n- **불명확한 점:** 거부 요청과 정상 내보내기도 섞여 있으며 복구 키가 여럿이라는 점이 명시되어 있다. 실제 자료 내용과 어떤 기록이 대응하는지는 확인 전이다.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "packet-delivery",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/packet-delivery/challenge.toml",
+          "input/challenges/packet-delivery/BRIEFING.md",
+          "input/challenges/packet-delivery/README.md",
+          "input/challenges/packet-delivery/AUTHORING.md",
+          "input/challenges/packet-delivery/hints/1.md",
+          "input/challenges/packet-delivery/hints/2.md",
+          "input/challenges/packet-delivery/solve/README.md",
+          "input/challenges/packet-delivery/solve/solve.sh",
+          "input/challenges/packet-delivery/files/public-list.txt",
+          "input/challenges/packet-delivery/authoring/build.py",
+          "input/challenges/packet-delivery/authoring/check.py",
+          "input/challenges/packet-delivery/authoring/validation.json",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/file-paths.md",
+          "input/knowledge/packet-streams.md"
+        ],
+        "first_pass": "새벽전송은 테스트 수신자가 공개 안내만 받아야 한다는 운영 원칙 아래, 공개 목록과 당시 전송을 재현한 교육용 PCAP을 제공한다. 플레이어는 요청 주소를 확인하고 패킷에서 파일을 복원한 뒤 압축 묶음의 영수증을 공개 목록의 배치·버전·상태와 대조한다. 승인 묶음에서 공개 목록에 없는 문서를 찾아 복구 코드를 제출한다. 같은 URL의 여러 버전과 폐기 버전 주의, 구체 명령이 제공된다. 실제 내부 문서 포함 여부는 본문에서 확정하지 않는다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "의뢰인, 테스트 수신자, 전송 기록, 파일 복원과 비교 행동이 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/BRIEFING.md",
+                "quote": "전송 기록에서 파일을 복원하고 공개 목록과 비교해, 비공개 문서가 실제로 전달됐는지 확인하자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "공개 안내만 전달해야 한다는 범위와 운영자 전용 복구 자료에 대한 우려가 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/BRIEFING.md",
+                "quote": "받아야 한다. 내부 복구 절차와 복구 코드는 운영 담당자가 장애 대응에 쓰는"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "URL·파일명이 아닌 receipt 필드와 공개 목록을 대조하도록 논리가 순서대로 이어진다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/README.md",
+                "quote": "같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "PCAP, TCP 조각, HTTP 객체, tar.gz와 영수증을 실제 분석 행동으로 풀어 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/README.md",
+                "quote": "HTTP 대화 세 개에 안내문과 서로 다른 버전의 압축 묶음이 담겨 있다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "문서 주장은 생성기와 대조 검사에서 요청·응답 본문 및 승인 receipt로 확인되며 정답은 조건을 한정해 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/authoring/build.py",
+                "quote": "payloads = [('/notice.txt', NOTICE), ('/delivery.tar.gz', bundle(1)), ('/delivery.tar.gz', bundle(2))]"
+              },
+              {
+                "path": "input/challenges/packet-delivery/authoring/check.py",
+                "quote": "assert receipt['status'] == ('approved' if receipt['revision'] == 2 else 'retired')"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "공개 범위는 공개 목록의 원칙으로, 실제 전송은 복원한 자료에서 확인할 질문으로 구분된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/files/public-list.txt",
+                "quote": "Public delivery: public/notice.txt and public/receipt.json only."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 지식, 시작 명령, 파일 판별 과정, 선택 조건, 제출 결과가 주어지며 핵심 발견은 숨긴다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/challenge.toml",
+                "quote": "requires = [\"terminal-commands\",\"file-paths\",\"packet-streams\"]"
+              },
+              {
+                "path": "input/challenges/packet-delivery/hints/1.md",
+                "quote": "`--export-objects http,objects`는 TCP 조각을 이어 붙인 전송 파일을 저장한다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문장은 작업 순서를 자연스럽게 안내하고 대상 파일과 선택 기준을 반복해 일관되게 부른다.",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/BRIEFING.md",
+                "quote": "요청 주소만 말고, 실제 전달된 파일 내용까지 확인해 주세요."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/packet-delivery/BRIEFING.md",
+            "quote": "이 PCAP은 로컬 테스트 HTTP 서버의 실제 요청·응답 바이트를 바탕으로 만든",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/authoring/build.py",
+                "quote": "Use real localhost HTTP bytes to construct a small synthetic Ethernet PCAP."
+              },
+              {
+                "path": "input/challenges/packet-delivery/authoring/build.py",
+                "quote": "response.split(b'\\r\\n\\r\\n', 1)[1] == payload"
+              }
+            ],
+            "verdict": "자료 생성 로직과 부합",
+            "reason": "생성기는 localhost HTTP 응답 바이트를 확인하고 패킷 파일에 담는다고 명시한다."
+          },
+          {
+            "path": "input/challenges/packet-delivery/BRIEFING.md",
+            "quote": "HTTP 대화 세 개에 안내문과 서로 다른 버전의 압축 묶음이 담겨 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/authoring/build.py",
+                "quote": "payloads = [('/notice.txt', NOTICE), ('/delivery.tar.gz', bundle(1)), ('/delivery.tar.gz', bundle(2))]"
+              },
+              {
+                "path": "input/challenges/packet-delivery/authoring/check.py",
+                "quote": "assert len(states) == 3"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "자료 생성기는 세 payload를 만들며 정적 검사도 세 연결을 기대한다."
+          },
+          {
+            "path": "input/challenges/packet-delivery/solve/README.md",
+            "quote": "TShark가 여러 TCP 조각을 재조립하면 전달된 압축 묶음을 읽을 수 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/authoring/check.py",
+                "quote": "result = subprocess.run(['tshark', '-r', str(path), '--export-objects', 'http,' + str(output)], capture_output=True)"
+              },
+              {
+                "path": "input/knowledge/packet-streams.md",
+                "quote": "분석기는 순서 번호로 조각을 연결해 대화를 재조립한다."
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "검사 코드는 TShark 객체 내보내기를 사용하고 공통 지식은 조각 재조립을 설명한다."
+          },
+          {
+            "path": "input/challenges/packet-delivery/AUTHORING.md",
+            "quote": "실제 PTY의 시작 명령·해답·정답/오답 제출·중단·재접속·종료 후 초기화와",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/packet-delivery/authoring/validation.json",
+                "quote": "\"real_pty_solution_submission_interrupt_reattach_restart\": true"
+              }
+            ],
+            "verdict": "작성 기록으로만 확인",
+            "reason": "기존 validation.json의 상태를 확인했다. 본 리뷰에서 해당 실행을 재수행하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "TShark 실행, PCAP 재생성 또는 실제 학습자 관찰을 하지 않았다. 검증 JSON과 AUTHORING의 실행 서술은 기존 기록이며 본 검토의 직접 실행 결과가 아니다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: packet-delivery\n\n읽은 자료: `input/challenges/packet-delivery/challenge.toml`, `BRIEFING.md`, `README.md`만. 힌트·해설·구현은 아직 열지 않았다.\n\n새벽전송은 자료 전송 서비스를 점검한다. 테스트 수신자는 공개 안내만 받아야 하며 내부 복구 절차와 코드는 운영자용이다. 공개 목록과 당시 전송을 재현한 교육용 PCAP을 받아, 실제 파일 내용까지 확인해 달라고 한다. 플레이어는 HTTP 요청 주소를 살핀 뒤 패킷에서 객체를 복원하고, 각 압축 묶음의 `public/receipt.json`에 든 배치·버전·상태를 공개 목록과 대조한다. 공개 목록에 없는 문서를 찾아 그 안의 복구 코드를 제출한다. 동일 URL의 복수 버전과 폐기된 버전도 있으므로 파일명만으로 고르지 말라는 경고가 있다.\n\n목표·자료·범위·시작 명령·버전 선택 단서·제출 조건이 구체적이다. 시나리오의 핵심 발견 자체(내부 파일 실제 전달 여부)는 미리 말하지 않는다. PCAP이 합성 자료이며 로컬 테스트 서버의 요청/응답 바이트에 기초했다고 본문이 주장한다. 구현 근거 확인은 후속 검토에 남긴다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

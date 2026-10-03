@@ -1,0 +1,583 @@
+{
+  "slug": "paper-session",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "2de4a306b6076e93279b805276af24c283d19bdd533eb29f4ec7c795ca54f571",
+  "source_sha256_after": "aa214afb85448c4463197e2efccdc798ac1b03b075d08f6efa95c2fe6fb35d33",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "paper-session",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/paper-session/challenge.toml",
+          "input/challenges/paper-session/BRIEFING.md",
+          "input/challenges/paper-session/README.md",
+          "input/challenges/paper-session/hints/1.md",
+          "input/challenges/paper-session/solve/README.md",
+          "input/challenges/paper-session/AUTHORING.md",
+          "input/challenges/paper-session/vulnerable/app.py",
+          "input/challenges/paper-session/vulnerable/policy.py",
+          "input/challenges/paper-session/patched/policy.py",
+          "input/challenges/paper-session/patched/test.py",
+          "input/challenges/paper-session/vulnerable/web/App.vue",
+          "input/knowledge/http-messages.md",
+          "input/knowledge/http-cookies.md",
+          "input/knowledge/trusted-identity.md"
+        ],
+        "first_pass": "게스트가 제작실 문서 사이트에서 브라우저 저장 사용자 구분만 바꿔 운영 문서를 읽을 수 있는지 점검해 달라는 의뢰다. 처음 paper_role은 guest이고 입력칸에 저장하면 서버 판단이 표시된다. 변경 전후 복구 키 링크 결과를 비교해 표시된 전체 키를 제출한다. UI 조작, 의미, 비교 절차 및 완료 조건이 명료하다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "게스트, 운영자, 브라우저와 사이트가 하는 행위를 구체적으로 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/README.md",
+                "quote": "브라우저는 이 사이트에 접속할 때 저장된 사용자 구분을 함께 보낸다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "게스트의 수정 가능한 값을 서버가 권한 판단에 쓰는지라는 의뢰 질문이 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/README.md",
+                "quote": "그 값만 바꿔도 운영자의 복구 키를 읽을 수 있는지 확인해 달라고 맡겼다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "운영 키의 기밀성, 역할값 변경, 전후 접근 비교가 자연스럽게 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/README.md",
+                "quote": "변경 전후 복구 키를 열었을 때의 결과를 비교하자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "paper_role과 쿠키를 화면의 입력값 및 서버 판정으로 대응하고, 공통 지식이 쿠키/세션을 설명한다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/http-cookies.md",
+                "quote": "쿠키는 브라우저가 보관했다가 사이트로 다시 보내는 작은 `이름=값` 데이터다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설에서 기술 동작을 설명하는 범위가 취약한 정책 코드와 제한된 패치 검사에 대응한다. 실제 요청 실행을 검토자가 주장하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/vulnerable/policy.py",
+                "quote": "return cookie.get('paper_role', 'guest')"
+              },
+              {
+                "path": "input/challenges/paper-session/patched/policy.py",
+                "quote": "return sessions.get(cookie.get('paper_sid', ''), 'guest')"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "게스트/운영자에게 바라는 권한은 원칙이며 변경 후 응답은 조사 질문이다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/README.md",
+                "quote": "복구 키는 장비를 다시 사용할 때 필요한 비밀값이다. 게스트에게 공개되면 안 된다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "초기값, 입력칸, 저장 동작, 서버 판정, 링크 비교와 제출물을 모두 알려 준다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/README.md",
+                "quote": "브라우저에 저장된 사용자 구분 값이다. 입력칸에 값을 저장하면 페이지가 다시 열리고"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "역할과 변경 전후 행동을 간단하고 자연스럽게 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/README.md",
+                "quote": "처음 사용자 구분은 게스트를 뜻하는 `guest`다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/paper-session/solve/README.md",
+            "quote": "브라우저의 `paper_role`만 guest에서 staff로 바꿨다. 서버에 저장된 사용자는 여전히 게스트다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/vulnerable/policy.py",
+                "quote": "return cookie.get('paper_role', 'guest')"
+              },
+              {
+                "path": "input/challenges/paper-session/vulnerable/app.py",
+                "quote": "self.reply(200, '장비 복구 키\\n' + os.environ['FLAG']) if role(values, SESSIONS) == 'staff' else self.reply(403, '복구 키는 운영자(staff)만 읽을 수 있습니다.')"
+              },
+              {
+                "path": "input/challenges/paper-session/patched/policy.py",
+                "quote": "return sessions.get(cookie.get('paper_sid', ''), 'guest')"
+              }
+            ],
+            "verdict": "취약 구현과 패치 구현의 구분을 정확하게 서술한다.",
+            "reason": "실제 서버 응답을 이번 리뷰에서 재현했다고 주장하지 않는다."
+          },
+          {
+            "path": "input/challenges/paper-session/README.md",
+            "quote": "처음 사용자 구분은 게스트를 뜻하는 `guest`다. 사이트에 표시된 `paper_role`은",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/vulnerable/web/App.vue",
+                "quote": "const stored = document.cookie.split('; ').find(item => item.startsWith('paper_role='))"
+              },
+              {
+                "path": "input/challenges/paper-session/vulnerable/web/App.vue",
+                "quote": "<label>사용자 구분 (paper_role)<input v-model=\"claim\""
+              }
+            ],
+            "verdict": "브라우저 입력 UI가 README 조작 안내에 대응한다.",
+            "reason": "브라우저 UI 자체를 구동하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "웹 UI 및 요청 응답을 실행하지 않았다.",
+          "실제 학습자 관찰은 수행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — paper-session\n\n의뢰인은 게스트로 제작실 문서 사이트에 접속한 상태에서 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서가 열릴지 확인해 달라고 한다. 게스트는 공개 작업 노트를, 운영자는 장비 복구 키를 봐야 한다. 웹 도구에서 노트와 키 링크를 확인한다. 초기 `paper_role`은 `guest`; 입력칸에 값을 저장하면 페이지가 다시 열리고 서버가 판단한 사용자를 표시한다. 변경 전후 복구 키 링크 결과를 비교하고, 열리면 표시된 전체 `pwnden{...}`를 제출한다.\n\n선수지식은 `http-messages`, `http-cookies`. 조작 지점·비교 방법·완료조건이 명료하다. 누락 정보 없음.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "paper-session",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/paper-session/challenge.toml",
+          "challenges/paper-session/BRIEFING.md",
+          "challenges/paper-session/README.md",
+          "challenges/paper-session/AUTHORING.md",
+          "challenges/paper-session/hints/1.md",
+          "challenges/paper-session/solve/README.md",
+          "challenges/paper-session/solve/solve.py",
+          "challenges/paper-session/vulnerable/app.py",
+          "challenges/paper-session/vulnerable/policy.py",
+          "challenges/paper-session/patched/policy.py",
+          "challenges/paper-session/patched/test.py",
+          "challenges/paper-session/compose.yaml",
+          "challenges/paper-session/compose.patched.yaml",
+          "docs/text-review.md",
+          "docs/authoring-standard.md",
+          "docs/player-content.md",
+          "knowledge/http-messages.md",
+          "knowledge/http-cookies.md",
+          "evidence-first.md"
+        ],
+        "first_pass": "# First pass: paper-session\n\n**읽은 범위(첫 단계):** `input/challenges/paper-session/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 식빵두쪽은 제작실 문서 사이트를 게스트로 이용한다. 운영자 복구 키는 게스트에게 공개되면 안 된다. 사이트 요청에는 브라우저의 사용자 구분 값이 실린다.\n- **질문:** 게스트 상태에서 브라우저의 `paper_role` 값을 바꾸면 운영자 복구 키를 읽을 수 있는가?\n- **시작:** 웹 사이트에서 작업 노트와 복구 키 링크를 확인하고, 처음 값 `guest`와 변경 후 결과를 비교한다. 입력칸으로 값을 저장하면 페이지가 다시 열린다고 안내한다.\n- **완료:** 운영자 복구 키 링크에서 확인한 `pwnden{...}` 전체를 제출.\n- **불명확한 점:** 브리핑은 확인하려는 가설을 분명히 하지만, 서버가 값을 어떻게 신뢰하는지는 아직 모른다. 실제 동작은 이후 자료와 대조해야 한다.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "식빵두쪽, guest, paper_role, 복구 키 경로와 단일 값 변경이라는 행위가 구체적이다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/BRIEFING.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              },
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "게스트에게 공개되면 안 되는 운영자 복구 키와 사용자 구분 변경 가설이 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "변경 전후와 세션 유지 조건을 비교해 응답 차이를 확인하는 흐름이 힌트와 자료에 설명된다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              },
+              {
+                "path": "challenges/paper-session/hints/1.md",
+                "quote": "로그인한 사용자와 브라우저가 보내는 사용자 구분이 서로 다르면 서버는 어느 쪽을 믿을까?"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "쿠키/세션의 설명은 취약 정책이 paper_role을 신뢰하는 동작과 패치가 paper_sid 세션을 찾는 동작으로 구체화된다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              },
+              {
+                "path": "challenges/paper-session/vulnerable/policy.py",
+                "quote": "def role(cookie, sessions):"
+              },
+              {
+                "path": "challenges/paper-session/patched/policy.py",
+                "quote": "def role(cookie, sessions):"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설의 취약 동작 주장은 handler·policy 코드와 대조되고, 패치 검사 기대와 현재 실행 성공을 구별한다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/solve/README.md",
+                "quote": "1. 첫 화면에서 서버가 게스트를 뜻하는 `guest`로 판단하는지 확인한다."
+              },
+              {
+                "path": "challenges/paper-session/vulnerable/app.py",
+                "quote": "\"\"\"Real cookies with a server-owned guest session and replaceable role policy.\"\"\""
+              },
+              {
+                "path": "challenges/paper-session/vulnerable/policy.py",
+                "quote": "def role(cookie, sessions):"
+              },
+              {
+                "path": "challenges/paper-session/patched/test.py",
+                "quote": "import runpy"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "운영자만 읽어야 함은 정책, 403 및 수정 후 거부는 해설/코드 조건으로 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              },
+              {
+                "path": "challenges/paper-session/solve/README.md",
+                "quote": "1. 첫 화면에서 서버가 게스트를 뜻하는 `guest`로 판단하는지 확인한다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "웹 도구와 준비된 편집기·초기값·변경 저장·복구 키 링크·완료 형식이 제시된다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/challenge.toml",
+                "quote": "slug = \"paper-session\""
+              },
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "쿠키와 세션을 정의한 뒤 권한 판단 주체를 쉬운 말로 풀어 쓴다.",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "제작실 문서 사이트에 게스트로 접속했어요. 브라우저에 저장된 사용자 구분을 바꾸면 운영자 문서도 열릴 것 같아요. 직접 확인해 줄래요?"
+              },
+              {
+                "path": "challenges/paper-session/solve/README.md",
+                "quote": "1. 첫 화면에서 서버가 게스트를 뜻하는 `guest`로 판단하는지 확인한다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/paper-session/solve/README.md",
+            "quote": "수정한 서버는 `paper_sid`로 서버에 저장된 사용자 정보를 찾는다. 이 값은 접속 상태를\n이어 주는 세션 식별자다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/solve/README.md",
+                "quote": "수정한 서버는 `paper_sid`로 서버에 저장된 사용자 정보를 찾는다. 이 값은 접속 상태를\n이어 주는 세션 식별자다."
+              },
+              {
+                "path": "challenges/paper-session/README.md",
+                "quote": "사이트에는 이 값을 바꿔 보는 입력칸이 준비돼 있다."
+              },
+              {
+                "path": "challenges/paper-session/vulnerable/policy.py",
+                "quote": "return cookie.get('paper_role', 'guest')"
+              },
+              {
+                "path": "challenges/paper-session/vulnerable/app.py",
+                "quote": "self.reply(200, '장비 복구 키\\n' + os.environ['FLAG']) if role(values, SESSIONS) == 'staff' else self.reply(403, '복구 키는 운영자(staff)만 읽을 수 있습니다.')"
+              },
+              {
+                "path": "challenges/paper-session/patched/policy.py",
+                "quote": "return sessions.get(cookie.get('paper_sid', ''), 'guest')"
+              }
+            ],
+            "verdict": "설명은 제공된 조작을 가리키며 문서 검토 범위 안에서 실제 UI 자산과 대응한다.",
+            "reason": "설명은 제공된 조작을 가리키며 문서 검토 범위 안에서 실제 UI 자산과 대응한다."
+          },
+          {
+            "path": "challenges/paper-session/solve/README.md",
+            "quote": "취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/solve/README.md",
+                "quote": "취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다."
+              }
+            ],
+            "verdict": "조건 분기와 취약 정책이 문장을 직접 뒷받침한다.",
+            "reason": "조건 분기와 취약 정책이 문장을 직접 뒷받침한다."
+          },
+          {
+            "path": "challenges/paper-session/solve/README.md",
+            "quote": "수정한 서버는 `paper_sid`로 서버에 저장된 사용자 정보를 찾는다. 이 값은 접속 상태를\n이어 주는 세션 식별자다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/paper-session/patched/policy.py",
+                "quote": "return sessions.get(cookie.get('paper_sid', ''), 'guest')"
+              }
+            ],
+            "verdict": "패치 동작의 설명으로 적절하다. 패치 검사를 이번에 실행했다고 말하지 않는다.",
+            "reason": "패치 동작의 설명으로 적절하다. 패치 검사를 이번에 실행했다고 말하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "제공된 작성자 검증 기록에 Browser Plugin 화면 조작 미수행 및 독립 학습 리뷰 대기 상태가 기재돼 있다. 이 검토는 브라우저 UI를 직접 조작하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: paper-session\n\n**읽은 범위(첫 단계):** `input/challenges/paper-session/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 식빵두쪽은 제작실 문서 사이트를 게스트로 이용한다. 운영자 복구 키는 게스트에게 공개되면 안 된다. 사이트 요청에는 브라우저의 사용자 구분 값이 실린다.\n- **질문:** 게스트 상태에서 브라우저의 `paper_role` 값을 바꾸면 운영자 복구 키를 읽을 수 있는가?\n- **시작:** 웹 사이트에서 작업 노트와 복구 키 링크를 확인하고, 처음 값 `guest`와 변경 후 결과를 비교한다. 입력칸으로 값을 저장하면 페이지가 다시 열린다고 안내한다.\n- **완료:** 운영자 복구 키 링크에서 확인한 `pwnden{...}` 전체를 제출.\n- **불명확한 점:** 브리핑은 확인하려는 가설을 분명히 하지만, 서버가 값을 어떻게 신뢰하는지는 아직 모른다. 실제 동작은 이후 자료와 대조해야 한다.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "paper-session",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/paper-session/challenge.toml",
+          "input/challenges/paper-session/BRIEFING.md",
+          "input/challenges/paper-session/README.md",
+          "input/challenges/paper-session/AUTHORING.md",
+          "input/challenges/paper-session/hints/1.md",
+          "input/challenges/paper-session/solve/README.md",
+          "input/challenges/paper-session/solve/solve.py",
+          "input/challenges/paper-session/vulnerable/app.py",
+          "input/challenges/paper-session/vulnerable/policy.py",
+          "input/challenges/paper-session/patched/policy.py",
+          "input/challenges/paper-session/patched/test.py",
+          "input/knowledge/http-messages.md",
+          "input/knowledge/http-cookies.md"
+        ],
+        "first_pass": "식빵두쪽은 공동 제작실 사이트의 게스트다. 게스트는 공개 노트를, 운영자는 장비 복구 키를 봐야 한다. 브라우저에 저장된 paper_role 값을 바꾸면 키가 열릴지 확인해 달라는 의뢰다. 처음 값 guest와 서버 판단, 변경 전후 복구 키 접근 응답을 비교한다. 완료는 복구 키 전체 제출이다. 상황·이름·조사 절차가 분명하며 실제 결과는 구현 대조 전까지 확정하지 않는다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "게스트, 운영자, 브라우저 값, 복구 키와 비교 행동을 식별할 수 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/BRIEFING.md",
+                "quote": "그 값만 바꿔도 운영자의 복구 키를 읽을 수 있는지 확인해 달라고 맡겼다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "운영자용 비밀값을 게스트가 읽을 수 있는지라는 조사 질문이 명확하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/BRIEFING.md",
+                "quote": "복구 키는 장비를 다시 사용할 때 필요한 비밀값이다. 게스트에게 공개되면 안 된다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "브라우저가 보낸 주장, 서버가 표시한 판단, 키 응답을 비교하도록 설명이 진행된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/BRIEFING.md",
+                "quote": "변경 전후 복구 키를 열었을 때의 결과를 비교하자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "paper_role을 브라우저 저장 사용자 구분값으로, 사이트 동작을 입력·응답으로 구체화한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/BRIEFING.md",
+                "quote": "사이트에 표시된 `paper_role`은"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "취약 구현은 paper_role 값을 직접 사용하며 패치는 paper_sid로 서버 세션을 조회한다. solve는 상태 비교를 기술하지만 본 검토에서 실행하지 않았다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/vulnerable/policy.py",
+                "quote": "return cookie.get('paper_role', 'guest')"
+              },
+              {
+                "path": "input/challenges/paper-session/patched/policy.py",
+                "quote": "return sessions.get(cookie.get('paper_sid', ''), 'guest')"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "권한 기대는 본문 설정이며, 실제 취약 동작은 해설과 구현에 근거해 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/solve/README.md",
+                "quote": "하지만 취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "초기 역할값, 편집 위치와 변경 전후 비교 및 제출 항목을 본문에서 알 수 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/BRIEFING.md",
+                "quote": "처음 사용자 구분은 게스트를 뜻하는 `guest`다."
+              },
+              {
+                "path": "input/challenges/paper-session/challenge.toml",
+                "quote": "requires = [\"http-messages\",\"http-cookies\"]"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문장은 자연스럽고 쿠키 값을 바꾸는 행동과 서버 응답 비교를 분리해 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/hints/1.md",
+                "quote": "세션 값은 유지한 상태에서 사용자 구분 값 하나를 바꿨을 때 응답이 달라지는지 비교하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/paper-session/BRIEFING.md",
+            "quote": "브라우저는 이 사이트에 접속할 때 저장된 사용자 구분을 함께 보낸다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/vulnerable/app.py",
+                "quote": "cookie.load(self.headers.get('Cookie', ''))"
+              },
+              {
+                "path": "input/challenges/paper-session/vulnerable/policy.py",
+                "quote": "return cookie.get('paper_role', 'guest')"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "요청 Cookie 헤더의 paper_role 값을 취약 정책이 읽는다."
+          },
+          {
+            "path": "input/challenges/paper-session/solve/README.md",
+            "quote": "브라우저의 `paper_role`만 guest에서 staff로 바꿨다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/solve/solve.py",
+                "quote": "assert get('/key', session + '; paper_role=guest')[0] == 403"
+              },
+              {
+                "path": "input/challenges/paper-session/solve/solve.py",
+                "quote": "get('/key', session + '; paper_role=staff')"
+              }
+            ],
+            "verdict": "풀이가 전제하는 비교",
+            "reason": "정적 풀이 코드는 같은 session 쿠키에서 역할값을 바꾸어 상태를 비교한다. 실제 실행 성공으로 주장하지 않는다."
+          },
+          {
+            "path": "input/challenges/paper-session/solve/README.md",
+            "quote": "서버에 저장된 사용자는 여전히 게스트다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/vulnerable/app.py",
+                "quote": "SESSIONS = {SID: 'guest'}"
+              },
+              {
+                "path": "input/challenges/paper-session/vulnerable/app.py",
+                "quote": "role(values, SESSIONS)"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "서버 세션은 guest로 초기화되지만 취약 role 정책은 해당 세션 테이블을 사용하지 않는다."
+          },
+          {
+            "path": "input/challenges/paper-session/solve/README.md",
+            "quote": "수정한 서버는 `paper_sid`로 서버에 저장된 사용자 정보를 찾는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/paper-session/patched/policy.py",
+                "quote": "return sessions.get(cookie.get('paper_sid', ''), 'guest')"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "패치 정책은 paper_sid를 세션 사전 키로 조회한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 웹 화면 또는 HTTP 요청을 실행하지 않았다. solve와 패치 검사 코드는 동작 설명의 정적 근거로만 사용했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: paper-session\n\n읽은 자료: `input/challenges/paper-session/challenge.toml`, `BRIEFING.md`, `README.md`만. 힌트·해설·구현은 아직 열지 않았다.\n\n식빵두쪽은 공동 제작실 사이트에 게스트로 접속해 있다. 사이트에서 게스트는 공개 노트를, 운영자는 장비 복구 키를 볼 수 있어야 한다. 브라우저에 저장된 `paper_role` 사용자 구분을 바꾸면 운영자 자료를 읽을 수 있을 것 같다는 제보가 있어 확인을 맡긴다. 웹 도구의 사이트에서 작업 노트와 복구 키 링크를 살피고, 초기 값 `guest`와 변경 후 서버가 판단한 사용자를 비교한 다음 복구 키 접근 결과를 비교한다. 완료는 복구 키의 `pwnden{...}` 전체를 제출하는 것이다.\n\n조사 질문과 변경 전후 관찰 방법, 대상 이름, 목표가 명시적이다. 단순히 브라우저 값이 바뀌었다는 사실과 서버의 신원 판단·자료 접근 결과를 나눠 보도록 안내한다. 실제로 값만으로 권한이 바뀌는지는 후속 구현 대조 전까지 미확인이다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

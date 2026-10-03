@@ -1,0 +1,609 @@
+{
+  "slug": "path-parcel",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "0850ce3d76ea63ea975f0eda810f9e6b2490e095cd9558c74048d116ea4c4561",
+  "source_sha256_after": "0272ecc79b2366dbc2ce8bbf97c4c09d9c7929e00caed2d728ca84052ca82b51",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "path-parcel",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/path-parcel/challenge.toml",
+          "input/challenges/path-parcel/BRIEFING.md",
+          "input/challenges/path-parcel/README.md",
+          "input/challenges/path-parcel/hints/1.md",
+          "input/challenges/path-parcel/solve/README.md",
+          "input/challenges/path-parcel/AUTHORING.md",
+          "input/challenges/path-parcel/vulnerable/app.py",
+          "input/challenges/path-parcel/vulnerable/policy.py",
+          "input/challenges/path-parcel/patched/policy.py",
+          "input/challenges/path-parcel/patched/test.py",
+          "input/challenges/path-parcel/vulnerable/web/App.vue",
+          "input/knowledge/web-addresses.md",
+          "input/knowledge/file-paths.md",
+          "input/knowledge/path-boundaries.md"
+        ],
+        "first_pass": "배송 안내 사이트에서 방문자가 파일명을 바꾸어 운영자 문서를 읽을 수 있는지 의뢰받았다. 입력 파일명은 public 폴더와 합쳐 읽히며 복구 문서는 별도 폴더에 있다. 먼저 welcome.txt와 guide.txt로 폴더 배치 및 파일명을 확인하고 입력칸에서 경로를 시도해 응답 내용을 확인한다. 운영 복구 키 전체가 완료 증거다. 필요한 사이트 접근과 시작 경로가 있고, 복구 문서명은 guide.txt에서 읽는 것으로 명시된다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "방문자, 사이트의 파일명 입력 및 서버 파일 읽기가 식별된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "방문자는 파일명을 입력해 접수 안내를 읽는다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "폴더 분리가 운영자 문서를 보호하는지라는 의뢰 목적이 명확하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "폴더를 따로 두면 운영자 문서도 보호되는지 확인하고 싶어 한다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "별도 보관 원칙과 입력 경로의 실제 파일 위치 여부를 시험하는 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "public, 별도 폴더, 상대 경로 및 실제 응답을 일반 용어로 대응한다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/file-paths.md",
+                "quote": "`..`는 한 단계 위의 폴더다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "취약 코드가 public과 입력명을 결합하며, 패치 대조 코드는 정규화 경계를 검사한다. 설명은 문서/구현 동작이지 검토자의 새 실행 주장이 아니다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name"
+              },
+              {
+                "path": "input/challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "운영자 문서 보호는 기대 원칙, 실제 읽기 가능성은 확인할 대상으로 둔다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "방문자가 읽어도 되는 안내 문서는 `public` 폴더에, 운영자만 읽어야 하는 복구 문서는"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수지식에 맞는 시작 파일과 입력 방식, 응답 확인, 완료 값이 안내되어 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "폴더와 경로를 익숙한 말로 설명하고 행동 순서가 짧다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/hints/1.md",
+                "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/path-parcel/README.md",
+            "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/vulnerable/app.py",
+                "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))"
+              },
+              {
+                "path": "input/challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name"
+              }
+            ],
+            "verdict": "구현의 경로 결합 동작을 정확히 요약한다.",
+            "reason": "가상 서비스의 파일 읽기 동작에 한정된다."
+          },
+          {
+            "path": "input/challenges/path-parcel/solve/README.md",
+            "quote": "최종 위치는 공개 폴더 밖이 된다. 폴더 분리와 접근 제한은 각각 구현해야 한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/vulnerable/app.py",
+                "quote": "locate(PUBLIC, name).read_text(encoding='utf-8')"
+              },
+              {
+                "path": "input/challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name"
+              },
+              {
+                "path": "input/challenges/path-parcel/patched/policy.py",
+                "quote": "path = (public / name).resolve()"
+              }
+            ],
+            "verdict": "취약 구현에서 결합 후 경로 해석이 이루어지고 패치는 해석된 경계가 다름을 설명한다.",
+            "reason": "실제 HTTP 읽기 결과를 이번 검토에서 실행하지 않았다."
+          },
+          {
+            "path": "input/challenges/path-parcel/solve/README.md",
+            "quote": "수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공개 폴더 안에 있는지 확인한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/patched/policy.py",
+                "quote": "path = (public / name).resolve()"
+              },
+              {
+                "path": "input/challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):"
+              },
+              {
+                "path": "input/challenges/path-parcel/patched/test.py",
+                "quote": "assert status == 403 and 'pwnden{' not in body, name"
+              }
+            ],
+            "verdict": "패치 설명과 코드/대조 검사 조건이 일치한다.",
+            "reason": "테스트 코드를 실행 성공 기록으로 해석하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "사이트를 실행하거나 HTTP 요청을 보내지 않았다.",
+          "실제 학습자 관찰은 수행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — path-parcel\n\n의뢰인은 배송 대행 사이트에서 방문자가 파일명을 바꾸어 운영자 문서를 읽을 수 있는지 점검하려 한다. `public`에는 안내, 별도 폴더에는 운영 복구 문서와 비밀값이 있다. 파일명 입력값을 공개 폴더 위치에 합쳐 찾는 사이트와 폴더 배치 안내를 제공했다. 먼저 사이트의 `welcome.txt`와 `guide.txt`를 읽고, 입력칸에서 다른 경로를 시험해 응답이 어떤 파일인지 확인한다. 운영 복구 문서의 `pwnden{...}` 전체가 제출 증거다.\n\n선수지식은 `web-addresses`, `file-paths`. 사이트 접근법과 조사 시작점, 응답 확인 방법, 제출값이 제시됐다. 문서 파일명을 알아내는 법은 `guide.txt`에 있다고 명시되어 있으므로 본문 밖 정답 단서 요구가 아니다. 누락 정보 없음.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "path-parcel",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/path-parcel/challenge.toml",
+          "challenges/path-parcel/BRIEFING.md",
+          "challenges/path-parcel/README.md",
+          "challenges/path-parcel/AUTHORING.md",
+          "challenges/path-parcel/hints/1.md",
+          "challenges/path-parcel/solve/README.md",
+          "challenges/path-parcel/solve/solve.py",
+          "challenges/path-parcel/vulnerable/app.py",
+          "challenges/path-parcel/vulnerable/policy.py",
+          "challenges/path-parcel/patched/policy.py",
+          "challenges/path-parcel/patched/test.py",
+          "challenges/path-parcel/compose.yaml",
+          "challenges/path-parcel/compose.patched.yaml",
+          "docs/text-review.md",
+          "docs/authoring-standard.md",
+          "docs/player-content.md",
+          "knowledge/web-addresses.md",
+          "knowledge/file-paths.md",
+          "evidence-first.md"
+        ],
+        "first_pass": "# First pass: path-parcel\n\n**읽은 범위(첫 단계):** `input/challenges/path-parcel/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 배송 안내 사이트 운영자는 방문자가 읽는 `public` 문서와 운영자 복구 문서를 별도 폴더에 둔다. 복구 문서에는 비밀값이 있다.\n- **질문:** 파일명 입력을 이용해 공개 폴더 밖의 운영자 복구 문서까지 읽을 수 있는가?\n- **시작:** 사이트에서 `welcome.txt`를 읽고 이어 `guide.txt`로 폴더 배치와 복구 문서 이름을 알아본다. 입력칸에는 경로를 그대로 넣고 응답 내용으로 실제 파일을 판별한다.\n- **완료:** 복구 문서의 `pwnden{...}` 키를 제출.\n- **불명확한 점:** 브리핑은 사이트가 입력을 공개 폴더 위치와 합친다고 설명한다. 실제 경로 처리와 접근 제한은 이 단계에서 확인하지 않았다.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "방문자, public 문서, 운영자 recovery 문서 및 파일명 입력으로 조회하는 동작이 분명하다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/BRIEFING.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "별도 폴더가 운영자 자료를 보호하는지 확인하려는 질문이 복구 키 보호 이유와 맞닿아 있다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/BRIEFING.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "welcome→guide로 위치 정보를 얻고 입력 경로를 구성하는 순서가 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              },
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다."
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "1. `welcome.txt`가 정상적으로 읽히는지 확인한다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "상대 경로의 .·.., 공개 폴더 시작 위치, 서버의 최종 파일 위치 처리를 구체적으로 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "1. `welcome.txt`가 정상적으로 읽히는지 확인한다."
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/policy.py",
+                "quote": "def locate(public, name):"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "취약 구현은 입력 경로를 public과 결합하며 패치 정책은 resolve 후 하위 경로 여부를 확인한다. 403/200 설명은 목표 코드 조건에 한정한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/vulnerable/app.py",
+                "quote": "\"\"\"Actual file reads in an ephemeral container directory.\"\"\""
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/policy.py",
+                "quote": "def locate(public, name):"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "def locate(public, name):"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "import runpy"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "운영자 전용이라는 원칙과 취약 서버의 경로 처리, 패치의 제한 동작을 해설에서 나눠 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/BRIEFING.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "1. `welcome.txt`가 정상적으로 읽히는지 확인한다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "사이트의 두 공개 문서, 경로 입력 UI, 응답 식별, 완료 키가 제시되고 README에서 상대 경로를 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/challenge.toml",
+                "quote": "slug = \"path-parcel\""
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "폴더와 이동 방향을 익숙한 예로 설명하고 수정 동작을 최종 위치 확인으로 풀어 쓴다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "배송 안내를 읽는 사이트를 정리하고 있어. 방문자가 파일 이름을 바꿔서 운영자 문서도 읽을 수 있는지 확인해 줘."
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "1. `welcome.txt`가 정상적으로 읽히는지 확인한다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/path-parcel/BRIEFING.md",
+            "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/BRIEFING.md",
+                "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다."
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "path = (public / name).resolve()"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):"
+              }
+            ],
+            "verdict": "취약 구현 조건을 정확하게 설명한다.",
+            "reason": "취약 구현 조건을 정확하게 설명한다."
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다. 폴더 분리와 접근 제한은 각각 구현해야 한다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다. 폴더 분리와 접근 제한은 각각 구현해야 한다."
+              }
+            ],
+            "verdict": "실행 관찰 단계로 풀이 지침에 둔 것이며, 이 검토는 실행 결과를 새로 주장하지 않는다.",
+            "reason": "실행 관찰 단계로 풀이 지침에 둔 것이며, 이 검토는 실행 결과를 새로 주장하지 않는다."
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공개 폴더 안에 있는지 확인한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공개 폴더 안에 있는지 확인한다."
+              }
+            ],
+            "verdict": "정책 구현과 대조 검사 범위가 설명과 대응한다.",
+            "reason": "정책 구현과 대조 검사 범위가 설명과 대응한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "대상 수준 학습자의 실제 풀이 관찰은 AUTHORING.md상 대기 상태다. 이 검토에서는 웹 기능을 실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: path-parcel\n\n**읽은 범위(첫 단계):** `input/challenges/path-parcel/challenge.toml`, `BRIEFING.md`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 배송 안내 사이트 운영자는 방문자가 읽는 `public` 문서와 운영자 복구 문서를 별도 폴더에 둔다. 복구 문서에는 비밀값이 있다.\n- **질문:** 파일명 입력을 이용해 공개 폴더 밖의 운영자 복구 문서까지 읽을 수 있는가?\n- **시작:** 사이트에서 `welcome.txt`를 읽고 이어 `guide.txt`로 폴더 배치와 복구 문서 이름을 알아본다. 입력칸에는 경로를 그대로 넣고 응답 내용으로 실제 파일을 판별한다.\n- **완료:** 복구 문서의 `pwnden{...}` 키를 제출.\n- **불명확한 점:** 브리핑은 사이트가 입력을 공개 폴더 위치와 합친다고 설명한다. 실제 경로 처리와 접근 제한은 이 단계에서 확인하지 않았다.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "path-parcel",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/path-parcel/challenge.toml",
+          "input/challenges/path-parcel/BRIEFING.md",
+          "input/challenges/path-parcel/README.md",
+          "input/challenges/path-parcel/AUTHORING.md",
+          "input/challenges/path-parcel/hints/1.md",
+          "input/challenges/path-parcel/solve/README.md",
+          "input/challenges/path-parcel/solve/solve.py",
+          "input/challenges/path-parcel/vulnerable/app.py",
+          "input/challenges/path-parcel/vulnerable/policy.py",
+          "input/challenges/path-parcel/patched/policy.py",
+          "input/challenges/path-parcel/patched/test.py",
+          "input/knowledge/web-addresses.md",
+          "input/knowledge/file-paths.md",
+          "input/knowledge/path-boundaries.md"
+        ],
+        "first_pass": "아직안잠은 배송 안내 사이트에서 방문자가 파일명을 바꾸어 운영자 문서를 읽을 수 있는지 확인하려 한다. welcome.txt와 guide.txt가 시작 자료이고, guide는 폴더 배치와 recovery.txt 이름을 알려 준다. 파일명 입력칸에 경로를 넣고 응답 내용이 어떤 파일인지 확인해 복구 키를 제출한다. 보호 범위와 시작 행동이 명시돼 있다. 정확한 경로 문자열은 미리 주지 않아 조사와 경로 지식을 적용할 여지가 있다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "사이트 방문자, 입력칸, 공개 폴더 및 운영 파일 읽기 행동이 명확하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/BRIEFING.md",
+                "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "운영자 전용 복구 문서와 폴더 분리의 보호 여부를 질문한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/BRIEFING.md",
+                "quote": "아직안잠은 폴더를 따로 두면 운영자 문서도 보호되는지 확인하고 싶어 한다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "guide의 경로 배치와 파일 이름을 출발 폴더에서 입력할 경로로 연결한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "웹 주소 입력값, 파일 경로, 상대 경로가 공통 지식 및 문제 조작과 맞는다.",
+            "evidence": [
+              {
+                "path": "input/knowledge/web-addresses.md",
+                "quote": "`?` 뒤의 `file=welcome.txt`는"
+              },
+              {
+                "path": "input/knowledge/file-paths.md",
+                "quote": "`..`는 한 단계 위의 폴더다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "취약 구현은 public/name을 읽고, 패치는 정규화한 최종 경로의 경계를 검사한다. 해설은 각각에 대응해 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name"
+              },
+              {
+                "path": "input/challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "운영 전용은 원하는 보호 원칙이며 실제 취약 접근은 해설에서 확인된 동작으로 표현한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/BRIEFING.md",
+                "quote": "방문자가 읽어도 되는 안내 문서는 `public` 폴더에, 운영자만 읽어야 하는 복구 문서는"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 지식, 시작 파일, 입력 경로 시험, 응답 판별과 제출 목표가 제공되며 정확 경로를 본문에 강요하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/challenge.toml",
+                "quote": "requires = [\"web-addresses\",\"file-paths\"]"
+              },
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "응답 내용이 어떤 파일인지 확인하자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "문장이 간결하고 입력·파일 위치·응답을 익숙한 말로 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/README.md",
+                "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/path-parcel/BRIEFING.md",
+            "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/vulnerable/app.py",
+                "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))"
+              },
+              {
+                "path": "input/challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "요청값을 PUBLIC 경로에 결합해 파일을 읽는다."
+          },
+          {
+            "path": "input/challenges/path-parcel/solve/README.md",
+            "quote": "2. `guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/vulnerable/app.py",
+                "quote": "(PUBLIC / 'guide.txt').write_text('공개 자료는 public/, 운영 자료는 같은 상위 폴더의 private/에 보관합니다.\\n운영 복구 기록의 파일명은 recovery.txt입니다.\\n', encoding='utf-8')"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "실제 제공 guide의 내용이 풀이가 설명한 폴더 배치와 파일명을 담는다."
+          },
+          {
+            "path": "input/challenges/path-parcel/solve/README.md",
+            "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name"
+              },
+              {
+                "path": "input/challenges/path-parcel/vulnerable/app.py",
+                "quote": "locate(PUBLIC, name).read_text(encoding='utf-8')"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "path 결합 후 직접 read_text하며 취약 코드에는 최종 경계 검사가 없다."
+          },
+          {
+            "path": "input/challenges/path-parcel/solve/README.md",
+            "quote": "수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공개 폴더 안에 있는지 확인한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/path-parcel/patched/policy.py",
+                "quote": "path = (public / name).resolve()"
+              },
+              {
+                "path": "input/challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "패치에서 resolve 후 public과의 경로 포함 관계를 확인한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "대상 서버나 브라우저를 실행하지 않았다. 취약·패치 코드 및 정적 테스트 자료를 기술 주장 대조에만 사용했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: path-parcel\n\n읽은 자료: `input/challenges/path-parcel/challenge.toml`, `BRIEFING.md`, `README.md`만. 힌트·해설·구현은 아직 열지 않았다.\n\n아직안잠은 배송 안내 사이트를 정리하며, 방문자가 파일명을 바꾸어 운영자 문서도 읽을 수 있는지 확인해 달라고 한다. 방문자가 읽을 수 있는 안내는 `public` 폴더에 있고 복구 문서는 별도 폴더에 있으며, 복구 문서에는 비밀값이 있다. 사이트는 입력한 파일명을 공개 폴더 위치와 합쳐 파일을 찾는다. 플레이어는 `welcome.txt`와 폴더 배치·복구 문서 파일명을 설명하는 `guide.txt`를 읽고 파일명 입력칸으로 경로를 시험한다. 응답 내용이 어떤 파일인지 확인해 복구 키를 제출한다.\n\n사이트 기능, 자료, 보호 범위, 질문, 시작 행동, 완료 결과가 식별 가능하다. 상대 경로 조사라는 개념은 선수 지식으로 선언되어 있고 공통 지식에서 다뤄질 예정임을 manifest에서 확인했으나 해당 지식 본문은 아직 열지 않았다. 발견할 정확한 입력 문자열은 미리 주어지지 않아 과도하게 답을 노출하지 않는다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

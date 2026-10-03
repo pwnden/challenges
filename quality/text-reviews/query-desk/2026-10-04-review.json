@@ -1,0 +1,547 @@
+{
+  "slug": "query-desk",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "d4f4225ccec2b51fe5daab1878b458628d8b80e87eb1aef083df186e6e4c241a",
+  "source_sha256_after": "09ff2fe4f44b9b8301fa0ed30b4b8a536d6664ee161fa5356277a56ee13ee7d7",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "query-desk",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/query-desk/challenge.toml",
+          "input/challenges/query-desk/README.md",
+          "input/challenges/query-desk/AUTHORING.md",
+          "input/challenges/query-desk/hints/1.md",
+          "input/challenges/query-desk/hints/2.md",
+          "input/challenges/query-desk/solve/README.md",
+          "input/challenges/query-desk/vulnerable/app.py",
+          "input/challenges/query-desk/vulnerable/policy.py",
+          "input/challenges/query-desk/patched/policy.py",
+          "input/challenges/query-desk/patched/test.py",
+          "input/challenges/query-desk/compose.yaml",
+          "input/knowledge/web-addresses.md",
+          "input/knowledge/http-messages.md",
+          "input/docs/text-review.md"
+        ],
+        "first_pass": "의뢰인은 공개 회원만 보여야 하는 커뮤니티 검색에서 비공개 소개의 복구 키가 보였다는 제보를 확인하려 한다. 제공 지식으로는 mira 검색, 실제 조건 표시 관찰, 입력 영향과 결과 비교가 시작 행동이다. 검색 조건·따옴표·AND/OR 설명 및 화면 사용법은 있지만 어느 입력이 문제인지와 추가 문법은 뒤 자료로 유보한다. 완료는 현재 비공개 복구 키 제출이다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "검색 기능을 만든 의뢰인, 검색 입력, 조건 표시와 검색 결과라는 행위자·대상이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "식빵두쪽은 어떤 입력이 문제를"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "비공개 소개에 복구 키가 있고 공개 여부 검사에도 노출 제보가 있어 조사 이유와 질문이 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "조사용 사이트의 비공개 회원 소개에는 계정을 복구할 때 필요한 비밀값인 복구 키가 들어 있다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "검색 페이지, 입력값, 표시되는 조건, 그 결과가 같은 맥락에서 지시되어 관계를 따라갈 수 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "검색 조건에 표시된 입력의 위치와 따옴표를 관찰해 보자. 다음 검색에서는 입력과 결과를 비교하자."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "SQL, WHERE, 작은따옴표, AND/OR를 이번 검색식에서 어떻게 읽는지 설명하고, 조건 화면이 실제 검색 조건임을 밝힌다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "SQL은 그 시스템에 원하는 자료를 요청하는 언어다."
+              },
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "이번 조사에서 필요한 추가 문법은 힌트와 사건 보고서에서 설명한다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "본문은 제보를 제보로 표현한다. 해설의 SQL 구조 및 반환 행은 대상 코드로 정적으로 대조된다. 실제 실행을 새로 수행한 주장은 하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/vulnerable/policy.py",
+                "quote": "query = f\"SELECT name, note FROM members WHERE name = '{name}' AND public = 1\""
+              },
+              {
+                "path": "input/challenges/query-desk/vulnerable/app.py",
+                "quote": "(\"keeper\", os.environ[\"FLAG\"], 0),"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "공개 회원만 보여야 한다는 기대, 노출 제보, 실제 조건 확인 과제가 구분되어 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "검색 결과에는 공개 회원의 이름과 소개만 나와야 한다."
+              },
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "최근 식빵두쪽은 검색창에 특정한 값을 넣었더니 비공개 소개까지 보였다는 제보를 받았다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "mira를 첫 입력으로 제시하고, 사용 가능한 화면·표시·결과, 제출 형식과 현재 환경 값을 안내한다. 발견할 공격 입력은 미리 요구하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "먼저 `mira`를 검색해 이름과 소개가 나오는지 확인해 보자."
+              },
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "복구 키는 `pwnden{...}` 형식이다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "행동을 검색·관찰·비교 같은 익숙한 동사로 설명한다. 긴 목표 문장도 조사 행동과 제출물을 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "검색 입력이 조건에 어떤 영향을 주는지 조사하고, 비공개 회원의 복구 키를 찾아 제출하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/query-desk/README.md",
+            "quote": "SQL은 그 시스템에 원하는 자료를 요청하는 언어다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/vulnerable/policy.py",
+                "quote": "query = f\"SELECT name, note FROM members WHERE name = '{name}' AND public = 1\""
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "본문의 기술 설명 및 이어지는 쿼리 예시가 취약 구현의 SQL 문자열과 맞는다."
+          },
+          {
+            "path": "input/challenges/query-desk/solve/README.md",
+            "quote": "검색어가 SQL 조건에 그대로 붙었다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/vulnerable/policy.py",
+                "quote": "query = f\"SELECT name, note FROM members WHERE name = '{name}' AND public = 1\""
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "입력값을 SQL 식 문자열에 삽입하는 구현이 해당 설명을 뒷받침한다."
+          },
+          {
+            "path": "input/challenges/query-desk/solve/README.md",
+            "quote": "수정한 서버는 `WHERE name = ? AND public = 1`의 `?` 자리에 검색어를 별도 데이터로 전달한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/patched/policy.py",
+                "quote": "return query, database.execute(query, (name,)).fetchall()"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "매개변수 전달과 공개 조건 유지가 패치 코드에 있다."
+          },
+          {
+            "path": "input/challenges/query-desk/solve/README.md",
+            "quote": "현재 사이트에서 읽는다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/vulnerable/app.py",
+                "quote": "(\"keeper\", os.environ[\"FLAG\"], 0),"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "비공개 keeper 행의 note에 실행 환경 FLAG를 둔다. 새 환경에서 값이 바뀐다는 설정은 실행자에게 해당 환경의 현재 값을 읽으라고 안내한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "독립 초보 학습자를 대상으로 실제 사용성 시험을 하지 않았다.",
+          "문제 서버를 실행하지 않았다. 기술 동작은 스냅샷 소스와 검사 코드의 정적 대조로 확인했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: query-desk\n\n선수지식으로는 웹 주소의 경로와 입력값, 요청·응답의 차이 및 SQL의 기초를 안다. 의뢰인은 커뮤니티 검색 기능을 만든 운영자다. 공개 회원만 검색돼야 하지만 검색 입력에 따라 비공개 소개에 든 복구 키까지 나왔다는 제보가 있어 이를 확인해 달라고 한다.\n\n시작은 공개 이름 `mira`를 검색해 결과를 보고, 화면에 표시되는 검색 조건에서 입력값이 조건에 들어가는 위치와 따옴표를 관찰하는 것이다. 공개 회원 이름 `mira`, `sol`, 공개 여부 값 `public = 0/1`, 검색 구조와 SELECT/WHERE, 따옴표, AND/OR 설명이 주어진다. 검색창과 결과·조건 표시를 사용할 수 있다.\n\n완료는 검색 입력이 조건에 미치는 영향을 살피고 비공개 회원 소개에서 현재 환경의 `pwnden{...}` 복구 키를 찾아 제출하는 것이다. 아직 어떤 입력이 문제를 일으키는지, 후속 조사에서 무엇을 확인할지는 명시되지 않았으며 본문은 추가 문법 설명을 힌트와 사건 보고서로 미룬다.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "query-desk",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/contract.toml",
+          "input/challenges/query-desk/challenge.toml",
+          "input/challenges/query-desk/README.md",
+          "input/challenges/query-desk/BRIEFING.md",
+          "input/challenges/query-desk/hints/",
+          "input/challenges/query-desk/solve/",
+          "input/challenges/query-desk/AUTHORING.md",
+          "input/challenges/query-desk/authoring/",
+          "input/challenges/query-desk/vulnerable/",
+          "input/challenges/query-desk/patched/",
+          "input/challenges/query-desk/files/",
+          "input/files/",
+          "input/knowledge/selected required docs",
+          "input/docs/text-review.md",
+          "input/docs/authoring-standard.md"
+        ],
+        "first_pass": "문제 본문만으로 인물, 보호 대상, 질문, 화면에서 입력-조건-결과를 비교할 시작점 및 검색 결과에서 복구 키를 제출한다는 완료 조건이 연결된다. 구현 확인 전 구체 취약 입력은 본문에 없는 의도적 탐색 사항이다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "검색어를 넣는 플레이어, 서버의 검색 조건, 결과가 본문에서 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/README.md",
+                "quote": "식빵두쪽은 어떤 입력이 문제를\n일으키는지 확인하려고 서버의 검색 조건을 화면에 표시해 두었다. 네가 입력한 검색어가 어떤 조건으로\n바뀌는지, 그 조건으로 어떤 결과가 나오는지 함께 살펴볼 수 있다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "비공개 소개 보호 필요와 제보 검증 및 복구 키 확인 목표가 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/README.md",
+                "quote": "비공개 회원의 소개는 다른 방문자에게 보여 주면 안 되는 자료다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "제보는 확인 대상으로 제시되고 입력-조건-결과의 관찰 계획이 명시된다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/README.md",
+                "quote": "식빵두쪽은 어떤 입력이 문제를\n일으키는지 확인하려고 서버의 검색 조건을 화면에 표시해 두었다. 네가 입력한 검색어가 어떤 조건으로\n바뀌는지, 그 조건으로 어떤 결과가 나오는지 함께 살펴볼 수 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "SQL 예시와 SELECT/WHERE/따옴표/AND/OR 풀이가 검색 대상에 적용된다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/README.md",
+                "quote": "SELECT name, note FROM members WHERE name = '입력한 이름' AND public = 1"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "README는 보고된 현재 실행 사실로 단정하지 않고 코드 대조에서 조건부 주장이 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/vulnerable/policy.py",
+                "quote": "query = f\"SELECT name, note FROM members WHERE name = '{name}' AND public = 1\""
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "운영 바람, 제보, 확인 목표가 분리되어 있으며 구현의 입력 결합은 별도 근거로 확인된다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/vulnerable/policy.py",
+                "quote": "Intentionally vulnerable: input becomes part of the SQL expression."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "mira 대조와 검색 조건/결과 관찰을 시작으로 주어진 지식 안에서 제출 목표까지 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/README.md",
+                "quote": "먼저 `mira`를 검색해 이름과 소개가 나오는지 확인해 보자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "실제 검색 동작을 익숙한 동사로 설명하고 문장 관계가 자연스럽다.",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/README.md",
+                "quote": "식빵두쪽은 어떤 입력이 문제를\n일으키는지 확인하려고 서버의 검색 조건을 화면에 표시해 두었다. 네가 입력한 검색어가 어떤 조건으로\n바뀌는지, 그 조건으로 어떤 결과가 나오는지 함께 살펴볼 수 있다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/query-desk/README.md",
+            "quote": "평범한 이름으로 검색하면 공개 회원의 소개만 나온다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/vulnerable/app.py",
+                "quote": "(\"mira\", \"전시 안내를 정리하는 사람\", 1)"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "환경에서 관찰했다고 말하지 않고 정상 입력 동작에 대한 설명; 자료 행과 공개 조건 분기가 일치한다."
+          },
+          {
+            "path": "input/challenges/query-desk/README.md",
+            "quote": "검색 조건에 표시된 입력의 위치와 따옴표를 관찰해 보자.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/vulnerable/policy.py",
+                "quote": "query = f\"SELECT name, note FROM members WHERE name = '{name}' AND public = 1\""
+              }
+            ],
+            "verdict": "충족",
+            "reason": "입력은 name 문자열 안에 그대로 삽입되고 UI가 query를 응답에 포함하므로 조건 관찰 지시는 구현과 대응한다."
+          },
+          {
+            "path": "input/challenges/query-desk/solve/README.md",
+            "quote": "수정한 서버는 `WHERE name = ? AND public = 1`의 `?` 자리에 검색어를 별도 데이터로 전달한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/query-desk/patched/policy.py",
+                "quote": "return query, database.execute(query, (name,)).fetchall()"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "패치의 parameterized query가 SQL 구조와 값을 분리한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 HTTP 실행 기록은 읽지 않았고 실행했다고 주장하지 않는다."
+        ]
+      },
+      "first_pass_artifact": "# Evidence first pass — query-desk\n\n- 검토자: evidence / gpt-6-luna\n- 읽기 단계: manifest와 브리핑·본문·선수 지식만 확인. 힌트·해설·구현·배포 정책·검사 자료는 아직 열지 않음.\n- 원문 상황과 질문: 검색 페이지에서 입력 조건과 결과를 함께 확인해 비공개 회원 소개의 복구 키를 찾는다. 공개/비공개 값과 SQL 기본 조건, 예시 검색이 제공된다. 입력이 구체적으로 어디에 삽입되는지, 추가 문법은 힌트/사건 보고서에 있다고 명시되어 있다. 별도 BRIEFING 없이 README가 본문이다.\n- 시작점: 해당 문제의 자료와 명시된 선수 지식으로 조사 시작.\n- 완료 증거: 본문에 적힌 제출 형식/산출물에 따름. 실제 완료 관찰은 아직 없음.\n- 첫 패스 모호점: 구현 및 대조 확인 전이므로 기술 동작의 실현 여부는 미확인. 현실 사고의 사실성이나 별도 정상 대조군을 요구하지 않음.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "query-desk",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/query-desk/challenge.toml",
+          "input/challenges/query-desk/README.md",
+          "input/challenges/query-desk/hints/1.md",
+          "input/challenges/query-desk/hints/2.md",
+          "input/challenges/query-desk/solve/README.md",
+          "input/challenges/query-desk/vulnerable/app.py",
+          "input/challenges/query-desk/vulnerable/policy.py",
+          "input/challenges/query-desk/patched/policy.py",
+          "input/challenges/query-desk/patched/test.py",
+          "input/challenges/query-desk/AUTHORING.md",
+          "input/docs/text-review.md",
+          "input/knowledge/catalog.toml"
+        ],
+        "first_pass": "첫 관찰: 검색 운영자는 공개 회원 정보만 보여야 하는데 비공개 소개의 복구 키가 노출된다는 제보를 받아 재현을 의뢰했다. 본문은 브라우저 검색, 조건/결과 관찰, SQL 기본 구조와 공개 회원 mira 시험, 현재 결과에서 복구 키 제출까지 안내한다. 선수지식 web-addresses/http-messages는 manifest에 선언되고 SQL 기초는 본문에서 보충한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "검색을 수행하는 플레이어, 검색 대상 회원/소개, 공개 조건, 화면의 조건과 결과가 본문에서 식별된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "검색창에는 이름을 입력한다. 아래에서 검색 조건과 결과를 함께 볼 수 있다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "비공개 소개의 민감성, 공개 범위 기대, 제보에 대한 확인 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "비공개 회원의 소개는 다른 방문자에게 보여 주면 안 되는 자료다."
+              },
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "어떤 입력에서 그런지 같이 봐줄래?"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "검색 조건을 화면에 표시하는 이유가 입력과 결과를 함께 조사하려는 것으로 이어지고, 지시어의 대상도 검색 페이지/입력으로 한정된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "화면에 표시해 두었다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "SQL 용어가 이 검색의 구체적인 SELECT/WHERE와 데이터 열에 대응하고 AND/OR와 인용 문자열을 풀이한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "SELECT name, note FROM members WHERE name = '입력한 이름' AND public = 1"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "본문은 제보를 사실로 확정하지 않고 조건부로 표현한다. 해설의 실행 동작은 취약 구현과 실제 SQLite 코드에 대응한다. 여기 기록은 구현 설명의 대응 확인이며 별도 실행 주장은 하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/solve/README.md",
+                "quote": "검색어가 SQL 조건에 그대로 붙었다."
+              },
+              {
+                "path": "input/challenges/query-desk/vulnerable/policy.py",
+                "quote": "query = f\"SELECT name, note FROM members WHERE name = '{name}' AND public = 1\""
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "공개 회원만 보여야 한다는 원칙과 취약 조건의 실제 결과, 패치의 파라미터 전달을 분리한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "검색 결과에는 공개 회원의 이름과 소개만 나와야 한다."
+              },
+              {
+                "path": "input/challenges/query-desk/patched/policy.py",
+                "quote": "database.execute(query, (name,)).fetchall()"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 웹 탐색에 본문 SQL 문법을 보태고, 공개 이름 검색을 첫 행동으로 제시한다. 힌트는 문법 단계, 해설은 행동·관찰·결론·현재 결과 제출을 잇는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "먼저 `mira`를 검색해 이름과 소개가 나오는지 확인해 보자."
+              },
+              {
+                "path": "input/challenges/query-desk/solve/README.md",
+                "quote": "결과에 `keeper`가 포함된다. 소개 칸에서 현재 복구 키를 읽는다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "대화체는 역할과 동기를 자연스럽게 드러내고, 본문은 실제 검색/표시/읽기 동사를 사용한다. ‘검색 조건이 바뀐다’는 표현도 이어지는 관찰 설명으로 의미가 구체화된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/README.md",
+                "quote": "어떤 입력에서 그런지 같이 봐줄래?"
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/query-desk/README.md",
+            "quote": "검색 결과에는 공개 회원의 이름과 소개만 나와야 한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/AUTHORING.md",
+                "quote": "검색 입력의 작은따옴표가 SQL 구조를 바꾸는 것을 관찰하고 비공개 자료를 읽는다."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "작성 설정상의 운영 원칙으로 제시되어 구현 사실로 오인되지 않는다."
+          },
+          {
+            "path": "input/challenges/query-desk/README.md",
+            "quote": "검색창에는 이름을 입력한다. 아래에서 검색 조건과 결과를 함께 볼 수 있다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/vulnerable/app.py",
+                "quote": "name = parse_qs(url.query, keep_blank_values=True).get(\"name\", [\"\"])[0]"
+              },
+              {
+                "path": "input/challenges/query-desk/vulnerable/app.py",
+                "quote": "result = {\"query\": query, \"matches\": [{\"name\": row[0], \"note\": row[1]} for row in rows]}"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "HTTP 검색 입력을 읽고 실행 query와 결과를 응답에 포함한다."
+          },
+          {
+            "path": "input/challenges/query-desk/solve/README.md",
+            "quote": "검색어가 SQL 조건에 그대로 붙었다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/vulnerable/policy.py",
+                "quote": "query = f\"SELECT name, note FROM members WHERE name = '{name}' AND public = 1\""
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "문자열 보간으로 입력이 쿼리 식에 들어간다."
+          },
+          {
+            "path": "input/challenges/query-desk/solve/README.md",
+            "quote": "수정한 서버는 `WHERE name = ? AND public = 1`의 `?` 자리에 검색어를 별도 데이터로 전달한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/query-desk/patched/policy.py",
+                "quote": "database.execute(query, (name,)).fetchall()"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "패치가 파라미터 바인딩을 사용하고 공개 조건을 유지한다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 학습자 실행/관찰은 하지 않았으며 주장하지 않는다. UI 동작은 코드로만 대조했다.",
+          "이 기록은 문장 검토이며 학습 설계 점수 재채점이 아니다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — query-desk\n\n## 원문 상황\n식빵두쪽은 작은 커뮤니티의 검색 페이지 운영자다. 회원 소개 중 공개 회원의 것만 검색 결과로 보여야 하고, 비공개 소개에는 계정 복구 키가 있다. 비공개 소개가 검색됐다는 제보가 있어, 운영자는 서버가 보여 주는 검색 조건과 결과를 이용해 문제 입력과 노출 여부를 재현해 달라고 한다.\n\n## 질문·접근·완료\n조사 질문은 어떤 검색 입력이 조건과 결과에 영향을 주어 비공개 회원의 복구 키를 노출시키는지다. 접근은 웹 검색창이며, 조건과 결과가 화면에 표시된다고 설명한다. 먼저 공개 회원 mira를 검색하도록 안내하고 이름/소개와 공개 상태 값 및 기본 SQL 조건을 제공한다. 완료는 현재 검색 결과에서 찾은 `pwnden{...}` 복구 키 제출이다. 선언한 선수지식은 web-addresses, http-messages이고, 이 과제에서 query-boundaries를 가르친다.\n\n## 누락·모호성\n본문에서 이름 검색이라는 과업, 공개 기준, 자료와 이유, 검색 화면과 관찰 대상은 식별 가능하다. 조사 사이트 접속 방법/실습 환경 진입 방법은 발췌한 본문에서 찾지 못했으나 보통 플랫폼이 제공할 수 있어 이를 문장 결함으로 단정하지 않고 구현/배포 자료 대조 대상으로 남긴다. SQL 조건과 AND/OR 문법이 시작 지점으로 주어져 있고 추가 문법은 힌트/보고서에 있다고 고지한다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

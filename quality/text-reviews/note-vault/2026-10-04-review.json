@@ -1,0 +1,563 @@
+{
+  "slug": "note-vault",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "b6cfa7b5bc98415b1a7a844d13a90ab93b1f745ef9ed793b5ebe65d623ce5be3",
+  "source_sha256_after": "89086e6e36c303b82f6ee266815058698ce7968e41b5725202b5161c7291eca2",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "note-vault",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/note-vault/challenge.toml",
+          "input/challenges/note-vault/README.md",
+          "input/challenges/note-vault/hints/1.md",
+          "input/challenges/note-vault/solve/README.md",
+          "input/challenges/note-vault/AUTHORING.md",
+          "input/challenges/note-vault/vulnerable/app.py",
+          "input/challenges/note-vault/vulnerable/policy.py",
+          "input/challenges/note-vault/patched/policy.py",
+          "input/challenges/note-vault/patched/test.py",
+          "input/challenges/note-vault/vulnerable/web/App.vue",
+          "input/knowledge/http-messages.md",
+          "input/knowledge/http-cookies.md",
+          "input/knowledge/object-ownership.md"
+        ],
+        "first_pass": "개인 메모 사이트는 로그인한 사람에게 자기 메모 목록을 보여 준다. 운영자는 admin 메모에 둔 복구 키를 게스트가 읽을 수 있는지 점검하려고 guest/guest를 제공했다. 로그인 뒤 Welcome을 열고 URL의 메모 번호 및 목록/읽기 동작을 살핀 다음 같은 게스트로 관리자 메모를 열어 키를 제출한다. 사이트 진입과 로그인, 첫 메모, 탐색 방향과 동적 제출조건이 제공됐다. 관리자 항목의 번호를 미리 주지 않는 것은 조사 목표에 포함된 탐색이다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "운영자·게스트, 메모 목록 및 개별 읽기 행위가 설명된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "게스트로 로그인하면 `Welcome`이라는 자기 메모 하나가 보인다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "목록에서 숨김이 개별 접근도 보호하는지라는 의뢰인의 질문이 명료하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "확인하고 싶어 한다. 이를 점검할 수 있도록 게스트 계정 `guest`를 전달했다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "목록과 개별 메모 열기 동작을 연달아 확인하게 해 관련성이 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/hints/1.md",
+                "quote": "목록에 보이는 메모와 직접 열 수 있는 메모가 반드시 같을까?"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "메모 고유 번호와 주소라는 실제 브라우저 관찰을 제시한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "메모마다 고유한 번호가 있고, 메모를 열면 주소에 그 번호가 표시된다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설의 목록/개별 읽기 구분은 app.py와 vulnerable policy 동작 및 patched 대조 검사로 뒷받침된다. 실행 성공을 이번 리뷰에서 주장하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/vulnerable/app.py",
+                "quote": "note = read_note(NOTES, note_id, user)"
+              },
+              {
+                "path": "input/challenges/note-vault/vulnerable/policy.py",
+                "quote": "return notes.get(note_id)"
+              },
+              {
+                "path": "input/challenges/note-vault/patched/test.py",
+                "quote": "assert status == 404 and b\"pwnden{\" not in body"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "개인 소유 원칙과 목록 가시성이 접근을 막는지에 대한 미확정 질문을 구분한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "다른 계정으로 로그인한 사람에게는 내용이 공개되면 안 된다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선수 지식에 맞는 접속 정보, 시작할 메모, 관찰할 번호와 제출 결과를 안내한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "메모를 읽는 기능이 계정별로 자료를 제대로 구분하는지 살펴보고"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "간결한 한국어로 소유·목록·주소 변경 관찰을 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "같은 게스트 계정으로 관리자의 메모까지 읽을 수 있는지 확인해 보자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/note-vault/solve/README.md",
+            "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/vulnerable/app.py",
+                "quote": "for note in NOTES.values() if note[\"owner\"] == user"
+              },
+              {
+                "path": "input/challenges/note-vault/vulnerable/policy.py",
+                "quote": "return notes.get(note_id)"
+              },
+              {
+                "path": "input/challenges/note-vault/patched/policy.py",
+                "quote": "if note is None or note[\"owner\"] != user:"
+              }
+            ],
+            "verdict": "목록과 개별 읽기의 권한 동작 차이를 코드와 대조해 설명한다.",
+            "reason": "patched 구현 및 테스트는 별도 보호 동작을 명시한다; 현재 서비스를 실제 요청하지 않았다."
+          },
+          {
+            "path": "input/challenges/note-vault/solve/README.md",
+            "quote": "관리자 메모가 열리고, 본문에 `pwnden{...}` 형식의 복구 키가 보인다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/vulnerable/app.py",
+                "quote": "2: {\"id\": 2, \"owner\": \"admin\", \"title\": \"Recovery key\", \"body\": os.environ[\"FLAG\"]}"
+              },
+              {
+                "path": "input/challenges/note-vault/vulnerable/app.py",
+                "quote": "self.page(200, note)"
+              }
+            ],
+            "verdict": "해설의 현재 실행 안내는 source상 읽기 경로에 대응한다.",
+            "reason": "실행별 FLAG는 동적이어서 여기서 실제 키나 접근 결과를 주장하지 않는다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "웹 UI를 실행하거나 실제 브라우저 요청을 보내지 않았다.",
+          "학습자 관찰은 수행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — note-vault\n\n개인 메모 사이트에서 로그인 사용자는 자기 메모를 목록에서 골라 읽는다. 운영자는 관리자 `admin`의 메모에 복구 키를 보관하며, 목록에 숨은 것만으로 타인 접근을 막는지 시험하고 싶어 게스트 계정 `guest`를 제공했다. `guest/guest`로 로그인해 자기 `Welcome` 메모를 열고 주소에 표시되는 고유 번호와 계정별 목록/열기 동작을 살펴본다. 같은 게스트 상태로 관리자 메모를 읽어 복구 키를 제출한다. 키는 실행 환경마다 바뀐다.\n\n선수지식은 `http-messages`, `http-cookies`. 사이트 진입과 최초 행동, 목표 및 제출 형식은 제시됐다. 관리자 메모의 위치/식별법은 아직 알 수 없고, 목록의 노출과 직접 열기 권한을 비교하는 것이 조사 자체로 남아 있다. 이는 의도된 탐색 질문으로 보이며 정보 부족으로 보지 않는다.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "note-vault",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "challenges/note-vault/challenge.toml",
+          "challenges/note-vault/README.md",
+          "challenges/note-vault/hints/1.md",
+          "challenges/note-vault/solve/README.md",
+          "challenges/note-vault/solve/solve.py",
+          "challenges/note-vault/vulnerable/app.py",
+          "challenges/note-vault/vulnerable/policy.py",
+          "challenges/note-vault/patched/policy.py",
+          "challenges/note-vault/patched/test.py",
+          "challenges/note-vault/compose.yaml",
+          "challenges/note-vault/compose.patched.yaml",
+          "docs/text-review.md",
+          "docs/authoring-standard.md",
+          "docs/player-content.md",
+          "knowledge/http-messages.md",
+          "knowledge/http-cookies.md",
+          "knowledge/object-ownership.md",
+          "evidence-first.md"
+        ],
+        "first_pass": "# First pass: note-vault\n\n**읽은 범위(첫 단계):** `input/challenges/note-vault/challenge.toml`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 개인 메모 사이트 운영자가 계정별 메모 소유권이 지켜지는지 확인하려 한다. 게스트 계정은 자기 메모 `Welcome`을 볼 수 있고, 관리자의 메모에는 복구 키가 있다.\n- **질문:** 게스트로 로그인했을 때 관리자 소유 메모의 내용까지 읽을 수 있는가?\n- **시작:** 제공된 `guest`/`guest` 접속 정보로 로그인하고 자기 목록의 `Welcome`을 연 뒤 메모 읽기 기능을 살핀다.\n- **완료:** 관리자 메모를 게스트로 읽고 복구 키 제출.\n- **불명확한 점:** 본문은 운영 원칙(남의 메모 비공개)과 점검 의뢰를 구분한다. 브라우저 조작이나 메모 식별 방법은 첫 자료 범위에서 설명되지 않았으며 이후 안내를 확인해야 한다.\n",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "관리자 메모, 게스트 계정, Welcome 시작 메모와 개별 메모 조회 행동이 명확하다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/README.md",
+                "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이"
+              },
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "메모 소유권 보호 원칙과 목록 숨김만으로 충분한지 확인할 질문이 연결된다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/README.md",
+                "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "목록 표시와 개별 조회를 구분하고 ID를 주소에서 찾은 뒤 변경하는 단계를 힌트·해설이 연결한다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/README.md",
+                "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이"
+              },
+              {
+                "path": "challenges/note-vault/hints/1.md",
+                "quote": "목록에 보이는 메모와 직접 열 수 있는 메모가 반드시 같을까? 자신의 메모를 연 상태에서 주소를 살펴보자. 메모를 구분하는 값이 보인다."
+              },
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "인증 세션과 소유자 확인을 구별하고 IDOR 설명을 실제 /notes 및 /api/notes 경로에 대응한다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다."
+              },
+              {
+                "path": "challenges/note-vault/vulnerable/app.py",
+                "quote": "from http import HTTPStatus"
+              },
+              {
+                "path": "challenges/note-vault/vulnerable/policy.py",
+                "quote": "def read_note(notes, note_id, user):"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설의 읽기 성공은 동적 키 값 일반화가 아니라 구현상 소유자 검사가 없는 동작으로 뒷받침되며 solve는 현재 실행 키를 추출하도록 작성돼 있다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다."
+              },
+              {
+                "path": "challenges/note-vault/vulnerable/app.py",
+                "quote": "from http import HTTPStatus"
+              },
+              {
+                "path": "challenges/note-vault/vulnerable/policy.py",
+                "quote": "def read_note(notes, note_id, user):"
+              },
+              {
+                "path": "challenges/note-vault/patched/test.py",
+                "quote": "from http.cookiejar import CookieJar"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "비공개는 운영 원칙, 취약 구현은 목록과 상세조회 정책 차이로 분리되어 서술된다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/README.md",
+                "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이"
+              },
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "로그인 정보, Welcome 시작점, URL의 메모 ID와 제출값이 본문·힌트에 이어서 제공된다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/challenge.toml",
+                "quote": "slug = \"note-vault\""
+              },
+              {
+                "path": "challenges/note-vault/README.md",
+                "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이"
+              },
+              {
+                "path": "challenges/note-vault/hints/1.md",
+                "quote": "목록에 보이는 메모와 직접 열 수 있는 메모가 반드시 같을까? 자신의 메모를 연 상태에서 주소를 살펴보자. 메모를 구분하는 값이 보인다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "목록과 직접 주소 조회의 차이를 익숙한 행동으로 풀며 인증/인가 용어를 해설에서 정의한다.",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/README.md",
+                "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이"
+              },
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "challenges/note-vault/README.md",
+            "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이\n자기 메모를 목록에서 골라 읽는다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/README.md",
+                "quote": "개인 메모 사이트의 운영자가 길드에 확인을 맡겼다. 이 사이트에서는 로그인한 사람이\n자기 메모를 목록에서 골라 읽는다."
+              }
+            ],
+            "verdict": "첫 문장은 서비스가 기대하는 동작을 설명하는 운영 맥락이다. 구현 설명은 별도로 해설에서 대비한다.",
+            "reason": "첫 문장은 서비스가 기대하는 동작을 설명하는 운영 맥락이다. 구현 설명은 별도로 해설에서 대비한다."
+          },
+          {
+            "path": "challenges/note-vault/solve/README.md",
+            "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다."
+              }
+            ],
+            "verdict": "정확한 vulnerable/patched 구현 차이다. patched/test.py는 거부 조건을 기술하지만 이 리뷰는 테스트 실행 성공을 주장하지 않는다.",
+            "reason": "정확한 vulnerable/patched 구현 차이다. patched/test.py는 거부 조건을 기술하지만 이 리뷰는 테스트 실행 성공을 주장하지 않는다."
+          },
+          {
+            "path": "challenges/note-vault/solve/README.md",
+            "quote": "같은 브라우저 탭에서 주소의 `/notes/1`만 `/notes/2`로 바꾸고 접속한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "challenges/note-vault/solve/README.md",
+                "quote": "같은 브라우저 탭에서 주소의 `/notes/1`만 `/notes/2`로 바꾸고 접속한다."
+              }
+            ],
+            "verdict": "정적 도전 절차가 URL 변경을 요구한다. 이 검토에서는 화면 조작을 수행하지 않았고 키 값은 실행마다 달라진다.",
+            "reason": "정적 도전 절차가 URL 변경을 요구한다. 이 검토에서는 화면 조작을 수행하지 않았고 키 값은 실행마다 달라진다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실행 환경별 recovery key 값은 generated이며 정적으로 특정할 수 없다. 본 검토는 키를 조회하거나 앱을 실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# First pass: note-vault\n\n**읽은 범위(첫 단계):** `input/challenges/note-vault/challenge.toml`, `README.md`의 첫 `::knowledge` 앞까지. 힌트·풀이·구현은 아직 읽지 않음.\n\n- **상황:** 개인 메모 사이트 운영자가 계정별 메모 소유권이 지켜지는지 확인하려 한다. 게스트 계정은 자기 메모 `Welcome`을 볼 수 있고, 관리자의 메모에는 복구 키가 있다.\n- **질문:** 게스트로 로그인했을 때 관리자 소유 메모의 내용까지 읽을 수 있는가?\n- **시작:** 제공된 `guest`/`guest` 접속 정보로 로그인하고 자기 목록의 `Welcome`을 연 뒤 메모 읽기 기능을 살핀다.\n- **완료:** 관리자 메모를 게스트로 읽고 복구 키 제출.\n- **불명확한 점:** 본문은 운영 원칙(남의 메모 비공개)과 점검 의뢰를 구분한다. 브라우저 조작이나 메모 식별 방법은 첫 자료 범위에서 설명되지 않았으며 이후 안내를 확인해야 한다.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "note-vault",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/docs/text-review.md",
+          "input/challenges/note-vault/challenge.toml",
+          "input/challenges/note-vault/README.md",
+          "input/challenges/note-vault/hints/1.md",
+          "input/challenges/note-vault/solve/README.md",
+          "input/challenges/note-vault/vulnerable/app.py",
+          "input/challenges/note-vault/vulnerable/policy.py",
+          "input/challenges/note-vault/vulnerable/web/App.vue",
+          "input/challenges/note-vault/patched/policy.py",
+          "input/challenges/note-vault/patched/test.py",
+          "input/knowledge/http-messages.md",
+          "input/knowledge/http-cookies.md",
+          "input/knowledge/object-ownership.md"
+        ],
+        "first_pass": "운영자는 개인 메모의 계정별 분리를 기대하고, 관리자 메모에 복구 키를 보관한다. 목록에서 숨기는 것만으로 개별 접근도 막히는지 확인하려고 guest를 제공한다. guest로 로그인해 Welcome을 열고 주소의 메모 번호를 관찰한 뒤 개별 메모 읽기 권한을 살펴본다. 관리자 메모의 복구 키 제출이 목표다. 접속 정보와 시작 행동이 명시적이며 실제 권한 동작은 후속 구현 대조가 필요하다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "운영자, guest, 관리자 메모, 로그인과 개별 메모 읽기 행동이 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "게스트로 로그인하면 `Welcome`이라는 자기 메모 하나가 보인다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "복구 키의 민감성과 계정 간 노출 우려를 명시하고 점검 질문을 제시한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "목록에서 숨겨져 있다는 것만으로 다른 사용자의 접근까지 막히는지"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "목록 표시와 직접 열기 권한을 구분하여 조사하도록 앞뒤 문장이 이어진다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/hints/1.md",
+                "quote": "목록에 보이는 메모와 직접 열 수 있는 메모가 반드시 같을까?"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "메모 번호가 주소에 보인다는 구체 단서로 기능 동작을 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "메모마다 고유한 번호가 있고, 메모를 열면 주소에 그 번호가 표시된다."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "취약 구현은 인증된 개별 조회에서 메모 소유자를 확인하지 않고, 패치 정책은 소유자 비교를 한다. 검사 자료는 guest 접근 시나리오를 적지만 본 검토에서 실행하지 않았다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/vulnerable/policy.py",
+                "quote": "return notes.get(note_id)"
+              },
+              {
+                "path": "input/challenges/note-vault/patched/policy.py",
+                "quote": "if note is None or note[\"owner\"] != user:"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "계정별 분리는 운영 원칙, owner 검사가 없는 취약 동작은 해설의 설명, 노출 여부는 조사 질문으로 구분된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "다른 계정으로 로그인한 사람에게는 내용이 공개되면 안 된다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "접속 정보, 시작할 메모, 주소 관찰 단서, 제출 목표가 있으며 구체 ID/코드는 미리 공개하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "| 아이디 | `guest` |"
+              },
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "| 비밀번호 | `guest` |"
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "대화체 질문과 간결한 행동 지시가 자연스럽고 대상 이름이 일관된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/README.md",
+                "quote": "같은 게스트 계정으로 관리자의 메모까지 읽을 수 있는지 확인해 보자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/note-vault/solve/README.md",
+            "quote": "목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/vulnerable/app.py",
+                "quote": "for note in NOTES.values() if note[\"owner\"] == user"
+              },
+              {
+                "path": "input/challenges/note-vault/vulnerable/policy.py",
+                "quote": "return notes.get(note_id)"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "목록은 owner로 거르고 개별 읽기 정책은 식별자로만 조회한다."
+          },
+          {
+            "path": "input/challenges/note-vault/solve/README.md",
+            "quote": "같은 브라우저 탭에서 주소의 `/notes/1`만 `/notes/2`로 바꾸고 접속한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/vulnerable/web/App.vue",
+                "quote": ":href=\"`/notes/${note.id}`\""
+              },
+              {
+                "path": "input/challenges/note-vault/vulnerable/app.py",
+                "quote": "note_id = int(path.rsplit(\"/\", 1)[1])"
+              }
+            ],
+            "verdict": "근거 일치",
+            "reason": "화면은 note ID 주소를 만들고 서버는 마지막 경로 부분을 ID로 읽는다."
+          },
+          {
+            "path": "input/challenges/note-vault/solve/README.md",
+            "quote": "메모를 읽는 모든 요청에서 로그인 여부와 해당 메모의 소유자를 함께 확인해야 한다.",
+            "kind": "원칙",
+            "evidence": [
+              {
+                "path": "input/challenges/note-vault/patched/policy.py",
+                "quote": "note[\"owner\"] != user"
+              },
+              {
+                "path": "input/challenges/note-vault/patched/test.py",
+                "quote": "for path in (\"/api/notes/2\", \"/notes/2\", \"/api/notes/999\")"
+              }
+            ],
+            "verdict": "구현 방향과 일치",
+            "reason": "패치 정책은 owner가 다른 메모를 반환하지 않으며 검사 자료는 두 조회 경로를 대상으로 기술돼 있다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 서비스 실행이나 브라우저 조작은 수행하지 않았다. 구현과 검사 코드를 읽어 동작 주장을 대조했고 테스트 코드를 실행 성공으로 간주하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: note-vault\n\n읽은 자료: `input/challenges/note-vault/challenge.toml`, `README.md`만. 힌트·해설·구현은 아직 열지 않았다.\n\n개인 메모 사이트 운영자는 계정별 메모가 다른 계정에 노출되지 않아야 한다고 생각한다. 관리자 `admin`의 메모에는 복구 키가 있으며, 목록에서 숨긴 것만으로 접근이 차단되는지 확인하려고 게스트 계정을 제공한다. 플레이어는 `guest`로 로그인해 자기 메모 `Welcome`을 열고, 메모 번호가 주소에 나타나는 점을 관찰한 뒤 메모 읽기 기능의 계정 구분을 살펴본다. 완료는 게스트로 관리자 메모를 읽고 복구 키를 제출하는 것이다.\n\n접속 정보와 명시적인 시작 행동, 조사 질문, 제출물이 주어진다. 본문은 목록 표시와 실제 읽기 권한을 구별해 확인하도록 자연스럽게 안내한다. 현재 근거는 사건 설정과 의뢰인의 질문뿐이며 실제 동작은 후속 자료 대조가 필요하다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}

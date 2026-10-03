@@ -1,0 +1,641 @@
+{
+  "slug": "quiet-route",
+  "reviewed_at": "2026-10-04",
+  "scope": "text review; design scores not regraded",
+  "source_commit_before": "3cdbc438aa5b3304276b410c2eb0b9b524248065",
+  "snapshot_sha256": "aaaf2b6b367b3c03b1635d6add01c3b6e374ee988134a633002c74dbfd8ab059",
+  "source_sha256_after": "828f638a247868fb2a847dc02986dc3e14ea593d312ba7fab3162776596820d0",
+  "independent_reports": [
+    {
+      "role": "learner",
+      "report": {
+        "slug": "quiet-route",
+        "reviewer": "learner",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/quiet-route/challenge.toml",
+          "input/challenges/quiet-route/README.md",
+          "input/challenges/quiet-route/AUTHORING.md",
+          "input/challenges/quiet-route/hints/1.md",
+          "input/challenges/quiet-route/hints/2.md",
+          "input/challenges/quiet-route/solve/README.md",
+          "input/challenges/quiet-route/vulnerable/app.py",
+          "input/challenges/quiet-route/vulnerable/policy.py",
+          "input/challenges/quiet-route/patched/policy.py",
+          "input/challenges/quiet-route/patched/test.sh",
+          "input/challenges/quiet-route/compose.yaml",
+          "input/challenges/quiet-route/authoring/validation.json",
+          "input/knowledge/terminal-commands.md",
+          "input/knowledge/http-messages.md",
+          "input/knowledge/response-comparison.md",
+          "input/docs/text-review.md"
+        ],
+        "first_pass": "의뢰인은 납품 보드 담당자로, 공개 도움말·상태와 담당자 전용 점검/복구 자료를 구분하고 싶다. 없는 경로도 공통 안내와 200을 반환해 상태만으로는 제보를 확인할 수 없다. 두 없는 주소의 본문 비교와 view 관찰부터 시작하고, 후보 목록·정책·서버 주소 및 구체적인 ffuf/curl/jq 예가 있다. 완료는 실제 응답 본문과 공개 정책을 비교해 노출된 복구 코드를 확인하는 것이다. 특정 경로나 결과는 첫 읽기에서 알 수 없다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "운영 담당자가 제공한 실습 서버의 응답 본문을 확인하는 조사 역할과 대상이 명확하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "안내 페이지를 받은 것인지 알 수 없다. 흐린응답은 실습 서버 주소와 작은 후보 목록,"
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "공개 범위 원칙, 유출 제보, 200 fallback 때문에 생기는 확인 질문을 한 흐름으로 제시한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "운영 자료를 읽을 수 있다는 제보가 왔지만, 상태 코드만 보면 실제 자료를 받은 것인지"
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "없는 주소와 공통 안내, 후보 검색, 실제 본문 대조의 순서 및 각 단계의 관계가 설명된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "먼저 서로 다른 없는 주소의 본문을 저장하고 비교하자."
+              },
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "아래 예제는 해당 표시를 가진 응답만 제외한다. 남은 주소를 curl과 jq로 읽어"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "200·본문·view·ffuf 정규식 필터를 이 서버의 안내와 후보 응답에 직접 연결하고 관련 용어를 선수지식 문서가 풀어 준다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "이 서버는 여러 JSON 응답의 길이를 같은 크기로 맞춘다."
+              },
+              {
+                "path": "input/knowledge/response-comparison.md",
+                "quote": "가진 응답을 제외한다. -fr은 정규식 필터이므로 모든 JSON을 제외하는 넓은"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "상태·본문 주장은 구현 코드와 대조되며, 의뢰 제보는 확정 사실이 아니라 확인 대상으로 남긴다. authored validation 기록을 리뷰어의 실제 실행으로 간주하지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "status = 200"
+              },
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "body = {'view': 'fallback', 'message': 'No public document at this address.'}"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "담당자 전용이라는 운영 원칙, 실제로 열람 가능한지 확인할 제보, 패치 서버의 403 설명이 서로 구분되어 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "운영 점검 자료와 장애 복구 코드는 담당자만 읽어야 한다."
+              },
+              {
+                "path": "input/challenges/quiet-route/solve/README.md",
+                "quote": "운영 점검 자료는 서버에서 공개 범위를 제한해야 한다."
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "기준 응답 수집부터 후보 필터링과 정책 대조까지 시작 절차를 제공하고, 결과 주소를 직접 확인하게 한다. 제출 대상도 현재 환경의 코드로 특정한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "아래 예제는 해당 표시를 가진 응답만 제외한다."
+              },
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "비공개 점검 응답에서 확인한 현재 환경의 `pwnden{...}` 복구 코드를 제출하자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "본문 저장·비교·읽기·공개 정책 대조로 행동을 구체적으로 표현하며 불필요하게 꼬인 문장이 없다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "공통 안내와 다른 응답을 찾고, 실제 본문을 공개 정책과 비교해 잘못 공개된 복구 코드를 확인하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/quiet-route/README.md",
+            "quote": "서버는 없는 주소를 요청해도 공통 안내 페이지와 상태 코드 200을 돌려준다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "status = 200"
+              },
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "body = {'view': 'fallback', 'message': 'No public document at this address.'}"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "일치하지 않는 경로의 기본 상태가 200이고 fallback 본문을 만든다."
+          },
+          {
+            "path": "input/challenges/quiet-route/README.md",
+            "quote": "이 서버는 여러 JSON 응답의 길이를 같은 크기로 맞춘다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "data = data.ljust(256, b' ')"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "기본 안내 및 비공개 경로 응답을 256바이트로 채우는 코드가 있다."
+          },
+          {
+            "path": "input/challenges/quiet-route/hints/2.md",
+            "quote": "`/ops-check`는 안내 페이지와 다른 JSON을 반환한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "'recovery_code': os.environ['FLAG']}"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "취약 설정의 해당 경로는 별도 JSON과 recovery_code를 구성한다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "help는 공개 도움말이다. ops-check는 staff를 대상으로 하는 복구 기능이며",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "'recovery_code': os.environ['FLAG']}"
+              },
+              {
+                "path": "input/challenges/quiet-route/vulnerable/policy.py",
+                "quote": "ALLOW_PRIVATE = True"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "취약 설정에서는 비공개 경로의 자료가 허용되는 정책이다. 여기서 실제 실행 응답을 관찰했다고 주장하지 않는다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "운영 점검 자료는 서버에서 공개 범위를 제한해야 한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/patched/policy.py",
+                "quote": "ALLOW_PRIVATE = False"
+              },
+              {
+                "path": "input/challenges/quiet-route/patched/test.sh",
+                "quote": "test \"$(curl -sS --max-time 5 -H 'X-Role: staff' -o \"$work/body\" -w '%{http_code}' \"http://app:8000$path\")\" = 403"
+              }
+            ],
+            "verdict": "근거와 일치",
+            "reason": "패치 설정과 검증 스크립트가 거부·공개 경로 보존을 검사하도록 작성됐다. 해당 검사를 이번 리뷰에서 실행하지 않았다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "독립 초보 학습자를 대상으로 실제 사용성 시험을 하지 않았다.",
+          "문제 서버 및 authored validation 절차를 실행하지 않았다. 동작은 소스와 검사 코드의 정적 대조로 확인했다."
+        ]
+      },
+      "first_pass_artifact": "# 첫 읽기: quiet-route\n\n선수지식으로는 기본 터미널 사용, HTTP 요청·응답, 응답 비교를 안다. 의뢰인은 납품 보드의 운영 담당자다. `/help`와 `/healthz`는 공개지만 운영 점검 자료와 복구 코드는 담당자만 읽어야 한다. 비공개 자료가 공개됐다는 제보가 있으나 서버는 없는 주소에도 공통 안내와 200을 반환하므로 상태 코드만으로는 확인할 수 없다.\n\n시작은 두 개의 없는 주소 응답을 파일로 저장해 본문과 길이를 비교하고 안내 응답의 `view` 값을 살펴보는 것이다. 실습 주소 `http://app:8000`, 12개 후보 경로 목록, 공개 정책 파일이 제공된다. 본문에는 후보에서 공통 안내 표시를 제외하는 ffuf 명령과 제한 옵션이 제시되어 있다. 후보를 curl과 jq로 읽어 실제 내용과 정책을 비교하라는 흐름이다.\n\n완료는 안내 응답과 다른 응답을 찾고, 실제 본문을 공개 정책과 대조해 잘못 공개된 복구 코드를 확인·제출하는 것이다. 어떤 후보가 점검 응답인지, 그 안에 복구 코드가 실제 있는지는 첫 읽기만으로 알 수 없다.\n"
+    },
+    {
+      "role": "evidence",
+      "report": {
+        "slug": "quiet-route",
+        "reviewer": "evidence",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/contract.toml",
+          "input/challenges/quiet-route/challenge.toml",
+          "input/challenges/quiet-route/README.md",
+          "input/challenges/quiet-route/BRIEFING.md",
+          "input/challenges/quiet-route/hints/",
+          "input/challenges/quiet-route/solve/",
+          "input/challenges/quiet-route/AUTHORING.md",
+          "input/challenges/quiet-route/authoring/",
+          "input/challenges/quiet-route/vulnerable/",
+          "input/challenges/quiet-route/patched/",
+          "input/challenges/quiet-route/files/",
+          "input/files/",
+          "input/knowledge/selected required docs",
+          "input/docs/text-review.md",
+          "input/docs/authoring-standard.md"
+        ],
+        "first_pass": "운영 원칙상 help/status 공개, 운영 점검·복구 코드는 담당자 전용이며 200 fallback과 제보가 문제다. 제공 후보·정책을 시작으로 본문 차이를 찾아 민감 자료인지 대조하고 현재 복구 코드를 제출한다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "운영자, 서버 경로 요청, 반환 본문을 연결한다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/BRIEFING.md",
+                "quote": "서버는 없는 주소를 요청해도 공통 안내 페이지와 상태 코드 200을 돌려준다."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "공개 범위와 제보 및 실제 공개 여부 확인 질문이 분명하다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/BRIEFING.md",
+                "quote": "운영 점검 자료와 장애 복구 코드는 담당자만 읽어야 한다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "동일 상태 코드라는 원인/한계에서 본문 확인으로 조사 흐름이 이어진다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/BRIEFING.md",
+                "quote": "운영 자료를 읽을 수 있다는 제보가 왔지만, 상태 코드만 보면 실제 자료를 받은 것인지\n안내 페이지를 받은 것인지 알 수 없다."
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "HTTP 본문, JSON view 및 curl/ffuf 필터의 기능이 구체화되어 있다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/BRIEFING.md",
+                "quote": "ffuf -w files/paths.txt -u http://app:8000/FUZZ -fr '\"view\":\"fallback\"'"
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "브리핑은 제보를 확정하지 않고 실제 본문+정책 비교를 요구; 코드 조건 및 설계 기록이 뒷받침한다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/vulnerable/app.py",
+                "quote": "elif path == '/ops-check':\n            if ALLOW_PRIVATE:\n                body = {'audience': 'staff', 'purpose': 'Delivery board recovery',\n                        'recovery_code': os.environ['FLAG']}"
+              },
+              {
+                "path": "challenges/quiet-route/vulnerable/policy.py",
+                "quote": "ALLOW_PRIVATE = True"
+              },
+              {
+                "path": "challenges/quiet-route/files/public-policy.txt",
+                "quote": "Staff only: operational diagnostics and recovery codes."
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "staff-only 정책과 ALLOW_PRIVATE 조건부 동작, 조사 전 의심이 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/patched/policy.py",
+                "quote": "ALLOW_PRIVATE = False"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "기준응답을 저장/비교하는 구체 명령과 후보자료 및 제출값이 명시된다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/BRIEFING.md",
+                "quote": "먼저 서로 다른 없는 주소의 본문을 저장하고 비교하자."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "절차와 결과 판정이 행동 중심의 자연스러운 문장이다.",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/BRIEFING.md",
+                "quote": "아래 예제는 해당 표시를 가진 응답만 제외한다. 남은 주소를 curl과 jq로 읽어\n실제 내용과 공개 정책을 비교하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/quiet-route/BRIEFING.md",
+            "quote": "서버는 없는 주소를 요청해도 공통 안내 페이지와 상태 코드 200을 돌려준다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/vulnerable/app.py",
+                "quote": "status = 200"
+              },
+              {
+                "path": "challenges/quiet-route/vulnerable/app.py",
+                "quote": "body = {'view': 'fallback', 'message': 'No public document at this address.'}"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "없는 주소의 기본 경로가 status 200 및 고정 fallback 본문을 반환한다."
+          },
+          {
+            "path": "input/challenges/quiet-route/BRIEFING.md",
+            "quote": "이 서버는 여러 JSON 응답의 길이를 같은 크기로 맞춘다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/vulnerable/app.py",
+                "quote": "data = data.ljust(256, b' ')"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "제시된 코드상 public root/help와 healthz를 제외한 본문이 256바이트로 패딩된다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "안내와 운영 자료는 모두 256바이트이므로 크기 필터는 실제\n자료까지 숨긴다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/vulnerable/app.py",
+                "quote": "data = data.ljust(256, b' ')"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "두 path 모두 공통 패딩 분기에 속한다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "수정한 서버는 해당\n경로를 403으로 거부하고 도움말·건강 검사·없는 주소의 안내는 유지한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "challenges/quiet-route/patched/policy.py",
+                "quote": "ALLOW_PRIVATE = False"
+              },
+              {
+                "path": "challenges/quiet-route/vulnerable/app.py",
+                "quote": "status, body = 403, {'error': 'staff_access_required'}"
+              }
+            ],
+            "verdict": "충족",
+            "reason": "정책 플래그를 껐을 때 앱 분기의 거부 status가 403이다. 실행 결과 주장은 아니다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "authoring validation.json은 문서에 기록된 실행 검증 이력으로만 취급했다; 재실행하지 않았다."
+        ]
+      },
+      "first_pass_artifact": "# Evidence first pass — quiet-route\n\n- 검토자: evidence / gpt-6-luna\n- 읽기 단계: manifest와 브리핑·본문·선수 지식만 확인. 힌트·해설·구현·배포 정책·검사 자료는 아직 열지 않음.\n- 원문 상황과 질문: 납품 보드 운영 담당자가 상태 코드가 같은 응답 가운데 공개 정책 위반 복구 자료가 실제 제공되는지 조사시킨다. 서버, 후보 12개, 공개 정책 파일, 공개 경로와 비교 절차가 제시된다. 첫 단계에서 본문 비교와 view 필드를 이용하라는 안내가 구체적이다.\n- 시작점: 해당 문제의 자료와 명시된 선수 지식으로 조사 시작.\n- 완료 증거: 본문에 적힌 제출 형식/산출물에 따름. 실제 완료 관찰은 아직 없음.\n- 첫 패스 모호점: 구현 및 대조 확인 전이므로 기술 동작의 실현 여부는 미확인. 현실 사고의 사실성이나 별도 정상 대조군을 요구하지 않음.\n"
+    },
+    {
+      "role": "designer",
+      "report": {
+        "slug": "quiet-route",
+        "reviewer": "designer",
+        "model": "gpt-6-luna",
+        "scope": [
+          "input/challenges/quiet-route/challenge.toml",
+          "input/challenges/quiet-route/README.md",
+          "input/challenges/quiet-route/BRIEFING.md",
+          "input/challenges/quiet-route/files/paths.txt",
+          "input/challenges/quiet-route/files/public-policy.txt",
+          "input/challenges/quiet-route/hints/1.md",
+          "input/challenges/quiet-route/hints/2.md",
+          "input/challenges/quiet-route/solve/README.md",
+          "input/challenges/quiet-route/vulnerable/app.py",
+          "input/challenges/quiet-route/vulnerable/policy.py",
+          "input/challenges/quiet-route/patched/policy.py",
+          "input/challenges/quiet-route/patched/test.sh",
+          "input/challenges/quiet-route/AUTHORING.md",
+          "input/challenges/quiet-route/authoring/validation.json",
+          "input/docs/text-review.md"
+        ],
+        "first_pass": "흐린응답은 보드 운영 담당자이며 공개 도움말/상태와 담당자 전용 점검자료/복구코드의 차이를 제시한다. 없는 주소도 200 안내를 내므로 본문으로 실제 공개를 판단해 달라는 의뢰다. 서버, 12개 후보, 정책, 기준 응답 비교와 도구, 코드 제출이 제공된다. 선수지식은 터미널·HTTP·응답 비교다.",
+        "criteria": {
+          "T1": {
+            "status": "충족",
+            "reason": "플레이어가 지정 서버의 후보 경로를 요청하고 실제 본문을 읽는 행동과 대상을 알 수 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "실제 내용과 공개 정책을 비교하자."
+              }
+            ]
+          },
+          "T2": {
+            "status": "충족",
+            "reason": "공개 허용 범위, 담당자 전용 자료, 제보와 검증 목표가 직접 연결된다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "운영 점검 자료와 장애 복구 코드는 담당자만 읽어야 한다."
+              }
+            ]
+          },
+          "T3": {
+            "status": "충족",
+            "reason": "200 안내, 실제 응답 구별의 한계, 기준 응답을 먼저 비교하라는 인과가 분명하다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "상태 코드만 보면 실제 자료를 받은 것인지"
+              }
+            ]
+          },
+          "T4": {
+            "status": "충족",
+            "reason": "HTTP 상태, 본문, JSON 표시값, ffuf 필터와 정책 비교를 구체적 대상에 맞춰 설명한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "두 안내의 JSON을 읽고 공통 안내임을 나타내는 view 값을 확인하자."
+              }
+            ]
+          },
+          "T5": {
+            "status": "충족",
+            "reason": "해설의 응답 주장은 서비스 코드와 정책 설정에 대응되고 validation 기록은 실행 성공 주장 범위를 한 문제에 한정한다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "if ALLOW_PRIVATE:"
+              },
+              {
+                "path": "input/challenges/quiet-route/vulnerable/policy.py",
+                "quote": "ALLOW_PRIVATE = True"
+              }
+            ]
+          },
+          "T6": {
+            "status": "충족",
+            "reason": "공개 정책은 운영 원칙, ALLOW_PRIVATE 분기와 응답은 취약 구현 동작으로 구분되어 있다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/files/public-policy.txt",
+                "quote": "Staff only: operational diagnostics and recovery codes."
+              },
+              {
+                "path": "input/challenges/quiet-route/patched/policy.py",
+                "quote": "ALLOW_PRIVATE = False"
+              }
+            ]
+          },
+          "T7": {
+            "status": "충족",
+            "reason": "선언한 응답비교 지식의 예시를 본문에 주고 시작 관찰을 지정한다. 힌트는 표시값 중심으로 줄이고 실제 민감 경로명은 후속 힌트에 두며 해설은 관찰과 정책 판단을 잇는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "먼저 서로 다른 없는 주소의 본문을 저장하고 비교하자."
+              },
+              {
+                "path": "input/challenges/quiet-route/solve/README.md",
+                "quote": "`recovery_code`를 포함한다."
+              }
+            ]
+          },
+          "T8": {
+            "status": "충족",
+            "reason": "간결한 한국어 지시와 자연스러운 대비 표현을 쓰며 번역투로 인해 행동이 가려지지 않는다.",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/README.md",
+                "quote": "실제 본문을 공개 정책과 비교해 잘못 공개된 복구 코드를 확인하자."
+              }
+            ]
+          }
+        },
+        "claims": [
+          {
+            "path": "input/challenges/quiet-route/README.md",
+            "quote": "서버는 없는 주소를 요청해도 공통 안내 페이지와 상태 코드 200을 돌려준다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "body = {'view': 'fallback', 'message': 'No public document at this address.'}"
+              },
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "status = 200"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "기본 상태가 200이며 알 수 없는 경로는 fallback body를 받는다."
+          },
+          {
+            "path": "input/challenges/quiet-route/README.md",
+            "quote": "운영 점검 자료와 장애 복구 코드는 담당자만 읽어야 한다.",
+            "kind": "설정",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/files/public-policy.txt",
+                "quote": "Staff only: operational diagnostics and recovery codes."
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "명시된 공개 정책이다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "없는 두 주소는 200과 동일한 공통 안내를 반환한다.",
+            "kind": "관찰",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/solve/solve.sh",
+                "quote": "cmp \"$work/does-not-exist\" \"$work/another-missing\""
+              },
+              {
+                "path": "input/challenges/quiet-route/authoring/validation.json",
+                "quote": "\"passed\": true"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "작성자 해답/검증 자료의 제한된 실습 기록을 설명한다. 이를 일반 서버 동작으로 확대하지 않는다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "안내와 운영 자료는 모두 256바이트이므로 크기 필터는 실제",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "data = data.ljust(256, b' ')"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "fallback과 ops-check 모두 길이 정규화 경로를 지난다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "`recovery_code`를 포함한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/vulnerable/app.py",
+                "quote": "'recovery_code': os.environ['FLAG']"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "이 실습 경로의 응답 필드와 내용에 한정된다."
+          },
+          {
+            "path": "input/challenges/quiet-route/solve/README.md",
+            "quote": "경로를 403으로 거부하고 도움말·건강 검사·없는 주소의 안내는 유지한다.",
+            "kind": "구현",
+            "evidence": [
+              {
+                "path": "input/challenges/quiet-route/patched/policy.py",
+                "quote": "ALLOW_PRIVATE = False"
+              },
+              {
+                "path": "input/challenges/quiet-route/patched/test.sh",
+                "quote": "jq -e '[.results[] | select(.url | endswith(\"/ops-check\"))] | length == 1 and .[0].status == 403' \"$work/candidates.json\" >/dev/null"
+              }
+            ],
+            "verdict": "근거 범위 내",
+            "reason": "패치 설정과 선언 검사 대상의 범위다."
+          }
+        ],
+        "findings": [],
+        "limitations": [
+          "실제 학습자 관찰은 주장하지 않는다. validation.json은 작성자 기록으로만 취급했다.",
+          "본문은 구체적인 응답 필터 명령을 제공하지만 결과 URL/정답 코드까지 선공개하지 않는다.",
+          "이 기록은 문장 검토이며 점수 재채점이 아니다."
+        ]
+      },
+      "first_pass_artifact": "# First pass — quiet-route\n\n## 원문 상황\n흐린응답은 납품 보드 운영 담당자다. 도움말/상태는 공개 대상이고 운영 점검 자료/장애 복구 코드는 담당자 전용이다. 서버가 없는 주소도 200과 공통 안내를 반환해 상태 코드로 자료 유무를 구분할 수 없으며, 운영 자료 공개 제보가 들어왔다. 실습 서버·경로 후보·정책 자료를 받아 실제 본문이 정책을 위반하는지 확인한다.\n\n## 질문·접근·완료\n질문은 안내 응답과 실제 자료 응답을 가려 비공개 자료 본문 및 복구 코드가 잘못 공개되는지 확인하는 것이다. 서버 주소, 12개 후보 경로, 공개 정책, 공개 경로 두 개, 먼저 비교할 없는 주소 예시, ffuf 필터 예시 및 curl/jq로 본문 대조 지침을 제공한다. 완료는 비공개 점검 응답에서 현재 환경의 복구 코드 제출. 선수지식은 terminal-commands, http-messages, response-comparison이며 response-evidence를 가르친다.\n\n## 누락·모호성\n본문상 대상, 공개 원칙, 제보의 성격, 관찰 절차와 완료 기준이 명확하다. 조사 전에 안내 응답을 저장하고 비교하라는 구체적 시작이 있다. 코드/명령 예시가 상당히 직접적이지만 경로·응답 필터·제출 답 자체를 지시하지 않는다. 후보가 특정 무엇인지 읽어야 할 자료가 제공된다.\n"
+    }
+  ],
+  "parent_reconciliation": {
+    "note": "원문과 구현·제공 자료를 대조해 문장 수정이 필요한 불일치는 확인하지 않았다.",
+    "decision": "기본 심사 3건의 근거와 본문·해설을 대조했다. 실행 결과와 검사 코드 존재를 구분해 해석했다."
+  },
+  "changed_files": [],
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 3,
+    "reason": "추가 확인이 필요한 판정 충돌을 확인하지 않아 3명을 유지했다."
+  },
+  "limitations": [
+    "동일한 가벼운 모델의 공통 편향을 제거했다는 뜻이 아니다.",
+    "독립 심사는 수정 전 snapshot의 정적 읽기다. 최종 문장은 부모가 다시 대조했다.",
+    "실제 초급 학습자 관찰과 브라우저 전체 풀이를 수행하지 않았다."
+  ]
+}
