@@ -10,6 +10,8 @@ difficulty evidence. Keep the design and review evidence in its `AUTHORING.md`.
 The [quality review](docs/quality-review.md) records evidence, demonstrated points
 and outstanding checks for every scenario. Run `python3 -B tools/quality.py` to
 check review coverage and source freshness; `--json` also lists follow-up actions.
+The repository-local [challenge-reviewer skill](.agents/skills/challenge-reviewer/SKILL.md)
+uses independent lightweight judges and retains raw scores, citations and disputes.
 Use the [scenario writing framework](docs/scenario-authoring.md) for a request
 briefing, progressive additional information and a complete investigation report.
 The [learning map](docs/learning-map.md) defines areas, topics, observable

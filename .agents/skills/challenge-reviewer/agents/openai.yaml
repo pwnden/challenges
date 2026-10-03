@@ -1,0 +1,4 @@
+interface:
+  display_name: "문제 검토자"
+  short_description: "독립 심사자들의 항목별 근거와 점수를 검토하고 합산"
+  default_prompt: "Use $challenge-reviewer to review selected challenges with independent lightweight judges and reconcile evidence-backed scores."
