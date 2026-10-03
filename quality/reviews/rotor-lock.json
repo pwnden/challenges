@@ -2,7 +2,7 @@
   "slug": "rotor-lock",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/rotor-lock/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/rotor-lock/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 3,
@@ -94,7 +94,7 @@
       "evidence": [
         {
           "path": "challenges/rotor-lock/README.md",
-          "quote": "네게 전달된 `files/checker.py`가 그 검사기다. 코드를 읽고 입력이 어떤 과정을 거쳐",
+          "quote": "관리자가 보낸 `files/checker.py`가 그 검사기다. 코드를 읽고 입력이 어떤 과정을 거쳐\n비교값이 되는지 분석한 뒤 이 장치가 받아들이는 문자열을 복원해 보자.",
           "kind": "source"
         },
         {
@@ -309,5 +309,5 @@
       "improvement": "문제전용작성기록에선언한이미지·실행날짜·역변환해답·정답/오답검사·정리결과를연결한다."
     }
   },
-  "source_sha256": "ffe9de1af7fc52b1040ef786f6ba1669356cb3c2b01fd01871a1b83748feb8df"
+  "source_sha256": "7c225caf5226aa4128b80ff7969b47728473ebf015d707d190f0e01301c6f41a"
 }

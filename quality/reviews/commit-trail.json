@@ -2,7 +2,7 @@
   "slug": "commit-trail",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/commit-trail/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/commit-trail/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -87,7 +87,7 @@
         },
         {
           "path": "knowledge/terminal-commands.md",
-          "quote": "파일을 읽는 명령과 결과를 확인하는 명령은 문제의 전달받은 자료에 제공한다.",
+          "quote": "각 문제의 ‘전달받은 자료’에서 파일을 읽고 결과를 확인할 명령을 안내한다.",
           "kind": "source"
         },
         {
@@ -354,5 +354,5 @@
       "improvement": "실행 요약에 준비 이미지 태그와 정상 동작 및 종료 후 정리의 개별 결과를 남기면 재현 범위를 더 쉽게 감사할 수 있다.\n새 이미지에서 해답 실행 및 대조군 결과를 다시 수집할 때 검증 일시와 각 실행 범위를 갱신한다.\n문제 공개에 쓰는 준비 이미지에서 기록된 검증을 반복하고 실행 로그 또는 재현 가능한 결과를 날짜와 함께 보존한다.\n다음 검증 기록에는 이미지 식별자와 대표 명령의 결과를 포함해 어떤 실행 환경과 결과를 재현했는지 더 쉽게 확인할 수 있게 한다."
     }
   },
-  "source_sha256": "cfaf589789f6280ac21d5d6af8c984d29995678cc729355d9548f8c5f9f01c2e"
+  "source_sha256": "ed130224bfe5339471770ffc8253e6bfa5869aedf991c2d01baecd00b256467b"
 }

@@ -2,7 +2,7 @@
   "slug": "path-parcel",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/path-parcel/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/path-parcel/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -344,5 +344,5 @@
       "improvement": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다.\n현재 검토 날짜의 실행 재현을 주장하려면 별도 실행을 하고 날짜·결과를 기록한다."
     }
   },
-  "source_sha256": "d3a2cd0257e72e09e17ec2f700edb85b2028b83562c781a93756ccea4449634d"
+  "source_sha256": "3b646aef1ccd75e37217d9a1f6409207eb4b782c66845e1061940b1e67c28481"
 }

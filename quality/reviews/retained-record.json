@@ -2,7 +2,7 @@
   "slug": "retained-record",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/retained-record/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/retained-record/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -264,5 +264,5 @@
       "improvement": "배포 전 재검토에서 현 실행 기록의 대상 이미지 태그와 각 consumer 단계의 출력 요약을 함께 남기면 이후 재현 검토가 쉬워진다."
     }
   },
-  "source_sha256": "b811697fdadbfd22d9cbe7d3d2303bdbbc4f198a3c6ae2856925493459744690"
+  "source_sha256": "8ac5a8684b05340116a2fdcf4d75da458c05f0828e94e9f9cc8f00a69d9ab881"
 }

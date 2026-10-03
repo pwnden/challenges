@@ -2,7 +2,7 @@
   "slug": "query-desk",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/query-desk/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/query-desk/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -224,5 +224,5 @@
       "improvement": "현재 snapshot의 문제별 공격/패치/정리 실행 로그와 정상 검색 결과를 남겨 과거 전체 실행 보고를 보완한다.\n향후 실행 결과에 이 문제의 공격·정상 기능·패치 검사와 정리 결과를 분리해 기록하면 개별 재현 범위를 더 직접 확인할 수 있다."
     }
   },
-  "source_sha256": "2224b40692b9f6d4e5cb362760ec7fe1106db2f07889909201d5d5c0edb67903"
+  "source_sha256": "b3ce8bfb40934ea6b429b26138c188876eaebc15dea66a7770f34ff02274fc1d"
 }

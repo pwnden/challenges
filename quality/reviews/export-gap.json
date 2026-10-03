@@ -2,7 +2,7 @@
   "slug": "export-gap",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/export-gap/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/export-gap/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -274,5 +274,5 @@
       "improvement": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
     }
   },
-  "source_sha256": "50b146924a7b64e7e6adf27b2c8d27eaefcade2674247651b5d3900213441d93"
+  "source_sha256": "016d2db9e8eaccad5c4a1864f2cd3061b358c7dae492fca9d087c971c329a239"
 }

@@ -2,7 +2,7 @@
   "slug": "hash-lantern",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/hash-lantern/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/hash-lantern/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 2,
@@ -269,5 +269,5 @@
       "improvement": "최초 구현 작업 트리 기준이라는 범위에 더해 실제 실행 로그나 결과 요약을 날짜별로 남겨 재현 정보를 보존한다."
     }
   },
-  "source_sha256": "7a0492e964a0886f90fcfbbf2a8df77c89152e5e9a2e02c7c8197ac0568f5715"
+  "source_sha256": "e92f92d89265b872ab6bcabd5a36c5b1015467fafaf98473dbf7dc29b1300069"
 }

@@ -2,7 +2,7 @@
   "slug": "image-notes",
   "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/image-notes/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/image-notes/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -294,5 +294,5 @@
       "improvement": "새 실행 기록을 추가해 현재 배포 도구 이미지에서 해답, 정답·오답 제출, 메타데이터 대조, 원본 보존이 재현되는지 확인한다."
     }
   },
-  "source_sha256": "27b1f098c9f6b7d87ab15a8adecd1917c078d25f706e412bd9999b46e23fb39f"
+  "source_sha256": "6a1312097d8f1931ec9e30414f3ff489015c1e8a19a31e87a38914335af11179"
 }
