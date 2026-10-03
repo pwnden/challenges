@@ -9,6 +9,11 @@ description: Review pwnden challenge learning quality with independent lightweig
 기준은 저장소의 `quality/rubric.json`과 `docs/quality-review.md`다. 이 스킬은
 문제 설계 평가용이며 보안 취약점 감사나 전체 문제 수정 작업을 대신하지 않는다.
 
+[문장 검토 기준](../../../docs/text-review.md)을 함께 적용한다. 부모는 심사자의
+원문·구현 대조와 문장별 발견을 확인해 `quality/text-reviews/<slug>/<run-id>.md`에
+검토 범위·판정·근거·미해결 사항을 보존한다. 기록 양식과 완료 조건은 해당 문서를
+따른다. 심사자들의 점수 일치만으로 문장 검토를 완료하지 않는다.
+
 ## 심사단
 
 - 기본 3명으로 시작하고, 아래 확대 조건이면 2명을 추가해 최대 5명으로 검토한다.
