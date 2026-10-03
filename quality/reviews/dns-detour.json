@@ -2,7 +2,7 @@
   "slug": "dns-detour",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/dns-detour/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/dns-detour/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 3,
@@ -32,93 +32,16 @@
       "improvement": "제출 뒤 복원 문자열이 DNS 질의에서 전달됐다는 근거를 한 문장으로 설명하게 하면 관찰과 보안 원리를 함께 확인할 수 있다."
     },
     "starting_context": {
-      "level": 4,
-      "reason": "dns-detour-learner (3): 기록 파일 위치, Q/R·id·qname 필드, 대상 도메인, 번호 순서, Base32 명령 예시와 제출 형식이 본문에 있다. 공통 지식은 재전송 및 시간 순서와 데이터 순서의 차이, Base32 복원을 설명한다. 중복 제거는 본문에서 직접 지시하지 않지만 같은 요청 재전송에 관한 선수 지식과 자료의 동일 행으로 판단할 수 있다.\ndns-detour-evidence (4): 자료 필드와 요청·응답 의미, ID 페어링, 재전송, 번호 순서 및 Base32 명령을 문제 본문과 선수지식에서 모두 소개한다. Python 작성이 필요하지 않다.\ndns-detour-designer (4): 대상자가 브라우저와 텍스트 읽기를 할 수 있고 제공된 조작을 수행하는 사람으로 명시돼 있으며, Python 작성은 요구하지 않는다. 본문은 자료 경로와 Q/R, ID, qname 필드를 정의하고 도메인 및 번호 조건, 복사 가능한 Base32 명령을 제공한다. 선수 지식도 라벨, 요청·응답 짝, 재전송 및 Base32 복원을 설명해 실제 시작에 필요한 정보가 준비되어 있다.",
-      "evidence": [
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "`sync.box.test`로 보낸 조회 요청에서 번호 뒤의 두 문자 조각을 찾자.\n번호 순서로 붙인 문자열을 아래 예제의 `문자열` 자리에 넣으면 복원할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "같은 질의가 재전송되면 같은 이름이 기록에 여러 번 나타날 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "`direction`: Q는 프로그램이 보낸 조회 요청, R은 받은 응답이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "번호 순서로 붙인 문자열을 아래 예제의 `문자열` 자리에 넣으면 복원할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/base32.md",
-          "quote": "조각으로 나뉜 문자열은 순서대로 붙인 뒤 한 번에 복원한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "`direction`: Q는 프로그램이 보낸 조회 요청, R은 받은 응답이다.\n- `id`: 요청과 응답을 짝지을 수 있는 번호다.\n- `qname`: 프로그램이 조회한 사이트 이름이다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/dns-records.md",
-          "quote": "같은 질의가 재전송되면 같은 이름이 기록에 여러 번 나타날 수 있다.\n시간 순서와 데이터 조각의 순서는 서로 다를 수 있으므로 기록의 번호와 이름을 함께 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/AUTHORING.md",
-          "quote": "Python 문법 읽기나 코드 작성은 일반 풀이의 선수 능력에 포함하지 않는다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 3,
-      "reason": "dns-detour-learner (3): 플레이어는 요청과 응답을 구분하고 unrelated 조회를 제외한 뒤, 시간 순서와 다른 조각 번호를 연결하고 중복 재전송을 한 조각으로 처리해야 한다. 실제 파일은 두 조각이 역순으로 나타나며 2번 요청을 재전송한다. 본문과 선수 지식은 필요한 선택을 뒷받침한다.\ndns-detour-evidence (3): 초급에 필요한 서로 다른 단서 연결이 있다: Q와 기반 도메인 선택, 1/2 번호로 조각 순서 지정, 반복 이름의 중복 제거. 실제 JSONL은 2번을 먼저 보여 주어 순차 나열의 오답을 피하게 한다. 해설이 완성 조각과 플래그를 제공하므로 평가는 기본 브리핑 기준이다.\ndns-detour-designer (3): 초급에 필요한 몇 가지 단서 연결이 남아 있다. 기록에서 요청과 응답, 무관한 도메인, 중복 재전송을 걸러내고 qname에서 번호와 조각을 비교해 순서를 복구해야 한다. 그러나 본문이 sync.box.test, 1-/2- 번호, 순서 연결법, 디코드 명령까지 명시하므로 독립적인 대안 배제나 결론 범위 추론은 제한적이며 기준 4의 혼동 사례 경계까지 충분히 요구하지는 않는다.",
-      "evidence": [
-        {
-          "path": "challenges/dns-detour/files/dns.jsonl",
-          "quote": "\"direction\": \"Q\", \"id\": 1002, \"type\": \"A\", \"qname\": \"2-KYLLONPWIYLUMFPW6235.sync.box.test\"",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/files/dns.jsonl",
-          "quote": "\"direction\": \"Q\", \"id\": 1004, \"type\": \"A\", \"qname\": \"1-OB3W4ZDFNZ5WI3TTL5WG.sync.box.test\"",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "시간 순서와 데이터 조각의 순서는 서로 다를 수 있으므로 기록의 번호와 이름을 함께 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "같은 요청을 다시 보낸 기록도 섞여 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "이름 맨 앞의 `1-`과 `2-`는 나눠 보낸 자료의 순서 번호다. 같은 요청을 다시 보낸 기록도 섞여 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "`sync.box.test`로 보낸 조회 요청에서 번호 뒤의 두 문자 조각을 찾자.\n번호 순서로 붙인 문자열을 아래 예제의 `문자열` 자리에 넣으면 복원할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/solve/README.md",
-          "quote": "서버가 요청을 받았다면 응답이 실패해도 조회 이름은 이미 전달된 것이다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "난도 2에 적합한지와 실제로 어떤 지점에서 멈추는지는 대상 수준 독립 풀이 기록으로 확인한다.\n기본 풀이 후 응답이 성공하지 않아도 이름의 정보는 전달됐다고 볼 수 있는 이유를 질문하면 본문이 이미 지원하는 응답 상태와 데이터 전송의 구분을 학습 증거에 포함할 수 있다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 3,
@@ -178,46 +101,10 @@
       "improvement": "학습자가 Q와 R을 실제로 구분했는지 제출 후 짧게 확인하고, 충돌·누락 동작을 주장할 때는 해당 사례의 실행 결과를 별도로 기록한다."
     },
     "hints": {
-      "level": 3,
-      "reason": "dns-detour-learner (3): 단일 힌트는 같은 도메인 요청의 이름을 비교하고 요청·응답 쌍 및 재전송을 구분하라고 유도한다. 순서와 Base32 해답은 직접 제공하지 않는다. 본문만으로도 시작할 수 있으나 막힐 수 있는 Q/R 및 중복 판단을 돕는 힌트다.\ndns-detour-evidence (3): 브리핑은 풀이 순서를 직접 노출하지 않지만 요청/응답과 번호 규칙을 가르친다. 단일 힌트는 변수 라벨과 재전송을 비교하고 요청과 응답을 구분하도록 유도한다. 정답 문자열은 해설로 분리되어 있다.\ndns-detour-designer (3): 첫 힌트는 새 정답 조각을 주지 않고 같은 도메인의 요청 이름을 비교하고 재전송을 새 데이터와 구분하라고 방향을 좁힌다. 다만 본문 자체가 도메인·번호 순서·Base32 명령을 이미 제공하므로 이 한 단계 힌트는 보충 안내에 가깝다. 별도 해설에서 최종 값과 실행 명령을 공개해 힌트와 정답을 분리한다.",
-      "evidence": [
-        {
-          "path": "challenges/dns-detour/hints/1.md",
-          "quote": "같은 도메인으로 향하는 요청들의 이름을 비교하자. 요청과 응답 한 쌍, 재전송은 각각\n새 데이터가 추가된 것인지 구분해야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "번호 순서로 붙인 문자열을 아래 예제의 `문자열` 자리에 넣으면 복원할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/hints/1.md",
-          "quote": "조회 요청마다 바뀌는 부분이 있을 것이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/solve/README.md",
-          "quote": "실제 연결 문자열은 아래와 같다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/hints/1.md",
-          "quote": "같은 도메인으로 향하는 요청들의 이름을 비교하자. 요청과 응답 한 쌍, 재전송은 각각",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/README.md",
-          "quote": "printf '%s' '문자열' | base32 --decode",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/dns-detour/solve/README.md",
-          "quote": "6. `pwnden{dns_leaks_data_ok}`를 제출한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "독립 풀이에서 힌트가 실제 막힘을 해소하는지 확인하고, 막힌 지점에 맞춰 힌트 문구를 조정한다.\n현재 힌트는 한 단계 안내로 기능한다. 실제 학습자 세션에서 추가 막힘이 확인되면 그 막힘에 맞는 후속 단서를 추가한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 4,
@@ -274,5 +161,5 @@
       "improvement": "날짜, 이미지 식별자, 자동 해답·정리 결과를 포함한 verify 실행 산출물을 기록으로 보존한다.\n배포 자료의 수정 뒤에도 현재 snapshot에 같은 검증이 적용됐는지 확인할 수 있도록 재실행 날짜와 입력 revision을 기록한다."
     }
   },
-  "source_sha256": "fd0ced8ad58536f13a31431488b0f2662e929b5040abcb1feb9172fa79513d43"
+  "source_sha256": "1b3bfc4e415e27961672b973a11fc4d16a49ab5fc900efe389f2ef56048ffc6d"
 }

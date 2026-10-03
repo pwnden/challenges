@@ -7,37 +7,21 @@
 파일 이름이나 수정 시각만 보고 고르면 예전 문서를 사용하거나 바뀐 도착지로 보낼 수 있다.
 
 온전한서명은 발신자에게 확인한 공개키와 문서별 서명 파일을 길드에 맡겼다.
-이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다. 서명으로는
-문서 내용이 원문과 같은지 확인할 수 있다. 하지만 과거 승인본도 유효한 서명을
-가지고 있으므로, 서명 검증에 성공한 문서라고 해서 이번 납품에 써도 되는 것은 아니다.
-승인 안내에서 이번에 사용할 배치와 버전을 먼저 확인하자. 키와 문서는 이 실습을
-위해 만들었으며 실제 업무용 개인키는 사용하지 않는다.
+이 실습에서는 제공한 공개키를 발신자의 키로 믿고 사용해도 된다. 이번 납품의 승인 안내도 함께 전달했다. 키와 문서는 이 실습을 위해 만들었다.
 
 ::objective
 승인 안내에서 현재 사용할 버전을 확인하고, 공개키로 서명을 검증해 그 버전의 원문을 찾자.
 그 문서에 적힌 납품 확인 코드를 그대로 제출하자.
 ::
 
-::resources{title="문서와 검증 자료"}
-- `files/copy-a.txt`, `files/copy-b.txt`, `files/copy-c.txt`는 내용이 다른 사본이다.
-- `files/sender-public.pem`은 발신자의 공개키다. 이 실습에서는 키의 출처를 확인한 것으로 본다.
-- `files/delivery.sig`와 `files/delivery-v2.sig`는 버전별 RSA/SHA-256 분리 서명이다.
-- `files/trust-note.txt`에는 이번에 승인한 배치·버전과 각 버전에 사용할 서명 파일이 적혀 있다.
+::resources
 
-먼저 승인 안내를 읽고 현재 버전에 대응하는 서명을 고른다. 아래는 검증 형식이며
-서명 파일을 선택한 값으로 바꿔 각 사본의 결과를 비교하자. 사본은 편집하지 않는다.
-
-```sh
-cat files/trust-note.txt
-openssl dgst -sha256 -verify files/sender-public.pem -signature files/선택한서명 files/copy-a.txt
-```
-
-검증을 통과한 파일을 `cat 파일경로`로 읽고 `Confirmation code` 값을 확인한다.
-사본마다 확인 코드가 다르므로, 코드의 형식만 보고 정답을 고르지 않는다.
+- `files/copy-a.txt`, `files/copy-b.txt`, `files/copy-c.txt`: 전달받은 문서 사본.
+- `files/sender-public.pem`: 발신자에게 확인한 공개키.
+- `files/delivery.sig`, `files/delivery-v2.sig`: 버전별 RSA/SHA-256 분리 서명.
+- `files/trust-note.txt`: 이번 납품의 승인 안내.
 ::
 
-::knowledge{concepts="terminal-commands,detached-signatures"}
-::
 
 ::submission
 현재 승인본의 `Confirmation code`에 적힌 `pwnden{...}` 문자열을 그대로 제출하자.

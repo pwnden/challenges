@@ -7,29 +7,18 @@
 장치에는 비밀번호를 확인할 때 사용하는 계정 정보도 남아 있다.
 
 장치는 계정 정보에 비밀번호 자체를 저장하지 않고 **해시**라는 계산 결과를 저장한다.
-같은 비밀번호를 같은 방식으로 계산하면 같은 결과가 나오므로, 후보를 하나씩 계산해
-저장된 값과 비교할 수 있다. 이 장치는 SHA-256으로 계산한다. 아래 명령으로 후보를 시험해 보자.
 여섯 후보 중 어느 것이 이 계정의 비밀번호인지 확인해 보자.
 
 ::objective
 기록의 해시와 일치하는 비밀번호를 찾아 제출하자.
 ::
 
-::resources{title="전달받은 자료"}
-- `files/account.txt`: 계정 이름, 해시 방식과 저장된 비밀번호 해시.
-- `files/candidates.txt`: 후보 비밀번호 여섯 개.
+::resources
 
-터미널에서 `cat files/account.txt`, `cat files/candidates.txt`로 자료를 읽을 수 있다.
-후보 하나의 SHA-256은 아래 명령의 `후보`를 실제 값으로 바꿔 확인한다.
-출력 왼쪽의 64글자를 account.txt의 password_hash와 비교하자.
-
-```sh
-printf '%s' '후보' | sha256sum
-```
+- `files/account.txt`: 계정 정보.
+- `files/candidates.txt`: 예전에 사용한 비밀번호 여섯 개.
 ::
 
-::knowledge{concepts="terminal-commands,hashing"}
-::
 
 ::submission
 해시가 일치하는 후보 비밀번호를 그대로 제출하자. 후보에 적힌 `pwnden{...}` 전체가 비밀번호다.

@@ -69,10 +69,10 @@ Describe the intended objective and the actions the player can take directly. Ea
 - Scoped prerequisite abilities and available learning references before the step
   that needs them. Supply the supporting explanation in the brief when a separate
   player-facing resource is unavailable.
-- Starting actions within the target exercise: sign in with the supplied credentials, inspect a provided resource, or run a problem-specific command.
+- Starting access: supplied credentials, target address, scope and resource locations.
 - The answer format and any instance-specific behavior, such as keys changing after restart.
 
-The panel already displays title and category. Start the brief with the scenario or objective, preserving a useful heading hierarchy rather than repeating the title. Keep the brief free of the answer. Show language names, protocols and commands when understanding them is part of the exercise. When a command is useful, identify the prepared website terminal as its execution location. Explain expected output. Author setup, Go runner commands, image digests, Compose internals, host architecture and automated verification details belong in maintainer documentation.
+The panel already displays title and category. Start the brief with the scenario or objective. The default brief supplies the situation, goal, scope, resources and submission target. Let players choose how to investigate. Put tool selection, command options, decisive fields, filtering rules and ordered solving steps in optional hints or the walkthrough. A supplied fact such as an export format may remain in the scenario; it does not need a second explanation or a matching command example in the resources section. Keep generic concept references independent of the exercise's files and solution. Author setup and automated verification details belong in maintainer documentation.
 
 The platform owns the common workspace workflow: preparing environments, attaching
 the terminal, presenting declared files and services, downloads, hints and answer
@@ -125,7 +125,7 @@ supplies one visible heading and the matching shared presentation.
 | --- | --- | --- |
 | `::objective` | 의뢰 목표 | The action and observable completion result |
 | `::resources` | 전달받은 정보 | Files, accounts, credentials and supplied facts |
-| `::knowledge` | 시작 전 알아둘 것 | Starting concepts, examples and problem-specific tool use |
+| `::knowledge` | 시작 전 알아둘 것 | Essential neutral background; optional learning references carry general concepts |
 | `::submission` | 정답 형식 | Answer format and any value changes after restart |
 
 Close each block with `::`. An optional escaped `title` string supplies a more

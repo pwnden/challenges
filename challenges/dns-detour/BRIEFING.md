@@ -15,25 +15,12 @@
 DNS 조회 이름에 나눠 담긴 두 문자 조각을 합쳐, 원래 내용을 찾아 제출하자.
 ::
 
-::resources{title="전달받은 자료"}
-`files/dns.jsonl`을 파일 도구에서 열어 보자. 한 줄이 요청 또는 응답 하나다.
+::resources
 
-- `direction`: Q는 프로그램이 보낸 조회 요청, R은 받은 응답이다.
-- `id`: 요청과 응답을 짝지을 수 있는 번호다.
-- `qname`: 프로그램이 조회한 사이트 이름이다.
-
-`sync.box.test`로 보낸 조회 요청에서 번호 뒤의 두 문자 조각을 찾자.
-번호 순서로 붙인 문자열을 아래 예제의 `문자열` 자리에 넣으면 복원할 수 있다.
-
-```sh
-printf '%s' '문자열' | base32 --decode
-```
-
-이 자료는 두 조각을 붙인 문자열을 그대로 명령에 넣으면 된다.
+- `files/dns.jsonl`: 프로그램의 DNS 요청·응답 기록.
+- `direction`은 요청(Q)과 응답(R), `id`는 요청·응답 번호, `qname`은 조회한 도메인 이름이다.
 ::
 
-::knowledge{concepts="dns-records,base32"}
-::
 
 ::submission
 복원한 `pwnden{...}` 전체를 제출하자.

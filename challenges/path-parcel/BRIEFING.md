@@ -15,13 +15,11 @@
 ::
 
 ::resources
-사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.
-공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.
-입력칸은 경로를 그대로 받는다. 응답 내용이 어떤 파일인지 확인하자.
+
+사이트에서 파일명을 입력해 문서를 읽을 수 있다.
+`welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치 안내다.
 ::
 
-::knowledge{concepts="web-addresses,file-paths"}
-::
 
 ::submission
 운영 복구 기록의 `pwnden{...}` 전체를 제출하자.

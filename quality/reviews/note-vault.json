@@ -2,7 +2,7 @@
   "slug": "note-vault",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/note-vault/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/note-vault/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 4,
@@ -57,113 +57,16 @@
       "improvement": ""
     },
     "starting_context": {
-      "level": 3,
-      "reason": "note-vault-learner (3): 첫 시작 계정, 첫 메모 이름, 웹 도구로 로그인할 동선이 적혀 있고, 메모 주소에 번호가 드러난다는 단서를 준다. 선언된 HTTP·쿠키 선수 지식은 요청과 로그인 상태를 이해하는 데 맞는다. 다만 번호를 주소에서 직접 바꾸는 조작과 응답 본문 확인 방법은 본문에서 한 단계 더 추론해야 한다.\nnote-vault-evidence (3): README는 guest 자격 증명, 시작할 Welcome 메모, URL에 나타나는 번호, 목록 노출과 개별 조회 권한을 살펴보라는 단서를 준다. 선수 지식도 HTTP 요청·응답과 쿠키로 선언되어 있고 관련 노트는 상태와 본문을 구분한다. 실제 비교 요청을 어떻게 만들지는 힌트에서 더 구체화되므로 첫 본문만의 구체성은 기본 수준에 머문다.\nnote-vault-designer (3): 문제는 계정 정보, 시작할 메모, 웹 도구, URL의 메모 번호라는 출발점을 주며 선수 문서는 HTTP 요청·응답과 쿠키 신원을 설명한다. 번호 변경의 구체 조작은 직접 선택하게 남겨 핵심 탐색을 보존한다. 브라우저 사용 안내에서 주소 편집 단계를 한 문장 더 명시하면 막힘을 줄일 수 있다.\nnote-vault-alternative (3): 본문은 로그인 정보, Welcome에서 시작, 주소에 표시되는 고유 번호, 목록과 개별 조회 권한의 비교 관점을 준다. 선수 문서가 GET·응답과 쿠키 신원을 설명하므로 파일명이나 요청 API를 외울 필요는 없다. 다만 ID를 어떤 다른 값으로 바꿔 볼지 직접 추론해야 하고 정상·거부 응답의 구별은 본문에서 구체적으로 안내하지 않는다.\nnote-vault-tooling (3): 본문은 guest 자격 증명, Welcome을 여는 첫 행동, URL에 번호가 보인다는 단서를 제공한다. 연결된 선수 지식은 HTTP 요청·응답과 쿠키를 설명해 브라우저 도구 사용의 바탕을 준다. 다만 힌트·해설을 닫은 상태에서는 메모 번호를 바꿔 읽기 권한을 비교하는 구체 조작이 충분히 명시되지 않아 첫 탐색에 해석이 필요하다. 실제 서비스 준비 여부와 제출 화면은 플랫폼 제공을 전제로 한다.",
-      "evidence": [
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "웹 도구에서 사이트를 열고 위 계정으로 로그인한 뒤, 목록의 `Welcome`을 눌러 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "메모마다 고유한 번호가 있고, 메모를 열면 주소에 그 번호가 표시된다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/challenge.toml",
-          "quote": "requires = [\"http-messages\",\"http-cookies\"]",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "게스트로 로그인하면 `Welcome`이라는 자기 메모 하나가 보인다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/http-messages.md",
-          "quote": "상태 번호만으로 자료의 내용까지 알 수는 없다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "게스트 계정 `guest`를 전달했다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "여는 데서 시작한다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/http-messages.md",
-          "quote": "`GET`은 자료 조회에 흔히 쓰이는 요청 방식이다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/http-cookies.md",
-          "quote": "쿠키가 어디에서 왔고 어떤 권한을 나타내는지는 서버가 확인해야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/challenge.toml",
-          "quote": "tools = [\"web\"]\ncli = []",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/http-cookies.md",
-          "quote": "쿠키는 브라우저가 보관했다가 사이트로 다시 보내는 작은 `이름=값` 데이터다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "첫 메모를 연 뒤 주소 표시줄에서 번호를 확인할 수 있고, 그 번호를 바꾸어 다시 여는 비교를 하라는 최소 조작 안내를 추가한다.\n브라우저에서 주소 끝의 메모 번호를 어떻게 시험하는지 한 문장으로 안내해 주소 편집에 익숙하지 않은 초급 학습자의 조작 부담을 낮춘다.\n목록에서 보이지 않는 자료를 임의 번호로 열어 볼 때 응답에서 무엇을 확인해야 하는지 짧게 안내한다.\n본문에 자기 메모를 연 뒤 URL 번호를 바꿔 같은 읽기 기능의 접근 여부를 비교하라는 정도의 조사 지시를 추가하면 첫 탐색의 범위가 선명해진다. 서비스 준비와 키 제출이 플랫폼에서 자동 제공되는지도 플레이어 화면에서 한 줄로 알려주면 환경 전제가 분명해진다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 3,
-      "reason": "note-vault-learner (3): 입문 문제로서 자기 메모를 정상적으로 연 후 메모 번호와 계정 소유권이 서버 조회에서 함께 검사되는지 연결하면 된다. 브리핑이 권한 정책의 결론을 직접 말하지 않아 단순히 메모 목록에서 보이지 않는 것으로 보호 여부를 확정할 수 없다. 다만 하나의 순차 번호 비교가 핵심 판단 대부분을 차지한다.\nnote-vault-evidence (3): 선언 난도 입문에서 필요한 판단은 계정별 목록 필터가 개별 메모 읽기까지 보호하는지 비교하는 것이다. Welcome의 번호와 관리자의 번호를 같은 로그인 상태에서 대조하고 민감한 본문까지 확인하도록 해, 열린 포트나 성공 상태만으로 결론내리는 문제를 피한다. 더 복잡한 오답 후보나 다수 읽기 경로 비교를 기본 문제에 요구할 필요는 없다.\nnote-vault-designer (3): 입문 난도에서 목록에 보이는 자료와 번호로 직접 여는 개별 자료를 비교해 한 원리를 관찰하게 한다. 계정 신원을 바꾸지 않고 같은 세션에서 대상 식별자를 바꾸는 핵심 선택이 남아 있다. 오답 또는 거부와의 직접 비교를 본문에서 요구하지는 않지만 이 난도에서 복잡도를 더할 필요는 없다.\nnote-vault-alternative (3): 난도 1의 단일 원리 관찰에 필요한 판단은 자기 메모를 연 뒤 그 주소의 ID를 관리자 자료 ID로 바꾸고 접근 결과를 판별하는 것이다. 본문이 번호의 존재와 목록 대 개별 조회 차이를 짚어 주지만, 후보 2는 직접 발굴하지 않고 walkthrough에서 제시되므로 초급 수준의 오답 구분이나 후보 비교를 요구하지 않는다. 대안 API 경로도 같은 원리를 보여 주며 의도한 학습을 건너뛰지 않는다.\nnote-vault-tooling (3): 난도 1에 적합하게 로그인된 상태에서 자기 메모와 다른 메모를 비교해 개별 객체의 소유권 검사를 확인하도록 설계되었다. 초기 본문은 번호가 주소에 있다는 단서를 준다. 해설은 /notes/1에서 /notes/2로 바꾸도록 하므로 실제 추론은 단순하지만, 브리핑만으로 관리자 ID가 2라는 연결까지 도출해야 하는 단서는 약하다. 목표와 풀이가 같은 원리를 측정한다.",
-      "evidence": [
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "목록에서 어떤 항목을 보여 주는지와 메모를 열 때 어떤 접근을 허용하는지 살펴보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "같은 게스트 계정으로 관리자의 메모까지 읽을 수 있는지 확인해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/solve/README.md",
-          "quote": "같은 브라우저 탭에서 주소의 `/notes/1`만 `/notes/2`로 바꾸고 접속한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/solve/README.md",
-          "quote": "로그인 상태를 유지한 채 `/api/notes/2`를 열어도 메모 내용을 읽을 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "목록에서 숨겨져 있다는 것만으로 다른 사용자의 접근까지 막히는지",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "메모마다 고유한 번호가 있고, 메모를 열면 주소에 그 번호가 표시된다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/challenge.toml",
-          "quote": "difficulty = 1",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/vulnerable/app.py",
-          "quote": "for note in NOTES.values() if note[\"owner\"] == user",
-          "kind": "source"
-        }
-      ],
-      "improvement": "충분한 입문 구조다. 난도를 높이려는 목적이 아니라면 변경하지 않아도 된다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 4,
@@ -213,46 +116,10 @@
       "improvement": "준비 이미지에서 취약 버전 풀이와 패치 검사를 실행한 날짜·결과를 남겨 검사 코드와 실행 성공을 구분하고, 두 읽기 경로 및 정상 소유자 기능의 결과를 기록한다."
     },
     "hints": {
-      "level": 3,
-      "reason": "note-vault-learner (3): 한 개의 힌트가 목록에 보이는 항목과 직접 열 수 있는 자료가 같은지 묻고, 현재 메모 주소의 구분 값을 살피도록 한다. 이는 초급자의 다음 관찰을 유도하면서 관리자 메모 번호나 복구 키를 직접 공개하지 않는다. 주소 수정 단계는 해설에 남겨 정답 분리를 유지한다.\nnote-vault-evidence (3): 한 개의 힌트가 목록에 보이는 항목과 직접 열 수 있는 항목이 다를 수 있다는 비교 지점을 드러내고, 자기 메모 주소의 식별 값을 살피게 한다. admin 메모 ID나 최종 복구 키를 알려 주지 않아 탐색을 대신하지 않는다.\nnote-vault-designer (3): 본문은 정답 입력을 직접 주지 않고 시작 단서를 제공한다. 유일한 힌트도 목록 노출과 직접 조회가 같은지 질문하고 URL의 식별자를 주목하게 해 핵심 막힘을 겨냥한다. 안내가 약해 주소를 어떻게 시험할지 모르는 학습자에게는 추가 조작 단서가 도움 될 수 있다.\nnote-vault-alternative (3): 본문은 이미 번호가 주소에 보이고 목록과 직접 열기의 접근 허용을 비교하라고 해 핵심 판단을 남긴다. 유일한 힌트는 자기 주소에서 메모 구분 값을 찾으라고 구체화하지만 관리자 번호나 정답을 노출하지 않는다. 입문 문제에서 더 상세한 힌트 단계가 꼭 필요하지는 않다.\nnote-vault-tooling (3): 단일 힌트는 목록에서 보이는 항목과 직접 열 수 있는 항목이 같을지 묻고 자기 메모 주소의 번호를 관찰하게 해 다음 조사 지점을 제시한다. 이 단계는 번호 자체나 관리자 키를 알려주지 않아 브리핑의 핵심 비교를 대신하지 않는다. 해설은 구체 입력을 후속 단계에 남긴다.",
-      "evidence": [
-        {
-          "path": "challenges/note-vault/hints/1.md",
-          "quote": "목록에 보이는 메모와 직접 열 수 있는 메모가 반드시 같을까? 자신의 메모를 연 상태에서 주소를 살펴보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/hints/1.md",
-          "quote": "메모를 구분하는 값이 보인다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/hints/1.md",
-          "quote": "목록에 보이는 메모와 직접 열 수 있는 메모가 반드시 같을까?",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "메모마다 고유한 번호가 있고, 메모를 열면 주소에 그 번호가 표시된다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/hints/1.md",
-          "quote": "자신의 메모를 연 상태에서 주소를 살펴보자. 메모를 구분하는 값이 보인다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/README.md",
-          "quote": "목록에서 어떤 항목을 보여 주는지와 메모를 열 때 어떤 접근을 허용하는지 살펴보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/note-vault/solve/README.md",
-          "quote": "다른 주소 부분은 유지한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "필요하면 첫 힌트 뒤에 주소의 마지막 숫자를 바꿔 비교하라는 단계형 힌트를 추가해, 정답 메모 번호를 바로 주지 않으면서 조작을 돕는다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 4,
@@ -309,5 +176,5 @@
       "improvement": "문제별 이미지·실행날짜·해답/패치/정상 기능/정리 결과를 연결한 전용 작성 기록을 남겨 모음 검증보다 직접적으로 감사할 수 있게 한다."
     }
   },
-  "source_sha256": "c6e49ae79642e9121e9bcac89da87ed57b1e343a727059a63b6e70c3fd67e818"
+  "source_sha256": "ca7becf719a9812f0bd759e48aac9379873c0f3da045e7217a7d614d22ba7ba6"
 }

@@ -16,77 +16,13 @@ TCP 조각으로 나뉘어 있으므로 전달된 파일을 복원해 제보를 
 전송 기록에서 파일을 복원하고 공개 목록과 비교해, 비공개 문서가 실제로 전달됐는지 확인하자.
 ::
 
-::resources{title="전송 기록과 공개 범위"}
-- `files/delivery.pcap`는 세 HTTP 연결을 담은 작은 합성 PCAP이다.
-- `files/public-list.txt`는 전송 자료 중 공개 가능한 문서를 정한다.
-- 저장된 파일 분석만 필요하며 새 통신이나 라이브 캡처는 필요 없다.
+::resources
 
-먼저 요청 주소를 확인하고 전송 파일을 빈 폴더에 복원하자.
-
-```sh
-tshark -r files/delivery.pcap -Y http.request -T fields -e tcp.stream -e http.request.uri
-mkdir objects
-tshark -r files/delivery.pcap --export-objects http,objects
-file objects/*
-```
-
-같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다.
-각 묶음의 public/receipt.json을 `tar -xzOf 묶음파일 public/receipt.json | jq .`로
-읽고 공개 목록에 적힌 배치·버전·상태와 대조하자. 해당 묶음에서 공개 목록에 없는
-문서를 찾아 내용을 읽자. 폐기된 버전의 코드는 제출 대상이 아니다.
-요청 주소만으로는 실제로 받은 파일의 내용을 알 수 없다. 복원한 파일을 직접 확인하자.
+- `files/delivery.pcap`: 로컬 실험의 HTTP 통신을 담은 합성 PCAP.
+- `files/public-list.txt`: 공개 가능한 문서의 목록.
+조사 범위는 제공한 기록이다. 새 통신을 수집할 필요는 없다.
 ::
 
-::knowledge
-
-### 준비된 터미널 명령 사용하기
-
-터미널에는 한 줄의 명령을 입력하고 Enter를 누르면 된다. `files/`로 시작하는
-경로는 이 문제의 배포 파일을 가리킨다. 명령 예제의 파일명은 조사할 자료의 이름으로 바꿔 넣자.
-
-`printf '%s' 'hello'`는 줄바꿈 없이 `hello`를 출력한다.
-`|`는 왼쪽 출력물을 오른쪽 프로그램의 입력으로 전달한다.
-예를 들어 `printf '%s' 'hello' | sha256sum`은 정확히 다섯 글자를 해시한다.
-`hello` 뒤에 줄바꿈이 추가되면 해시도 달라진다.
-
-각 문제의 ‘전달받은 자료’에서 파일을 읽고 결과를 확인할 명령을 안내한다.
-Ctrl+C는 오래 실행되는 명령을 중단하고, 위쪽 화살표는 이전 명령을 다시 가져온다.
-
-### 폴더와 상대 경로
-
-경로는 파일이 어느 폴더에 있는지 나타낸다. `public/welcome.txt`는
-`public` 폴더의 `welcome.txt`다. `/`는 폴더와 파일 이름을 구분한다.
-
-상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,
-`..`는 한 단계 위의 폴더다. 예를 들어 `books`에서 `../music/song.txt`를 읽으면
-`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.
-
-파일 제공 기능은 입력 문자열과 실제 파일 위치를 함께 확인해야 한다.
-입력이 어느 폴더까지 도달할 수 있는지가 접근 범위를 결정한다.
-
-### 패킷에서 전송 자료 읽기
-
-PCAP은 통신 패킷을 순서대로 담는 파일 형식이다. TCP는 한 자료를 여러 조각으로
-전송할 수 있다. 분석기는 순서 번호로 조각을 연결해 대화를 재조립한다.
-`tcp.stream`은 같은 TCP 연결을 구분하는 번호다.
-
-`tshark -r 자료.pcap -Y http.request -T fields -e tcp.stream -e http.request.uri`는
-파일을 읽어 HTTP 요청의 연결 번호와 주소만 표시한다. `-r`은 저장된 파일을
-읽으며 라이브 캡처를 시작하지 않는다. `-Y`는 표시할 패킷의 조건이다.
-
-`mkdir objects`로 빈 폴더를 만든 뒤
-`tshark -r 자료.pcap --export-objects http,objects`를 실행하면 재조립된 HTTP
-전송 파일이 objects에 저장된다. 요청 주소를 봤다는 사실과 실제 파일 내용이
-남아 있다는 사실은 구분해야 한다. 기록에 조각이 빠졌다면 완전한 복원이 어렵다.
-
-`file objects/파일`은 실제 형식을 확인한다. tar.gz 파일이라면
-`tar -tzf 파일.tar.gz`로 내부 경로를 나열하고
-`tar -xzOf 파일.tar.gz 내부/문서.txt`로 선택한 문서 내용을 출력할 수 있다.
-
-같은 URL에서 여러 파일을 받으면 내보낸 이름에 번호가 붙을 수 있다. 내부 영수증의
-배치·버전·상태를 요구 사항과 비교해 파일을 고른다. JSON 영수증은 위 내용 출력에
-`| jq .`를 붙여 읽기 좋게 표시할 수 있다. 파일명만으로 현재 버전을 판단하지 않는다.
-::
 
 ::submission
 복원한 비공개 문서에서 찾은 `pwnden{...}` 복구 코드를 제출하자.

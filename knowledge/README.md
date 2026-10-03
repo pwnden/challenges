@@ -24,9 +24,11 @@
 | `packet-streams` | [패킷에서 전송 자료 읽기](packet-streams.md) |
 | `detached-signatures` | [문서와 분리된 서명 확인하기](detached-signatures.md) |
 
-작성자는 `BRIEFING.md`에 아래 블록을 둔다. `python3 tools/content.py`가
-공통 문서를 기존 `::knowledge` 블록으로 묶어 배포용 `README.md`에 반영한다.
-플레이어는 사이트의 문제 본문에서 읽고 현재 작업 공간을 계속 사용한다.
+기본 브리핑은 문제의 상황과 자료를 소개한다. 공통 개념은 `[learning]` 관계를
+통해 학습 연결에서 선택해 읽는다. 개념 문서는 문제와 독립된 원리와 예시를 다룬다.
+
+필수 배경을 본문에 포함할 때는 `BRIEFING.md`의 아래 블록을 사용할 수 있다.
+`python3 tools/content.py`가 배포용 `README.md`로 컴파일한다.
 
 ```md
 ::knowledge{concepts="http-messages,http-cookies"}

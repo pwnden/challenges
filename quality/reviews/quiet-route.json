@@ -2,7 +2,7 @@
   "slug": "quiet-route",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/quiet-route/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/quiet-route/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 4,
@@ -32,123 +32,16 @@
       "improvement": ""
     },
     "starting_context": {
-      "level": 4,
-      "reason": "quiet-route-learner (4): 초급 대상에게 필요한 서버 주소, 후보 파일, 공개 정책, 공개 경로와 첫 비교 명령이 본문에 있다. 선수 지식 문서는 curl 저장 옵션, cmp의 무출력 의미, ffuf 필터와 jq의 쓰임을 보충하고, 본문은 길이만으로 판단하지 말고 view 표시 및 실제 내용을 확인하라고 연결한다.\nquiet-route-evidence (3): 브리핑은 주소, 후보 목록, 정책 파일, 공개 endpoint와 기준 응답 비교, 실제 본문 확인 절차를 안내한다. 선수 지식은 curl 저장·상태 코드·본문·cmp·ffuf 필터를 설명한다. 다만 JSON `view` 표시와 jq 해석은 공통 지식에서 미리 설명되지 않고 브리핑에서 처음 안내되므로 첫 명령 이후 새 개념을 익혀야 한다. 후보 및 정책 자료는 실제 배포되어 확인 가능하다.\nquiet-route-designer (4): 본문이 대상 주소·후보 목록·정책·공개 경로와 첫 비교 명령을 제공한다. 선수 지식은 터미널·HTTP·응답 비교로 한정되며 공통 문서는 cmp, ffuf의 필터·속도·시간 옵션, 본문 확인법을 설명한다. 초급자가 조작법 때문에 핵심 비교에 도달하지 못할 가능성을 줄이고, 크기 대신 view 표시를 보라는 연결 단서도 제공한다.\nquiet-route-alternative (4): 첫 행동 두 baseline 요청의 저장·크기·cmp 예시, 서버와 후보 파일, 공개 정책을 제공한다. README는 본문 길이가 같은 응답이라는 혼란 지점과 fallback view 필터 선택 이유, 도구 옵션 및 후보 후 본문 확인까지 안내한다.\nquiet-route-tooling (3): 대상 주소, 후보 파일과 정책을 주고 curl/cmp/ffuf/jq의 역할 및 제한을 설명해 초급 사용자가 시작할 근거가 있다. 다만 브리핑은 ffuf 후보 이후 curl과 jq로 내용을 비교하라고 하지만 그 후속 조작의 완전한 예시 명령은 본문에 없다.",
-      "evidence": [
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "서버 주소는 문제 네트워크의 `http://app:8000`이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "먼저 서로 다른 없는 주소의 본문을 저장하고 비교하자.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/response-comparison.md",
-          "quote": "같은 대상의 서로 다른 없는 주소가 동일한 안내를 주는지 먼저 비교한다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/response-comparison.md",
-          "quote": "본문 길이가 같아도 내용은 다를 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "서버 주소는 문제 네트워크의 `http://app:8000`이다.\n- `files/paths.txt`에는 조사할 후보 경로 12개가 있다.\n- `files/public-policy.txt`는 공개 가능한 자료의 범위를 정한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "두 안내의 JSON을 읽고 공통 안내임을 나타내는 view 값을 확인하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "`files/paths.txt`에는 조사할 후보 경로 12개가 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "curl -sS http://app:8000/does-not-exist -o first.json -w '%{http_code}\\n'",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/files/public-policy.txt",
-          "quote": "Public: help and health status.\nStaff only: operational diagnostics and recovery codes.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "ffuf -w files/paths.txt -u http://app:8000/FUZZ -fr '\"view\":\"fallback\"' -t 2 -rate 10 -maxtime 15",
-          "kind": "source"
-        }
-      ],
-      "improvement": "`jq`로 JSON 필드를 확인하는 짧은 예시를 제공해 `view` 표식과 정책 자료를 연결하는 첫 판독 부담을 줄인다.\n후보 주소를 가져와 본문을 저장하고 jq로 정책 필드를 확인하는 한 줄 예시를 브리핑에도 제공한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 3,
-      "reason": "quiet-route-learner (3): 초급 수준에 맞게 없는 주소의 동일 본문 비교, fallback 표시를 이용한 필터 선택, 후보 본문과 공개 정책 대조라는 단서 연결이 남아 있다. 공개 help와 healthz가 유효 후보이므로 필터 결과 전체를 유출로 오인하지 않고 내용을 확인해야 한다. 안내문이 필터 문자열과 결과 의미를 상당 부분 알려주므로 해당 선택 자체의 탐색 폭은 작다.\nquiet-route-evidence (3): 초급 기준의 판단이 남아 있다. 없는 경로 둘을 비교해 fallback 기준을 만들고, 동일한 256바이트 응답 때문에 크기만으로 제외할 수 없음을 이해한 뒤 표시를 골라 필터링하고, 남은 세 후보 중 help·health와 ops-check를 실제 본문 및 정책으로 대조한다. 표식 자체는 본문에서 안내되어 있으나 최종 유출 판단은 단순한 URL 발견을 넘어선다.\nquiet-route-designer (3): 본문이 구체 필터 명령을 제공해 탐색 명령 자체의 선택 부담은 낮다. 그래도 초급 핵심인 기준 응답 비교, 필터 선택 근거 확인, 후보 JSON을 공개 정책과 대조하는 여러 단서 연결은 남아 있다. 해설상 공개 help/healthz와 민감한 ops-check를 구분하며, 단순히 URL 후보가 나온 것으로 결론내리지 않도록 한다. 실제 독립 초급 풀이 기록이 없어 체감 난도는 확인되지 않았다.\nquiet-route-alternative (3): 초급 기준의 비교·연결이 남아 있다: baseline 본문 식별, 같은 길이를 가진 응답의 표시 기준 선택, 세 후보를 정책 및 본문과 비교해야 한다. ops-check가 후보에 있고 힌트가 필드를 알려주므로 대안 이름 검색이 일부 탐색을 단축할 수 있으나, 공개 help/healthz 오탐 구분과 실제 응답 검증은 남는다.\nquiet-route-tooling (4): 서로 다른 누락 경로의 본문 비교에서 시작해 같은 크기 응답 때문에 크기 필터가 실패하는 함정을 거쳐, 고유 표시를 필터링하고 남은 실제 JSON을 정책과 대조하도록 해 초급 수준의 단서 연결과 오답 배제를 요구한다.",
-      "evidence": [
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "두 안내의 JSON을 읽고 공통 안내임을 나타내는 view 값을 확인하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "실제 내용과 공개 정책을 비교하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/files/public-policy.txt",
-          "quote": "Staff only: operational diagnostics and recovery codes.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "아래 예제는 해당 표시를 가진 응답만 제외한다. 남은 주소를 curl과 jq로 읽어",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/solve/README.md",
-          "quote": "없는 두 주소는 200과 동일한 공통 안내를 반환한다. 상태 코드로 찾은 후보에는\n없는 경로가 섞인다. 안내와 운영 자료는 모두 256바이트이므로 크기 필터는 실제\n자료까지 숨긴다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/files/paths.txt",
-          "quote": "help\narchive\nnews\ndelivery\nstatus\nhealthz\nnotes\nops-check\ncontact\nmanual\nreleases\nassets",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "아래 예제는 해당 표시를 가진 응답만 제외한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/solve/README.md",
-          "quote": "안내와 운영 자료는 모두 256바이트이므로 크기 필터는 실제\n자료까지 숨긴다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/solve/README.md",
-          "quote": "없는 경로가 섞인다. 안내와 운영 자료는 모두 256바이트이므로 크기 필터는 실제",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/solve/README.md",
-          "quote": "안내와 운영 자료는 모두 256바이트이므로 크기 필터는 실제",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/solve/README.md",
-          "quote": "help는 공개 도움말이다. ops-check는 staff를 대상으로 하는 복구 기능이며",
-          "kind": "source"
-        }
-      ],
-      "improvement": "실제 학습자가 공개 후보와 staff 전용 후보를 구분하는 데 어떤 비교에서 멈추는지 확인할 짧은 독립 풀이 기록을 수집한다.\n독립 학습자 풀이에서 정책과 응답 필드를 실제로 연결하는 단계가 난도 2에 맞는지 기록한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 4,
@@ -218,61 +111,10 @@
       "improvement": ""
     },
     "hints": {
-      "level": 2,
-      "reason": "quiet-route-learner (4): 첫 힌트는 길이 필터가 숨길 수 있는 이유와 fallback 표시를 고르는 근거를 상기시키고, 둘째 힌트는 ops-check의 audience/purpose 및 공개 정책 대조를 안내한다. 둘째 힌트는 식별할 필드까지 좁혀 주지만 복구 코드의 값을 직접 제공하지 않는다.\nquiet-route-evidence (4): 본문은 탐색 절차를 주지만 정답 경로는 공개하지 않는다. 첫 힌트는 크기 필터가 같은 길이 응답을 놓친다는 판단을 지원하고, 두 번째 힌트는 후보 응답을 정책과 비교하되 ops-check의 실제 응답과 핵심 필드를 확인하라고 해석을 구체화한다. 답 코드는 최종 해설에만 나온다.\nquiet-route-designer (3): 첫 힌트는 길이만으로 거르면 같은 길이의 민감 자료를 놓친다는 원인을 설명하고 구체 표시 필터와 결과 본문 확인으로 유도한다. 두 번째 힌트는 남은 후보 중 ops-check 응답의 audience/purpose와 정책을 대조하라고 하여 다음 막힘을 푼다. 정확한 제출 코드는 공개하지 않아 본문 비교와 정책 판단을 남긴다.\nquiet-route-alternative (3): 본문에서 baseline 및 view 필터 원리를 설명하고, 첫 힌트는 같은 크기 본문과 안내 표식 확인, 둘째 힌트는 후보 내용의 정책 비교를 준다. 마지막 힌트는 ops-check 경로·필드를 특정해 답 근접도를 높이나, 복구 코드 값 자체는 주지 않는다.\nquiet-route-tooling (3): 첫 힌트가 같은 크기의 응답을 size-only로 제거하면 실제 자료까지 빠질 수 있음을 짚고 구체 표시를 고르게 한다. 다음 힌트는 응답의 audience/purpose와 정책, recovery_code를 연결해 다음 조사 행동을 안내한다.\n부모 조정: 기본resources와선수설명이 정확한view=fallback값과완성된ffuf -fr명령을이미제시해 내용표식을찾고 필터기준을고르는판단을대신한다. 후보본문·정책비교는남아있으므로전체과업실패는아니지만 본문과핵심판단의분리는부분충족2로확정한다. 마지막힌트가구체적이라는이유의감점과구분한다.",
-      "evidence": [
-        {
-          "path": "challenges/quiet-route/hints/1.md",
-          "quote": "크기 필터만으로 제외하면 필요한 응답을 놓친다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/2.md",
-          "quote": "`/ops-check`는 안내 페이지와 다른 JSON을 반환한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/1.md",
-          "quote": "없는 두 주소의 본문에서 view 값을 확인하자. 이 서버는 크기가 같은 다른 내용도\n반환하므로 크기 필터만으로 제외하면 필요한 응답을 놓친다. -fr로 안내의 표시를 제외하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/2.md",
-          "quote": "`/ops-check`는 안내 페이지와 다른 JSON을 반환한다. `audience`와 `purpose`를\n공개 정책과 비교하고 `recovery_code` 필드를 확인하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/1.md",
-          "quote": "반환하므로 크기 필터만으로 제외하면 필요한 응답을 놓친다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/2.md",
-          "quote": "공개 정책과 비교하고 `recovery_code` 필드를 확인하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/1.md",
-          "quote": "없는 두 주소의 본문에서 view 값을 확인하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/1.md",
-          "quote": "-fr로 안내의 표시를 제외하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/hints/2.md",
-          "quote": "`recovery_code` 필드를 확인하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/quiet-route/README.md",
-          "quote": "ffuf -w files/paths.txt -u http://app:8000/FUZZ -fr '\"view\":\"fallback\"' -t 2 -rate 10 -maxtime 15",
-          "kind": "source"
-        }
-      ],
-      "improvement": "ffuf조작템플릿은유지하되 필터값은두기준응답의본문에서찾게하고, 정확한view/fallback조건은필요할때후속힌트로제공한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 3,
@@ -379,5 +221,5 @@
       "improvement": "검증 기록에 해답·패치 검사별 실행 결과와 통과한 정상/거부 경로를 남기면 재현 범위를 더 쉽게 확인할 수 있다.\n실행 출력이 보존된 기록에서 선언된 해답, 패치 거부, 공개 기능 유지 및 정리 결과의 범위를 확인해 연결한다."
     }
   },
-  "source_sha256": "7468fb1a9de22abaf8b731cd8675cec68243499caf11e7f8df82e6b62c7082f6"
+  "source_sha256": "1e67fbd5a6ae77c42dc2e78fc8bf9a38a455dc4dc7ae0757baffbfe729716ed9"
 }

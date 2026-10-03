@@ -14,33 +14,13 @@
 공통 안내와 다른 응답을 찾고, 실제 본문을 공개 정책과 비교해 잘못 공개된 복구 코드를 확인하자.
 ::
 
-::resources{title="서버와 후보 자료"}
-- 서버 주소는 문제 네트워크의 `http://app:8000`이다.
-- `files/paths.txt`에는 조사할 후보 경로 12개가 있다.
-- `files/public-policy.txt`는 공개 가능한 자료의 범위를 정한다.
-- `/help`와 `/healthz`는 공개 기능이다.
+::resources
 
-먼저 서로 다른 없는 주소의 본문을 저장하고 비교하자.
-
-```sh
-curl -sS http://app:8000/does-not-exist -o first.json -w '%{http_code}\n'
-curl -sS http://app:8000/another-missing -o second.json -w '%{http_code}\n'
-wc -c first.json second.json
-cmp first.json second.json
-```
-
-이 서버는 여러 JSON 응답의 길이를 같은 크기로 맞춘다. 크기가 같아도 내용은
-다를 수 있다. 두 안내의 JSON을 읽고 공통 안내임을 나타내는 view 값을 확인하자.
-아래 예제는 해당 표시를 가진 응답만 제외한다. 남은 주소를 curl과 jq로 읽어
-실제 내용과 공개 정책을 비교하자.
-
-```sh
-ffuf -w files/paths.txt -u http://app:8000/FUZZ -fr '"view":"fallback"' -t 2 -rate 10 -maxtime 15
-```
+- 서버 주소: 문제 네트워크의 `http://app:8000`.
+- `files/paths.txt`: 조사할 후보 경로 12개.
+- `files/public-policy.txt`: 공개 가능한 자료의 범위.
 ::
 
-::knowledge{concepts="terminal-commands,http-messages,response-comparison"}
-::
 
 ::submission
 비공개 점검 응답에서 확인한 현재 환경의 `pwnden{...}` 복구 코드를 제출하자.

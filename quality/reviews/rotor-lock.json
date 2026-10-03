@@ -2,7 +2,7 @@
   "slug": "rotor-lock",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/rotor-lock/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/rotor-lock/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 3,
@@ -37,202 +37,28 @@
       "improvement": ""
     },
     "starting_context": {
-      "level": 2,
-      "reason": "rotor-lock-learner (3): 본문은 대상 파일, 시작할 코드 위치, Python 실행 예시와 실패 출력, 필요한 Python·바이트·비트 용어를 설명한다. 반면 검사기 코드에서 어떤 흐름을 추적하고 허용 문자열 범위를 어떻게 알아낼지는 미리 안내하지 않아 첫 분석 단계는 학습자가 코드에서 찾아야 한다.\nrotor-lock-evidence (3): 시작 파일, 제안한 첫 조사 지점, 실행 명령, 인자 인용법, 성공/실패 출력과 핵심 비트 연산 용어가 제공된다. 선수 지식도 함수·반복문 및 바이트/비트 연산으로 선언되어 본문과 맞는다. 초급으로서 이 수준의 역변환을 유도하는 최소 예시는 첫 단계에 없어, 초기 독립 진행 가능성은 학습자 세션으로 확인되지 않았다.\nrotor-lock-designer (2): 자료와 시작 동작, Python 실행 예, 기대 출력이 명확하고 `program-reading` 선수 지식도 선언돼 있다. 그러나 checker는 `|` 비트 OR 및 bytes 반복 결과를 사용하고, 본문은 XOR와 시프트만 설명하므로 첫 코드 읽기에서 필요한 연산 하나가 미정의다. 회전을 말로 정의하지만 shift 조합을 직접 적용하는 설명은 후속 힌트에 있다.\nrotor-lock-alternative (4): 첫 행동으로 checker.py에서 main 비교와 encode를 보라고 명시한다. XOR·이동·바이트 회전을 설명하고 터미널 명령 및 오답 출력까지 보여 주므로 시작에 필요한 도구와 어휘가 제공된다. 이후 역산 원리를 알아내는 과제는 남는다.\nrotor-lock-tooling (3): 본문 перечисляет файлы и точку сравнения, определяет байтовые и битовые операции, указывает `python3` команду и ожидаемое отрицательное поведение. Требуемые Python loops/functions отнесены к prerequisites. Обратная ротация и значение previous раскрываются только через hints; CLI определяется manifest, а контракт проверки гарантирует, что он есть в образе, хотя доказательства конкретного pull/запуска здесь нет.\n부모 조정: checker의회전조합에 |가쓰이고 encode는bytes를숫자로순회한다. 기본본문은XOR와시프트·회전정의만설명하고공통program-reading은기본조건/반복읽기만다룬다. 이두동작과34바이트역변환반복의재현부담을설명하는출발지원이누락돼부분충족2로확정한다.",
-      "evidence": [
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "파일에서 `main`의 비교 부분을 먼저 찾고, 그 앞에서 호출하는 `encode`를 읽어 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "python3 files/checker.py 'pwnden{test}'",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/program-reading.md",
-          "quote": "`ord`는 문자의 숫자값을 얻는다. 각 입력 위치와 비교값이 어떻게 연결되는지 따라간다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/program-reading.md",
-          "quote": "입력 검사 코드를 읽을 때는 입력을 받는 부분, 반복과 조건, 성공 결과를 나눠 본다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "코드의 `^`는 XOR, `<<`와 `>>`는 비트 이동, `%`는 나머지 연산이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/files/checker.py",
-          "quote": "previous = ((mixed << shift) | (mixed >> (8 - shift))) & 0xFF",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/program-reading.md",
-          "quote": "각 입력 위치와 비교값이 어떻게 연결되는지 따라간다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "비트 회전은 한쪽 끝으로 밀려난 비트를 반대쪽 끝으로 옮기는 연산이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/challenge.toml",
-          "quote": "cli = [\"python3\"]",
-          "kind": "source"
-        }
-      ],
-      "improvement": "|비트OR와bytes순회의숫자값을사용전에설명하고, 역변환반복재현의코딩부담을declared선수능력과맞춘다. 첫바이트를독립계산하는작은예시로시작행동을지원한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 3,
-      "reason": "rotor-lock-learner (3): 난도 2인 코드 분석에서 입력 흐름을 읽고, 회전을 역방향으로 되돌린 뒤 XOR로 마스크와 상태값을 제거하는 단서 연결이 요구된다. 힌트와 해설은 출력값을 역변환하며 첫 바이트와 이후 상태를 구분하는 과정을 설명해 단순한 플래그 문자열 검색으로 끝나지 않는다. 다만 요구되는 조합 전체를 플레이어가 첫 단계에서 어떻게 쪼갤지에 대한 가이드는 제한적이다.\nrotor-lock-evidence (3): 문자열의 위치마다 마스크와 shift가 달라 각 위치 변환을 따라가고, TARGET을 이전 출력으로 사용하며, 역연산을 적용하는 추론이 남아 있다. 첫 바이트 예와 두 번째 힌트가 이전 입력이 아닌 이전 출력을 강조해 핵심 혼동을 다룬다. 다만 해설 스크립트는 역변환 계산을 대신해 주므로, 최종 과업 자체에서 별도 그럴듯한 오답 후보를 비교하는 판단은 제한적이다.\nrotor-lock-designer (3): 입력 바이트마다 위치별 mask, 이전 출력, 회전 횟수, TARGET을 연결해 역순으로 계산해야 한다. 특히 이전 출력의 의미는 그럴듯한 오해 지점이며 두 번째 힌트가 이를 분명히 한다. 선언된 난도 2에 맞는 제한된 분석 문제지만, 계산의 실제 단계는 복수다.\nrotor-lock-alternative (3): 풀이는 목표 배열을 읽고 회전을 역으로 돌린 다음 XOR을 되돌리며 인덱스별 값을 잇는 실질 추론이다. 오답을 형태 검색만으로 고를 경로는 보이지 않고, 순차 의존성이 출력 TARGET으로 해소된다. 다만 본문은 첫 실행 예시를 주고 힌트가 역변환을 거의 정해 주므로 초급 수준의 판단은 비교적 좁다.\nrotor-lock-tooling (3): Для difficulty=2 нужно восстановить цепь кодирования, инвертировать rotate-right и XOR и понять, что прошлое состояние известно по соседней TARGET позиции. Для каждого следующего байта надо связать константу, индекс и прошлый выход; это больше нескольких связанных решений, но текст не просит различать правдоподобные ложные алгоритмы/размеры и заранее сообщает, что преобразование обратимо и данные открыты.",
-      "evidence": [
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "관리자가 보낸 `files/checker.py`가 그 검사기다. 코드를 읽고 입력이 어떤 과정을 거쳐\n비교값이 되는지 분석한 뒤 이 장치가 받아들이는 문자열을 복원해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/2.md",
-          "quote": "`previous`는 앞선 입력이 아니라 앞선 출력이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/README.md",
-          "quote": "`TARGET[i]`를 `shift`만큼 오른쪽으로 회전해 `mixed`를 구한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "검사기는 입력한 문자열을 바이트 단위의 숫자로 바꾸고, 몇 가지 연산을 거친 결과를\n저장된 숫자 목록과 비교한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/files/checker.py",
-          "quote": "mixed = byte ^ ((0x53 + 13 * index) & 0xFF) ^ previous",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/files/checker.py",
-          "quote": "previous = ((mixed << shift) | (mixed >> (8 - shift))) & 0xFF",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/1.md",
-          "quote": "저장된 바이트를 같은 횟수만큼 오른쪽으로 회전하면 `mixed`가 된다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/challenge.toml",
-          "quote": "difficulty = 2",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "저장된 숫자 목록과 비교한다. 원래 비밀번호는 코드에 적혀 있지 않지만,",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/2.md",
-          "quote": "바로 앞의 `TARGET` 값을 쓰면 된다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "한 위치를 플레이어가 직접 역산해 보고, 다음 위치에서 previous가 TARGET[i-1]임을 연결하도록 작은 중간 확인값을 둘 수 있다.\nРассмотреть снижение заявленной сложности или добавить различение примеров, проверяющее понимание порядка и восьмибитной границы, сохраняя ответ вне основного текста."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
-      "level": 3,
-      "reason": "rotor-lock-learner (2): 플레이어는 후보 문자열을 제출하고 `unlocked`/`locked`를 구별할 수 있으며 해설은 끝에 문자를 붙인 오답을 거부하는 사례를 제시한다. 자동 해답은 정답과 잘못된 후보를 검사하지만, 정상 입력의 경계나 인코딩/길이 조건처럼 그럴듯한 오답 사례는 별도로 대조하지 않는다.\nrotor-lock-evidence (3): 정답 문자열은 제공 검사기에 넣어 `unlocked`를 확인하고, 끝에 임의 문자를 더한 입력은 `locked`가 된다고 해설한다. 자동 솔버도 성공 입력과 변형 오답을 별도 subprocess로 검사한다. 이는 이 단일 결정기의 수락 여부에 대한 유효한 음성 대조이며, 자기 인코딩 구현만 신뢰하지 않게 한다. 다만 위치별 중간값 비교를 별도 대조하거나 다른 형식/바이트 경계를 검증하지 않는다.\nrotor-lock-designer (3): checker는 정확한 변환 결과 전체를 TARGET과 비교해 승인하고, 불일치 입력을 거부한다. 플레이어는 `pwnden{test}` 예시로 오답 결과를 확인할 수 있으며 해답 자동화 코드도 복원 문자열과 끝에 문자를 붙인 경우를 분리해 검사하도록 작성돼 있다. 별도의 변조/누락 대조가 필요한 서비스나 패치 과제는 아니다.\nrotor-lock-alternative (3): 대상은 전체 인코딩 결과가 TARGET과 정확히 같은지 비교한다. 해설 풀이 스크립트에는 복원 입력을 받아들이고 끝에 !를 붙인 변형 입력은 거부하는 두 대조가 설계되어 있다. 이는 단순히 정답 형식이나 unlocked 문자열을 찾는 오답을 구분한다. 다만 이 snapshot은 실행 기록이 아니므로 성공 실행으로 판단하지 않는다.\nrotor-lock-tooling (3): Проверка реальная и точная: весь ввод в UTF-8 кодируется, преобразуется и сравнивается с TARGET; решатель пробует восстановленную строку и вариант с добавленным символом, а walkthrough отдельно сообщает `unlocked` и `locked`. Обратимость делает цель проверяемой. Второй кандидат — строка, передающая те же UTF-8 байты, — невозможен для UTF-8; иные байты не равны массиву TARGET. Ручных проверок валидатора флагов, разных неправильных длин или независимых контрольных примеров нет.",
-      "evidence": [
-        {
-          "path": "challenges/rotor-lock/README.md",
-          "quote": "위 예시 입력에는 `locked`가 나온다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/solve.py",
-          "quote": "flag + \"!\"",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/README.md",
-          "quote": "문자열 끝에 다른 문자를 붙이면 `locked`가 나온다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/solve.py",
-          "quote": "if accepted.returncode != 0 or accepted.stdout.strip() != b\"unlocked\":",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/solve.py",
-          "quote": "if rejected.returncode != 1:",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/files/checker.py",
-          "quote": "if encode(sys.argv[1].encode(\"utf-8\")) == TARGET:",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/solve.py",
-          "quote": "rejected = subprocess.run(",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/solve.py",
-          "quote": "rejected = subprocess.run(\n        [sys.executable, str(checker), flag + \"!\"], capture_output=True, check=False,\n    )",
-          "kind": "source"
-        }
-      ],
-      "improvement": "잘못된 첫 글자나 중간 글자 하나를 바꾼 후보도 거부되는 비교를 실행 기록 또는 풀이 절차에 포함해 전체 문자열 비교의 의미를 확인한다.\n일반 입력에 대해 거부 코드를 확인하는 것에 더해, 자체 역변환의 encode 결과가 TARGET과 정확히 같은지 자동으로 assert하면 계산 실수를 더 직접적으로 국소화할 수 있다.\n문제별 실행 검증 기록에 실제 정답 수락과 변형 입력 거부를 남긴다.\nПоказать один независимый контроль по длине или отдельному неверному входу и зафиксировать реальный вывод/код возврата в записи исполнения."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "hints": {
-      "level": 4,
-      "reason": "rotor-lock-learner (4): 첫 힌트는 마지막 회전을 오른쪽으로 되돌리는 것부터 시작하게 하고, 둘째 힌트는 `previous`가 앞선 입력이 아니라 앞선 출력임을 밝혀 실제 막히기 쉬운 상태 의존 지점을 해결한다. 전체 반복 코드와 정답은 해설에 남아 있다.\nrotor-lock-evidence (4): 첫 힌트는 역연산이라는 접근과 첫 바이트 계산을 안내하고, 두 번째는 previous가 앞선 출력이라는 의존성 해석을 분명히 한다. 해설은 그 뒤 전체 역변환과 제출 문자열을 제공해 힌트와 정답을 단계적으로 분리한다.\nrotor-lock-designer (3): 첫 힌트는 회전의 역변환과 XOR 복원을 안내하고, 두 번째는 이전 입력과 이전 출력의 혼동을 해결한다. 두 힌트 모두 풀이 경험에 필요한 서로 다른 막힘을 다루며, 완성 문자열과 전체 코드는 해설에 남겨 뒀다.\nrotor-lock-alternative (4): 힌트는 역회전/XOR의 연산 방향을 먼저 열고, 다음 힌트에서 previous가 직전 출력값이라는 혼동 지점을 분리해 설명한다. 정답 문자열과 전체 자동 복원 코드는 walkthrough에 있어 단계별 도움과 정답이 구분된다.\nrotor-lock-tooling (4): Первый hint сообщает обратный ход по ротации, XOR и приглашает вывести один байт. Второй снимает конкретное состояние previous: это предыдущий выход, непосредственно доступный в TARGET. Обе подсказки устраняют локальные препятствия, но не выдают общий скрипт или строку; полный цикл и строка размещены в walkthrough.",
-      "evidence": [
-        {
-          "path": "challenges/rotor-lock/hints/1.md",
-          "quote": "저장된 바이트를 같은 횟수만큼 오른쪽으로 회전하면 `mixed`가 된다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/2.md",
-          "quote": "`previous`는 앞선 입력이 아니라 앞선 출력이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/2.md",
-          "quote": "앞서 복원한 글자가 다음 계산을 좌우하는지 구분해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/solve/README.md",
-          "quote": "복원된 플래그는 **`pwnden{rotate_then_xor_then_check}`**다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/1.md",
-          "quote": "마지막 연산은 왼쪽 회전이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/2.md",
-          "quote": "바로 앞의 `TARGET` 값을 쓰면 된다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/rotor-lock/hints/1.md",
-          "quote": "한 바이트부터 계산해 보자.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 4,
@@ -309,5 +135,5 @@
       "improvement": "문제전용작성기록에선언한이미지·실행날짜·역변환해답·정답/오답검사·정리결과를연결한다."
     }
   },
-  "source_sha256": "2b0c4dd81d6b3fb8c4082bf72bd8990d4c66e8c5e4aa22018b65e5142df49943"
+  "source_sha256": "329ec7b32e2a863b6530cf1670e3b490538f5ab4207c64f41c202b88cecbdf4e"
 }

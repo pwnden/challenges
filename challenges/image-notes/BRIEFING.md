@@ -14,26 +14,12 @@
 공개 이미지의 속성을 조사하고, 이번에 내보낸 배너 버전에 해당하는 내부 복구 코드를 찾자.
 ::
 
-::resources{title="공개한 파일과 배포 규칙"}
-- `files/notice.png`: 파란 테두리와 밝은 중앙 영역을 가진 배너 파일.
+::resources
+
+- `files/notice.png`: 외부에 공개한 배너 파일.
 - `files/export-policy.txt`: 공개해도 되는 정보의 범위.
-
-터미널에 파일 조사 도구가 준비돼 있다. 먼저 규칙과 파일 형식을 확인하자.
-
-```sh
-cat files/export-policy.txt
-file files/notice.png
-exiftool files/notice.png
-```
-
-내보내기 기록의 `asset_id`는 배너 ID, `revision`은 배너 버전이다.
-메모 목록에는 다른 배너와 교체 전 버전의 기록도 섞일 수 있다.
-이번 내보내기 기록과 ID·버전이 같고 `state`가 `active`인 메모가 조사 대상이다.
-JSON을 읽을 때 첫 번째 코드나 버전 번호만 보고 선택하지 말자.
 ::
 
-::knowledge{concepts="terminal-commands,image-metadata"}
-::
 
 ::submission
 이번 배너 버전에 해당하는 활성 메모의 `pwnden{...}` 복구 코드 전체를 제출하자.

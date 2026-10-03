@@ -2,7 +2,7 @@
   "slug": "midnight-trace",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/midnight-trace/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/midnight-trace/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 4,
@@ -32,83 +32,16 @@
       "improvement": ""
     },
     "starting_context": {
-      "level": 4,
-      "reason": "midnight-trace-learner (4): 시작 전에 조사 대상과 두 파일의 역할, 첫 파일을 여는 행동, JSON 한 줄·필드 의미·상태 코드·같은 request_id로 연결하는 방법을 설명한다. 파일 도구 및 요구 선수 개념 선언과도 일치해 코딩이나 저장소 탐색을 요구하지 않는다. 첫 행동부터 정답 키를 알려 주지는 않는다.\nmidnight-trace-evidence (4): 시작 자료가 두 파일의 역할, JSON 필드, 상태 의미, 요청 ID 상관관계, 정상 자기 요청과 거부 요청을 구체적으로 설명한다. 특히 응답 상태와 response 내용을 함께 보라고 하므로 200만으로 전달을 단정하지 않는다. 실제 플랫폼에서 파일을 여는 화면의 사용성은 이 자료만으로 평가할 수 없다.\nmidnight-trace-designer (4): 브리핑이 첫 파일 열기부터 필드 해석, 상태코드 의미, 같은 요청 ID로 연결하기까지 설명하고, 대상은 텍스트 읽기와 비교만 요구한다. 선수 문서도 HTTP 응답 상태와 개별 자료별 소유권 확인을 짧게 보충한다. 작성 기록의 대상 능력(브라우저·텍스트 읽기)과 본문이 일치한다.",
-      "evidence": [
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "파일 도구에서 먼저 `files/access.log`를 열어 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "같은 요청은 두 파일에서 같은 `request_id`를 갖는다.\n이 값을 기준으로 요청 기록과 응답 내용을 연결해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/challenge.toml",
-          "quote": "requires = [\"http-messages\",\"object-ownership\"]",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "`access.log`에서 **누가 요청했는지**, `audit.jsonl`에서\n**누구의 자료를 어떤 내용까지 보냈는지** 확인할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "파일마다 기록 순서가 다르다. 같은 요청은 두 파일에서 같은 `request_id`를 갖는다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "판단하려면 응답 상태와 `response`의 내용을 함께 확인해야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "파일마다 기록 순서가 다르다. 같은 요청은 두 파일에서 같은 `request_id`를 갖는다.\n이 값을 기준으로 요청 기록과 응답 내용을 연결해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/http-messages.md",
-          "quote": "응답의 `200`은 요청 성공,\n`403`은 접근 거절, `404`는 찾을 수 없는 자료를 뜻한다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/object-ownership.md",
-          "quote": "개별 자료를 읽는 요청마다 소유권이나 공유 권한을 확인해야 한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 3,
-      "reason": "midnight-trace-learner (3): 입문 문제에 필요한 판단은 실제로 남아 있다. 여섯 요청에서 guest를 찾고, 성공과 거부/없음을 나눈 다음 ID로 감사 기록을 연결해 owner와 response를 비교한다. 정상 자기 자료 키가 그럴듯한 오답으로 존재하고 로그 순서도 다르다. 본문이 이미 비교 방법과 필드 의미를 안내하므로 다단계 추론 부담은 과하지 않지만, 고난도 대안이나 충돌 증거까지 다루는 문제는 아니다.\nmidnight-trace-evidence (4): 입문 난도에 필요한 구체적인 증거 연결과 혼동하기 쉬운 대안 구분이 있다. access.log의 순서는 req-205 다음 req-206이지만 audit.jsonl은 req-206부터 역순이며, guest 자기 내보내기 req-202와 거부 req-203, 없는 자료 req-204가 후보를 구분한다. req-205는 guest/200이고 같은 ID의 audit 행은 owner=ops 및 recovery_key를 기록한다.\nmidnight-trace-designer (3): 입문 목표에 필요한 실질 판단은 게스트 성공 요청을 고른 뒤 요청 ID로 다른 기록을 찾아 요청자와 소유자를 비교하고 응답 본문까지 확인하는 것이다. 자기 자료 성공·거부·404가 함께 있어 상태나 경로만으로 답을 고를 수 없고, 배포된 로그는 순서도 다르다. 이 연결은 선언 난도에 알맞다. 수준 4에 해당할 만큼 다양한 해석 경계나 더 어려운 오답을 풀이자가 직접 다루도록 요구하지는 않는다.",
-      "evidence": [
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "복구 키가 여러 개 보이므로, 목표에 해당하는 요청의 값을 골라야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/files/audit.jsonl",
-          "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"action\": \"export\", \"owner\": \"ops\", \"response\": {\"recovery_key\": \"pwnden{follow_the_request_not_the_clock}\"}}",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/files/access.log",
-          "quote": "{\"timestamp\": \"2026-10-02T05:50:30.451+00:00\", \"request_id\": \"req-205\", \"user\": \"guest\", \"method\": \"GET\", \"path\": \"/exports/42\", \"status\": 200}",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "정상적인 내보내기와\n거부된 요청도 섞여 있다. 복구 키가 여러 개 보이므로, 목표에 해당하는 요청의 값을 골라야 한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 4,
@@ -153,31 +86,10 @@
       "improvement": ""
     },
     "hints": {
-      "level": 3,
-      "reason": "midnight-trace-learner (3): 한 개의 힌트는 정답을 말하지 않고 성공한 요청 중 요청자와 소유자가 다른 경우를 찾도록 돕고, 두 기록에 필드가 나뉘면 동일 ID로 연결하라고 안내한다. 입문 목표에 맞는 단일 막힘 지원이다. 기본 본문만으로 이미 이 연결 방법을 제공하므로 힌트의 추가 가치는 작지만, 정답 키는 해설에 남겨 둔다.\nmidnight-trace-evidence (3): 기본 본문만으로 풀이가 가능하고 힌트는 요청자와 소유자가 다른 성공 요청을 먼저 찾고, 두 파일에 필드가 나뉘면 request_id로 연결하라는 적절한 절차를 제공한다. 힌트가 정답 ID나 키를 노출하지는 않는다. 입문 문제여서 단계별 힌트가 하나인 점은 기능상 부족하다고 보지 않는다.\nmidnight-trace-designer (3): 본문은 목표에 필요한 자료와 필드를 설명하되 요청 ID와 정답 요청을 직접 지목하지 않는다. 단일 힌트는 성공 요청의 요청자와 자료 소유자를 비교하고 다른 파일에서 동일 ID를 찾으라는 핵심 연결을 돕는다. 입문 문제의 본문만으로도 시작은 가능하고, 힌트가 키 문자열을 공개하지 않는다. 힌트 이전보다 새 판단 방법을 제공하지만, 단계별 막힘이 여러 개 있는 문제는 아니므로 추가 힌트가 꼭 필요해 보이지 않는다.",
-      "evidence": [
-        {
-          "path": "challenges/midnight-trace/hints/1.md",
-          "quote": "성공한 요청에서 요청자와 자료 소유자가 다른 경우를 찾아보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/hints/1.md",
-          "quote": "한 기록에 둘 다 없다면 같은 `request_id`를 가진 다른 기록과 연결해 확인할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/hints/1.md",
-          "quote": "성공한 요청에서 요청자와 자료 소유자가 다른 경우를 찾아보자.\n한 기록에 둘 다 없다면 같은 `request_id`를 가진 다른 기록과 연결해 확인할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/midnight-trace/README.md",
-          "quote": "복구 키가 여러 개 보이므로, 목표에 해당하는 요청의 값을 골라야 한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 4,
@@ -249,5 +161,5 @@
       "improvement": "재현성을 높이려면 이 문제의 자동 해답 및 대조 검사 실행 로그를 날짜·명령·결과와 함께 보존하고 이번 실행 여부와 분리해 연결한다."
     }
   },
-  "source_sha256": "be8bfdf030e7438b95b0a4814be4626f1654623cec825775b97d503ac6869bc1"
+  "source_sha256": "83357dcd446262de5b529052aecfdd8441bf0b5767e31b81273b551dc0448278"
 }

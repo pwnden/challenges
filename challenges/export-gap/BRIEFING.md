@@ -16,31 +16,13 @@ JSON 사본으로 내려받을 수 있다. 손님은 운영 담당자의 복구 
 같은 문서를 일반 조회와 내보내기로 요청해 권한을 비교하고, 잘못 공개된 복구 코드를 찾자.
 ::
 
-::resources{title="실습 계정과 API"}
-- 터미널의 서비스 주소는 `http://app:8000`이다.
-- 로그인은 `POST /api/login`, 계정은 `guest`, 비밀번호는 `lab-guest`다.
-- `GET /api/catalog`는 문서의 ID·소유자·제목만 보여 준다.
-- `GET /api/notes/문서ID`는 본문 조회다.
-- `POST /api/exports`에 `{"note_id":문서ID}`를 보내면 기본 요약 사본을 요청한다.
-- `GET /`에는 제공하는 작업과 내보내기 형식의 안내가 있다.
+::resources
 
-먼저 로그인 쿠키를 저장하고 목록과 자기 문서를 읽자.
-
-```sh
-curl -sS -c cookies.txt -H 'Content-Type: application/json' \
-  -d '{"username":"guest","password":"lab-guest"}' http://app:8000/api/login
-curl -sS -b cookies.txt http://app:8000/api/catalog | jq .
-curl -i -b cookies.txt http://app:8000/api/notes/7
-```
-
-자기 문서의 정상 동작을 확인한 뒤, 목록에서 다른 소유자의 문서를 골라 두 작업을
-비교하자. 쿠키와 응답 파일은 문제를 종료하면 지워지는 임시 공간에 저장된다.
-기본 요약 사본에는 문서 ID·제목·소유자가 담기고 본문은 빠진다. 상태가 200이어도 실제 본문이 제공됐는지
-확인하고, 형식에 따라 반환 내용과 권한 검사가 달라지는지 비교하자.
+- 서비스 주소: `http://app:8000`.
+- 손님 계정: 아이디 `guest`, 비밀번호 `lab-guest`.
+- 서비스 첫 화면에 로그인·문서 조회·내보내기 API 안내가 있다.
 ::
 
-::knowledge{concepts="terminal-commands,http-messages,http-cookies,curl-json"}
-::
 
 ::submission
 잘못 허용된 내보내기의 본문에서 찾은 현재 환경의 `pwnden{...}` 복구 코드를 제출하자.

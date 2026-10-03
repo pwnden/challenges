@@ -2,7 +2,7 @@
   "slug": "borrowed-badge",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/borrowed-badge/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/borrowed-badge/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 4,
@@ -42,93 +42,16 @@
       "improvement": ""
     },
     "starting_context": {
-      "level": 3,
-      "reason": "badge-learner (4): 선수 자료가 Action/Resource, 와일드카드, 암묵 거절, Deny 우선과 동작별 구분을 설명한다. 브리핑은 team-reader, 공유 노트, 변경 기록, 기능 안내와 주소창 조작을 알려주며 실제 화면에는 운영 문서의 링크, 규칙, 요청 동작 이름이 표시된다. 학습자는 구체적 요청을 그 자료에서 알아내면 된다.\nbadge-evidence (3): 본문은 계정, 공유 노트, 기록 링크, 문서 용도, 기능 이름, 주소창에서 요청값을 바꿀 수 있음을 알려주고 선수 문서는 별도 동작, 패턴, Deny 우선순위를 정의한다. 따라서 브라우저에서 시작해 비교할 기반은 있지만 실제 요청 파라미터와 버전 판별 방식은 첫 탐색으로 찾아야 한다.\nbadge-designer (3): 문서는 복구 키의 용도, 계정 이름, 공유 노트, 정책 필드와 와일드카드 규칙, 제출 형식을 시작 전에 설명한다. 웹 주소창에서 경로와 요청값을 살피거나 바꾸라고 안내하고, 실제 홈 화면에는 정책과 기능 이름이 노출된다. 구체 주소 문법과 상태 코드 해석은 본문에 없어 첫 화면 관찰에 의존하지만, 대상 페이지의 링크와 정보가 이 공백을 보완한다.",
-      "evidence": [
-        {
-          "path": "challenges/borrowed-badge/README.md",
-          "quote": "문서 목록에는 이름과 용도가 적혀 있고, 사이트의 기능 안내에는 각 요청에 해당하는 동작 이름이 표시된다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/resource-policies.md",
-          "quote": "현재 문서 읽기와 기록에 저장된 문서 읽기는 서로 다른 동작일 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/vulnerable/web/App.vue",
-          "quote": "<li>변경 기록 목록: read-history</li><li>기록에 저장된 문서: read-version</li>",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/README.md",
-          "quote": "공유 노트의 현재 문서와 변경 기록 링크로 기능을 확인할 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/README.md",
-          "quote": "웹 도구의 주소창에서 페이지 경로와 요청 값을 살펴보거나 바꿀 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/resource-policies.md",
-          "quote": "일치하는 허용 규칙이 없으면 거절하며,\n일치하는 `Deny` 규칙이 있으면 허용 규칙이 있어도 거절한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/README.md",
-          "quote": "이번 사이트는 대소문자를 구분한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "첫 기록 링크의 제목/값이 어느 버전의 복구 키 포함 가능성을 뜻하는지 본문 또는 화면 안내에서 명시해 첫 조사 뒤 버전 선택 기준을 분명히 한다.\n브라우저 조작을 처음 하는 학습자를 위해 기록 화면에서 링크를 따라가며 요청 이름을 확인하는 방법과 거절 응답의 의미를 간단히 설명한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 4,
-      "reason": "badge-learner (3): 초급 수준의 실제 판단이 있다. 공유 문서의 현재/기록 기능에서 동작 이름을 관찰하고, read* 허용과 read 전용 거절을 문서 이름과 함께 비교한 뒤 운영 문서의 기록 접근을 시도한다. 기록 제목이 다른 r1/r2 중 비밀 값이 있는 버전을 골라야 한다. 선수 설명이 비교 기준을 주므로 요구 난도에 맞는다.\nbadge-evidence (4): 선수 지식의 wildcard 의미, 페이지에 표시되는 세 동작 이름, 자원별 정책을 연결해 현재 read와 history/version 읽기를 대조하고 기록 중 어느 것이 키를 담는지 선택해야 한다. 단순 성공 코드와 비밀값 응답을 구분하며 정상 공유 기록, 거부 현재 문서, 과거 기록이라는 그럴듯한 결과를 비교한다.\nbadge-designer (4): 초급 수준에 맞게 학습자는 공유 노트에서 관찰한 기능 이름, 문서 이름, 팀원 정책을 연결해야 한다. 현재 읽기 거부는 잘못된 단서가 될 수 있고, 최근 기록에는 키가 없어 기록 제목·버전을 구분하는 추가 선택도 필요하다. 대상에는 정상 공유 노트, 개인 초안, 운영 문서, 서로 다른 기록이 있어 비슷한 오답을 가려낼 수 있다.",
-      "evidence": [
-        {
-          "path": "challenges/borrowed-badge/README.md",
-          "quote": "공유 노트에서 문서를 읽는 기능을 살펴본 뒤, 그 규칙이 운영자의 자료를 읽는\n다른 경로에도 적용되는지 조사하자.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/resource-policies.md",
-          "quote": "동작 이름에도 같은 규칙을 적용한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/solve/README.md",
-          "quote": "최근 기록 `r2`에는 키를 다른 곳으로 옮겼다는 안내만 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/vulnerable/web/App.vue",
-          "quote": "<li>현재 문서: read</li><li>변경 기록 목록: read-history</li><li>기록에 저장된 문서: read-version</li>",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/vulnerable/policy.json",
-          "quote": "{\n  \"Statement\": [\n    {\"Effect\": \"Allow\", \"Action\": \"read*\", \"Resource\": \"locker/team-*\"},\n    {\"Effect\": \"Deny\", \"Action\": \"read\", \"Resource\": \"locker/team-admin\"}\n  ]\n}",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/solve/README.md",
-          "quote": "최근 기록 `r2`에는 키를 다른 곳으로 옮겼다는 안내만 있다.\n   첫 작성 기록 `r1` 링크를 열거나 `/version?resource=locker%2Fteam-admin&version=r1`을 요청한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/AUTHORING.md",
-          "quote": "공유 노트의 정상 기능과 운영 문서의 거절을 관찰한 뒤, 요청 동작과 거절 규칙의 적용 범위를 비교해 별도 읽기 경로를 찾아야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/vulnerable/app.py",
-          "quote": "'locker/team-admin': {'r1': ('복구 절차 첫 작성', ITEMS['locker/team-admin']), 'r2': ('민감한 값 분리', '복구 키는 별도 운영 기록으로 옮겼습니다.')}",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 4,
@@ -178,36 +101,10 @@
       "improvement": ""
     },
     "hints": {
-      "level": 3,
-      "reason": "badge-learner (3): 유일한 힌트는 공유 노트의 현재 문서와 변경 기록에서 요청 동작 이름을 비교하라고 안내한다. 본문에 있는 단서를 다음 단계로 연결하지만, 어떤 권한 패턴이 빠졌는지나 운영 문서의 URL/버전 답을 공개하지 않는다.\nbadge-evidence (4): 본문과 선수 지식이 시작 경로와 정책 비교의 필요한 기초를 주고, 단일 힌트는 현재/기록 기능의 동작 이름 및 거절 규칙의 적용 여부를 비교하라고 안내한다. 정확한 경로, 운영자 자원값, 키가 있는 버전은 해설에 남겨 답을 직접 노출하지 않는다.\nbadge-designer (3): 유일한 힌트는 같은 문서라도 요청 동작이 다를 수 있다는 핵심 비교를 제시하고, 공유 문서의 주소와 동작 이름을 살펴보도록 안내한다. 정답 경로나 문서 이름 변경은 알려 주지 않아 스스로 정책 적용을 비교할 여지가 남는다. 이 초급 문제의 주된 추론 장애를 직접 돕는다.",
-      "evidence": [
-        {
-          "path": "challenges/borrowed-badge/hints/1.md",
-          "quote": "공유 노트의 현재 문서와 변경 기록을 열었을 때 주소와 동작 이름을 비교하자.\n운영자 문서의 거절 규칙이 그 동작들에 각각 맞는지 확인해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/README.md",
-          "quote": "공유 노트에서 문서를 읽는 기능을 살펴본 뒤, 그 규칙이 운영자의 자료를 읽는\n다른 경로에도 적용되는지 조사하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/hints/1.md",
-          "quote": "공유 노트의 현재 문서와 변경 기록을 열었을 때 주소와 동작 이름을 비교하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/hints/1.md",
-          "quote": "운영자 문서의 거절 규칙이 그 동작들에 각각 맞는지 확인해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/borrowed-badge/hints/1.md",
-          "quote": "같은 문서를 읽는 기능도 요청하는 동작이 다를 수 있다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 4,
@@ -269,5 +166,5 @@
       "improvement": "향후 재설계된 snapshot에서 verify.py를 다시 실행하고 날짜·작업 트리 식별자를 기록해 현 상태와 연결한다.\n검증 실행의 날짜, 대상 revision 또는 이미지 digest, 명령별 결과를 별도 실행 기록으로 보존한다."
     }
   },
-  "source_sha256": "ab52b09ff731249a0bbe745196fb3b8b4c76766b060897795ac47f2b992997a5"
+  "source_sha256": "368ccc63ff07dbb3e7c4ddbb3840a7b1e791f4c0a9e5a6d71fc92bfae6f5cb66"
 }

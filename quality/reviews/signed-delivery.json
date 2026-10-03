@@ -2,7 +2,7 @@
   "slug": "signed-delivery",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "2026-10-04 Codex parent reassessment for direct submission; existing criterion levels retained after source review. Earlier independent panels and text reviews remain historical. Current text gate: quality/text-reviews/signed-delivery/2026-10-04-direct-submission.md",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 4,
@@ -27,43 +27,16 @@
       "improvement": ""
     },
     "starting_context": {
-      "level": 4,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 제공 자료, 승인 안내를 읽는 첫 행동, OpenSSL 검증 형식, 성공 여부를 비교한 뒤 cat으로 코드를 읽는 절차가 본문과 선수 지식에 있다. 코드의 위치와 전체 문자열 제출이 명시되어 별도 해시 계산이나 포장을 요구하지 않는다.",
-      "evidence": [
-        {
-          "path": "challenges/signed-delivery/BRIEFING.md",
-          "quote": "먼저 승인 안내를 읽고 현재 버전에 대응하는 서명을 고른다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/signed-delivery/BRIEFING.md",
-          "quote": "검증을 통과한 파일을 `cat 파일경로`로 읽고 `Confirmation code` 값을 확인한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 4,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 현재 버전 확인, 대응 서명 선택, 세 사본의 검증 비교가 필요하다. 과거 서명에만 통과하는 문서와 현재 버전이지만 도착지·코드가 바뀐 문서를 구분한다. 세 코드의 길이가 같고 세 문서의 크기도 같으므로 정답 형식이나 크기는 선택 근거가 되지 않는다. 소수 후보를 제출해 추측하는 방법까지 막는 설계는 아니다.",
-      "evidence": [
-        {
-          "path": "challenges/signed-delivery/BRIEFING.md",
-          "quote": "서명 검증에 성공한 문서라고 해서 이번 납품에 써도 되는 것은 아니다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/signed-delivery/files/copy-a.txt",
-          "quote": "Destination: Depot-D",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/signed-delivery/authoring/check.py",
-          "quote": "assert len({p.stat().st_size for p in copies}) == 1",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 4,
@@ -88,21 +61,10 @@
       "improvement": ""
     },
     "hints": {
-      "level": 3,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 첫 힌트는 현재 버전에 맞는 서명 선택과 후보 검증을 안내한다. 두 번째는 통과 사본과 코드 읽기를 밝힌다. 최종 힌트가 파일명을 공개하는 기존 수준은 유지되므로 단계 구분은 있지만 독립 판단을 모두 보존하지는 않는다.",
-      "evidence": [
-        {
-          "path": "challenges/signed-delivery/hints/1.md",
-          "quote": "같은 공개키와 그 서명을 사용해 세 사본을 각각 검증한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/signed-delivery/hints/2.md",
-          "quote": "`cat files/copy-c.txt`로 문서를 읽고 `Confirmation code` 값을 그대로 제출한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 4,
@@ -134,5 +96,5 @@
       "improvement": "자동 해답과 주요 대조군의 출력 결과를 날짜가 붙은 기록으로 남기면 실행 증거를 독립적으로 검토하기 쉽다."
     }
   },
-  "source_sha256": "b2e13f17e97d7f70e0a3ea98ad16d8a1b635741ad5b1ba239ac8e30c7972227b"
+  "source_sha256": "e4d7b6979c36416e733f600bd0d3e3ca7640508595e3288bc9b407f1f134ef1c"
 }

@@ -16,29 +16,13 @@ TCP 조각으로 나뉘어 있으므로 전달된 파일을 복원해 제보를 
 전송 기록에서 파일을 복원하고 공개 목록과 비교해, 비공개 문서가 실제로 전달됐는지 확인하자.
 ::
 
-::resources{title="전송 기록과 공개 범위"}
-- `files/delivery.pcap`는 세 HTTP 연결을 담은 작은 합성 PCAP이다.
-- `files/public-list.txt`는 전송 자료 중 공개 가능한 문서를 정한다.
-- 저장된 파일 분석만 필요하며 새 통신이나 라이브 캡처는 필요 없다.
+::resources
 
-먼저 요청 주소를 확인하고 전송 파일을 빈 폴더에 복원하자.
-
-```sh
-tshark -r files/delivery.pcap -Y http.request -T fields -e tcp.stream -e http.request.uri
-mkdir objects
-tshark -r files/delivery.pcap --export-objects http,objects
-file objects/*
-```
-
-같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다.
-각 묶음의 public/receipt.json을 `tar -xzOf 묶음파일 public/receipt.json | jq .`로
-읽고 공개 목록에 적힌 배치·버전·상태와 대조하자. 해당 묶음에서 공개 목록에 없는
-문서를 찾아 내용을 읽자. 폐기된 버전의 코드는 제출 대상이 아니다.
-요청 주소만으로는 실제로 받은 파일의 내용을 알 수 없다. 복원한 파일을 직접 확인하자.
+- `files/delivery.pcap`: 로컬 실험의 HTTP 통신을 담은 합성 PCAP.
+- `files/public-list.txt`: 공개 가능한 문서의 목록.
+조사 범위는 제공한 기록이다. 새 통신을 수집할 필요는 없다.
 ::
 
-::knowledge{concepts="terminal-commands,file-paths,packet-streams"}
-::
 
 ::submission
 복원한 비공개 문서에서 찾은 `pwnden{...}` 복구 코드를 제출하자.

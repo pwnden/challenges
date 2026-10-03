@@ -16,28 +16,12 @@
 이번 배포 정보와 이름 변경·키 교체 이력을 연결해, 설정 삭제 직전의 팀 복구 키를 찾자.
 ::
 
-::resources{title="전달한 소스 묶음"}
-- `files/source.tar.gz`: 현재 파일과 `.git` 기록을 포함한 압축 묶음.
-- `files/release-note.txt`: 배포 담당자가 수행한 조치와 자료 출처.
+::resources
 
-아래 명령으로 별도 작업 폴더에 풀고 현재 설정과 이력을 확인할 수 있다.
-
-```sh
-mkdir -p work
-tar -xzf files/source.tar.gz -C work
-cd work/source
-ls -a
-cat config/example.env
-cat config/release.txt
-git log --all --stat
-```
-
-release.txt는 이번 배포의 버전과 삭제한 운영 설정의 경로를 기록한다.
-이력에서 그 경로의 이전 이름과 키 교체를 확인한 뒤 삭제 직전 내용을 읽자.
+- `files/source.tar.gz`: 현재 파일과 Git 저장소를 담은 압축 묶음.
+- `files/release-note.txt`: 배포 담당자의 조치와 자료 출처.
 ::
 
-::knowledge{concepts="terminal-commands,git-history"}
-::
 
 ::submission
 과거 설정에서 확인한 `pwnden{...}` 팀 복구 키 전체를 제출하자.

@@ -14,28 +14,13 @@
 목록과 백업을 비교하고, 보드 복구 절차 문서의 마지막 승인 본문에 남은 코드를 찾자.
 ::
 
-::resources{title="삭제 후 만든 백업"}
+::resources
+
 - `files/visible-documents.csv`: 화면에 표시된 문서 ID와 제목.
-- `files/snapshot.sqlite`: 문서 상태와 변경된 본문을 함께 보관한 DB.
+- `files/snapshot.sqlite`: 문서 백업 데이터베이스.
 - `files/backup-note.txt`: 담당자의 조치와 조사 범위.
-
-준비된 SQLite 도구로 원본을 읽기 전용으로 확인하자.
-
-```sh
-cat files/visible-documents.csv
-cat files/backup-note.txt
-sqlite3 -readonly files/snapshot.sqlite '.tables'
-sqlite3 -readonly files/snapshot.sqlite '.schema'
-```
-
-문서 제목은 `Board recovery procedure`다. `publication`이 `published`면 승인된
-본문이고 `draft`면 미승인 초안이다. 삭제 문서는 여럿일 수 있고 가장 큰 버전이
-항상 승인본인 것은 아니다. 조사할 문서와 승인 상태를 먼저 고른 뒤 버전을 비교하자.
-이번 조사는 저장된 행을 확인하며 디스크의 삭제 영역을 복구할 필요는 없다.
 ::
 
-::knowledge{concepts="terminal-commands,sqlite-records"}
-::
 
 ::submission
 보드 복구 절차의 마지막 승인 본문에서 찾은 `pwnden{...}` 코드를 제출하자.

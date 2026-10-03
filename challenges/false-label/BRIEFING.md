@@ -13,27 +13,11 @@
 banner.png의 실제 형식을 확인하고, 내부 복구 키를 찾아 제출하자.
 ::
 
-::resources{title="전달받은 자료"}
-받은 파일은 `files/banner.png`다. 파일 안에는 컴퓨터가 읽는 숫자 데이터인 **바이트**가 들어 있다.
-터미널의 준비된 명령으로 앞부분의 숫자와 압축된 파일 목록을 확인할 수 있다.
+::resources
 
-앞 여덟 바이트를 16진수로 확인하는 명령은 다음과 같다.
-
-```sh
-od -An -tx1 -N8 files/banner.png
-```
-
-묶음 형식을 알아냈다면 아래 예제의 파일명을 전달 자료로 바꿔 목록을 읽자.
-목록에 나온 내부 파일명은 그대로 복사해 쓸 수 있다.
-
-```sh
-tar -tzf 묶음파일
-tar -xOzf 묶음파일 내부파일명
-```
+- `files/banner.png`: 이전 담당자에게 받은 파일. 그림으로 열리지 않는다.
 ::
 
-::knowledge{concepts="file-signatures"}
-::
 
 ::submission
 내부 자료에서 찾은 `pwnden{...}` 전체를 제출하자.

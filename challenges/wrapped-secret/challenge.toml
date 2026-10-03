@@ -15,7 +15,7 @@ teaches = ["encoding-secrecy"]
 
 [content]
 description = "README.md"
-hints = []
+hints = ["hints/1.md", "hints/2.md"]
 walkthrough = "solve/README.md"
 
 [flag]

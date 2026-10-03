@@ -2,7 +2,7 @@
   "slug": "hash-lantern",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "2026-10-04 Codex parent reassessment for direct submission; existing criterion levels retained after source review. Earlier independent panels and text reviews remain historical. Current text gate: quality/text-reviews/hash-lantern/2026-10-04-direct-submission.md",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
       "level": 2,
@@ -22,38 +22,16 @@
       "improvement": "작성 목표와 teaches의 범위를 여섯 후보의 일치 비교로 입증 가능한 범위에 맞추거나, 입문 부담 안에서 후보 확인 비용을 실제로 비교하는 행동과 근거를 추가한다."
     },
     "starting_context": {
-      "level": 4,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 두 파일의 역할, SHA-256·UTF-8·salt=none, 준비된 printf 명령과 해시 출력의 비교 위치를 설명한다. 후보의 중괄호를 포함한 전체 문자열이 비밀번호이고 일치 값을 그대로 제출하므로 시작 입력과 완료 값이 일치한다.",
-      "evidence": [
-        {
-          "path": "challenges/hash-lantern/BRIEFING.md",
-          "quote": "출력 왼쪽의 64글자를 account.txt의 password_hash와 비교하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/BRIEFING.md",
-          "quote": "후보에 적힌 `pwnden{...}` 전체가 비밀번호다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 3,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 여섯 후보를 같은 방식으로 계산하고 계정 기록과 비교해 유일한 일치를 찾는 입문 판단이다. 모든 후보가 같은 정답 형식이므로 포장 여부는 단서가 되지 않는다. 입력의 정확한 바이트와 줄바꿈은 비교 결과에 영향을 준다. 더 복잡한 단서 연결을 추가한 변경은 아니다.",
-      "evidence": [
-        {
-          "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "여섯 후보 모두 같은 제출 형식을 사용하므로 형식만으로 정답을 고를 수 없다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "`echo`를 그대로 사용하면 줄바꿈까지 입력에 포함될 수 있다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "후보를 하나씩 검증하는 간단한 수작업 절차를 유지하되, 반복 시 실수를 줄이는 안내를 보태도 좋다.\n예시 출력 하나 또는 간단한 비교 표를 제공해 후보 일치/불일치 판정을 눈으로 확인하게 하면 오답 후보의 대조도 남는다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 3,
@@ -73,21 +51,10 @@
       "improvement": "학습자는 후보별 일치 여부를 기록할 수 있는 작은 표를 제공해 오답 계산과 최종 유일 일치를 명확히 대조하게 한다.\n본문의 학습 절차에 불일치 후보 하나의 출력이 저장 hash와 다르다는 짧은 비교 예를 추가하면 양성·음성 대조가 직접 보인다.\n선택 사항으로 후보 하나의 철자를 바꾼 계산이 저장 해시와 일치하지 않는 짧은 비교를 추가해, 일치 판단의 대조 사례를 보여 줄 수 있다.\nAdd a small check showing that a nonmatching candidate stays nonmatching, or alter the stored digest and show that no candidate is accepted; retain the intended real-digest comparison as the completion evidence.\n후보가 아닌 임의 문자열 또는 줄바꿈 포함 입력의 해시가 저장값과 일치하지 않는 짧은 대조 예를 제공해 입력 경계와 비교 기준을 명확히 하자."
     },
     "hints": {
-      "level": 3,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 별도 힌트는 없지만 본문에서 후보 입력 명령과 저장된 해시를 비교할 위치를 제공한다. 여섯 후보를 시험하는 단일 입문 판단은 본문만으로 수행 가능하다. 복잡한 막힘별 힌트를 추가한 변경은 아니다.",
-      "evidence": [
-        {
-          "path": "challenges/hash-lantern/challenge.toml",
-          "quote": "hints = []",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/BRIEFING.md",
-          "quote": "printf '%s' '후보' | sha256sum",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 3,
@@ -119,5 +86,5 @@
       "improvement": "최초 구현 작업 트리 기준이라는 범위에 더해 실제 실행 로그나 결과 요약을 날짜별로 남겨 재현 정보를 보존한다."
     }
   },
-  "source_sha256": "f63a957a339d064ec462d0a3f2ad3af77fea710795947640d82e21b4614269ab"
+  "source_sha256": "6f26f23a44b6213c2795f0eaae1f7d9a9edfc97fbffbae3f4f88e725c957282c"
 }

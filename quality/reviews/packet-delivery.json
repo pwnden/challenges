@@ -2,138 +2,25 @@
   "slug": "packet-delivery",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/packet-delivery/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/packet-delivery/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
+  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
   "criteria": {
     "goal": {
-      "level": 4,
-      "reason": "packet-delivery-learner (4): 요구는 복원한 실제 응답 본문을 공개 목록과 대조해 내부 문서 전달을 확인하는 것이고, 목표에 요청 주소만으로는 부족하다는 원리가 직접 연결된다. 다만 해설이 관찰 범위를 HTTP·압축·이 합성 캡처로 한정해 현실 시스템 전반의 유출 추정은 피한다.\npacket-delivery-evidence (4): 목표는 공개 정책과 다른 자료가 실제 전달되었는지 확인하는 것이고, 완료 증거는 승인 묶음에서 복원한 내부 문서다. 본문은 요청 주소만으로 결론내리지 말라고 하고 실제 응답 파일을 복원하게 하며, 해설은 결론을 완전한 합성 캡처의 HTTP 바이트로 한정한다. 목표·관찰·범위가 일치한다.\npacket-delivery-designer (4): 요청 주소만으로 판단하지 말고 전송 바이트를 복원해 공개 목록과 대조하라는 완료 행동이 TCP 재조립 및 실제 자료 노출 관찰과 맞물린다. 안내문과 복구 문서를 함께 제공해 공개 범위 초과를 확인하며 합성 localhost 자료임을 범위 한계로 밝힌다.",
-      "evidence": [
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "전송 기록에서 파일을 복원하고 공개 목록과 비교해, 비공개 문서가 실제로 전달됐는지 확인하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/solve/README.md",
-          "quote": "요청된 이름이나 응답 상태만 추측한 것이 아니라 실제 전달된 바이트로 확인했다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/solve/README.md",
-          "quote": "오프라인으로 분석하므로 캡처 권한이 필요하지 않다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "이 PCAP은 로컬 테스트 HTTP 서버의 실제 요청·응답 바이트를 바탕으로 만든\n합성 패킷이다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/AUTHORING.md",
-          "quote": "teaches: TCP 조각을 재조립해 실제 전송 파일로 자료 공개 여부를 입증한다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "starting_context": {
-      "level": 4,
-      "reason": "packet-delivery-learner (3): 첫 조회·재조립·파일 식별 명령이 복사 가능한 형태로 제공되고 선수지식은 PCAP/TCP 재조립·경로·기본 터미널에 한정된다. 요청 URL과 실제 응답 차이, 반복 이름, receipt의 batch/version/status 판단도 설명돼 첫 경로를 고를 수 있다. 다만 셸 명령의 옵션, jq 조건 선택, export 저장 결과 확인과 archive 읽기 경로를 이미 적용해 본다는 가정은 남아 있으며 플레이어 기본 설명에 해결 예가 완전하지 않다.\npacket-delivery-evidence (4): 대상은 준비된 터미널 명령을 조정하는 초급자이며 선수 지식은 요청된 PCAP·경로·stream 조작으로 한정된다. 플레이어 자료는 요청 확인, export, 형식 확인, archive 영수증 대조를 명령과 함께 안내하고 동일 URL의 중복 파일명 경고를 준다. 핵심 판단에 필요한 승인 batch/version/status와 공개 범위도 자료에 나온다.\npacket-delivery-designer (4): 대상 난도 2에 필요한 명령을 그대로 제시하고 PCAP, TCP stream, 객체 재조립, 경로, tar 멤버 읽기를 설명한다. 파일명으로 버전을 택하지 말고 영수증과 승인목록을 비교하라고 하여 핵심 결정은 플레이어에게 남긴다. 실행은 안내되나 학습자 증거는 별도 검증이 필요하다.",
-      "evidence": [
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "먼저 요청 주소를 확인하고 전송 파일을 빈 폴더에 복원하자.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/packet-streams.md",
-          "quote": "같은 URL에서 여러 파일을 받으면 내보낸 이름에 번호가 붙을 수 있다. 내부 영수증의\n배치·버전·상태를 요구 사항과 비교해 파일을 고른다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/AUTHORING.md",
-          "quote": "대상: 준비된 터미널 명령을 조정하는 초급자. 난도 2는 요청·복원 객체·내부\n  경로·공개 범위를 연결하는 판단에 근거한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/packet-streams.md",
-          "quote": "같은 URL에서 여러 파일을 받으면 내보낸 이름에 번호가 붙을 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/AUTHORING.md",
-          "quote": "대상: 준비된 터미널 명령을 조정하는 초급자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "tshark -r files/delivery.pcap --export-objects http,objects",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/packet-streams.md",
-          "quote": "분석기는 순서 번호로 조각을 연결해 대화를 재조립한다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/file-paths.md",
-          "quote": "`public/welcome.txt`는\n`public` 폴더의 `welcome.txt`다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "첫 셸 경험자도 따라갈 수 있도록 object 반복 확인과 receipt 조건을 확인하는 짧은 출력 예 또는 변수 선택 안내를 추가하고, 필요한지 학습자 검토로 확인한다.\n독립 학습자 검토에서 각 명령의 파일명 대입과 tshark 산출물 연결이 실제로 명확한지 확인한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "reasoning": {
-      "level": 3,
-      "reason": "packet-delivery-learner (3): 목표는 지정된 세 HTTP 대화에서 전송 객체를 복원한 뒤 공개 목록과 receipt 조건 세 가지를 연결해 두 같은 URL 중 승인 revision 2를 고르는 것이다. 폐기 버전의 코드와 내부 문서 공개 여부를 구분하므로 초급 수준의 단서 결합 및 그럴듯한 오답 구분이 있다. 그러나 기본 본문이 선택 조건과 내부 파일명을 강하게 안내해 자유 분석 난도는 제한된다.\npacket-delivery-evidence (4): URL이 같은 두 archive 사이에서 이름만 보지 않고 receipt의 batch/revision/status를 공개 목록과 대조하게 하며, retired 묶음은 그럴듯한 오답으로 작동한다. 복원된 내부 경로와 공개 파일 목록도 비교해야 완료 코드에 도달하므로 초급 난도의 여러 단서 연결을 실제로 남긴다.\npacket-delivery-designer (3): 난도 2의 주요 추론은 세 요청의 실제 복원 결과, 반복 URL에 대응하는 두 아카이브, receipt의 batch/revision/status, 공개목록 및 내부 문서 경로를 연결하는 것이다. 공개 목록은 정확한 승인 배치·버전·상태를 주지만 본문도 반복 URL과 영수증 비교 과정을 자세히 알려 주므로 분석 판단은 남되 비교 방식은 강하게 구조화되어 있다. 작성 기록은 폐기 revision 1이 유효한 오답인 것을 확인한다.",
-      "evidence": [
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/files/public-list.txt",
-          "quote": "Repeated URL names can represent different delivery revisions; inspect each receipt.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/hints/1.md",
-          "quote": "`--export-objects http,objects`는 TCP 조각을 이어 붙인 전송 파일을 저장한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/AUTHORING.md",
-          "quote": "대상: 준비된 터미널 명령을 조정하는 초급자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/README.md",
-          "quote": "각 묶음의 public/receipt.json을 `tar -xzOf 묶음파일 public/receipt.json | jq .`로\n읽고 공개 목록에 적힌 배치·버전·상태와 대조하자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/AUTHORING.md",
-          "quote": "같은 URL의 두 묶음은 폐기 버전 1과 승인 버전 2다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/solve/README.md",
-          "quote": "첫 묶음은 폐기된 버전 1이다.",
-          "kind": "source"
-        }
-      ],
-      "improvement": "학습자 검토에서 초급 대상자가 receipt와 public-list의 승인 기준을 실제로 스스로 연결하는지 확인하고, 본문 안내가 필요한 만큼인지 조정한다.\n독립 학습자 관찰로 revision/status 비교가 의도한 난도를 만들며 파일명 혼동이 과도한 도구 장애가 아닌지 확인한다."
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "controls": {
       "level": 4,
@@ -183,36 +70,10 @@
       "improvement": ""
     },
     "hints": {
-      "level": 3,
-      "reason": "packet-delivery-learner (3): 브리핑은 목표·첫 명령을 제공하지만 코드 자체와 승인 파일을 직접 밝히지는 않는다. 첫 힌트는 객체 연결 및 receipt 조건을 드러내고, 두 번째 힌트는 해결 절차와 flag를 포함한다. 본문만으로도 절차가 상당히 안내되어 있지만 힌트 단계는 추가 방향과 최종 정답을 구분한다.\npacket-delivery-evidence (3): 첫 힌트는 HTTP 객체 복원과 형식 확인을 돕고, 두 번째는 receipt 기준으로 archive를 고르고 내부 경로를 읽는 단계를 구체화한다. 정답 문자열은 해설에 남아 있어 힌트와 답이 순차적으로 분리된다. 두 번째 힌트는 선택 조건과 추출 경로를 직접 알려주므로 남은 판단은 작지만, 자료 해석을 막는 지점을 해소한다.\npacket-delivery-designer (4): 첫 힌트는 HTTP 객체 내보내기가 재조립이며 추출 파일을 요청과 형식에 연결하라고 돕고, 두 번째 힌트는 영수증 필드 및 내부 문서 읽기 명령을 구체화한다. 본문에 이미 절차가 있어 힌트가 이를 재정리하는 성격은 있으나 승인값·정답 코드를 기본 본문에서 직접 주지 않고 제출 코드 자체는 walkthrough에 남긴다.",
-      "evidence": [
-        {
-          "path": "challenges/packet-delivery/hints/1.md",
-          "quote": "`--export-objects http,objects`는 TCP 조각을 이어 붙인 전송 파일을 저장한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/solve/README.md",
-          "quote": "pwnden{tcp_reassembles_the_delivery}",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/hints/2.md",
-          "quote": "묶음을 고르고 `tar -xzOf 선택한파일 internal/recovery.txt`로 내부 문서를 읽는다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/solve/README.md",
-          "quote": "`pwnden{tcp_reassembles_the_delivery}`가 있으며 이 값을 제출한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/packet-delivery/hints/1.md",
-          "quote": "요청 목록의 압축 묶음과 objects의 파일을 연결해 실제 형식을 확인하자.",
-          "kind": "source"
-        }
-      ],
-      "improvement": ""
+      "level": null,
+      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
+      "evidence": [],
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
     },
     "explanation": {
       "level": 4,
@@ -289,5 +150,5 @@
       "improvement": "배포 기준에서 필요하면 이미지 태그와 실행 원시 로그/정상 기능 및 정리 결과를 재검토 가능한 형태로 보존한다.\n패키지 버전, 이미지 태그/아키텍처, 핵심 명령 출력 및 cleanup 결과를 게시물과 함께 재검토 가능하게 보존한다."
     }
   },
-  "source_sha256": "b97bdcb23702465e278fe9d389bc705173b98d0518c505af25a389f368572dff"
+  "source_sha256": "77aa5734bb0d621abc6ddc24976cb90e171b337811e8c133a9fb9fe427df4688"
 }
