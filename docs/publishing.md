@@ -11,6 +11,8 @@ Run these commands from the challenges repository:
 ```sh
 python3 tools/create.py example --kind service --category web --patched
 # Complete the exercise, solution, hints, walkthrough and AUTHORING.md.
+# Add or reassess quality/reviews/<slug>.json with source evidence.
+python3 -B tools/quality.py
 python3 tools/verify.py example
 # Review and commit the completed changes on main.
 python3 tools/publish.py --check
@@ -32,10 +34,11 @@ included. The temporary checkout contains its own contract and author tools.
 
 The snapshot must pass:
 
-1. Author-tool regression tests.
-2. Vue screen types and rendered behavior through the pinned Docker toolchain.
-3. Actual network isolation with reachable host and separate-network controls.
-4. Format checks and every declared solution, patch and resource-cleanup check.
+1. Complete, evidence-backed and current [quality reviews](quality-review.md).
+2. Author-tool regression tests.
+3. Vue screen types and rendered behavior through the pinned Docker toolchain.
+4. Actual network isolation with reachable host and separate-network controls.
+5. Format checks and every declared solution, patch and resource-cleanup check.
 
 The [verification guide](verification.md) defines those checks and their
 coverage. The host control currently requires a locally accessible Linux/WSL

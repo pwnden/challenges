@@ -1,0 +1,115 @@
+{
+  "slug": "note-vault",
+  "rubric_version": 1,
+  "reviewed_at": "2026-10-03",
+  "reviewer": "Codex — 작성자 관점의 소스 검토",
+  "source_sha256": "29ae41d60a59279072d6917573495c90685865f1b816d944ceb30be830e25e48",
+  "criteria": {
+    "goal": {
+      "level": 3,
+      "reason": "의뢰 목표와 제출 증거가 연결되고 해설에서 보안 원리를 설명한다. 정답 제출만으로 학습자의 원리 이해까지 확인하지는 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/note-vault/README.md",
+          "quote": "::objective\n\n게스트 계정으로 관리자의 메모를 읽고, 그 안의 복구 키를 찾아 제출하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/note-vault/solve/README.md",
+          "quote": "## 핵심: 메모를 열 때도 권한을 확인하는가\n\n이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다.\n\n### 1. 자신의 메모를 연다\n\n메모 사이트에서 아이디와 비밀번호에 각각 `guest`를 입력한다. 로그인 후 보이는 메모를 열면 주소 끝이 `/notes/1`이다.\n\n### 2. 주소의 번호를 바꾼다\n\n같은 브라우저 탭에서 주소의 `/notes/1`만 `/notes/2`로 바꾸고 접속한다. 다른 주소 부분은 유지한다. 관리자 메모가 열리고, 본문에 `pwnden{...}` 형식의 복구 키가 보인다.\n\n그 값을 복사해 이 작업 화면의 플래그 입력란에 제출한다. 실행마다 새 키가 생기므로 해설에 적힌 고정된 정답은 없다. 현재 실행 중인 메모에서 읽은 값이 정답이다.\n\n#",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "starting_context": {
+      "level": 3,
+      "reason": "대상·자료와 시작 행동을 제공하고 web 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+      "evidence": [
+        {
+          "path": "challenges/note-vault/README.md",
+          "quote": "::resources{title=\"접속 정보\"}\n\n| 항목 | 값 |\n| --- | --- |\n| 아이디 | `guest` |\n| 비밀번호 | `guest` |",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/note-vault/README.md",
+          "quote": "::knowledge\n\n웹 도구에서 사이트를 열고 위 계정으로 로그인한 뒤, 목록의 `Welcome`을 눌러 보자.\n메모마다 고유한 번호가 있고, 메모를 열면 주소에 그 번호가 표시된다.\n목록에서 어떤 항목을 보여 주는지와 메모를 열 때 어떤 접근을 허용하는지 살펴보자.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "reasoning": {
+      "level": 3,
+      "reason": "자기 목록과 단일 메모 주소의 접근 결과를 비교한다. 한 번호 변경으로 소유권 검사 차이를 관찰하는 입문 목표다.",
+      "evidence": [
+        {
+          "path": "challenges/note-vault/solve/README.md",
+          "quote": "목록의 필터만으로는 보호할 수 없다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "controls": {
+      "level": 3,
+      "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/note-vault/patched/test.py",
+          "quote": "assert request(client, \"/healthz\")[0] == 200\n    assert request(client, \"/api/notes/1\")[0] == 401\n    assert request(client, \"/login\", {\"username\": \"guest\", \"password\": \"wrong\"})[0] == 401\n    assert request(client, \"/login\", {\"username\": \"guest\", \"password\": \"guest\"})[0] == 200\n    status, body = request(client, \"/api/notes\")\n    assert status == 200 and json.loads(body) == [{\"id\": 1, \"title\": \"Welcome\"}]\n    status, body = request(client, \"/api/notes/1\")\n    assert status == 200 and json.loads(body)[\"body\"] == \"Your first private note.\"\n    a",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "hints": {
+      "level": 3,
+      "reason": "기본 본문은 조사 시작점을 주고 실제 정답은 해설에 둔다. 첫 힌트는 필요한 비교를 돕는다.",
+      "evidence": [
+        {
+          "path": "challenges/note-vault/hints/1.md",
+          "quote": "목록에 보이는 메모와 직접 열 수 있는 메모가 반드시 같을까? 자신의 메모를 연 상태에서 주소를 살펴보자. 메모를 구분하는 값이 보인다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "explanation": {
+      "level": 3,
+      "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+      "evidence": [
+        {
+          "path": "challenges/note-vault/solve/README.md",
+          "quote": "## 핵심: 메모를 열 때도 권한을 확인하는가\n\n이 서비스는 목록에서는 내 메모만 보여 주지만, 메모 하나를 여는 요청에서는 소유자를 확인하지 않는다. 로그인한 사용자가 메모 번호를 바꾸면 다른 사람의 내용을 읽을 수 있다.\n\n### 1. 자신의 메모를 연다\n\n메모 사이트에서 아이디와 비밀번호에 각각 `guest`를 입력한다. 로그인 후 보이는 메모를 열면 주소 끝이 `/notes/1`이다.\n\n### 2. 주소의 번호를 바꾼다\n\n같은 브라우저 탭에서 주소의 `/notes/1`만 `/notes/2`로 바꾸고 접속한다. 다른 주소 부분은 유지한다. 관리자 메모가 열리고, 본문에 `pwnden{...}` 형식의 복구 키가 보인다.\n\n그 값을 복사해 이 작업 화면의 플래그 입력란에 제출한다. 실행마다 새 키가 생기므로 해설에 적힌 고정된 정답은 없다. 현재 실행 중인 메모에서 읽은 값이 정답이다.\n\n### 3. 왜 읽을 수 있었을까\n\n목록을 반환하는 경로는 메모의 소유자가 로그인한 사용자와 같은지 확인한다. 반면 개별 조회는 메모 번호로 내용을 찾은 뒤 그대로 반환한다. 사용자는 목록을 거치지 않고도 개별 주소를 요청할 수 있으므로 목록의 필터만으로는 보호할 수 없다.\n\n로그인 상태를 유지한 채 `/api/notes/2`를 열어도 메모 내용을 읽을 수 있다.\n화면과 데이터 응답 모두 내용을 읽을 때 권한을 확인해야 한다.\n이렇게 주소의 번호를 바꿔 다른 사람의 자료를 읽는 결함을 **IDOR**라고 부른다.\n\n### 4. 올바른 방어\n\n메모를 읽는 모든 요청에서 로그인 여부와 해당 메모의 소유자를 함께 확인해야 한다. 자신의 메모는 계속 읽을 수 있어야 하고, 다른 사람의 메모는 거절해야 한다. 번호를 복잡하게 만들거나 목록에서 감추는 것만으로는 권한 검사를 대신할 수 없다.\n\n### 배운 점\n\n**인증**은 누구인지 확인하고, **인가**는 그 사람이 해당 자료를 읽어도 되는지 확인한다.\n자기 계정으로 로그인한 뒤 다른 사람의 메모 주소를 요청하면 이 두 검사가 각각 필요한 이유를 확인할 수 있다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "execution": {
+      "level": 3,
+      "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+      "evidence": [
+        {
+          "path": "docs/cli-challenge-plan.md",
+          "quote": "2026-10-03 최종 묶음 검증에서 기존 12개와 신규 8개를 합한 20개 카탈로그의\n콘텐츠 일치·형식 검사, 작성자 회귀 테스트 65개, 작성자 전체 verify와 소비자 전체\nvalidate·run·verify·stop을 모두 통과했다. 위 소비자 CLI로 파일 대조 검사 5개도\n재현했다. 커밋에서 내보낸 배포 파일은 작업 사본과 바이트가 일치하며 합계\n30,921 B다. basic·pcap 이미지 ID를 유지해 추가 CLI 설치 없이 완주했다.",
+          "kind": "recorded-execution"
+        }
+      ],
+      "improvement": ""
+    },
+    "browser": {
+      "level": null,
+      "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
+      "evidence": [],
+      "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+    },
+    "learner": {
+      "level": null,
+      "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
+      "evidence": [],
+      "improvement": "난도 1 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+    }
+  }
+}

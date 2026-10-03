@@ -52,6 +52,8 @@ def extract_snapshot(archive, destination):
 
 
 def gate_snapshot(snapshot, commands, prepare_timeout):
+    result = commands.run([sys.executable, '-B', 'tools/quality.py'], cwd=snapshot, timeout=60)
+    print(result.stdout, end='', flush=True)
     commands.run([sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools', '-p', 'test_*.py'],
                  cwd=snapshot, timeout=300)
     commands.run(['docker', 'build', '--file', 'web/Dockerfile', '--target', 'check', '.'],

@@ -1,0 +1,115 @@
+{
+  "slug": "packet-delivery",
+  "rubric_version": 1,
+  "reviewed_at": "2026-10-03",
+  "reviewer": "Codex — 작성자 관점의 소스 검토",
+  "source_sha256": "04844644f25b8ae7d639854133da9ee21b1fa296896857f085c9538a29366e56",
+  "criteria": {
+    "goal": {
+      "level": 3,
+      "reason": "의뢰 목표와 제출 증거가 연결되고 해설에서 보안 원리를 설명한다. 정답 제출만으로 학습자의 원리 이해까지 확인하지는 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/packet-delivery/README.md",
+          "quote": "::objective\n전송 기록에서 파일을 복원하고 공개 목록과 비교해, 비공개 문서가 실제로 전달됐는지 확인하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/packet-delivery/solve/README.md",
+          "quote": "## 조사 결과와 재현\n\n세 HTTP 요청 중 /notice.txt는 안내이고 /delivery.tar.gz는 두 번 내려온다.\nURL은 같지만 public/receipt.json의 버전은 다르다. 첫 묶음은 폐기된 버전 1이다.\nTShark가 여러 TCP 조각을 재조립하면 전달된 압축 묶음을 읽을 수 있다.\n\n```sh\ntshark -r files/delivery.pcap -Y http.request -T fields -e tcp.stream -e http.request.uri\nmkdir objects\ntshark -r files/delivery.pcap --export-objects http,objects\nfile objects/*\nfor object in objects/*; do\n  tar -xzOf \"$object\" public/receipt.json 2>/dev/null | jq .\nd",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "starting_context": {
+      "level": 4,
+      "reason": "대상·자료와 시작 행동을 제공하고 tshark, tar, jq, file 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+      "evidence": [
+        {
+          "path": "challenges/packet-delivery/README.md",
+          "quote": "::resources{title=\"전송 기록과 공개 범위\"}\n- `files/delivery.pcap`는 세 HTTP 연결을 담은 작은 합성 PCAP이다.\n- `files/public-list.txt`는 전송 자료 중 공개 가능한 문서를 정한다.\n- 저장된 파일 분석만 필요하며 새 통신이나 라이브 캡처는 필요 없다.\n\n먼저 요청 주소를 확인하고 전송 파일을 빈 폴더에 복원하자.\n\n```sh\ntshark -r files/delivery.pcap -Y http.request -T fields -e tcp.stream -e http.request.uri\nmkdir objects\ntshark -r files/delivery.pcap --export-objects http,objects\nfile objects/*\n```\n\n같은 URL에서 서로 다른 묶음이 내려왔으므로 저장 이름만으로 버전을 고르지 않는다.\n각 묶음의 public/receipt.json을 `tar -xzOf 묶음파일 public/receipt.json | jq .`로\n읽고 공개 목록의 승인된 배치·버전·상태와 대조",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/packet-delivery/README.md",
+          "quote": "::knowledge\n\n### 준비된 터미널 명령 사용하기\n\n터미널에는 한 줄의 명령을 입력하고 Enter를 누르면 된다. `files/`로 시작하는\n경로는 이 문제의 배포 파일을 가리킨다. 명령 예제의 파일명은 조사할 자료의 이름으로 바꿔 넣자.\n\n`printf '%s' 'hello'`는 줄바꿈 없이 `hello`를 출력한다.\n`|`는 왼쪽 출력물을 오른쪽 프로그램의 입력으로 전달한다.\n예를 들어 `printf '%s' 'hello' | sha256sum`은 정확히 다섯 글자를 해시한다.\n`hello` 뒤에 줄바꿈이 추가되면 해시도 달라진다.\n\n파일을 읽는 명령과 결과를 확인하는 명령은 문제의 전달받은 자료에 제공한다.\nCtrl+C는 오래 실행되는 명령을 중단하고, 위쪽 화살표는 이전 명령을 다시 가져온다.\n\n### 폴더와 상대 경로\n\n경로는 파일이 어느 폴더에 있는지 나타낸다. `public/welcome.txt`는\n`public` 폴더의 `welcome.txt`다. `/`는 폴더와 파일 이름을 구분한다.\n\n상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "reasoning": {
+      "level": 4,
+      "reason": "동일 URL의 두 묶음을 복원하고 배치·승인 버전·실제 내부 문서로 판단한다. 상태와 이름만으로 결론을 낼 수 없다.",
+      "evidence": [
+        {
+          "path": "challenges/packet-delivery/solve/README.md",
+          "quote": "첫 묶음은 폐기된 버전 1이다.\nTShark가 여러 TCP 조각을 재조립하면 전달된 압축 묶음을 읽을 수 있다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "controls": {
+      "level": 4,
+      "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/packet-delivery/authoring/check.py",
+          "quote": "assert KEY.encode() not in recovered\n    invalid = root / 'invalid.pcap'\n    invalid.write_bytes(b'not a capture\\n')\n    assert subprocess.run(['tshark', '-r', str(invalid)], capture_output=True).returncode != 0\n    build(root / 'regenerated')\n    rebuilt = exports(root / 'regenerated/delivery.pcap', root / 'rebuilt')\n    rebuilt_documents = []\n    for data in rebuilt.values():\n        if data == NOTICE:\n            continue\n        with tarfile.open(fileobj=io.BytesIO(data), mode='r:gz') as archive:\n            rebuilt_documents.append(archive",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "hints": {
+      "level": 3,
+      "reason": "기본 본문은 조사 시작점을 주고 실제 정답은 해설에 둔다. 첫 힌트는 필요한 비교를 돕는다.",
+      "evidence": [
+        {
+          "path": "challenges/packet-delivery/hints/1.md",
+          "quote": "`--export-objects http,objects`는 TCP 조각을 이어 붙인 전송 파일을 저장한다.\n요청 목록의 압축 묶음과 objects의 파일을 연결해 실제 형식을 확인하자.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "explanation": {
+      "level": 4,
+      "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+      "evidence": [
+        {
+          "path": "challenges/packet-delivery/solve/README.md",
+          "quote": "## 조사 결과와 재현\n\n세 HTTP 요청 중 /notice.txt는 안내이고 /delivery.tar.gz는 두 번 내려온다.\nURL은 같지만 public/receipt.json의 버전은 다르다. 첫 묶음은 폐기된 버전 1이다.\nTShark가 여러 TCP 조각을 재조립하면 전달된 압축 묶음을 읽을 수 있다.\n\n```sh\ntshark -r files/delivery.pcap -Y http.request -T fields -e tcp.stream -e http.request.uri\nmkdir objects\ntshark -r files/delivery.pcap --export-objects http,objects\nfile objects/*\nfor object in objects/*; do\n  tar -xzOf \"$object\" public/receipt.json 2>/dev/null | jq .\ndone\n```\n\n공개 목록이 요구하는 LAB-17의 승인 버전 2에 해당하는 파일을 골라\n`tar -xzOf 선택한파일 internal/recovery.txt`를 실행한다. 복원 시 중복 이름은\n번호가 붙으므로 파일명만 고정해 선택하지 않는다.\n묶음에는 공개 안내 외에도 `internal/recovery.txt`가 있다. 공개 목록은 그 복구\n절차와 코드를 담당자 전용으로 정한다. 복원한 문서에는\n`pwnden{tcp_reassembles_the_delivery}`가 있으며 이 값을 제출한다.\n요청된 이름이나 응답 상태만 추측한 것이 아니라 실제 전달된 바이트로 확인했다.\n\n## 드러난 원리\n\n암호화되지 않은 HTTP 전송이 완전한 캡처에 남으면 재조립해 본문을 읽을 수 있다.\n압축은 비밀 보호를 제공하지 않는다. 서버는 수신자의 권한에 맞는 자료만 묶어\n보내고, 전송 경로에서도 적절한 기밀성 보호를 사용해야 한다. 이 문제는\n교육용 합성 기록을 오프라인으로 분석하므로 캡처 권한이 필요하지 않다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "execution": {
+      "level": 3,
+      "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/packet-delivery/authoring/validation.json",
+          "quote": "{\n  \"slug\": \"packet-delivery\",\n  \"verified_at_utc\": \"2026-10-02T21:08:35.935839+00:00\",\n  \"artifact_controls\": true,\n  \"author_solution_patch_cleanup\": true,\n  \"consumer_validate_run_verify_stop\": true,\n  \"real_pty_solution_submission_interrupt_reattach_restart\": true,\n  \"original_preserved\": true,\n  \"total_validation_seconds\": 11.37,\n  \"distribution_bytes\": 5175,\n  \"passed\": true\n}",
+          "kind": "recorded-execution"
+        }
+      ],
+      "improvement": ""
+    },
+    "browser": {
+      "level": null,
+      "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
+      "evidence": [],
+      "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+    },
+    "learner": {
+      "level": null,
+      "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
+      "evidence": [],
+      "improvement": "난도 2 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+    }
+  }
+}

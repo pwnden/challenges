@@ -1,0 +1,120 @@
+{
+  "slug": "hash-lantern",
+  "rubric_version": 1,
+  "reviewed_at": "2026-10-03",
+  "reviewer": "Codex — 작성자 관점의 소스 검토",
+  "source_sha256": "ab0d891e1b991830822985ee6dac1a9f627c306d7bb3aa62bb2d2a0f658d31dd",
+  "criteria": {
+    "goal": {
+      "level": 2,
+      "reason": "후보 일치와 약한 비밀번호 회수는 관찰 가능하다. 작성 목표의 후보 대입 비용은 계산 시간이나 비교 관찰 없이 해설 설명에 의존한다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/README.md",
+          "quote": "::objective\n기록의 해시와 일치하는 비밀번호를 찾아 제출하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/solve/README.md",
+          "quote": "## 조사 순서\n\n1. account.txt에서 계산 방식이 SHA-256인지 확인한다. UTF-8은 글자를 바이트로\n   나타내는 방식이며, salt=none은 계산에 추가 값을 넣지 않았다는 뜻이다.\n   password_hash가 비교할 결과다.\n2. 후보마다 `printf '%s' '후보' | sha256sum`을 실행한다.\n3. 출력의 해시가 저장된 값과 일치하는 후보를 찾는다.\n4. 일치하는 값은 `rainboat27`이다. `pwnden{rainboat27}`을 제출한다.\n\n출력이 다르면 후보 철자, 대소문자와 줄바꿈을 확인하자.\n`echo`를 그대로 사용하면 줄바꿈까지 입력에 포함될 수 있다.\n\n## 확인된 원리\n\n후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다.\n이렇게 후보를 하나씩 시험하는 방법을 **사전 대입 공격**이라고 한다.\nSHA-25",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "후보 대입 비용을 관찰한다.\n- 대상 풀이자: 브라우저 사용과 텍스트 읽기를 할 수 있으며 제공된 조작을 수행하는 사람.\n- 플레이어 도구: files, terminal. 현재 계약 선언으로 공통 플랫폼 도구를 소비한다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": "목표를 여섯 후보 비교로 입증 가능한 범위에 맞추거나, 입문 부담 안에서 계산 비용을 실제로 관찰하는 행동과 증거를 추가한다."
+    },
+    "starting_context": {
+      "level": 3,
+      "reason": "대상·자료와 시작 행동을 제공하고 sha256sum 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/README.md",
+          "quote": "::resources{title=\"전달받은 자료\"}\n- `files/account.txt`: 계정 이름, 해시 방식과 저장된 비밀번호 해시.\n- `files/candidates.txt`: 후보 비밀번호 여섯 개.\n\n터미널에서 `cat files/account.txt`, `cat files/candidates.txt`로 자료를 읽을 수 있다.\n후보 하나의 SHA-256은 아래 명령의 `후보`를 실제 값으로 바꿔 확인한다.\n출력 왼쪽의 64글자를 account.txt의 password_hash와 비교하자.\n\n```sh\nprintf '%s' '후보' | sha256sum\n```",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/README.md",
+          "quote": "::knowledge\n\n### 준비된 터미널 명령 사용하기\n\n터미널에는 한 줄의 명령을 입력하고 Enter를 누르면 된다. `files/`로 시작하는\n경로는 이 문제의 배포 파일을 가리킨다. 명령 예제의 파일명은 조사할 자료의 이름으로 바꿔 넣자.\n\n`printf '%s' 'hello'`는 줄바꿈 없이 `hello`를 출력한다.\n`|`는 왼쪽 출력물을 오른쪽 프로그램의 입력으로 전달한다.\n예를 들어 `printf '%s' 'hello' | sha256sum`은 정확히 다섯 글자를 해시한다.\n`hello` 뒤에 줄바꿈이 추가되면 해시도 달라진다.\n\n파일을 읽는 명령과 결과를 확인하는 명령은 문제의 전달받은 자료에 제공한다.\nCtrl+C는 오래 실행되는 명령을 중단하고, 위쪽 화살표는 이전 명령을 다시 가져온다.\n\n### 해시와 비밀번호 후보\n\n해시 함수는 입력을 일정한 길이의 요약값으로 바꾼다. SHA-256의 결과는 보통\n숫자와 `a`부터 `f`까지의 글자 64개로 표시한다. 같은 입력은 같은 결과를 만들며,\n작은 변화도 보통 크게 다른 요약값을 만든다.\n\n해시는 원문으",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "reasoning": {
+      "level": 3,
+      "reason": "알고리즘·줄바꿈 없는 입력·해시 일치를 비교한다. 여섯 후보와 준비 명령은 입문 범위에 맞는다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/solve/README.md",
+          "quote": "후보마다 `printf '%s' '후보' | sha256sum`을 실행한다.\n3. 출력의 해시가 저장된 값과 일치하는 후보를 찾는다.\n4. 일치하는 값은 `rainboat27`이다. `pwnden{rainboat27}`을 제출한다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "controls": {
+      "level": 3,
+      "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+      "evidence": [
+        {
+          "path": "tools/test_second_experiments.py",
+          "quote": "self.assertEqual(matches, ['rainboat27'])\n        metadata = tomllib.loads((directory / 'challenge.toml').read_text())\n        self.assertEqual(hashlib.sha256(('pwnden{' + matches[0] + '}').encode()).hexdigest(), metadata['flag']['sha256'])",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "hints": {
+      "level": 3,
+      "reason": "입문 본문에 예제와 명령 형식이 있어 별도 힌트 없이 시작할 수 있다. 실제 자료의 정답은 본문에 직접 적지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/README.md",
+          "quote": "::knowledge\n\n### 준비된 터미널 명령 사용하기\n\n터미널에는 한 줄의 명령을 입력하고 Enter를 누르면 된다. `files/`로 시작하는\n경로는 이 문제의 배포 파일을 가리킨다. 명령 예제의 파일명은 조사할 자료의 이름으로 바꿔 넣자.\n\n`printf '%s' 'hello'`는 줄바꿈 없이 `hello`를 출력한다.\n`|`는 왼쪽 출력물을 오른쪽 프로그램의 입력으로 전달한다.\n예를 들어 `printf '%s' 'hello' | sha256sum`은 정확히 다섯 글자를 해시한다.\n`hello` 뒤에 줄바꿈이 추가되면 해시도 달라진다.\n\n파일을 읽는 명령과 결과를 확인하는 명령은 문제의 전달받은 자료에 제공한다.\nCtrl+C는 오래 실행되는 명령을 중단하고, 위쪽 화살표는 이전 명령을 다시 가져온다.\n\n### 해시와 비밀번호 후보\n\n해시 함수는 입력을 일정한 길이의 요약값으로 바꾼다. SHA-256의 결과는 보통\n숫자와 `a`부터 `f`까지의 글자 64개로 표시한다. 같은 입력은 같은 결과를 만들며,\n작은 변화도 보통 크게 다른 요약값을 만든다.\n\n해시는 원문으",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "explanation": {
+      "level": 3,
+      "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/solve/README.md",
+          "quote": "## 조사 순서\n\n1. account.txt에서 계산 방식이 SHA-256인지 확인한다. UTF-8은 글자를 바이트로\n   나타내는 방식이며, salt=none은 계산에 추가 값을 넣지 않았다는 뜻이다.\n   password_hash가 비교할 결과다.\n2. 후보마다 `printf '%s' '후보' | sha256sum`을 실행한다.\n3. 출력의 해시가 저장된 값과 일치하는 후보를 찾는다.\n4. 일치하는 값은 `rainboat27`이다. `pwnden{rainboat27}`을 제출한다.\n\n출력이 다르면 후보 철자, 대소문자와 줄바꿈을 확인하자.\n`echo`를 그대로 사용하면 줄바꿈까지 입력에 포함될 수 있다.\n\n## 확인된 원리\n\n후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다.\n이렇게 후보를 하나씩 시험하는 방법을 **사전 대입 공격**이라고 한다.\nSHA-256처럼 빠른 계산을 한 번만 적용하면 많은 후보도 빠르게 비교할 수 있다.\n\n## 보호 방법\n\n비밀번호는 후보 하나를 계산하는 데 시간이 들도록 설계된 전용 방식으로 저장한다.\n사용자마다 다른 추가 값인 **salt**도 함께 계산한다. 그러면 같은 비밀번호를 쓰는 계정도\n서로 다른 결과를 갖고, 미리 계산해 둔 목록을 여러 계정에 그대로 적용하기 어려워진다.\n비밀번호 자체도 추측하기 어렵게 정하고, 로그인 시도 횟수를 제한해야 한다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "execution": {
+      "level": 3,
+      "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "python3 -B tools/verify.py hash-lantern`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.\n- 작성자 내용 검토: 의뢰 맥락, 출발 정보, 완료 조건, 점진적 힌트와 해설의 보안 원리를 대조했다.\n- Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.\n- 독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.\n- 공개 준비: 기술 구현은 완료됐으며 독립 학습 리뷰와 난도 확인을 마친 뒤 공식 카탈로그로 공개한다.\n",
+          "kind": "recorded-execution"
+        }
+      ],
+      "improvement": ""
+    },
+    "browser": {
+      "level": null,
+      "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
+      "evidence": [],
+      "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+    },
+    "learner": {
+      "level": null,
+      "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
+      "evidence": [],
+      "improvement": "난도 1 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+    }
+  }
+}

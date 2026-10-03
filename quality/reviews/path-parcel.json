@@ -1,0 +1,115 @@
+{
+  "slug": "path-parcel",
+  "rubric_version": 1,
+  "reviewed_at": "2026-10-03",
+  "reviewer": "Codex — 작성자 관점의 소스 검토",
+  "source_sha256": "01459e4e5e23c3b284a37b6dbcd45d31eccc915f15d82a2523155abe86b7a3b6",
+  "criteria": {
+    "goal": {
+      "level": 3,
+      "reason": "의뢰 목표와 제출 증거가 연결되고 해설에서 보안 원리를 설명한다. 정답 제출만으로 학습자의 원리 이해까지 확인하지는 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/path-parcel/README.md",
+          "quote": "::objective\n파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/path-parcel/solve/README.md",
+          "quote": "## 조사 순서\n\n1. `welcome.txt`가 정상적으로 읽히는지 확인한다.\n2. `guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.\n3. 현재 출발 폴더가 public이므로 `../`로 상위 폴더를 가리킨다.\n4. 파일명 입력칸에 `../private/recovery.txt`를 넣는다.\n5. 운영 복구 기록에 표시된 `pwnden{...}`를 제출한다.\n\n`./../private/recovery.txt`도 같은 위치를 가리킨다.\n\n## 확인된 원리\n\n대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다. 폴더 분리와 접근 제한은 각각 구현해야 한다.\n\n## 고친 동작\n\n수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "starting_context": {
+      "level": 3,
+      "reason": "대상·자료와 시작 행동을 제공하고 web 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+      "evidence": [
+        {
+          "path": "challenges/path-parcel/README.md",
+          "quote": "::resources\n사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.\n공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.\n입력칸은 경로를 그대로 받는다. 응답 내용이 어떤 파일인지 확인하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/path-parcel/README.md",
+          "quote": "::knowledge\n\n### 주소의 경로와 입력값\n\n`/view?file=welcome.txt`에서 `/view`는 서버의 기능을 가리키는 **경로**,\n`?` 뒤의 `file=welcome.txt`는 그 기능에 전달하는 **입력값**이다.\n`file`이 입력 이름이고 `welcome.txt`가 값이다.\n\n값에 공백이나 `/` 같은 문자가 들어가면 브라우저가 다른 표기로 바꿔 전송할 수 있다.\n`%2F`는 `/`의 URL 인코딩이다. 서버는 보통 이 표기를 풀어서 입력을 읽는다.\n문제 사이트의 입력 폼은 이 전송 처리를 해 주므로, 폼에 원래 문자를 입력하면 된다.\n\n### 폴더와 상대 경로\n\n경로는 파일이 어느 폴더에 있는지 나타낸다. `public/welcome.txt`는\n`public` 폴더의 `welcome.txt`다. `/`는 폴더와 파일 이름을 구분한다.\n\n상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,\n`..`는 한 단계 위의 폴더다. 예를 들어 `books`에서 `../music/song.txt`를 읽으면\n`books`를 벗어나 같은 상위",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "reasoning": {
+      "level": 3,
+      "reason": "안내에서 실제 폴더 관계를 읽고 상대 경로를 구성한다. 의미 있는 경로 판단이 있으나 오답 후보 선택 부담은 작다.",
+      "evidence": [
+        {
+          "path": "challenges/path-parcel/solve/README.md",
+          "quote": "`./../private/recovery.txt`도 같은 위치를 가리킨다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "controls": {
+      "level": 4,
+      "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+      "evidence": [
+        {
+          "path": "tools/test_second_experiments.py",
+          "quote": "def test_path_patch_checks_directory_boundaries_and_symlink_targets(self):\n        locate = runpy.run_path(str(ROOT / 'path-parcel/patched/policy.py'))['locate']\n        with tempfile.TemporaryDirectory() as name:\n            public = Path(name) / 'public'\n            public.mkdir()\n            outside = Path(name) / 'private'\n            outside.mkdir()\n            self.assertEqual(locate(public, './file.txt'), public / 'file.txt')\n            for request in ['../private/key.txt', '../public-other/key.txt', str(outside / 'key.txt')]:\n         ",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "hints": {
+      "level": 3,
+      "reason": "기본 본문은 조사 시작점을 주고 실제 정답은 해설에 둔다. 첫 힌트는 필요한 비교를 돕는다.",
+      "evidence": [
+        {
+          "path": "challenges/path-parcel/hints/1.md",
+          "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다.\n폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "explanation": {
+      "level": 3,
+      "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+      "evidence": [
+        {
+          "path": "challenges/path-parcel/solve/README.md",
+          "quote": "## 조사 순서\n\n1. `welcome.txt`가 정상적으로 읽히는지 확인한다.\n2. `guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.\n3. 현재 출발 폴더가 public이므로 `../`로 상위 폴더를 가리킨다.\n4. 파일명 입력칸에 `../private/recovery.txt`를 넣는다.\n5. 운영 복구 기록에 표시된 `pwnden{...}`를 제출한다.\n\n`./../private/recovery.txt`도 같은 위치를 가리킨다.\n\n## 확인된 원리\n\n대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다. 폴더 분리와 접근 제한은 각각 구현해야 한다.\n\n## 고친 동작\n\n수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공개 폴더 안에 있는지 확인한다.\n위 경로와 절대 경로 입력은 `403`으로 거절하면서 welcome.txt와 guide.txt는 계속 읽힌다.\n폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.\n파일이 실제로 public 폴더 안에 있는지 확인해야 한다.\n\n다른 응답을 만났다면 입력의 폴더 순서와 파일명을 다시 확인하자.\n존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "execution": {
+      "level": 3,
+      "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/path-parcel/AUTHORING.md",
+          "quote": "python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.\n- 작성자 내용 검토: 의뢰 맥락, 출발 정보, 완료 조건, 점진적 힌트와 해설의 보안 원리를 대조했다.\n- Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.\n- 독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.\n- 공개 준비: 기술 구현은 완료됐으며 독립 학습 리뷰와 난도 확인을 마친 뒤 공식 카탈로그로 공개한다.\n",
+          "kind": "recorded-execution"
+        }
+      ],
+      "improvement": ""
+    },
+    "browser": {
+      "level": null,
+      "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
+      "evidence": [],
+      "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+    },
+    "learner": {
+      "level": null,
+      "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
+      "evidence": [],
+      "improvement": "난도 2 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+    }
+  }
+}

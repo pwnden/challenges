@@ -1,0 +1,115 @@
+{
+  "slug": "false-label",
+  "rubric_version": 1,
+  "reviewed_at": "2026-10-03",
+  "reviewer": "Codex — 작성자 관점의 소스 검토",
+  "source_sha256": "280399dac71eafc5aa684b0d33d06c3d7088de5b8b7e7869c5db073c11324b8b",
+  "criteria": {
+    "goal": {
+      "level": 3,
+      "reason": "의뢰 목표와 제출 증거가 연결되고 해설에서 보안 원리를 설명한다. 정답 제출만으로 학습자의 원리 이해까지 확인하지는 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/README.md",
+          "quote": "::objective\nbanner.png의 실제 형식을 확인하고, 내부 복구 키를 찾아 제출하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/solve/README.md",
+          "quote": "## 조사 순서\n\n1. `od -An -tx1 -N8 files/banner.png`로 앞부분을 확인한다.\n2. 시작은 `1f 8b 08`이다. PNG의 식별 바이트와 다르고 gzip에 해당한다.\n3. `tar -tzf files/banner.png`로 실제 묶음 구조가 읽히는지 확인한다.\n4. notes/transfer.txt와 recovery/key.txt가 나타난다.\n5. `tar -xOzf files/banner.png recovery/key.txt`로 복구 키를 화면에 출력한다.\n6. `pwnden{bytes_tell_the_story}`를 제출한다.\n\n## 확인된 원리\n\n이름이 banner.png여도 내부 바이트는 gzip으로 압축된 tar다.\n식별 바이트로 형식을 추정하고, 해당 형식의 도구가 구조를 읽는 것으로 확인했다.\n압축 자체는 내부 키를 기밀로 만들지 않는다.\n\n명령의 대문",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "starting_context": {
+      "level": 3,
+      "reason": "대상·자료와 시작 행동을 제공하고 od, tar 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/README.md",
+          "quote": "::resources{title=\"전달받은 자료\"}\n받은 파일은 `files/banner.png`다. 파일 안에는 컴퓨터가 읽는 숫자 데이터인 **바이트**가 들어 있다.\n터미널의 준비된 명령으로 앞부분의 숫자와 압축된 파일 목록을 확인할 수 있다.\n\n앞 여덟 바이트를 16진수로 확인하는 명령은 다음과 같다.\n\n```sh\nod -An -tx1 -N8 files/banner.png\n```\n\n묶음 형식을 알아냈다면 아래 예제의 파일명을 전달 자료로 바꿔 목록을 읽자.\n목록에 나온 내부 파일명은 그대로 복사해 쓸 수 있다.\n\n```sh\ntar -tzf 묶음파일\ntar -xOzf 묶음파일 내부파일명\n```",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/README.md",
+          "quote": "::knowledge\n\n### 확장자와 파일의 실제 형식\n\n`.png` 같은 확장자는 파일 이름의 일부다. 파일 이름을 바꿔도 내부 바이트는 그대로다.\n바이트는 컴퓨터가 파일에 저장하는 숫자 데이터의 단위다.\n실제 형식을 알아보려면 내용의 구조와 앞부분의 숫자 배열인 **식별 바이트**를 함께 살펴본다.\n\nPNG 그림의 앞 여덟 바이트는 `89 50 4e 47 0d 0a 1a 0a`다.\ngzip 압축 자료는 보통 `1f 8b 08`로 시작한다. 이 값은 바이트를 16진수로 쓴 것이다.\n앞부분이 맞는다는 이유만으로 파일 전체가 정상인지는 확정할 수 없다.\n그 형식의 도구가 내용을 읽는지도 확인하자.\n\ntar는 여러 파일을 한 자료로 묶고, gzip은 그 묶음의 크기를 줄일 수 있다.\n`tar -tzf 파일명`은 gzip으로 압축된 tar 묶음의 파일 목록을 보여준다.\n`tar -xOzf 파일명 내부파일명`은 그 파일을 화면에 출력한다. 대문자 `O`가 들어간다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "reasoning": {
+      "level": 3,
+      "reason": "이름과 식별 바이트를 비교하고 실제 tar 파서로 확인한다. 준비 명령으로 한 형식 원리를 관찰하는 입문 경로다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/solve/README.md",
+          "quote": "식별 바이트로 형식을 추정하고, 해당 형식의 도구가 구조를 읽는 것으로 확인했다.\n압축 자체는 내부 키를 기밀로 만들지 않는다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "controls": {
+      "level": 3,
+      "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+      "evidence": [
+        {
+          "path": "tools/test_second_experiments.py",
+          "quote": "self.assertEqual((directory / 'files/banner.png').read_bytes(), archive())",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "hints": {
+      "level": 3,
+      "reason": "기본 본문은 조사 시작점을 주고 실제 정답은 해설에 둔다. 첫 힌트는 필요한 비교를 돕는다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/hints/1.md",
+          "quote": "파일 이름보다 앞부분의 바이트를 먼저 보자. PNG와 gzip의 식별 바이트는\n시작 지식에 나와 있다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "explanation": {
+      "level": 3,
+      "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/solve/README.md",
+          "quote": "## 조사 순서\n\n1. `od -An -tx1 -N8 files/banner.png`로 앞부분을 확인한다.\n2. 시작은 `1f 8b 08`이다. PNG의 식별 바이트와 다르고 gzip에 해당한다.\n3. `tar -tzf files/banner.png`로 실제 묶음 구조가 읽히는지 확인한다.\n4. notes/transfer.txt와 recovery/key.txt가 나타난다.\n5. `tar -xOzf files/banner.png recovery/key.txt`로 복구 키를 화면에 출력한다.\n6. `pwnden{bytes_tell_the_story}`를 제출한다.\n\n## 확인된 원리\n\n이름이 banner.png여도 내부 바이트는 gzip으로 압축된 tar다.\n식별 바이트로 형식을 추정하고, 해당 형식의 도구가 구조를 읽는 것으로 확인했다.\n압축 자체는 내부 키를 기밀로 만들지 않는다.\n\n명령의 대문자 O는 내용을 화면으로 내보낸다. 파일을 풀어 저장할 필요 없이\n조사할 자료만 읽을 수 있다. 형식 검사에서도 확장자와 내용 검증을 함께 사용한다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "execution": {
+      "level": 3,
+      "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/AUTHORING.md",
+          "quote": "python3 -B tools/verify.py false-label`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.\n- 작성자 내용 검토: 의뢰 맥락, 출발 정보, 완료 조건, 점진적 힌트와 해설의 보안 원리를 대조했다.\n- Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.\n- 독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.\n- 공개 준비: 기술 구현은 완료됐으며 독립 학습 리뷰와 난도 확인을 마친 뒤 공식 카탈로그로 공개한다.\n",
+          "kind": "recorded-execution"
+        }
+      ],
+      "improvement": ""
+    },
+    "browser": {
+      "level": null,
+      "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
+      "evidence": [],
+      "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+    },
+    "learner": {
+      "level": null,
+      "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
+      "evidence": [],
+      "improvement": "난도 1 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+    }
+  }
+}
