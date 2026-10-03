@@ -62,7 +62,7 @@ def _ensure_workspace(docker, directory, network):
                         output.addfile(info)
             archive.seek(0)
             labels = [f'{OWNER_LABEL}={docker.owner}', 'pwnden.managed=true', 'pwnden.kind=workspace',
-                      'pwnden.project='+project, 'pwnden.workspace-policy=tmpfs-v1']
+                      'pwnden.project='+project, 'pwnden.workspace-policy=tmpfs-v2']
             flags = [part for label in labels for part in ('--label', label)]
             docker.workspaces[project] = volume  # Cleanup also owns partial initialization.
             docker.call('volume', 'create', '--driver', 'local', '--opt', 'type=tmpfs', '--opt', 'device=tmpfs', '--opt', 'o='+OPTIONS, *flags, volume)
@@ -74,10 +74,10 @@ def _ensure_workspace(docker, directory, network):
                         '--cpus', '0.25', '--memory', '512m', '--memory-swap', '512m', '--pids-limit', '32',
                         '--log-driver', 'local', '--log-opt', 'max-size=10m', '--log-opt', 'max-file=3',
                         '--tmpfs', '/state:rw,noexec,nosuid,nodev,size=1m,nr_inodes=32,uid=10001,gid=10001,mode=0700',
-                        '--mount', 'type=volume,source='+volume+',target=/challenge,volume-nocopy',
+                        '--mount', 'type=volume,source='+volume+',target=/workspace,volume-nocopy',
                         '--entrypoint', '/bin/sleep', *flags, IMAGE, '2147483647')
             docker.call('start', name)
-            docker.call('exec', '-i', name, '/bin/tar', '-x', '-f', '-', '-C', '/challenge', input=archive)
+            docker.call('exec', '-i', name, '/bin/tar', '-x', '-f', '-', '-C', '/workspace', input=archive)
             docker.call('exec', name, '/bin/touch', '/state/ready')
     return volume
 
@@ -89,7 +89,7 @@ def check_workspace(docker, project):
     labels = cfg.get('Labels') or {}
     volumes = json.loads(docker.call('volume', 'inspect', project+'_pwnden-workspace').stdout)
     if (labels.get(OWNER_LABEL) != docker.owner or labels.get('pwnden.project') != project
-            or labels.get('pwnden.kind') != 'workspace' or labels.get('pwnden.workspace-policy') != 'tmpfs-v1'
+            or labels.get('pwnden.kind') != 'workspace' or labels.get('pwnden.workspace-policy') != 'tmpfs-v2'
             or cfg['Image'] != IMAGE or cfg['User'] != '10001:10001'
             or cfg['Entrypoint'] != ['/bin/sleep'] or cfg['Cmd'] != ['2147483647']
             or not item['State']['Running'] or host['NetworkMode'] != 'none' or not host['ReadonlyRootfs']
@@ -105,7 +105,7 @@ def check_workspace(docker, project):
             or volumes[0]['Options'] != {'type': 'tmpfs', 'device': 'tmpfs', 'o': OPTIONS}):
         raise ExecutionError('existing workspace ownership or quota changed')
     mount, = item['Mounts']
-    if mount['Type'] != 'volume' or mount['Name'] != project+'_pwnden-workspace' or mount['Destination'] != '/challenge' or not mount['RW']:
+    if mount['Type'] != 'volume' or mount['Name'] != project+'_pwnden-workspace' or mount['Destination'] != '/workspace' or not mount['RW']:
         raise ExecutionError('workspace mount changed')
 
 

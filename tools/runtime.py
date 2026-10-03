@@ -311,7 +311,7 @@ def check_network(network, project):
 
 def toolbox_mount(directory, writable):
     output = io.StringIO()
-    fields = ['type=bind', f'source={directory}', 'target=/challenge']
+    fields = ['type=bind', f'source={directory}', 'target=/workspace']
     if not writable:
         fields.append('readonly')
     csv.writer(output, lineterminator='').writerow(fields)
@@ -372,11 +372,11 @@ class Docker:
         mount = toolbox_mount(directory, False)
         if writable:
             from workspace import ensure_workspace
-            mount = 'type=volume,source='+ensure_workspace(self, directory, network)+',target=/challenge,volume-nocopy'
+            mount = 'type=volume,source='+ensure_workspace(self, directory, network)+',target=/workspace,volume-nocopy'
         options = ['create', '--rm', '--name', name, '--label', f'{OWNER_LABEL}={self.owner}',
                    '--label', MANAGED_LABEL+'=true', '--label', 'pwnden.kind=tool',
                    '--network', network, '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
-                   '--mount', mount, '--workdir', '/challenge']
+                   '--mount', mount, '--workdir', '/workspace']
         options.extend(tool_options(writable))
         try:
             with admission(self.call, tool_cost(), interrupted=lambda: self.commands.interrupted):

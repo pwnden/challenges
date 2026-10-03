@@ -72,7 +72,7 @@ class FixtureServer(http.server.ThreadingHTTPServer):
 
 
 def main():
-    os.chdir("/challenge")
+    os.chdir("/workspace")
     missing = [name for name in COMMANDS if shutil.which(name) is None]
     record("command-coverage", not missing, kind="installation", checked=len(COMMANDS), missing=missing)
     status = Path("/proc/self/status").read_text()
@@ -200,7 +200,7 @@ def main():
     check("katana-http", ["katana", "-u", url, "-d", "1", "-c", "2", "-p", "1", "-silent"], "/hidden")
     check("rustscan-connect", ["rustscan", "-a", "127.0.0.1", "-p", "18080", "-b", "2", "--ulimit", "256", "--", "--unprivileged", "-sT", "-Pn", "-n"], "18080")
     Path("nuclei-fixture.yaml").write_text('id: pwnden-fixture\ninfo:\n  name: local fixture\n  author: pwnden\n  severity: info\nhttp:\n  - method: GET\n    path: ["{{BaseURL}}/hidden"]\n    matchers:\n      - type: word\n        words: ["pwnden-test"]\n')
-    check("nuclei-local-template", ["nuclei", "-u", url, "-t", "/challenge/nuclei-fixture.yaml", "-silent"], "pwnden-fixture", timeout=60)
+    check("nuclei-local-template", ["nuclei", "-u", url, "-t", "/workspace/nuclei-fixture.yaml", "-silent"], "pwnden-fixture", timeout=60)
     check("cewl-small-wordlist", ["cewl", "--depth", "0", url], "hidden")
     shell("tls-fixture-key", "openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=pwnden-test -keyout tls.key -out tls.crt >/dev/null 2>&1")
     tls = FixtureServer(("127.0.0.1", 18443), Handler)
@@ -239,7 +239,7 @@ def main():
     check("apktool-decode-fixture", ["apktool", "d", "fixture.apk", "-o", "apk-decoded"], "Baksmaling", timeout=90)
     shell("jadx-dex-decompile", "jadx --no-res -d jadx-output fixture.apk; rg pwnden-test jadx-output", "pwnden-test", timeout=90)
     if shutil.which("msfvenom"):
-        check("msfvenom-custom-fixture", ["msfvenom", "-p", "generic/custom", "PAYLOADFILE=/challenge/sample.txt", "-f", "raw", "-o", "msf.bin"], "Saved as:", timeout=90)
+        check("msfvenom-custom-fixture", ["msfvenom", "-p", "generic/custom", "PAYLOADFILE=/workspace/sample.txt", "-f", "raw", "-o", "msf.bin"], "Saved as:", timeout=90)
         record("msfvenom-generated-bytes", Path("msf.bin").exists() and Path("msf.bin").read_bytes() == Path("sample.txt").read_bytes(), kind="functional")
     # The engine is present; actual memory dumps, symbols, AD services and device
     # scenarios require their own per-problem fixtures and are not claimed here.

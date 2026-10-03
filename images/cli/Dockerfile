@@ -12,7 +12,7 @@ RUN sed -i 's|http://deb.debian.org/debian-security|https://snapshot.debian.org/
     && dpkg-query -W > /opt/package-versions.txt
 ENV HOME=/home/pwnden XDG_CACHE_HOME=/tmp/.cache POCL_CACHE_DIR=/tmp/pocl-cache POCL_MAX_PTHREAD_COUNT=2 OMP_NUM_THREADS=2
 USER 10001:10001
-WORKDIR /challenge
+WORKDIR /workspace
 CMD ["/bin/bash"]
 
 FROM basic AS lab

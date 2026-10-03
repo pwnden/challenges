@@ -27,7 +27,7 @@ RUN sh /opt/toolbox/strip_privileges.sh
 ENV HOME=/home/pwnden XDG_CACHE_HOME=/tmp/.cache POCL_CACHE_DIR=/tmp/pocl-cache \
     POCL_MAX_PTHREAD_COUNT=2 OMP_NUM_THREADS=2 JAVA_TOOL_OPTIONS="-XX:ActiveProcessorCount=2 -Xmx1024m"
 USER 10001:10001
-WORKDIR /challenge
+WORKDIR /workspace
 CMD ["/bin/bash"]
 
 FROM packages AS toolbox

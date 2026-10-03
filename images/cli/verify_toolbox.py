@@ -33,7 +33,7 @@ def main():
             "--memory", "2g", "--memory-swap", "2g", "--pids-limit", "256",
             "--tmpfs", "/tmp:rw,exec,nosuid,nodev,size=128m",
             "--tmpfs", "/home/pwnden:rw,nosuid,nodev,uid=10001,gid=10001,size=64m",
-            "--tmpfs", "/challenge:rw,exec,nosuid,nodev,uid=10001,gid=10001,size=256m,nr_inodes=32768",
+            "--tmpfs", "/workspace:rw,exec,nosuid,nodev,uid=10001,gid=10001,size=256m,nr_inodes=32768",
             args.image, "/usr/bin/python3", "-"]
     try:
         result = subprocess.run(argv, input=source, text=True, capture_output=True, timeout=900)
