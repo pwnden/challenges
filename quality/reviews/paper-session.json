@@ -2,21 +2,35 @@
   "slug": "paper-session",
   "rubric_version": 1,
   "reviewed_at": "2026-10-03",
-  "reviewer": "Codex — 작성자 관점의 소스 검토",
-  "source_sha256": "1129c8da2d454cb7fd8eae9414fbe5670f3a1e78184b8505b9c168772989ce0c",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/paper-session/2026-10-03-panel.json",
   "criteria": {
     "goal": {
-      "level": 3,
-      "reason": "의뢰 목표와 제출 증거가 연결되고 해설에서 보안 원리를 설명한다. 정답 제출만으로 학습자의 원리 이해까지 확인하지는 않는다.",
+      "level": 4,
+      "reason": "paper-session-learner (3): 의뢰의 질문은 게스트가 브라우저 사용자 구분을 바꿔 운영자 문서를 읽을 수 있는지이며, 목표와 제출 조건이 복구 키의 실제 공개 여부에 맞물린다. 본문은 복구 키를 장비 재사용에 필요한 비밀값으로 정의하고, 서버가 브라우저가 보낸 글자만으로 권한을 증명할 수 없다는 원리를 준다. 따라서 한 신뢰 경계를 관찰하는 입문 목표가 명료하다.\npaper-session-evidence (4): 의뢰·비밀의 민감성·완료 증거가 한 동작에 직접 연결된다. 실제 응답 본문에 복구 키가 있는지 확인하게 해 화면 상태와 자료 노출을 구분한다.\npaper-session-designer (4): 목표는 게스트 상태에서 운영자 복구 키를 얻는 행동으로 구체적이고, 성공 조건도 응답의 pwnden{...} 전체 제출로 관찰 가능하다. 취약 구현은 /key에서 role 결과가 staff일 때에만 환경의 복구 키를 응답하므로 관찰과 목표가 직접 연결된다.\npaper-session-alternative (4): 게스트 상태에서 쿠키 주장값만 바꾸고 운영자 전용 키가 노출되는지라는 보안 원리와 복구 키 제출 목표가 일치한다. 실제 취약 구현은 키 응답을 role 값에 연결한다.\npaper-session-tooling (3): 목표는 게스트 상태에서 운영자 복구 키를 실제로 읽고 제출하는 것이다. 가용 복구 키는 브라우저 대상이 반환하는 비밀 본문에 놓이고, 설정된 웹 흐름으로 비교할 수 있다. 증거가 목표와 완료 증거를 연결한다.",
       "evidence": [
         {
           "path": "challenges/paper-session/README.md",
-          "quote": "::objective\n게스트로 접속한 상태에서 운영자의 복구 키를 읽어 제출하자.",
+          "quote": "게스트로 접속한 상태에서 운영자의 복구 키를 읽어 제출하자.",
           "kind": "source"
         },
         {
-          "path": "challenges/paper-session/solve/README.md",
-          "quote": "## 조사 순서\n\n1. 첫 화면에서 서버가 게스트를 뜻하는 `guest`로 판단하는지 확인한다.\n2. 복구 키를 연다. 서버는 접근 거절을 뜻하는 `403`과 운영자만 읽을 수 있다는 안내를 돌려준다.\n3. 이전 페이지로 돌아가 쿠키 편집기에 `staff`를 저장한다.\n4. 서버가 운영자를 뜻하는 `staff`로 판단하는지 확인한 뒤 복구 키를 다시 연다.\n5. 응답에 나타난 `pwnden{...}` 전체를 제출한다.\n\n## 확인된 원리\n\n브라우저의 `paper_role`만 guest에서 staff로 바꿨다. 서버에 저장된 사용자는 여전히 게스트다.\n하지만 취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다.\n사용자가 바꿀 수 있는 값으로 접근 권한을 결정한 것이 문제다.\n\n## 고친 동작\n\n수정한 서버는 `paper_sid`로 서버에 저장된 사용자 정보를 찾는다. ",
+          "path": "challenges/paper-session/README.md",
+          "quote": "쿠키가 어디에서 왔고 어떤 권한을 나타내는지는 서버가 확인해야 한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/README.md",
+          "quote": "복구 키에 표시된 `pwnden{...}` 전체를 제출하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/app.py",
+          "quote": "self.reply(200, '장비 복구 키\\n' + os.environ['FLAG']) if role(values, SESSIONS) == 'staff' else self.reply(403, '복구 키는 운영자(staff)만 읽을 수 있습니다.')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/challenge.toml",
+          "quote": "tools = [\"web\"]\ncli = []",
           "kind": "source"
         }
       ],
@@ -24,64 +38,259 @@
     },
     "starting_context": {
       "level": 3,
-      "reason": "대상·자료와 시작 행동을 제공하고 web 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+      "reason": "paper-session-learner (3): 플레이어는 사이트의 작업 노트와 복구 키 링크, 초기 guest 값, paper_role 의미, 값 저장 후 서버 판단이 보인다는 정보를 받는다. HTTP 응답 코드·헤더·본문과 쿠키의 name=value 형태도 미리 설명되어 있어 비교 행동을 시작할 수 있다. 실제 화면은 확인하지 않았으며 본문은 staff라는 유효한 운영자 값과 guest의 403 결과를 구체적으로 알려주지 않아 첫 비교에 일부 화면 관찰이 필요하다.\npaper-session-evidence (4): 도구는 웹만 필요하며 guest 기본값, 저장 방식, 서버 판단 표시, 전후 조회 비교와 제출 형식이 모두 시작 전에 안내된다. 필요한 요청·응답 및 쿠키·신원 개념도 본문에 실려 있어 선수 문서와 일치한다.\npaper-session-designer (3): 입문 수준에서 시작에 필요한 기능과 자료는 제공된다. 본문은 paper_role을 바꾸고 저장 후 서버 판단과 복구 키 접근을 확인하라고 하며, 선수 문서는 쿠키가 이름=값 데이터이고 서버가 신원을 확인해야 한다고 설명한다. 대상 UI가 guest와 staff의 뜻 및 수정 필드를 노출한다. 다만 브리핑의 ‘입력칸’과 힌트·해설의 ‘쿠키 편집기’ 표현이 달라 도구 조작을 브라우저 별도 편집기로 오해할 수 있다.\npaper-session-alternative (3): 입문 대상에게 쿠키, 요청·응답, 200/403과 브라우저 조작 장소를 제공하고 값 전후 비교를 안내한다. 기본 본문에서는 편집기 이름이나 staff 후보값이 공개되지 않아 사이트에서 이를 찾아야 한다.\npaper-session-tooling (3): 웹 전용 도구와 선수 지식이 manifest에 선언되고, 본문은 초기 guest 값, paper_role, 저장 후 재열림, 전후 응답 비교를 설명한다. HTTP 요청·응답과 쿠키 설명도 배포 본문에 들어 있다. 입력 후보 staff를 처음부터 밝히지 않아 값 발견은 남는다. 실제 브라우저 준비 상태는 텍스트 근거만으로 보증되지 않는다.",
       "evidence": [
         {
           "path": "challenges/paper-session/README.md",
-          "quote": "::resources\n웹 도구의 사이트에서 작업 노트와 복구 키 링크를 확인할 수 있다.\n처음 사용자 구분은 게스트를 뜻하는 `guest`다. 사이트에 표시된 `paper_role`은\n브라우저에 저장된 사용자 구분 값이다. 입력칸에 값을 저장하면 페이지가 다시 열리고\n서버가 어떤 사용자로 판단했는지 보인다. 변경 전후 복구 키를 열었을 때의 결과를 비교하자.",
+          "quote": "처음 사용자 구분은 게스트를 뜻하는 `guest`다.",
+          "kind": "source"
+        },
+        {
+          "path": "knowledge/http-messages.md",
+          "quote": "`403`은 접근 거절",
+          "kind": "source"
+        },
+        {
+          "path": "knowledge/http-cookies.md",
+          "quote": "쿠키는 브라우저가 보관했다가 사이트로 다시 보내는 작은 `이름=값` 데이터다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/web/App.vue",
+          "quote": "guest는 게스트, staff는 운영자를 뜻합니다.",
           "kind": "source"
         },
         {
           "path": "challenges/paper-session/README.md",
-          "quote": "::knowledge\n\n### Web 요청과 응답 읽기\n\n사이트에서 버튼을 누르거나 주소를 열면 브라우저는 서버에 **요청**을 보내고,\n서버는 상태와 내용을 담은 **응답**을 돌려준다. `GET`은 자료 조회에 흔히 쓰이는 요청 방식이다.\n\n예를 들어 `GET /help`는 도움말을 요청한다. 응답의 `200`은 요청 성공,\n`403`은 접근 거절, `404`는 찾을 수 없는 자료를 뜻한다. 화면에 오류 안내가 뜨면\n입력한 값과 응답 내용을 함께 살펴보자. 상태 번호만으로 자료의 내용까지 알 수는 없다.\n\n**헤더**는 쿠키나 내용 형식 같은 부가 정보다. **본문**은 페이지, 문서, 데이터 자체다.\n같은 주소라도 요청에 실린 정보에 따라 서버가 다른 내용을 돌려줄 수 있다.\n\n### 쿠키와 신원\n\n쿠키는 브라우저가 보관했다가 사이트로 다시 보내는 작은 `이름=값` 데이터다.\n`theme=dark`처럼 표시 설정을 담기도 하고, 로그인 상태를 이어 가는 데 쓰이기도 한다.\n\n쿠키를 담은 요청은 대략 `Cookie: theme=dark`처럼 보인다. 여기서 `them",
+          "quote": "브라우저에 저장된 사용자 구분 값이다. 입력칸에 값을 저장하면 페이지가 다시 열리고",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/challenge.toml",
+          "quote": "tools = [\"web\"]",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/README.md",
+          "quote": "처음 사용자 구분은 게스트를 뜻하는 `guest`다. 사이트에 표시된 `paper_role`은\n브라우저에 저장된 사용자 구분 값이다. 입력칸에 값을 저장하면 페이지가 다시 열리고\n서버가 어떤 사용자로 판단했는지 보인다. 변경 전후 복구 키를 열었을 때의 결과를 비교하자.",
+          "kind": "source"
+        },
+        {
+          "path": "knowledge/http-cookies.md",
+          "quote": "쿠키가 어디에서 왔고 어떤 권한을 나타내는지는 서버가 확인해야 한다.\n브라우저가 전달한 글자만으로 그 사용자의 신원과 권한이 증명되지는 않는다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/web/App.vue",
+          "quote": "guest는 게스트, staff는 운영자를 뜻합니다. <a href=\"/key\">장비 복구 키</a>는 운영자용 자료입니다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/web/App.vue",
+          "quote": "paper_role은 브라우저가 사이트에 보내는 쿠키 값입니다. 아래 입력칸에서 바꿀 수 있습니다. 저장 후 서버의 판단과 복구 키 접근 결과를 확인하세요.",
+          "kind": "source"
+        },
+        {
+          "path": "knowledge/http-cookies.md",
+          "quote": "쿠키가 어디에서 왔고 어떤 권한을 나타내는지는 서버가 확인해야 한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/challenge.toml",
+          "quote": "requires = [\"http-messages\",\"http-cookies\"]",
           "kind": "source"
         }
       ],
-      "improvement": ""
+      "improvement": "브리핑 자료 설명에 staff가 운영자 값임을 넣으면 화면 문구를 통해 값의 의미를 역추론하는 부담이 줄어든다.\n힌트와 해설의 ‘쿠키 편집기’를 화면의 ‘사용자 구분 (paper_role)’ 입력칸이라는 같은 용어로 맞추고, 입력칸 저장이 페이지를 다시 여는 동작임을 한 번 설명한다."
     },
     "reasoning": {
       "level": 3,
-      "reason": "게스트 세션을 유지한 채 role만 바꿔 거부/성공을 비교한다. 단일 신뢰 경계의 입문 실험이다.",
+      "reason": "paper-session-learner (3): 입문 수준에서 필요한 판단은 같은 복구 키 접근을 guest와 역할 주장 변경 상태로 비교하는 것이다. 해설은 서버 세션을 유지한 채 paper_role 하나를 staff로 바꾸며, 서버가 판단한 역할과 키 응답을 연결한다. 본문은 바꿀 필드를 지정하지만 바꿔야 할 정확한 값과 변화 결과는 숨겨 두므로 최소한의 관찰과 선택은 남아 있다. 해당 난도에서 한 원리의 직접 관찰은 기준에 맞는다.\npaper-session-evidence (3): 입문에 맞게 guest 거부 관찰 후 한 쿠키 값만 staff로 바꿔 접근 결과를 비교하는 단일 신뢰 경계 판단이 남는다. 기본 화면이 값·편집기·대상 응답을 알려주며 자동으로 결론을 내주지는 않는다. 복잡한 오답 배제까지 요구하는 난도는 아니다.\npaper-session-designer (3): 난도 1에 맞는 단일 보안 원리를 비교로 직접 관찰한다. guest 상태의 복구 키 거절과 동일한 접속 상태에서 브라우저 주장만 바꾼 뒤의 결과를 대조한다. 화면은 staff 값까지 알려 주어 값 발견이 추론 과제가 되지는 않지만, 세션과 역할 주장의 신뢰 차이는 결과 비교로 확인해야 한다.\npaper-session-alternative (3): 입문 수준에서 키 접근 거부와 role 단일 변경 후 결과 비교가 신뢰 경계를 직접 관찰한다. 역할 이름 탐색과 응답 비교가 남아 정답 문자열 암기보다 한 단계 판단이 있다.\npaper-session-tooling (3): 입문 수준에 맞게 동일한 브라우저 세션에서 사용자 구분을 바꾸고 키 응답 전후를 대조한다. 본문은 조작과 비교 지점을 알려 주지만 값 선택은 탐색으로 남는다. 그 변경이 서버 신뢰 경계를 검증하는 이유는 해설에서 설명한다.",
       "evidence": [
         {
+          "path": "challenges/paper-session/README.md",
+          "quote": "변경 전후 복구 키를 열었을 때의 결과를 비교하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/hints/1.md",
+          "quote": "세션 값은 유지한 상태에서 사용자 구분 값 하나를 바꿨을 때 응답이 달라지는지 비교하자.",
+          "kind": "source"
+        },
+        {
           "path": "challenges/paper-session/solve/README.md",
-          "quote": "서버에 저장된 사용자는 여전히 게스트다.\n하지만 취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다.\n사용자가 바꿀 수 있는 값으로 접근 권한을 결정한 것이 문제다.",
+          "quote": "브라우저의 `paper_role`만 guest에서 staff로 바꿨다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/README.md",
+          "quote": "처음 사용자 구분은 게스트를 뜻하는 `guest`다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/web/App.vue",
+          "quote": "서버가 판단한 사용자 구분:",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/README.md",
+          "quote": "처음 사용자 구분은 게스트를 뜻하는 `guest`다. 사이트에 표시된 `paper_role`은\n브라우저에 저장된 사용자 구분 값이다. 입력칸에 값을 저장하면 페이지가 다시 열리고\n서버가 어떤 사용자로 판단했는지 보인다. 변경 전후 복구 키를 열었을 때의 결과를 비교하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/web/App.vue",
+          "quote": "guest는 게스트, staff는 운영자를 뜻합니다. <a href=\"/key\">장비 복구 키</a>는 운영자용 자료입니다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "브라우저의 `paper_role`만 guest에서 staff로 바꿨다. 서버에 저장된 사용자는 여전히 게스트다.\n하지만 취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/policy.py",
+          "quote": "return cookie.get('paper_role', 'guest')",
           "kind": "source"
         }
       ],
       "improvement": ""
     },
     "controls": {
-      "level": 4,
-      "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+      "level": 3,
+      "reason": "paper-session-learner (2): 자동 풀이와 실제 구현은 guest 쿠키로 403을 받고 같은 세션에 staff 주장을 넣으면 키가 노출되는 비교를 명확히 구성한다. 다만 패치 검사는 guest 세션에 대한 거부와 공개 노트·health·404를 확인할 뿐, 서버 세션 자체가 staff일 때 필요한 정상 키 조회를 검증하지 않는다. AUTHORING.md는 staff 세션 정상 역할을 확인한다고 적지만, 배포된 patched/test.py에는 해당 검사가 없어 문서 주장과 실제 대조 검사 범위가 일치하지 않는다.\npaper-session-evidence (4): 실제 구현상 guest 키 조회는 403이고, 취약 정책은 클라이언트 역할 주장만 읽어 staff 키를 노출한다. 해답은 세션을 유지한 상태에서 guest/staff 주장 비교 및 세션 없는 staff 주장도 확인한다. 패치 검사는 guest 정상 홈·노트, 여러 위조/공백 SID·role 조합의 거부, health/404를 대조하며 유효 세션 역할을 쓴다. 다만 staff 정상 권한 보존 검사는 작성기록이 언급할 뿐 선언 검사 코드에는 없다.\npaper-session-designer (3): 취약 경로의 거부와 성공이 서로 대조되고, 선언된 패치 검사는 빈 쿠키·staff 주장만 있는 경우·위조 SID와 유효 게스트 SID에 staff 주장을 붙인 경우 모두 키를 거부하며 작업 노트와 health/404 동작도 확인한다. 다만 패치 검사는 서버 세션에 실제 staff가 있을 때 복구 키가 정상 허용되는 양성 대조를 직접 만들지 않아 패치가 필요한 기능을 유지하는지까지 이 검증만으로 완전히 입증하지는 않는다.\npaper-session-alternative (3): 해답 스크립트는 같은 세션에서 guest의 403과 staff 성공을 비교한다. 패치 검사는 빈 값·staff 주장·위조 SID·실제 guest 세션의 staff 주장까지 거부하면서 공개 노트와 health/missing 동작도 확인한다. 패치 검사에는 서버 소유 staff 세션의 정상 키 조회가 없다.\npaper-session-tooling (3): 패치 검사는 빈 쿠키, staff 주장, 위조 SID, 세션 유지 중 role 변경을 거절하고 정상 홈과 health/missing 응답도 확인한다. 작성 기록은 실제 HTTP의 guest 거절과 staff 주장 성공, 패치 및 정상 staff 세션 확인을 2026-10-02 범위로 기록한다.\n부모 조정: patched/test.py는 정상guest 홈·health와 위조role/SID거부를 검사한다. tools/test_second_experiments.py의 실제단위는 서버가소유한known-staff SID가 클라이언트guest주장에도staff역할을 유지하는지 확인한다. 작성기록의 정상staff역할 단위검사 주장은 이 코드와 일치한다. staff의 전체HTTP키조회는 별도양성검사가없어 그 경계까지실행됐다고 주장하지 않으며 기준3으로확정한다.",
       "evidence": [
         {
+          "path": "challenges/paper-session/solve/solve.py",
+          "quote": "assert get('/key', session + '; paper_role=guest')[0] == 403",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/solve.py",
+          "quote": "status, body, _ = get('/key', session + '; paper_role=staff')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/patched/test.py",
+          "quote": "assert status == 403 and 'pwnden{' not in body, cookie",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "단위 검사는 서버가 소유한 staff 세션의 정상 역할도 유지하는지 확인한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/vulnerable/app.py",
+          "quote": "self.reply(200, '장비 복구 키\\n' + os.environ['FLAG']) if role(values, SESSIONS) == 'staff' else self.reply(403, '복구 키는 운영자(staff)만 읽을 수 있습니다.')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/patched/test.py",
+          "quote": "for cookie in ['', 'paper_role=staff', 'paper_sid=forged; paper_role=staff', session + '; paper_role=staff', session + '; paper_role=guest']:",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/patched/test.py",
+          "quote": "for cookie in ['', 'paper_role=staff', 'paper_sid=forged; paper_role=staff', session + '; paper_role=staff', session + '; paper_role=guest']:\n    status, body, _ = get('/key', cookie)\n    assert status == 403 and 'pwnden{' not in body, cookie",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/patched/test.py",
+          "quote": "assert 'guest' in get('/', session + '; paper_role=staff')[1]\nassert get('/healthz')[0] == 200\nassert get('/missing')[0] == 404",
+          "kind": "source"
+        },
+        {
           "path": "tools/test_second_experiments.py",
-          "quote": "self.assertEqual(patched(forged, sessions), 'guest')\n        self.assertEqual(patched({'paper_sid': 'forged', 'paper_role': 'staff'}, sessions), 'guest')\n        self.assertEqual(patched({'paper_sid': 'known-staff', 'paper_role': 'guest'}, sessions), 'staff')",
+          "quote": "self.assertEqual(patched({'paper_sid': 'known-staff', 'paper_role': 'guest'}, sessions), 'staff')",
           "kind": "source"
         }
       ],
-      "improvement": ""
+      "improvement": "staff 역할 단위를 넘어 실제 /key HTTP응답의 정상권한 양성검사를 추가하면 필요한 운영자기능 보존을 더 직접적으로 입증할 수 있다."
     },
     "hints": {
       "level": 3,
-      "reason": "기본 본문은 조사 시작점을 주고 실제 정답은 해설에 둔다. 첫 힌트는 필요한 비교를 돕는다.",
+      "reason": "paper-session-learner (3): 브리핑은 목표와 관찰 도구를 알려주지만 정답값을 싣지 않는다. 단일 힌트는 로그인한 사용자와 브라우저 주장의 신뢰 관계를 묻고, 한 쿠키만 바꿔 응답을 비교하도록 방향을 준다. 후속 조사 순서는 staff 값과 구체 결과까지 공개해 상당히 직접적이지만, 입문 문제에 하나의 단계적인 도움을 제공하는 구성이다.\npaper-session-evidence (4): 단일 힌트는 서버가 누구를 믿는지 질문하고 세션은 유지한 채 역할 값만 바꾸라는 판단 단서를 준다. 입력 값 staff와 결론을 직접 말하지 않아 본문의 입문 과제를 대신 풀지 않는다.\npaper-session-designer (2): 기본 본문만으로 변경 전후를 비교할 수 있고, 힌트는 같은 세션을 유지하라는 통제 조건과 관찰 방향을 보강한다. 다만 단일 힌트가 정확한 staff 입력 및 조작 순서를 한 번에 공개하고, 본문과 화면에 이미 나온 단서를 대부분 되풀이한다. 입문에서 구체적인 힌트 자체는 타당하나 막힌 판단에 단계적으로 정보를 보탠다는 측면은 약하다.\npaper-session-alternative (3): 기본 본문이 실험 방법을 구체적으로 제공하는 입문 문제이며, 힌트는 핵심 응답 차이를 확인한 후 쿠키 편집 단계로 막힘을 좁힌다.\npaper-session-tooling (3): 유일한 힌트는 세션값을 유지하고 사용자 구분값 하나만 바꾸라고 실험 변수를 좁혀 준다. 막힐 경우 통제된 비교를 할 수 있게 돕고, 정확한 후보값과 결과를 직접 모두 제시하지 않는다.\n부모 조정: 힌트는 세션을유지하고 역할주장 하나만바꾸는 통제조건을 알려주며 실제staff값과 정답을제시하지않는다. 입문에필요한 다음비교를 돕는 기준3을 충족한다. 해설에있는 구체단계를 힌트에서주었다는 판정은 원문과불일치한다.",
       "evidence": [
+        {
+          "path": "challenges/paper-session/README.md",
+          "quote": "입력칸에 값을 저장하면 페이지가 다시 열리고",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/hints/1.md",
+          "quote": "로그인한 사용자와 브라우저가 보내는 사용자 구분이 서로 다르면 서버는 어느 쪽을 믿을까?",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/hints/1.md",
+          "quote": "응답이 달라지는지 비교하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/hints/1.md",
+          "quote": "세션 값은 유지한 상태에서 사용자 구분 값 하나를 바꿨을 때 응답이 달라지는지 비교하자.",
+          "kind": "source"
+        },
         {
           "path": "challenges/paper-session/hints/1.md",
           "quote": "로그인한 사용자와 브라우저가 보내는 사용자 구분이 서로 다르면 서버는 어느 쪽을 믿을까?\n세션 값은 유지한 상태에서 사용자 구분 값 하나를 바꿨을 때 응답이 달라지는지 비교하자.",
           "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "3. 이전 페이지로 돌아가 쿠키 편집기에 `staff`를 저장한다.\n4. 서버가 운영자를 뜻하는 `staff`로 판단하는지 확인한 뒤 복구 키를 다시 연다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/README.md",
+          "quote": "사이트에 표시된 `paper_role`",
+          "kind": "source"
         }
       ],
-      "improvement": ""
+      "improvement": "힌트·해설의 쿠키 편집기 표현을 화면의 사용자 구분 입력칸 명칭과 맞춰 별도 브라우저 도구로 오해할 여지를 줄인다."
     },
     "explanation": {
       "level": 3,
-      "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+      "reason": "paper-session-learner (3): 해설은 guest 기준 응답과 staff 주장 후 결과, 취약한 서버가 신뢰하는 입력, 서버 소유 세션으로 권한을 결정하는 패치 원리를 연결한다. 또한 이번 실험이 초대된 게스트 세션과 공개 노트에 한정되고 로그인 시스템 전체 설계로 일반화하지 않도록 범위를 적는다. 플레이어가 실제로 응답 내용을 확인하게 하며 방어 방향도 설명한다.\npaper-session-evidence (4): 해설은 guest 거부, 쿠키 변경, 서버의 잘못된 신뢰, 세션 기반 수정과 거부 동작을 연결하며 실습이 전체 로그인 설계를 검증하지 않는 범위를 밝힌다.\npaper-session-designer (3): 해설은 guest 거절, 동일 세션의 역할 주장 변경, 키 공개 결과를 순서대로 재현하고 사용자가 바꿀 수 있는 값으로 권한을 정한 원인과 서버 세션을 조회하는 방어를 설명한다. 결론도 실습에서 관찰한 세션 신뢰 경계를 기반으로 한 학습 범위로 제시한다. 실제 브라우저 풀이·응답 내용의 독립 대조 없이 설명 자체가 재현되었다고 볼 수는 없다.\npaper-session-alternative (4): 해설은 유지한 SID와 변경된 role을 특정하고, 서버 저장 사용자는 guest임에도 브라우저의 역할값을 신뢰해 키가 노출되는 이유와 서버 세션으로 권한을 판단하는 수정 원리를 설명한다. 로그인 전체 설계로 결론을 과장하지 않는 한계도 밝힌다.\npaper-session-tooling (3): 해설은 guest 거절, paper_role 변경, staff 판단과 키 공개를 순서대로 잇고 원인을 브라우저 제공 권한값 신뢰로 설명한다. 서버 세션 ID로 저장 사용자 정보를 확인하는 보호 방법과 실험 범위를 덧붙인다.",
       "evidence": [
         {
           "path": "challenges/paper-session/solve/README.md",
-          "quote": "## 조사 순서\n\n1. 첫 화면에서 서버가 게스트를 뜻하는 `guest`로 판단하는지 확인한다.\n2. 복구 키를 연다. 서버는 접근 거절을 뜻하는 `403`과 운영자만 읽을 수 있다는 안내를 돌려준다.\n3. 이전 페이지로 돌아가 쿠키 편집기에 `staff`를 저장한다.\n4. 서버가 운영자를 뜻하는 `staff`로 판단하는지 확인한 뒤 복구 키를 다시 연다.\n5. 응답에 나타난 `pwnden{...}` 전체를 제출한다.\n\n## 확인된 원리\n\n브라우저의 `paper_role`만 guest에서 staff로 바꿨다. 서버에 저장된 사용자는 여전히 게스트다.\n하지만 취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다.\n사용자가 바꿀 수 있는 값으로 접근 권한을 결정한 것이 문제다.\n\n## 고친 동작\n\n수정한 서버는 `paper_sid`로 서버에 저장된 사용자 정보를 찾는다. 이 값은 접속 상태를\n이어 주는 세션 식별자다. 서버에 저장된 사용자는 guest이므로 `paper_role=staff`를\n보내도 키 조회를 거절한다. 접근 권한은 서버가 확인한 사용자 정보로 결정해야 한다.\n\n이 실험에는 초대된 게스트 세션과 공개 작업 노트가 준비돼 있다.\n로그인 시스템 전체의 설계는 이 문제에서 관찰한 세션 신뢰 경계를 기반으로 확장할 수 있다.",
+          "quote": "하지만 취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "접근 권한은 서버가 확인한 사용자 정보로 결정해야 한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "이 실험에는 초대된 게스트 세션과 공개 작업 노트가 준비돼 있다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "사용자가 바꿀 수 있는 값으로 접근 권한을 결정한 것이 문제다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "로그인 시스템 전체의 설계는 이 문제에서 관찰한 세션 신뢰 경계를 기반으로 확장할 수 있다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "브라우저의 `paper_role`만 guest에서 staff로 바꿨다. 서버에 저장된 사용자는 여전히 게스트다.\n하지만 취약한 서버는 브라우저에서 받은 값을 그대로 믿어 운영자의 복구 키를 보여 줬다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "브라우저의 `paper_role`만 guest에서 staff로 바꿨다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/paper-session/solve/README.md",
+          "quote": "이 실험에는 초대된 게스트 세션과 공개 작업 노트가 준비돼 있다.\n로그인 시스템 전체의 설계는 이 문제에서 관찰한 세션 신뢰 경계를 기반으로 확장할 수 있다.",
           "kind": "source"
         }
       ],
@@ -89,27 +298,65 @@
     },
     "execution": {
       "level": 3,
-      "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+      "reason": "paper-session-learner (2): 2026-10-02 작성 기록은 HTTP에서 guest 거부와 세션 유지 후 staff 주장 성공, SID 없는 주장 성공을 확인했다고 보고하며, Python 3.13.15 이미지에서 자동 풀이·선언 패치·컨테이너 정리가 통과했다고 기록한다. 날짜와 범위가 기재된 과거 기술 검증 요약은 있으나 이번 심사에서 새로 실행하지 않았고 상세 실행 로그나 staff 세션 정상 기능의 패치 결과는 제시되지 않아 재현 근거는 일부 충족으로 본다.\npaper-session-evidence (3): 2026-10-02 작성자 기록은 최초 콘텐츠 구현 작업 트리에서 실제 HTTP 거부·노출 동작, 고정 Python 이미지의 자동 풀이, 선언 패치와 컨테이너·네트워크·볼륨 정리의 검증 성공을 명시한다. 이는 그 과거 범위의 재현 근거이며 현재 심사에서 재실행한 결과는 아니다. 패치 테스트도 소스상 정상 guest 및 위조 값 거부를 명시한다.\npaper-session-designer (3): 작성 기록은 2026-10-02 검증 범위로 실제 HTTP의 guest 거절, 세션 유지 후 staff 주장 성공, SID 없는 주장 성공 및 패치 동작을 보고하고, 고정 Python 3.13.15 이미지에서 풀이·선언 패치·컨테이너/네트워크/볼륨 정리 검증 명령의 통과를 기록한다. 이는 과거 작성자 검증 증거이며 이번 심사의 새 실행은 아니다.\npaper-session-alternative (3): 작성 기록은 2026-10-02 고정 Python 3.13.15 이미지로 자동 풀이·패치·컨테이너 네트워크 볼륨 정리를 통과했다고 기록한다. 이는 작성자 기록이며 이번 검토의 재실행이 아니다.\npaper-session-tooling (3): 작성 기록은 2026-10-02 실제 HTTP 비교 및 고정 Python 3.13.15 이미지에서 해답·선언된 패치·컨테이너/네트워크/볼륨 정리 검증 통과를 보고한다. 해당 날짜의 작성자 기록으로 판정하며 본 심사에서 새로 실행했다는 뜻은 아니다.",
       "evidence": [
         {
           "path": "challenges/paper-session/AUTHORING.md",
-          "quote": "python3 -B tools/verify.py paper-session`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.\n- 작성자 내용 검토: 의뢰 맥락, 출발 정보, 완료 조건, 점진적 힌트와 해설의 보안 원리를 대조했다.\n- Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.\n- 독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.\n- 공개 준비: 기술 구현은 완료됐으며 독립 학습 리뷰와 난도 확인을 마친 뒤 공식 카탈로그로 공개한다.\n",
+          "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "`python3 -B tools/verify.py paper-session`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "- `python3 -B tools/verify.py paper-session`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "- 2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "- 2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.\n- 실제 HTTP에서 guest 거절, 세션 유지 후 staff 주장 성공, SID 없이 동일한 주장 성공을 확인했다.",
           "kind": "recorded-execution"
         }
       ],
-      "improvement": ""
+      "improvement": "현재 소스 스냅샷에서 선언 검증 실행 결과와 패치의 정상 staff 동작까지 날짜가 있는 재현 기록으로 남긴다.\n최근 배포 기준 커밋에서 검증을 다시 실행하고 실행 로그를 보존한다."
     },
     "browser": {
       "level": null,
-      "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
-      "evidence": [],
-      "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+      "reason": "paper-session-learner (None): 현재 문제를 브라우저에서 검색·선택하고 환경 준비부터 풀이, 오답·정답 제출, 종료까지 진행한 세션 기록이 없다. 이번 모델의 본문 열람은 브라우저 풀이가 아니다.\npaper-session-evidence (None): 현재 스냅샷에는 이 문제를 실제 브라우저로 검색·선택하고 환경 준비, 전 과정 풀이, 정오답 제출, 종료까지 진행한 세션 기록이 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 명시한다.\npaper-session-designer (None): 현재 검토에서 실제 브라우저 세션을 수행하지 않았고 작성 기록도 Browser Plugin 화면 조작 검증을 하지 않았다고 명시한다. 터미널 또는 HTTP 검증으로 브라우저 전체 풀이를 대체할 수 없다.\npaper-session-alternative (None): 현재 문제의 검색부터 종료까지 확인한 실제 브라우저 세션 기록이 없다.\npaper-session-tooling (None): 현재 심사에서 검색부터 문제 선택, 준비, 전체 풀이, 정오답 제출과 종료까지 이어진 브라우저 세션을 확인하지 못했다. 작성 기록도 실제 화면 검증이 수행되지 않았다고 명시한다.",
+      "evidence": [
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "- Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+          "kind": "browser-session"
+        },
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+          "kind": "browser-session"
+        }
+      ],
+      "improvement": "실제 브라우저에서 전체 플레이 흐름과 정답·오답 제출 및 종료를 기록한다.\n현재 문제를 브라우저에서 시작부터 종료까지 수행하고 제출 정답과 오답 거부를 포함한 세션 기록을 남긴다.\n현재 문제를 선택하는 순간부터 환경 준비, 브라우저 조작, 정답·오답 제출, 종료까지 실제 브라우저 세션을 기록한다.\n실제 브라우저에서 검색부터 종료까지 수행하고 기록한다.\nBrowser Plugin에서 문제 검색·선택, 환경 준비, 쿠키 변경 풀이, 정답·오답 제출, 종료까지 기록한다."
     },
     "learner": {
       "level": null,
-      "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
-      "evidence": [],
-      "improvement": "난도 1 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+      "reason": "paper-session-learner (None): 대상 수준의 독립 풀이자가 힌트와 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 이번 persona 기반 문서 심사는 실제 학습자 세션으로 볼 수 없다.\npaper-session-evidence (None): 실제 대상 수준의 독립 풀이 기록은 없으며 작성기록도 리뷰 대기라고 구분한다. 이 심사는 학습자 세션으로 대체할 수 없다.\npaper-session-designer (None): 모델 심사는 실제 학습자 세션이 아니며 작성 기록도 대상 수준 풀이자의 독립 리뷰가 아직 없다고 밝힌다. 실제 풀이 시간, 막힘, 힌트 사용과 원리 이해를 확인할 자료가 없다.\npaper-session-alternative (None): 대상 수준 학습자가 해설 없이 독립 풀이한 시간·막힘·힌트·원리 이해 기록이 없다. 작성자 검토와 자동 풀이는 독립 학습자 검증이 아니다.\npaper-session-tooling (None): 대상 수준 학습자의 독립 풀이 시간·막힌 단계·힌트 사용·이해 기록이 없다. 작성자와 자동 해답 결과는 이 근거를 대신하지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/paper-session/AUTHORING.md",
+          "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
+          "kind": "learner-session"
+        }
+      ],
+      "improvement": "대상 수준 풀이자에게 독립 수행을 요청하고 시간·막힘·힌트 사용·원리 설명을 기록한다.\n대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 이해 확인을 기록한다.\n해설을 닫은 대상 수준 독립 풀이자가 수행한 시간·막힘 단계·힌트 사용·원리 설명을 기록하고 난도를 재평가한다.\n대상 수준의 독립 풀이자에게 해설 없이 수행하게 하고 시간, 막힘, 힌트, 원리 이해를 기록한다.\n대상 수준 독립 풀이 세션을 기록해 시간, 막힌 단계, 힌트 사용, 원리 이해를 확인한다."
     }
-  }
+  },
+  "source_sha256": "1129c8da2d454cb7fd8eae9414fbe5670f3a1e78184b8505b9c168772989ce0c"
 }

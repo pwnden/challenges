@@ -1,0 +1,2712 @@
+{
+  "slug": "path-parcel",
+  "input_sha256": "04a7f6840ce9a610c50f3a8f79fb3a632b9a92b102a9109f30d05534ac88ff90",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "judge_count": 5,
+  "method": "criterion median",
+  "ballots": [
+    {
+      "judge_id": "path-parcel-learner",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "learner-advocate",
+      "first_pass": "문제: path-parcel — learner-advocate first pass\n\n배정된 초급 대상의 전제는 `web-addresses`와 `file-paths`다. 본문은 `/view?file=...`의 입력값과 URL 인코딩, 상대 경로의 `..` 의미를 설명하므로 기본 용어는 준비되어 있다. 첫 행동도 `welcome.txt` 공개 읽기, 이어 `guide.txt`로 폴더 배치와 복구 파일명을 확인하라는 순서가 구체적이다. 그다음 입력칸에서 경로를 바꾸어 보고 응답 내용으로 어느 파일인지 확인하면 된다.\n\n학습자의 핵심 선택은 안내 파일의 배치·이름을 바탕으로 공개 폴더 바깥의 파일을 가리키는 상대 경로를 구성하는 것이다. 공개 위치를 기준으로 상위 폴더로 이동해야 할 수 있다는 점은 공통 설명의 예시로 이해 가능하다. 폼이 URL 처리를 맡는다고 명시해 인코딩 조작 부담도 덜었다. 그러나 정확한 저장 루트/상대 깊이와 오류 응답 해석은 본문만으로 특정할 수 없고, 우선 guide의 실제 내용을 관찰해야 한다. 지금 단계에서 실행을 수행한 것으로 간주하지 않는다.\n\n막힐 수 있는 지점: guide를 읽은 뒤 공개 폴더에서 별도 복구 폴더로 이동할 경로를 조합하는 방법. 최소한 입력값이 공개 폴더 기준임을 재확인하고 응답을 내용으로 판별하도록 안내되어 있으나, 성공·거부·없는 파일의 응답 차이는 아직 설명되지 않았다. 또한 제출 목표는 `pwnden{...}` 전체 문자열이라고 알려져 있다.",
+      "review": {
+        "slug": "path-parcel",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "path-parcel-learner",
+        "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "의뢰의 폴더 분리 가정과 관찰 목표가 일치하며, 완료 증거를 실제 복구 문서의 flag로 정했다. 읽기 범위 이탈이라는 학습 원리가 명확하다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "운영 복구 기록의 `pwnden{...}` 전체를 제출하자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "본문은 첫 공개 파일과 guide를 읽는 순서를 주고 입력칸의 경로 처리, URL 인코딩, 상대 경로 개념을 설명한다. guide를 실제로 읽기 전에는 정확한 상대 경로를 만들 수 없지만, 그 정보가 다음 관찰 자료에 있다고 안내한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "입력칸은 경로를 그대로 받는다. 응답 내용이 어떤 파일인지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/file-paths.md",
+                "quote": "`..`는 한 단계 위의 폴더다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "초급에 맞는 연결 과제가 남아 있다. 학습자는 guide에서 private 폴더의 위치와 recovery.txt 이름을 얻고, public에서의 상대 위치를 입력값으로 조합해야 한다. 단순 클릭만으로 정답이 정해지지는 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 3,
+            "reason": "패치된 경로 검사는 정규화 후 public 경계 안인지 확인하며, 테스트는 정상 안내 파일을 유지하면서 여러 상대·절대 경로와 public-other를 거절하고 missing·빈 입력·NUL의 상태도 구분한다. 이는 보호와 정상 기능을 함께 확인한다. 다만 테스트는 정해진 사례 중심이며 운영 실행의 대조군 기록은 작성 기록에 요약되어 있다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "path = (public / name).resolve()",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['welcome.txt', './welcome.txt', 'guide.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "'../public-other/test.txt']:",
+                "kind": "source"
+              }
+            ],
+            "improvement": "격리된 테스트에서 검사하는 symlink 경계 사례도 코드 테스트에 포함하면 설명된 경계 조건을 직접 확인할 수 있다."
+          },
+          "hints": {
+            "level": 3,
+            "reason": "첫 힌트는 문제의 폴더 관계를 먼저 그리게 한 뒤 출발 위치에서 위로 가는 경로가 유지되는지 시험하라고 안내한다. 핵심 판단을 좁혀 주지만 폴더 관계를 직접 조합하도록 남겨 둔다. 마지막 단계의 정답 입력은 해설에 둔다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "파일명 입력칸에 `../private/recovery.txt`를 넣는다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "해설은 정상 파일과 guide를 먼저 확인하고 입력·응답에서 복구 문서를 관찰한 뒤, `..`가 실제 위치를 공개 폴더 밖으로 옮긴다는 원인을 설명한다. 패치 설명도 정규화된 최종 위치와 폴더 경계를 연결한다. 실습의 증거 한계를 과장하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "위 경로와 절대 경로 입력은 `403`으로 거절하면서 welcome.txt와 guide.txt는 계속 읽힌다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+          },
+          "execution": {
+            "level": 3,
+            "reason": "날짜가 명시된 2026-10-02 작성 기록은 실제 HTTP의 두 상대 경로 풀이와 정상 파일, 그리고 고정 Python 이미지의 해답·패치·정리 검증 통과를 보고한다. 이는 이번 심사의 새 실행이 아니라 최초 구현 작업 트리의 과거 기술 검증이다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다."
+          },
+          "browser": {
+            "level": null,
+            "reason": "현재 문제를 검색하는 단계부터 환경 준비, 웹 풀이, 정답·오답 제출, 종료까지 확인한 실제 Browser Plugin 세션 기록이 없다. 작성 기록도 화면 조작 검증을 수행하지 않았다고 명시한다.",
+            "evidence": [],
+            "improvement": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 모델의 문서 검토는 학습자 세션 근거가 아니다.",
+            "evidence": [],
+            "improvement": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "path-parcel-evidence",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "evidence-examiner",
+      "first_pass": "배정 관점: evidence-examiner. 기본 본문은 방문자가 파일명을 입력해 배송 안내를 보는 사이트에서 운영자 복구 문서의 복구 키를 제출하게 한다. 첫 입력은 welcome.txt이며 안내상 guide.txt에 폴더 배치와 비공개 문서 파일명이 있다고 한다. 파일명 입력이 경로를 그대로 받는다는 지식과 상대경로의 .. 설명으로 공개 디렉터리 밖을 탐색할 단서는 주어진다. 성공을 입증하려면 응답이 단순히 성공 상태나 열린 포트인지를 넘어 실제 운영자 복구 기록인지, 그 안의 pwnden{...}가 제출 대상인지 확인해야 한다. 지금은 서버 동작과 파일 배치가 보이지 않아 URL 형태나 어느 디렉터리 이동이 성공하는지는 확인할 수 없다. 오탐 대조로는 공개 안내 파일 응답과 복구 문서 응답의 내용을 비교해야 하며, 숨겨진 다른 기능 또는 잘못된 파일 응답을 정답 증거로 혼동하지 않아야 한다.",
+      "review": {
+        "slug": "path-parcel",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "path-parcel-evidence",
+        "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "의뢰, 관찰 대상, 제출 증거가 일치한다. 사용자가 복구 문서를 파일 읽기로 찾아 키 전체를 제출하도록 하고, 배포된 지식은 최종 파일 위치가 폴더 경계를 벗어나는지를 원리로 제시한다. 취약 앱은 읽은 파일 본문을 반환하므로 상태 코드만이 아니라 비밀이 든 자료 자체를 확인할 수 있다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/path-boundaries.md",
+                "quote": "상대 경로를 해석한 최종 위치가 허용 범위에 있는지 확인한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/app.py",
+                "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "첫 행동(welcome.txt), 조사 대상(guide.txt와 파일명 입력), 입력 방식(경로 그대로), URL 입력 처리, 상대 경로의 .. 의미가 플레이어 문서에 있다. 이는 결과 내용을 판별하며 직접 시도하기에 충분하다. 다만 화면 조작 설명은 간결하고 오류별 다음 행동은 뒤의 해설에서야 제공되므로 시작 정보가 모든 막힘을 선제적으로 풀지는 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "입력칸은 경로를 그대로 받는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "`..`는 한 단계 위의 폴더다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/web/App.vue",
+                "quote": "<form action=\"/view\"><label>파일명<input v-model=\"file\" name=\"file\" maxlength=\"256\" required></label><button>읽기</button></form>",
+                "kind": "source"
+              }
+            ],
+            "improvement": "첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "초급 과제에 필요한 단서 연결이 있다. 플레이어는 guide.txt에서 public/private의 관계와 실제 파일명을 읽고, 제공된 상대경로 개념 및 입력값을 합쳐 경로를 구성해야 한다. 정상 안내 읽기와 운영 기록 읽기의 본문을 구분하는 판단이 남아 있다. 동등 경로 변형은 해설에만 있어 본문만으로 대안 경로 구분을 요구하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "`guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "값에 공백이나 `/` 같은 문자가 들어가면 브라우저가 다른 표기로 바꿔 전송할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다."
+          },
+          "controls": {
+            "level": 4,
+            "reason": "취약 풀이 스크립트는 공개 안내와 guide 응답을 확인한 뒤 비밀 형식이 든 복구 문서 응답을 확인하고, 동일 파일의 동등 상대경로 결과도 본문 전체로 비교한다. 패치 검사는 정상 파일의 유지, 여러 상대경로·절대경로·public-other 거부, 없는 파일·빈 입력·NUL의 상태를 함께 확인한다. 이는 200 응답을 곧바로 성공으로 오인하지 않게 하고 경계 비교와 정상 기능을 함께 검증한다. 단, 이 평가는 검사 코드와 기록에 근거한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/solve.py",
+                "quote": "assert 'pwnden{' not in get('/')[1]",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/solve.py",
+                "quote": "assert view('./../private/recovery.txt')[1] == body",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "assert status == 403 and 'pwnden{' not in body, name",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "assert status == 200 and 'pwnden{' not in body, name",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 2,
+            "reason": "단일 힌트는 막히는 지점에 정확히 대응해 폴더 관계를 그리게 하고, 다음 단계에서는 공개 자료 조회, 파일명 발견, 출발 폴더, 사용할 입력, 제출 동작까지 전부 제공한다. 도움의 순서는 명확하지만 점진적으로 작은 단서부터 제공하지 않고 한 번 열면 풀이 경로가 사실상 노출된다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "파일명 입력칸에 `../private/recovery.txt`를 넣는다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "첫 힌트는 상대 위치를 도식화하도록 유지하고, 뒤따르는 힌트에서 파일명과 경로 조합을 단계별로 공개해 정답 입력은 해설에 남긴다."
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 공개 폴더에서의 시작 위치, 실제 응답 파일, 동등 경로, 입력과 실제 파일 위치의 관계를 연결한다. 수정은 정규화된 실제 위치를 공개 폴더와 비교하고, 단순 문자열 접두어 비교의 public-other 오류와 정상·오류 상태를 설명한다. 결론은 이 실습의 파일 읽기 범위에 한정되어 있으며 실제 파일을 읽었다는 근거와 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "최종 위치는 공개 폴더 밖이 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "최종 위치는 공개 폴더 밖이 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "2026-10-02 작성자 기술 검증 기록은 고정 Python 3.13.15 이미지에서 두 상대경로의 실제 HTTP 풀이, 패치의 거부 및 정상 파일 동작, verify 명령으로 풀이·선언된 패치·자원 정리를 확인했다고 구체적으로 범위를 적는다. 이는 이번 심사에서 새로 실행한 결과가 아니라 기록된 과거 실행이다. 기록에는 양성·음성 경로와 정리가 언급되나 실행 로그 원문은 포함되지 않아 최상 수준의 독립 재현 증거로 보지는 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "`python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "실제 HTTP의 두 상대 경로 풀이와 정상 파일을 확인했다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다."
+          },
+          "browser": {
+            "level": null,
+            "reason": "현재 문제의 검색부터 환경 준비, 브라우저 풀이, 정답·오답 제출 및 종료까지를 기록한 실제 browser-session 증거가 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 밝힌다.",
+            "evidence": [],
+            "improvement": "현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간·막힌 단계·힌트 사용·원리 이해 기록이 없다. 작성자 검토와 자동 해답은 learner-session을 대신할 수 없다.",
+            "evidence": [],
+            "improvement": "브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "path-parcel-designer",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "learning-designer",
+      "first_pass": "힌트·해설·구현을 읽기 전 관찰 (learning-designer)\n\n첫 행동은 분명하다. `welcome.txt`를 공개 폴더에서 먼저 열고 이어서 `guide.txt`로 배치와 파일명을 확인한 뒤 입력칸에서 다른 경로를 시도한다. 선수지식은 URL의 경로/값 구분과 상대 경로, `..`의 동작 및 폼의 URL 인코딩 처리를 설명해 실제 입력 문법의 숨은 부담을 낮춘다. 남은 학습 판단은 공개 폴더를 기준으로 경로가 어디로 해석되는지 이어 붙이고 응답 내용으로 대상 파일을 식별하는 것이다. 성공 관찰도 복구 문서의 `pwnden{...}` 값 제출로 명시되어 있다.\n\n초급 설계자로서 확인할 지점: 복구 파일명을 전달 자료에서 공개 파일과 어떻게 연결하는지, `..`를 반복하는 횟수가 단서로 결정되는지, 정상 안내와 운영 문서 응답을 구분하는 비교가 가능한지다. 초기 브리핑은 폴더 배치를 따로 두는 것이 경계를 보장하는지라는 보안 질문을 주지만 구체적 단서의 순서는 자료에 맡긴다. 브리핑은 경로를 그대로 넣을 수 있다고 명시해 경로 표기를 추측하는 문제로 흐르지 않는다. 명령줄이나 코딩은 선언되지 않았으며 브라우저 조작만으로 원리를 관찰할 수 있다.",
+      "review": {
+        "slug": "path-parcel",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "path-parcel-designer",
+        "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "의뢰는 공개 폴더 밖 운영 자료를 읽을 수 있는지 묻고, 목표는 운영 복구 문서의 키를 찾는 것이며 제출값이 완료를 확인한다. 실제 서비스는 파일을 읽어 응답하므로 파일 내용 관찰이 경계의 문제를 직접 드러낸다. 정상 public 문서와 private 복구 기록이 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/app.py",
+                "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 4,
+            "reason": "브리핑은 정상 자료부터 확인하고 guide에서 배치·파일명을 얻어 입력칸에 경로를 시험하라고 안내한다. 공통 지식은 URL 값 전달과 상대 경로의 `..`를 사용 전에 예로 설명하고 문제 지식은 파일 제공 범위가 최종 실제 위치에 달렸다고 연결한다. 해설을 열지 않아도 브라우저만으로 시작할 수 있으며 코딩이나 CLI는 요구되지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/file-paths.md",
+                "quote": "예를 들어 `books`에서 `../music/song.txt`를 읽으면\n`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "폼에 원래 문자를 입력하면 된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "초급 수준에 필요한 단서 연결이 남아 있다. 플레이어는 정상 파일을 열고 guide의 폴더 관계와 recovery.txt 이름을 연결한 뒤 공개 폴더에서 한 단계 위로 올라가는 상대 경로를 구성해야 한다. 수행은 한 번의 핵심 경로 선택이며 복잡한 오답 분석은 요구하지 않아 4수준의 여러 경계 사례 학습이라고 보기 어렵다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "`guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "제공된 예제로 상대 경로를 학습한 뒤 실제 폴더 배치와 파일명을 연결해 입력을 독립적으로 만든다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "정상 공개 응답과 공개 범위 밖 응답의 비교가 목표를 뒷받침한다. 패치 검사는 정상 문서들이 계속 읽히는지와 상대 경로 탈출, 절대 경로, public-other 접두어 오인을 각각 대조하며 존재하지 않는 파일·빈 값·NUL 입력도 다른 결과로 구분한다. 패치는 경로 문자열 접두어가 아닌 정규화된 실제 위치의 경계를 검사한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['welcome.txt', './welcome.txt', 'guide.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "기본 브리핑은 시작 자료와 상대 경로 원리를 제공하지만 서로 다른 시작 위치라는 마지막 관계는 직접 말하지 않는다. 단일 힌트가 우선 폴더 위치의 차이를 떠올리게 한 다음 파일 경로를 그려 보고 `..`가 처리되는지 확인하도록 유도하며, 답 경로를 힌트에 직접 노출하지 않는다. 이 수준의 짧은 문제에 힌트 한 개면 충분하다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 정상 문서 확인부터 guide의 파일명·폴더 관계, 상대 경로 입력, 키 추출까지 재현 순서를 제시한다. 이어 최종 위치가 공개 폴더 밖이 되는 이유와 패치의 정규화 경계 검증, 접두어 비교의 오류 가능성을 설명하고 실습의 결론을 경로 구현에 한정한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.\n파일이 실제로 public 폴더 안에 있는지 확인해야 한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "다른 응답을 만났다면 입력의 폴더 순서와 파일명을 다시 확인하자.\n존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 4,
+            "reason": "날짜가 있는 작성 기록은 2026-10-02 최초 콘텐츠 구현 작업 트리의 실제 HTTP 상대 경로 두 건 및 정상 파일 확인, 패치 경계와 여러 거부 대조, 고정 Python 이미지에서 해답·패치·정리 검증 통과를 기록한다. 이는 과거 실행 증거로 반영했으며 현재 심사 중 새 실행으로 표현하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "`python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": ""
+          },
+          "browser": {
+            "level": null,
+            "reason": "현재 문제에서 검색부터 환경 준비, 브라우저 입력과 제출, 오답 확인 및 종료까지 실제 화면으로 수행한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증을 수행하지 않았다고 명시한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+                "kind": "browser-session"
+              }
+            ],
+            "improvement": "브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "선언된 선수 능력을 가진 독립 풀이자의 실제 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성자는 독립 리뷰가 대기 중임을 분명히 한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "독립적인 대상 수준 풀이자의 관찰로 재평가한다.",
+                "kind": "learner-session"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
+                "kind": "learner-session"
+              }
+            ],
+            "improvement": "브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "path-parcel-alternative",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "alternative-path-reviewer",
+      "first_pass": "first_pass (alternative-path-reviewer): 목표는 경로 문자열을 바꿔 공개 폴더 밖 복구 문서를 읽는 것이다. 본문이 `guide.txt`에 파일명과 배치를 준다고 하므로, 정상 경로인 `guide.txt`를 먼저 확인하고 실제 폴더 기준을 잡는 풀이를 예상한다. 가능한 대안 가설은 파일명 검색어만으로 응답/오류 차이를 이용하는 것, `..` 대신 절대경로나 중복 구분자·인코딩 표기로 경계를 넘는 것, 문서명이 본문에 이미 노출되어 직접 지목하는 것이다. 입력 폼이 원문 경로를 전달하고 응답 내용으로 파일을 식별하라고 안내하므로, 경로 조작 자체는 숨은 도구 지식에 기대지 않는다. 첫 단계에는 대상 구현과 대조군이 아직 없어 지름길이나 관찰의 타당성을 확정할 수 없다.",
+      "review": {
+        "slug": "path-parcel",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "path-parcel-alternative",
+        "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "의뢰·입력 기능·제출물은 서로 맞고, 취약 구현은 `../private/recovery.txt`의 실제 읽기 내용을 복구 키로 연결한다. 해답은 별도 정상·경계 검사로 원리를 확인한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/app.py",
+                "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 4,
+            "reason": "브라우저 입력 폼, 공개 자료의 역할, 실제 폴더 배치·파일명을 본문과 선수지식에서 찾을 수 있다. URL 인코딩과 상대 경로 예시도 사용 전에 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/file-paths.md",
+                "quote": "상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,\n`..`는 한 단계 위의 폴더다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "초급 수준에 맞게 guide의 폴더 관계·파일명과 출발 폴더를 이어 입력을 구성한다. 취약 응답의 실제 내용이 최종 판단 증거다. 대안 표기 자체는 원리 이해를 바꾸지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "`./../private/recovery.txt`도 같은 위치를 가리킨다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "해답은 일반 파일 읽기와 외부 문서 유출을 비교한다. 패치 검사는 정상 공개 파일을 계속 허용하고 상대·절대 경로 이탈, 오도 경로 `public-other`, 누락 파일, 빈 입력, NUL을 대조한다. 테스트 코드의 존재와 과거 실행 기록은 구분한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "assert status == 403 and 'pwnden{' not in body, name",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "assert status == 200 and 'pwnden{' not in body, name",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "본문이 파일명을 발견하고 경로 지식을 상기시킨다. 유일한 힌트는 시작 폴더와 운영 파일 위치의 차이를 주목하게 하지만 정확한 경로 조합은 해설에 남긴다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 공개 파일 조회에서 폴더 관계를 찾고, 상대 경로를 구성해 응답의 비밀값을 확인하며, 최종 경로 기준의 방어 및 경계 비교 오류까지 설명한다. 범위 주장은 실제 임시 파일 읽기 대상에 한정되어 과장되지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "최종 위치는 공개 폴더 밖이 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "기록은 2026-10-02의 최초 구현 작업 트리에서 고정 이미지로 해답, 선언된 패치, 정리 검증을 통과했다고 범위를 밝힌다. 이는 이번 2026-10-03 심사 중 새 실행 결과가 아니다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "- `python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": ""
+          },
+          "browser": {
+            "level": null,
+            "reason": "이번 심사는 자료의 독립 검토이며 실제 브라우저에서 문제 검색·환경 준비·풀이·제출·종료까지 수행한 기록이 없다.",
+            "evidence": [],
+            "improvement": "현재 환경에서 실제 브라우저 전체 풀이 세션을 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "초급 persona로 자료를 검토한 것은 대상 수준 학습자의 독립 세션이 아니며, 시간·막힘·힌트·이해 기록이 없다.",
+            "evidence": [],
+            "improvement": "선수 능력을 갖춘 독립 학습자에게 해설을 닫고 수행시켜 세션과 원리 이해 기록을 남긴다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "path-parcel-tooling",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "low",
+      "lens": "tooling-reviewer",
+      "first_pass": "`challenge.toml`은 브라우저만을 도구로 선언하며 CLI는 비어 있다. README는 먼저 공개된 welcome.txt를 읽고, 이어 guide.txt에서 배치와 운영자 문서의 이름을 얻은 뒤 파일명 입력칸에서 경로를 바꾸도록 안내한다. 본문은 `%2F` 인코딩과 `..` 상대경로를 설명하므로 주소창을 직접 조립하는 기술은 요구하지 않고 입력 폼 사용을 명시한다. 즉 도구 전제는 브라우저 사용뿐이다.\n\n도구·환경 관점에서 첫 미확정 지점은 화면/폼 주소 및 시작 URL 제공 여부다. 명령줄 도구, 설치, 쓰기, 권한, timeout, 종료 코드, 결과 복사 단계는 본문에 없다. 서버의 대상 파일명은 guide에 있다고 하지만 서버 실행/준비를 학습자가 해야 하는지, URL이 어디에 제공되는지는 이 첫 자료만으로 판별되지 않는다. 이 persona의 첫 질문(선언된 도구 및 검증된 준비 환경이 있는가?)에 대해 `tools=[web]`, `cli=[]`는 명확하나 이미지/브라우저 제공 근거는 아직 보이지 않는다.",
+      "review": {
+        "slug": "path-parcel",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "path-parcel-tooling",
+        "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "파일명 입력으로 private 문서와 키를 찾는 제출 목표가 관찰 가능한 성공 조건이며, 실제 취약 대상은 요청 경로의 파일을 읽어 응답한다. 폴더 경계 검증이라는 학습 목표와 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/app.py",
+                "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 4,
+            "reason": "공개 파일부터 순서대로 조사하라는 자료 지시, 폼 조작법, URL 인코딩, 상대경로의 `..` 의미와 선수 지식이 제공된다. 웹 UI에도 기본 파일과 입력 폼이 있으며 CLI나 프로그래밍 설치를 요구하지 않는다. URL은 runner가 전달하는 영역으로 구현 확인은 있으나 학습자 세션은 검증되지 않았다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "문제 사이트의 입력 폼은 이 전송 처리를 해 주므로, 폼에 원래 문자를 입력하면 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/web/App.vue",
+                "quote": "<form action=\"/view\"><label>파일명<input v-model=\"file\" name=\"file\" maxlength=\"256\" required></label><button>읽기</button></form>",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "풀이자는 guide에서 두 폴더가 같은 상위 폴더에 있음을 얻고, 공개 루트에서 상위로 이동하는 상대경로를 구성해야 한다. 비교·추론은 초급 목표에 맞지만 한 번의 명확한 경로 결합이며 그럴듯한 오답을 실제 플레이어 절차가 비교시키지는 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "현재 출발 폴더가 public이므로 `../`로 상위 폴더를 가리킨다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "정상 공개 파일과 실패하는 오경로를 짧게 비교하는 선택지를 추가하면, 난도를 높이지 않고 경로 구성 근거를 확인할 수 있다."
+          },
+          "controls": {
+            "level": 3,
+            "reason": "기록된 패치 검사는 정상 공개 문서, 여러 상대·절대 경로 거부, 누락 및 빈/NUL 입력의 상태와 health/root 응답을 대조한다. 패치는 정규화한 실제 경로가 공개 폴더 안인지 확인한다. test.py 파일 자체는 호출 코드이며 이번 실행 증거로 간주하지 않았고, 2026-10-02 작성 기록에 실행 범위가 기재돼 있다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "path = (public / name).resolve()\n    if not path.is_relative_to(public.resolve()):",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "실제 HTTP의 두 상대 경로 풀이와 정상 파일을 확인했다. 패치는 정규화된 최종 위치를 폴더 경계로 비교한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "유일한 힌트는 공개 폴더와 문서 위치의 관계를 생각하게 하고 상위 경로 처리를 확인하도록 해 막히는 개념을 안내한다. 정확한 최종 파일명과 전체 경로는 기본 본문에는 없으나, 힌트가 검증할 값의 유형은 상당히 좁혀 준다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 정상 파일 읽기와 private 파일 요청을 연결하고, 입력 연결만으로 폴더 경계가 생기지 않는 원인과 정규화된 실제 위치 검증을 설명한다. 상대·절대 경로 거부와 정상 공개 파일 유지, 접두어 판정의 public-other 반례 및 HTTP 오류 구분을 함께 제시한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "2026-10-02의 작성자 기록은 고정 Python 이미지에서 해답, 선언된 패치, 컨테이너·네트워크·볼륨 정리를 통과했다고 범위를 특정한다. 이는 날짜가 있는 과거 기록이며 이번 심사에서 새로 실행한 결과로 표시하지 않는다. 사용자가 사용할 브라우저 세션 재현은 이 항목의 검증 범위가 아니다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "`python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "현재 검토 날짜의 실행 재현을 주장하려면 별도 실행을 하고 날짜·결과를 기록한다."
+          },
+          "browser": {
+            "level": null,
+            "reason": "실제 브라우저에서 검색·선택, 환경 준비, 웹/터미널 풀이, 정답·오답 제출, 종료까지 확인한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증은 수행하지 않았다고 명시한다.",
+            "evidence": [],
+            "improvement": "실제 브라우저 세션으로 시작부터 정답/오답 제출과 환경 종료까지 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "대상 수준 독립 학습자의 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성 기록은 실제 독립 풀이자 리뷰가 수행되지 않았다고 명시한다.",
+            "evidence": [],
+            "improvement": "선언된 선수 능력을 가진 독립 풀이자로 전체 풀이와 이해 확인 세션을 기록한다."
+          }
+        }
+      }
+    }
+  ],
+  "distribution": {
+    "goal": {
+      "levels": {
+        "path-parcel-learner": 3,
+        "path-parcel-evidence": 4,
+        "path-parcel-designer": 4,
+        "path-parcel-alternative": 4,
+        "path-parcel-tooling": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "starting_context": {
+      "levels": {
+        "path-parcel-learner": 3,
+        "path-parcel-evidence": 3,
+        "path-parcel-designer": 4,
+        "path-parcel-alternative": 4,
+        "path-parcel-tooling": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "reasoning": {
+      "levels": {
+        "path-parcel-learner": 3,
+        "path-parcel-evidence": 3,
+        "path-parcel-designer": 3,
+        "path-parcel-alternative": 3,
+        "path-parcel-tooling": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "controls": {
+      "levels": {
+        "path-parcel-learner": 3,
+        "path-parcel-evidence": 4,
+        "path-parcel-designer": 4,
+        "path-parcel-alternative": 4,
+        "path-parcel-tooling": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "hints": {
+      "levels": {
+        "path-parcel-learner": 3,
+        "path-parcel-evidence": 2,
+        "path-parcel-designer": 3,
+        "path-parcel-alternative": 3,
+        "path-parcel-tooling": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "explanation": {
+      "levels": {
+        "path-parcel-learner": 3,
+        "path-parcel-evidence": 4,
+        "path-parcel-designer": 4,
+        "path-parcel-alternative": 4,
+        "path-parcel-tooling": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "execution": {
+      "levels": {
+        "path-parcel-learner": 3,
+        "path-parcel-evidence": 3,
+        "path-parcel-designer": 4,
+        "path-parcel-alternative": 3,
+        "path-parcel-tooling": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "browser": {
+      "levels": {
+        "path-parcel-learner": null,
+        "path-parcel-evidence": null,
+        "path-parcel-designer": null,
+        "path-parcel-alternative": null,
+        "path-parcel-tooling": null
+      },
+      "unverified_judges": 5,
+      "proposed_median": null,
+      "needs_adjudication": false
+    },
+    "learner": {
+      "levels": {
+        "path-parcel-learner": null,
+        "path-parcel-evidence": null,
+        "path-parcel-designer": null,
+        "path-parcel-alternative": null,
+        "path-parcel-tooling": null
+      },
+      "unverified_judges": 5,
+      "proposed_median": null,
+      "needs_adjudication": false
+    }
+  },
+  "needs_adjudication": [],
+  "summary": {
+    "slug": "path-parcel",
+    "points": 71.25,
+    "reviewed_weight": 80,
+    "pending": [
+      "browser",
+      "learner"
+    ],
+    "improvements": [
+      {
+        "criterion": "starting_context",
+        "action": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다.\n첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+      },
+      {
+        "criterion": "reasoning",
+        "action": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다.\n정상 공개 파일과 실패하는 오경로를 짧게 비교하는 선택지를 추가하면, 난도를 높이지 않고 경로 구성 근거를 확인할 수 있다."
+      },
+      {
+        "criterion": "controls",
+        "action": "격리된 테스트에서 검사하는 symlink 경계 사례도 코드 테스트에 포함하면 설명된 경계 조건을 직접 확인할 수 있다."
+      },
+      {
+        "criterion": "hints",
+        "action": "첫 힌트는 상대 위치를 도식화하도록 유지하고, 뒤따르는 힌트에서 파일명과 경로 조합을 단계별로 공개해 정답 입력은 해설에 남긴다."
+      },
+      {
+        "criterion": "explanation",
+        "action": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+      },
+      {
+        "criterion": "execution",
+        "action": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다.\n현재 검토 날짜의 실행 재현을 주장하려면 별도 실행을 하고 날짜·결과를 기록한다."
+      },
+      {
+        "criterion": "browser",
+        "action": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다.\n현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다.\n브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다.\n현재 환경에서 실제 브라우저 전체 풀이 세션을 기록한다.\n실제 브라우저 세션으로 시작부터 정답/오답 제출과 환경 종료까지 기록한다."
+      },
+      {
+        "criterion": "learner",
+        "action": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다.\n브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다.\n선수 능력을 갖춘 독립 학습자에게 해설을 닫고 수행시켜 세션과 원리 이해 기록을 남긴다.\n선언된 선수 능력을 가진 독립 풀이자로 전체 풀이와 이해 확인 세션을 기록한다."
+      }
+    ]
+  },
+  "adjudications": {
+    "hints": {
+      "original_distribution": {
+        "levels": {
+          "path-parcel-learner": 3,
+          "path-parcel-evidence": 2,
+          "path-parcel-designer": 3,
+          "path-parcel-alternative": 3,
+          "path-parcel-tooling": 3
+        },
+        "unverified_judges": 0,
+        "proposed_median": 3,
+        "needs_adjudication": false
+      },
+      "level": 3,
+      "reason": "실제 단일힌트는 폴더관계를 그리고 출발위치에서 위로올라가는경로가 처리되는지 시험하라고만 한다. 정답경로나 전체제출절차는 해설에 있어 수준2의 직접답노출 주장은 원문과다르다. 초급의막힌 비교를지원하는 기준3으로확정한다.",
+      "evidence": [
+        {
+          "path": "challenges/path-parcel/hints/1.md",
+          "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "controls": {
+      "original_distribution": {
+        "levels": {
+          "path-parcel-learner": 3,
+          "path-parcel-evidence": 4,
+          "path-parcel-designer": 4,
+          "path-parcel-alternative": 4,
+          "path-parcel-tooling": 3
+        },
+        "unverified_judges": 0,
+        "proposed_median": 4,
+        "needs_adjudication": false
+      },
+      "level": 4,
+      "reason": "정상공개파일과 상대/절대탈출·public-other·빈/NUL/없는파일 대조 외에 공통단위에서 public/link를 private로 연결한 symlink타깃도거부되는지 확인한다. 여러경계와정상기능을구체적으로대조하므로4를수용한다. 이는 검사코드범위이고 이번심사에서새실행했다는뜻은아니다.",
+      "evidence": [
+        {
+          "path": "tools/test_second_experiments.py",
+          "quote": "(public / 'link').symlink_to(outside, target_is_directory=True)",
+          "kind": "source"
+        },
+        {
+          "path": "tools/test_second_experiments.py",
+          "quote": "locate(public, 'link/key.txt')",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    }
+  },
+  "first_pass_records": {
+    "learner": {
+      "saved_text": "문제: path-parcel — learner-advocate first pass\n\n배정된 초급 대상의 전제는 `web-addresses`와 `file-paths`다. 본문은 `/view?file=...`의 입력값과 URL 인코딩, 상대 경로의 `..` 의미를 설명하므로 기본 용어는 준비되어 있다. 첫 행동도 `welcome.txt` 공개 읽기, 이어 `guide.txt`로 폴더 배치와 복구 파일명을 확인하라는 순서가 구체적이다. 그다음 입력칸에서 경로를 바꾸어 보고 응답 내용으로 어느 파일인지 확인하면 된다.\n\n학습자의 핵심 선택은 안내 파일의 배치·이름을 바탕으로 공개 폴더 바깥의 파일을 가리키는 상대 경로를 구성하는 것이다. 공개 위치를 기준으로 상위 폴더로 이동해야 할 수 있다는 점은 공통 설명의 예시로 이해 가능하다. 폼이 URL 처리를 맡는다고 명시해 인코딩 조작 부담도 덜었다. 그러나 정확한 저장 루트/상대 깊이와 오류 응답 해석은 본문만으로 특정할 수 없고, 우선 guide의 실제 내용을 관찰해야 한다. 지금 단계에서 실행을 수행한 것으로 간주하지 않는다.\n\n막힐 수 있는 지점: guide를 읽은 뒤 공개 폴더에서 별도 복구 폴더로 이동할 경로를 조합하는 방법. 최소한 입력값이 공개 폴더 기준임을 재확인하고 응답을 내용으로 판별하도록 안내되어 있으나, 성공·거부·없는 파일의 응답 차이는 아직 설명되지 않았다. 또한 제출 목표는 `pwnden{...}` 전체 문자열이라고 알려져 있다.\n",
+      "matches_wrapper": true
+    },
+    "evidence": {
+      "saved_text": "배정 관점: evidence-examiner. 기본 본문은 방문자가 파일명을 입력해 배송 안내를 보는 사이트에서 운영자 복구 문서의 복구 키를 제출하게 한다. 첫 입력은 welcome.txt이며 안내상 guide.txt에 폴더 배치와 비공개 문서 파일명이 있다고 한다. 파일명 입력이 경로를 그대로 받는다는 지식과 상대경로의 .. 설명으로 공개 디렉터리 밖을 탐색할 단서는 주어진다. 성공을 입증하려면 응답이 단순히 성공 상태나 열린 포트인지를 넘어 실제 운영자 복구 기록인지, 그 안의 pwnden{...}가 제출 대상인지 확인해야 한다. 지금은 서버 동작과 파일 배치가 보이지 않아 URL 형태나 어느 디렉터리 이동이 성공하는지는 확인할 수 없다. 오탐 대조로는 공개 안내 파일 응답과 복구 문서 응답의 내용을 비교해야 하며, 숨겨진 다른 기능 또는 잘못된 파일 응답을 정답 증거로 혼동하지 않아야 한다.\n",
+      "matches_wrapper": true
+    },
+    "designer": {
+      "saved_text": "힌트·해설·구현을 읽기 전 관찰 (learning-designer)\n\n첫 행동은 분명하다. `welcome.txt`를 공개 폴더에서 먼저 열고 이어서 `guide.txt`로 배치와 파일명을 확인한 뒤 입력칸에서 다른 경로를 시도한다. 선수지식은 URL의 경로/값 구분과 상대 경로, `..`의 동작 및 폼의 URL 인코딩 처리를 설명해 실제 입력 문법의 숨은 부담을 낮춘다. 남은 학습 판단은 공개 폴더를 기준으로 경로가 어디로 해석되는지 이어 붙이고 응답 내용으로 대상 파일을 식별하는 것이다. 성공 관찰도 복구 문서의 `pwnden{...}` 값 제출로 명시되어 있다.\n\n초급 설계자로서 확인할 지점: 복구 파일명을 전달 자료에서 공개 파일과 어떻게 연결하는지, `..`를 반복하는 횟수가 단서로 결정되는지, 정상 안내와 운영 문서 응답을 구분하는 비교가 가능한지다. 초기 브리핑은 폴더 배치를 따로 두는 것이 경계를 보장하는지라는 보안 질문을 주지만 구체적 단서의 순서는 자료에 맡긴다. 브리핑은 경로를 그대로 넣을 수 있다고 명시해 경로 표기를 추측하는 문제로 흐르지 않는다. 명령줄이나 코딩은 선언되지 않았으며 브라우저 조작만으로 원리를 관찰할 수 있다.\n",
+      "matches_wrapper": true
+    },
+    "alternative": {
+      "saved_text": "first_pass (alternative-path-reviewer): 목표는 경로 문자열을 바꿔 공개 폴더 밖 복구 문서를 읽는 것이다. 본문이 `guide.txt`에 파일명과 배치를 준다고 하므로, 정상 경로인 `guide.txt`를 먼저 확인하고 실제 폴더 기준을 잡는 풀이를 예상한다. 가능한 대안 가설은 파일명 검색어만으로 응답/오류 차이를 이용하는 것, `..` 대신 절대경로나 중복 구분자·인코딩 표기로 경계를 넘는 것, 문서명이 본문에 이미 노출되어 직접 지목하는 것이다. 입력 폼이 원문 경로를 전달하고 응답 내용으로 파일을 식별하라고 안내하므로, 경로 조작 자체는 숨은 도구 지식에 기대지 않는다. 첫 단계에는 대상 구현과 대조군이 아직 없어 지름길이나 관찰의 타당성을 확정할 수 없다.\n",
+      "matches_wrapper": true
+    },
+    "tooling": {
+      "saved_text": "`challenge.toml`은 브라우저만을 도구로 선언하며 CLI는 비어 있다. README는 먼저 공개된 welcome.txt를 읽고, 이어 guide.txt에서 배치와 운영자 문서의 이름을 얻은 뒤 파일명 입력칸에서 경로를 바꾸도록 안내한다. 본문은 `%2F` 인코딩과 `..` 상대경로를 설명하므로 주소창을 직접 조립하는 기술은 요구하지 않고 입력 폼 사용을 명시한다. 즉 도구 전제는 브라우저 사용뿐이다.\n\n도구·환경 관점에서 첫 미확정 지점은 화면/폼 주소 및 시작 URL 제공 여부다. 명령줄 도구, 설치, 쓰기, 권한, timeout, 종료 코드, 결과 복사 단계는 본문에 없다. 서버의 대상 파일명은 guide에 있다고 하지만 서버 실행/준비를 학습자가 해야 하는지, URL이 어디에 제공되는지는 이 첫 자료만으로 판별되지 않는다. 이 persona의 첫 질문(선언된 도구 및 검증된 준비 환경이 있는가?)에 대해 `tools=[web]`, `cli=[]`는 명확하나 이미지/브라우저 제공 근거는 아직 보이지 않는다.\n",
+      "matches_wrapper": true
+    }
+  },
+  "escalation": {
+    "initial_judges": 3,
+    "final_judges": 5,
+    "triggers": [
+      {
+        "criterion": "hints",
+        "reason": "증거 심사자는 단일 힌트에 전체 입력과 제출동작이 나온다고 보나 실제 힌트는 폴더위치 도식과 .. 비교만 요청한다. 힌트와 해설 경계의 근거가 충돌한다.",
+        "sources": [
+          "challenges/path-parcel/hints/1.md",
+          "challenges/path-parcel/solve/README.md"
+        ]
+      }
+    ],
+    "initial_summary": {
+      "slug": "path-parcel",
+      "points": 68.75,
+      "reviewed_weight": 80,
+      "pending": [
+        "browser",
+        "learner"
+      ],
+      "improvements": [
+        {
+          "criterion": "starting_context",
+          "action": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다.\n첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+        },
+        {
+          "criterion": "reasoning",
+          "action": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다."
+        },
+        {
+          "criterion": "controls",
+          "action": "격리된 테스트에서 검사하는 symlink 경계 사례도 코드 테스트에 포함하면 설명된 경계 조건을 직접 확인할 수 있다."
+        },
+        {
+          "criterion": "hints",
+          "action": "첫 힌트는 상대 위치를 도식화하도록 유지하고, 뒤따르는 힌트에서 파일명과 경로 조합을 단계별로 공개해 정답 입력은 해설에 남긴다."
+        },
+        {
+          "criterion": "explanation",
+          "action": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+        },
+        {
+          "criterion": "execution",
+          "action": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다."
+        },
+        {
+          "criterion": "browser",
+          "action": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다.\n현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다.\n브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다."
+        },
+        {
+          "criterion": "learner",
+          "action": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다.\n브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다."
+        }
+      ]
+    },
+    "initial_needs_adjudication": [],
+    "initial_result": {
+      "candidate": {
+        "slug": "path-parcel",
+        "rubric_version": 1,
+        "reviewed_at": "2026-10-03",
+        "reviewer": "Panel median: path-parcel-designer, path-parcel-evidence, path-parcel-learner",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "path-parcel-learner (3): 의뢰의 폴더 분리 가정과 관찰 목표가 일치하며, 완료 증거를 실제 복구 문서의 flag로 정했다. 읽기 범위 이탈이라는 학습 원리가 명확하다.\npath-parcel-evidence (4): 의뢰, 관찰 대상, 제출 증거가 일치한다. 사용자가 복구 문서를 파일 읽기로 찾아 키 전체를 제출하도록 하고, 배포된 지식은 최종 파일 위치가 폴더 경계를 벗어나는지를 원리로 제시한다. 취약 앱은 읽은 파일 본문을 반환하므로 상태 코드만이 아니라 비밀이 든 자료 자체를 확인할 수 있다.\npath-parcel-designer (4): 의뢰는 공개 폴더 밖 운영 자료를 읽을 수 있는지 묻고, 목표는 운영 복구 문서의 키를 찾는 것이며 제출값이 완료를 확인한다. 실제 서비스는 파일을 읽어 응답하므로 파일 내용 관찰이 경계의 문제를 직접 드러낸다. 정상 public 문서와 private 복구 기록이 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "운영 복구 기록의 `pwnden{...}` 전체를 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/path-boundaries.md",
+                "quote": "상대 경로를 해석한 최종 위치가 허용 범위에 있는지 확인한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/app.py",
+                "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "path-parcel-learner (3): 본문은 첫 공개 파일과 guide를 읽는 순서를 주고 입력칸의 경로 처리, URL 인코딩, 상대 경로 개념을 설명한다. guide를 실제로 읽기 전에는 정확한 상대 경로를 만들 수 없지만, 그 정보가 다음 관찰 자료에 있다고 안내한다.\npath-parcel-evidence (3): 첫 행동(welcome.txt), 조사 대상(guide.txt와 파일명 입력), 입력 방식(경로 그대로), URL 입력 처리, 상대 경로의 .. 의미가 플레이어 문서에 있다. 이는 결과 내용을 판별하며 직접 시도하기에 충분하다. 다만 화면 조작 설명은 간결하고 오류별 다음 행동은 뒤의 해설에서야 제공되므로 시작 정보가 모든 막힘을 선제적으로 풀지는 않는다.\npath-parcel-designer (4): 브리핑은 정상 자료부터 확인하고 guide에서 배치·파일명을 얻어 입력칸에 경로를 시험하라고 안내한다. 공통 지식은 URL 값 전달과 상대 경로의 `..`를 사용 전에 예로 설명하고 문제 지식은 파일 제공 범위가 최종 실제 위치에 달렸다고 연결한다. 해설을 열지 않아도 브라우저만으로 시작할 수 있으며 코딩이나 CLI는 요구되지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "입력칸은 경로를 그대로 받는다. 응답 내용이 어떤 파일인지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/file-paths.md",
+                "quote": "`..`는 한 단계 위의 폴더다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "입력칸은 경로를 그대로 받는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "`..`는 한 단계 위의 폴더다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/web/App.vue",
+                "quote": "<form action=\"/view\"><label>파일명<input v-model=\"file\" name=\"file\" maxlength=\"256\" required></label><button>읽기</button></form>",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/file-paths.md",
+                "quote": "예를 들어 `books`에서 `../music/song.txt`를 읽으면\n`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "폼에 원래 문자를 입력하면 된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다.\n첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "path-parcel-learner (3): 초급에 맞는 연결 과제가 남아 있다. 학습자는 guide에서 private 폴더의 위치와 recovery.txt 이름을 얻고, public에서의 상대 위치를 입력값으로 조합해야 한다. 단순 클릭만으로 정답이 정해지지는 않는다.\npath-parcel-evidence (3): 초급 과제에 필요한 단서 연결이 있다. 플레이어는 guide.txt에서 public/private의 관계와 실제 파일명을 읽고, 제공된 상대경로 개념 및 입력값을 합쳐 경로를 구성해야 한다. 정상 안내 읽기와 운영 기록 읽기의 본문을 구분하는 판단이 남아 있다. 동등 경로 변형은 해설에만 있어 본문만으로 대안 경로 구분을 요구하지 않는다.\npath-parcel-designer (3): 초급 수준에 필요한 단서 연결이 남아 있다. 플레이어는 정상 파일을 열고 guide의 폴더 관계와 recovery.txt 이름을 연결한 뒤 공개 폴더에서 한 단계 위로 올라가는 상대 경로를 구성해야 한다. 수행은 한 번의 핵심 경로 선택이며 복잡한 오답 분석은 요구하지 않아 4수준의 여러 경계 사례 학습이라고 보기 어렵다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "`guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "값에 공백이나 `/` 같은 문자가 들어가면 브라우저가 다른 표기로 바꿔 전송할 수 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/README.md",
+                "quote": "`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "`guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "제공된 예제로 상대 경로를 학습한 뒤 실제 폴더 배치와 파일명을 연결해 입력을 독립적으로 만든다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다."
+          },
+          "controls": {
+            "level": 4,
+            "reason": "path-parcel-learner (3): 패치된 경로 검사는 정규화 후 public 경계 안인지 확인하며, 테스트는 정상 안내 파일을 유지하면서 여러 상대·절대 경로와 public-other를 거절하고 missing·빈 입력·NUL의 상태도 구분한다. 이는 보호와 정상 기능을 함께 확인한다. 다만 테스트는 정해진 사례 중심이며 운영 실행의 대조군 기록은 작성 기록에 요약되어 있다.\npath-parcel-evidence (4): 취약 풀이 스크립트는 공개 안내와 guide 응답을 확인한 뒤 비밀 형식이 든 복구 문서 응답을 확인하고, 동일 파일의 동등 상대경로 결과도 본문 전체로 비교한다. 패치 검사는 정상 파일의 유지, 여러 상대경로·절대경로·public-other 거부, 없는 파일·빈 입력·NUL의 상태를 함께 확인한다. 이는 200 응답을 곧바로 성공으로 오인하지 않게 하고 경계 비교와 정상 기능을 함께 검증한다. 단, 이 평가는 검사 코드와 기록에 근거한다.\npath-parcel-designer (4): 정상 공개 응답과 공개 범위 밖 응답의 비교가 목표를 뒷받침한다. 패치 검사는 정상 문서들이 계속 읽히는지와 상대 경로 탈출, 절대 경로, public-other 접두어 오인을 각각 대조하며 존재하지 않는 파일·빈 값·NUL 입력도 다른 결과로 구분한다. 패치는 경로 문자열 접두어가 아닌 정규화된 실제 위치의 경계를 검사한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "path = (public / name).resolve()",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['welcome.txt', './welcome.txt', 'guide.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "'../public-other/test.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/solve.py",
+                "quote": "assert 'pwnden{' not in get('/')[1]",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/solve.py",
+                "quote": "assert view('./../private/recovery.txt')[1] == body",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "assert status == 403 and 'pwnden{' not in body, name",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/test.py",
+                "quote": "assert status == 200 and 'pwnden{' not in body, name",
+                "kind": "source"
+              }
+            ],
+            "improvement": "격리된 테스트에서 검사하는 symlink 경계 사례도 코드 테스트에 포함하면 설명된 경계 조건을 직접 확인할 수 있다."
+          },
+          "hints": {
+            "level": 3,
+            "reason": "path-parcel-learner (3): 첫 힌트는 문제의 폴더 관계를 먼저 그리게 한 뒤 출발 위치에서 위로 가는 경로가 유지되는지 시험하라고 안내한다. 핵심 판단을 좁혀 주지만 폴더 관계를 직접 조합하도록 남겨 둔다. 마지막 단계의 정답 입력은 해설에 둔다.\npath-parcel-evidence (2): 단일 힌트는 막히는 지점에 정확히 대응해 폴더 관계를 그리게 하고, 다음 단계에서는 공개 자료 조회, 파일명 발견, 출발 폴더, 사용할 입력, 제출 동작까지 전부 제공한다. 도움의 순서는 명확하지만 점진적으로 작은 단서부터 제공하지 않고 한 번 열면 풀이 경로가 사실상 노출된다.\npath-parcel-designer (3): 기본 브리핑은 시작 자료와 상대 경로 원리를 제공하지만 서로 다른 시작 위치라는 마지막 관계는 직접 말하지 않는다. 단일 힌트가 우선 폴더 위치의 차이를 떠올리게 한 다음 파일 경로를 그려 보고 `..`가 처리되는지 확인하도록 유도하며, 답 경로를 힌트에 직접 노출하지 않는다. 이 수준의 짧은 문제에 힌트 한 개면 충분하다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "파일명 입력칸에 `../private/recovery.txt`를 넣는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/hints/1.md",
+                "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "첫 힌트는 상대 위치를 도식화하도록 유지하고, 뒤따르는 힌트에서 파일명과 경로 조합을 단계별로 공개해 정답 입력은 해설에 남긴다."
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "path-parcel-learner (3): 해설은 정상 파일과 guide를 먼저 확인하고 입력·응답에서 복구 문서를 관찰한 뒤, `..`가 실제 위치를 공개 폴더 밖으로 옮긴다는 원인을 설명한다. 패치 설명도 정규화된 최종 위치와 폴더 경계를 연결한다. 실습의 증거 한계를 과장하지 않는다.\npath-parcel-evidence (4): 해설은 공개 폴더에서의 시작 위치, 실제 응답 파일, 동등 경로, 입력과 실제 파일 위치의 관계를 연결한다. 수정은 정규화된 실제 위치를 공개 폴더와 비교하고, 단순 문자열 접두어 비교의 public-other 오류와 정상·오류 상태를 설명한다. 결론은 이 실습의 파일 읽기 범위에 한정되어 있으며 실제 파일을 읽었다는 근거와 구분된다.\npath-parcel-designer (4): 해설은 정상 문서 확인부터 guide의 파일명·폴더 관계, 상대 경로 입력, 키 추출까지 재현 순서를 제시한다. 이어 최종 위치가 공개 폴더 밖이 되는 이유와 패치의 정규화 경계 검증, 접두어 비교의 오류 가능성을 설명하고 실습의 결론을 경로 구현에 한정한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "위 경로와 절대 경로 입력은 `403`으로 거절하면서 welcome.txt와 guide.txt는 계속 읽힌다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "최종 위치는 공개 폴더 밖이 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/vulnerable/policy.py",
+                "quote": "return public / name",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/patched/policy.py",
+                "quote": "if not path.is_relative_to(public.resolve()):",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.\n파일이 실제로 public 폴더 안에 있는지 확인해야 한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/path-parcel/solve/README.md",
+                "quote": "다른 응답을 만났다면 입력의 폴더 순서와 파일명을 다시 확인하자.\n존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+          },
+          "execution": {
+            "level": 3,
+            "reason": "path-parcel-learner (3): 날짜가 명시된 2026-10-02 작성 기록은 실제 HTTP의 두 상대 경로 풀이와 정상 파일, 그리고 고정 Python 이미지의 해답·패치·정리 검증 통과를 보고한다. 이는 이번 심사의 새 실행이 아니라 최초 구현 작업 트리의 과거 기술 검증이다.\npath-parcel-evidence (3): 2026-10-02 작성자 기술 검증 기록은 고정 Python 3.13.15 이미지에서 두 상대경로의 실제 HTTP 풀이, 패치의 거부 및 정상 파일 동작, verify 명령으로 풀이·선언된 패치·자원 정리를 확인했다고 구체적으로 범위를 적는다. 이는 이번 심사에서 새로 실행한 결과가 아니라 기록된 과거 실행이다. 기록에는 양성·음성 경로와 정리가 언급되나 실행 로그 원문은 포함되지 않아 최상 수준의 독립 재현 증거로 보지는 않는다.\npath-parcel-designer (4): 날짜가 있는 작성 기록은 2026-10-02 최초 콘텐츠 구현 작업 트리의 실제 HTTP 상대 경로 두 건 및 정상 파일 확인, 패치 경계와 여러 거부 대조, 고정 Python 이미지에서 해답·패치·정리 검증 통과를 기록한다. 이는 과거 실행 증거로 반영했으며 현재 심사 중 새 실행으로 표현하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "`python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "실제 HTTP의 두 상대 경로 풀이와 정상 파일을 확인했다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다."
+          },
+          "browser": {
+            "level": null,
+            "reason": "path-parcel-learner (None): 현재 문제를 검색하는 단계부터 환경 준비, 웹 풀이, 정답·오답 제출, 종료까지 확인한 실제 Browser Plugin 세션 기록이 없다. 작성 기록도 화면 조작 검증을 수행하지 않았다고 명시한다.\npath-parcel-evidence (None): 현재 문제의 검색부터 환경 준비, 브라우저 풀이, 정답·오답 제출 및 종료까지를 기록한 실제 browser-session 증거가 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 밝힌다.\npath-parcel-designer (None): 현재 문제에서 검색부터 환경 준비, 브라우저 입력과 제출, 오답 확인 및 종료까지 실제 화면으로 수행한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증을 수행하지 않았다고 명시한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+                "kind": "browser-session"
+              }
+            ],
+            "improvement": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다.\n현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다.\n브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다."
+          },
+          "learner": {
+            "level": null,
+            "reason": "path-parcel-learner (None): 선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 모델의 문서 검토는 학습자 세션 근거가 아니다.\npath-parcel-evidence (None): 선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간·막힌 단계·힌트 사용·원리 이해 기록이 없다. 작성자 검토와 자동 해답은 learner-session을 대신할 수 없다.\npath-parcel-designer (None): 선언된 선수 능력을 가진 독립 풀이자의 실제 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성자는 독립 리뷰가 대기 중임을 분명히 한다.",
+            "evidence": [
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "독립적인 대상 수준 풀이자의 관찰로 재평가한다.",
+                "kind": "learner-session"
+              },
+              {
+                "path": "challenges/path-parcel/AUTHORING.md",
+                "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
+                "kind": "learner-session"
+              }
+            ],
+            "improvement": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다.\n브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다."
+          }
+        },
+        "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431"
+      },
+      "audit": {
+        "slug": "path-parcel",
+        "input_sha256": "04a7f6840ce9a610c50f3a8f79fb3a632b9a92b102a9109f30d05534ac88ff90",
+        "model": "gpt-6-luna",
+        "reasoning_effort": "low",
+        "judge_count": 3,
+        "method": "criterion median",
+        "ballots": [
+          {
+            "judge_id": "path-parcel-learner",
+            "model": "gpt-6-luna",
+            "reasoning_effort": "low",
+            "lens": "learner-advocate",
+            "first_pass": "문제: path-parcel — learner-advocate first pass\n\n배정된 초급 대상의 전제는 `web-addresses`와 `file-paths`다. 본문은 `/view?file=...`의 입력값과 URL 인코딩, 상대 경로의 `..` 의미를 설명하므로 기본 용어는 준비되어 있다. 첫 행동도 `welcome.txt` 공개 읽기, 이어 `guide.txt`로 폴더 배치와 복구 파일명을 확인하라는 순서가 구체적이다. 그다음 입력칸에서 경로를 바꾸어 보고 응답 내용으로 어느 파일인지 확인하면 된다.\n\n학습자의 핵심 선택은 안내 파일의 배치·이름을 바탕으로 공개 폴더 바깥의 파일을 가리키는 상대 경로를 구성하는 것이다. 공개 위치를 기준으로 상위 폴더로 이동해야 할 수 있다는 점은 공통 설명의 예시로 이해 가능하다. 폼이 URL 처리를 맡는다고 명시해 인코딩 조작 부담도 덜었다. 그러나 정확한 저장 루트/상대 깊이와 오류 응답 해석은 본문만으로 특정할 수 없고, 우선 guide의 실제 내용을 관찰해야 한다. 지금 단계에서 실행을 수행한 것으로 간주하지 않는다.\n\n막힐 수 있는 지점: guide를 읽은 뒤 공개 폴더에서 별도 복구 폴더로 이동할 경로를 조합하는 방법. 최소한 입력값이 공개 폴더 기준임을 재확인하고 응답을 내용으로 판별하도록 안내되어 있으나, 성공·거부·없는 파일의 응답 차이는 아직 설명되지 않았다. 또한 제출 목표는 `pwnden{...}` 전체 문자열이라고 알려져 있다.",
+            "review": {
+              "slug": "path-parcel",
+              "rubric_version": 1,
+              "reviewed_at": "2026-10-03",
+              "reviewer": "path-parcel-learner",
+              "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+              "criteria": {
+                "goal": {
+                  "level": 3,
+                  "reason": "의뢰의 폴더 분리 가정과 관찰 목표가 일치하며, 완료 증거를 실제 복구 문서의 flag로 정했다. 읽기 범위 이탈이라는 학습 원리가 명확하다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "운영 복구 기록의 `pwnden{...}` 전체를 제출하자.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "starting_context": {
+                  "level": 3,
+                  "reason": "본문은 첫 공개 파일과 guide를 읽는 순서를 주고 입력칸의 경로 처리, URL 인코딩, 상대 경로 개념을 설명한다. guide를 실제로 읽기 전에는 정확한 상대 경로를 만들 수 없지만, 그 정보가 다음 관찰 자료에 있다고 안내한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "입력칸은 경로를 그대로 받는다. 응답 내용이 어떤 파일인지 확인하자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "knowledge/file-paths.md",
+                      "quote": "`..`는 한 단계 위의 폴더다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다."
+                },
+                "reasoning": {
+                  "level": 3,
+                  "reason": "초급에 맞는 연결 과제가 남아 있다. 학습자는 guide에서 private 폴더의 위치와 recovery.txt 이름을 얻고, public에서의 상대 위치를 입력값으로 조합해야 한다. 단순 클릭만으로 정답이 정해지지는 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "controls": {
+                  "level": 3,
+                  "reason": "패치된 경로 검사는 정규화 후 public 경계 안인지 확인하며, 테스트는 정상 안내 파일을 유지하면서 여러 상대·절대 경로와 public-other를 거절하고 missing·빈 입력·NUL의 상태도 구분한다. 이는 보호와 정상 기능을 함께 확인한다. 다만 테스트는 정해진 사례 중심이며 운영 실행의 대조군 기록은 작성 기록에 요약되어 있다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/patched/policy.py",
+                      "quote": "path = (public / name).resolve()",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/policy.py",
+                      "quote": "if not path.is_relative_to(public.resolve()):",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/test.py",
+                      "quote": "for name in ['welcome.txt', './welcome.txt', 'guide.txt']:",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/test.py",
+                      "quote": "'../public-other/test.txt']:",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "격리된 테스트에서 검사하는 symlink 경계 사례도 코드 테스트에 포함하면 설명된 경계 조건을 직접 확인할 수 있다."
+                },
+                "hints": {
+                  "level": 3,
+                  "reason": "첫 힌트는 문제의 폴더 관계를 먼저 그리게 한 뒤 출발 위치에서 위로 가는 경로가 유지되는지 시험하라고 안내한다. 핵심 판단을 좁혀 주지만 폴더 관계를 직접 조합하도록 남겨 둔다. 마지막 단계의 정답 입력은 해설에 둔다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/hints/1.md",
+                      "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "파일명 입력칸에 `../private/recovery.txt`를 넣는다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "explanation": {
+                  "level": 3,
+                  "reason": "해설은 정상 파일과 guide를 먼저 확인하고 입력·응답에서 복구 문서를 관찰한 뒤, `..`가 실제 위치를 공개 폴더 밖으로 옮긴다는 원인을 설명한다. 패치 설명도 정규화된 최종 위치와 폴더 경계를 연결한다. 실습의 증거 한계를 과장하지 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "위 경로와 절대 경로 입력은 `403`으로 거절하면서 welcome.txt와 guide.txt는 계속 읽힌다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+                },
+                "execution": {
+                  "level": 3,
+                  "reason": "날짜가 명시된 2026-10-02 작성 기록은 실제 HTTP의 두 상대 경로 풀이와 정상 파일, 그리고 고정 Python 이미지의 해답·패치·정리 검증 통과를 보고한다. 이는 이번 심사의 새 실행이 아니라 최초 구현 작업 트리의 과거 기술 검증이다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                      "kind": "recorded-execution"
+                    }
+                  ],
+                  "improvement": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다."
+                },
+                "browser": {
+                  "level": null,
+                  "reason": "현재 문제를 검색하는 단계부터 환경 준비, 웹 풀이, 정답·오답 제출, 종료까지 확인한 실제 Browser Plugin 세션 기록이 없다. 작성 기록도 화면 조작 검증을 수행하지 않았다고 명시한다.",
+                  "evidence": [],
+                  "improvement": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다."
+                },
+                "learner": {
+                  "level": null,
+                  "reason": "선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 모델의 문서 검토는 학습자 세션 근거가 아니다.",
+                  "evidence": [],
+                  "improvement": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다."
+                }
+              }
+            }
+          },
+          {
+            "judge_id": "path-parcel-evidence",
+            "model": "gpt-6-luna",
+            "reasoning_effort": "low",
+            "lens": "evidence-examiner",
+            "first_pass": "배정 관점: evidence-examiner. 기본 본문은 방문자가 파일명을 입력해 배송 안내를 보는 사이트에서 운영자 복구 문서의 복구 키를 제출하게 한다. 첫 입력은 welcome.txt이며 안내상 guide.txt에 폴더 배치와 비공개 문서 파일명이 있다고 한다. 파일명 입력이 경로를 그대로 받는다는 지식과 상대경로의 .. 설명으로 공개 디렉터리 밖을 탐색할 단서는 주어진다. 성공을 입증하려면 응답이 단순히 성공 상태나 열린 포트인지를 넘어 실제 운영자 복구 기록인지, 그 안의 pwnden{...}가 제출 대상인지 확인해야 한다. 지금은 서버 동작과 파일 배치가 보이지 않아 URL 형태나 어느 디렉터리 이동이 성공하는지는 확인할 수 없다. 오탐 대조로는 공개 안내 파일 응답과 복구 문서 응답의 내용을 비교해야 하며, 숨겨진 다른 기능 또는 잘못된 파일 응답을 정답 증거로 혼동하지 않아야 한다.",
+            "review": {
+              "slug": "path-parcel",
+              "rubric_version": 1,
+              "reviewed_at": "2026-10-03",
+              "reviewer": "path-parcel-evidence",
+              "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+              "criteria": {
+                "goal": {
+                  "level": 4,
+                  "reason": "의뢰, 관찰 대상, 제출 증거가 일치한다. 사용자가 복구 문서를 파일 읽기로 찾아 키 전체를 제출하도록 하고, 배포된 지식은 최종 파일 위치가 폴더 경계를 벗어나는지를 원리로 제시한다. 취약 앱은 읽은 파일 본문을 반환하므로 상태 코드만이 아니라 비밀이 든 자료 자체를 확인할 수 있다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "knowledge/path-boundaries.md",
+                      "quote": "상대 경로를 해석한 최종 위치가 허용 범위에 있는지 확인한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/vulnerable/app.py",
+                      "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "starting_context": {
+                  "level": 3,
+                  "reason": "첫 행동(welcome.txt), 조사 대상(guide.txt와 파일명 입력), 입력 방식(경로 그대로), URL 입력 처리, 상대 경로의 .. 의미가 플레이어 문서에 있다. 이는 결과 내용을 판별하며 직접 시도하기에 충분하다. 다만 화면 조작 설명은 간결하고 오류별 다음 행동은 뒤의 해설에서야 제공되므로 시작 정보가 모든 막힘을 선제적으로 풀지는 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "입력칸은 경로를 그대로 받는다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "`..`는 한 단계 위의 폴더다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/vulnerable/web/App.vue",
+                      "quote": "<form action=\"/view\"><label>파일명<input v-model=\"file\" name=\"file\" maxlength=\"256\" required></label><button>읽기</button></form>",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+                },
+                "reasoning": {
+                  "level": 3,
+                  "reason": "초급 과제에 필요한 단서 연결이 있다. 플레이어는 guide.txt에서 public/private의 관계와 실제 파일명을 읽고, 제공된 상대경로 개념 및 입력값을 합쳐 경로를 구성해야 한다. 정상 안내 읽기와 운영 기록 읽기의 본문을 구분하는 판단이 남아 있다. 동등 경로 변형은 해설에만 있어 본문만으로 대안 경로 구분을 요구하지 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "`guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "값에 공백이나 `/` 같은 문자가 들어가면 브라우저가 다른 표기로 바꿔 전송할 수 있다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다."
+                },
+                "controls": {
+                  "level": 4,
+                  "reason": "취약 풀이 스크립트는 공개 안내와 guide 응답을 확인한 뒤 비밀 형식이 든 복구 문서 응답을 확인하고, 동일 파일의 동등 상대경로 결과도 본문 전체로 비교한다. 패치 검사는 정상 파일의 유지, 여러 상대경로·절대경로·public-other 거부, 없는 파일·빈 입력·NUL의 상태를 함께 확인한다. 이는 200 응답을 곧바로 성공으로 오인하지 않게 하고 경계 비교와 정상 기능을 함께 검증한다. 단, 이 평가는 검사 코드와 기록에 근거한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/solve/solve.py",
+                      "quote": "assert 'pwnden{' not in get('/')[1]",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/solve.py",
+                      "quote": "assert view('./../private/recovery.txt')[1] == body",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/test.py",
+                      "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/test.py",
+                      "quote": "assert status == 403 and 'pwnden{' not in body, name",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/test.py",
+                      "quote": "assert status == 200 and 'pwnden{' not in body, name",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "hints": {
+                  "level": 2,
+                  "reason": "단일 힌트는 막히는 지점에 정확히 대응해 폴더 관계를 그리게 하고, 다음 단계에서는 공개 자료 조회, 파일명 발견, 출발 폴더, 사용할 입력, 제출 동작까지 전부 제공한다. 도움의 순서는 명확하지만 점진적으로 작은 단서부터 제공하지 않고 한 번 열면 풀이 경로가 사실상 노출된다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/hints/1.md",
+                      "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "파일명 입력칸에 `../private/recovery.txt`를 넣는다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": "첫 힌트는 상대 위치를 도식화하도록 유지하고, 뒤따르는 힌트에서 파일명과 경로 조합을 단계별로 공개해 정답 입력은 해설에 남긴다."
+                },
+                "explanation": {
+                  "level": 4,
+                  "reason": "해설은 공개 폴더에서의 시작 위치, 실제 응답 파일, 동등 경로, 입력과 실제 파일 위치의 관계를 연결한다. 수정은 정규화된 실제 위치를 공개 폴더와 비교하고, 단순 문자열 접두어 비교의 public-other 오류와 정상·오류 상태를 설명한다. 결론은 이 실습의 파일 읽기 범위에 한정되어 있으며 실제 파일을 읽었다는 근거와 구분된다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "최종 위치는 공개 폴더 밖이 된다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "최종 위치는 공개 폴더 밖이 된다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/vulnerable/policy.py",
+                      "quote": "return public / name",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/policy.py",
+                      "quote": "if not path.is_relative_to(public.resolve()):",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "execution": {
+                  "level": 3,
+                  "reason": "2026-10-02 작성자 기술 검증 기록은 고정 Python 3.13.15 이미지에서 두 상대경로의 실제 HTTP 풀이, 패치의 거부 및 정상 파일 동작, verify 명령으로 풀이·선언된 패치·자원 정리를 확인했다고 구체적으로 범위를 적는다. 이는 이번 심사에서 새로 실행한 결과가 아니라 기록된 과거 실행이다. 기록에는 양성·음성 경로와 정리가 언급되나 실행 로그 원문은 포함되지 않아 최상 수준의 독립 재현 증거로 보지는 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "`python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "실제 HTTP의 두 상대 경로 풀이와 정상 파일을 확인했다.",
+                      "kind": "recorded-execution"
+                    }
+                  ],
+                  "improvement": "검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다."
+                },
+                "browser": {
+                  "level": null,
+                  "reason": "현재 문제의 검색부터 환경 준비, 브라우저 풀이, 정답·오답 제출 및 종료까지를 기록한 실제 browser-session 증거가 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 밝힌다.",
+                  "evidence": [],
+                  "improvement": "현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다."
+                },
+                "learner": {
+                  "level": null,
+                  "reason": "선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간·막힌 단계·힌트 사용·원리 이해 기록이 없다. 작성자 검토와 자동 해답은 learner-session을 대신할 수 없다.",
+                  "evidence": [],
+                  "improvement": "브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다."
+                }
+              }
+            }
+          },
+          {
+            "judge_id": "path-parcel-designer",
+            "model": "gpt-6-luna",
+            "reasoning_effort": "low",
+            "lens": "learning-designer",
+            "first_pass": "힌트·해설·구현을 읽기 전 관찰 (learning-designer)\n\n첫 행동은 분명하다. `welcome.txt`를 공개 폴더에서 먼저 열고 이어서 `guide.txt`로 배치와 파일명을 확인한 뒤 입력칸에서 다른 경로를 시도한다. 선수지식은 URL의 경로/값 구분과 상대 경로, `..`의 동작 및 폼의 URL 인코딩 처리를 설명해 실제 입력 문법의 숨은 부담을 낮춘다. 남은 학습 판단은 공개 폴더를 기준으로 경로가 어디로 해석되는지 이어 붙이고 응답 내용으로 대상 파일을 식별하는 것이다. 성공 관찰도 복구 문서의 `pwnden{...}` 값 제출로 명시되어 있다.\n\n초급 설계자로서 확인할 지점: 복구 파일명을 전달 자료에서 공개 파일과 어떻게 연결하는지, `..`를 반복하는 횟수가 단서로 결정되는지, 정상 안내와 운영 문서 응답을 구분하는 비교가 가능한지다. 초기 브리핑은 폴더 배치를 따로 두는 것이 경계를 보장하는지라는 보안 질문을 주지만 구체적 단서의 순서는 자료에 맡긴다. 브리핑은 경로를 그대로 넣을 수 있다고 명시해 경로 표기를 추측하는 문제로 흐르지 않는다. 명령줄이나 코딩은 선언되지 않았으며 브라우저 조작만으로 원리를 관찰할 수 있다.",
+            "review": {
+              "slug": "path-parcel",
+              "rubric_version": 1,
+              "reviewed_at": "2026-10-03",
+              "reviewer": "path-parcel-designer",
+              "source_sha256": "60f8633fd195f6c030013f00966e781e6325dfbdf6a59b2e5f103c232d6d6431",
+              "criteria": {
+                "goal": {
+                  "level": 4,
+                  "reason": "의뢰는 공개 폴더 밖 운영 자료를 읽을 수 있는지 묻고, 목표는 운영 복구 문서의 키를 찾는 것이며 제출값이 완료를 확인한다. 실제 서비스는 파일을 읽어 응답하므로 파일 내용 관찰이 경계의 문제를 직접 드러낸다. 정상 public 문서와 private 복구 기록이 구분된다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/vulnerable/app.py",
+                      "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "starting_context": {
+                  "level": 4,
+                  "reason": "브리핑은 정상 자료부터 확인하고 guide에서 배치·파일명을 얻어 입력칸에 경로를 시험하라고 안내한다. 공통 지식은 URL 값 전달과 상대 경로의 `..`를 사용 전에 예로 설명하고 문제 지식은 파일 제공 범위가 최종 실제 위치에 달렸다고 연결한다. 해설을 열지 않아도 브라우저만으로 시작할 수 있으며 코딩이나 CLI는 요구되지 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "knowledge/file-paths.md",
+                      "quote": "예를 들어 `books`에서 `../music/song.txt`를 읽으면\n`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "폼에 원래 문자를 입력하면 된다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "reasoning": {
+                  "level": 3,
+                  "reason": "초급 수준에 필요한 단서 연결이 남아 있다. 플레이어는 정상 파일을 열고 guide의 폴더 관계와 recovery.txt 이름을 연결한 뒤 공개 폴더에서 한 단계 위로 올라가는 상대 경로를 구성해야 한다. 수행은 한 번의 핵심 경로 선택이며 복잡한 오답 분석은 요구하지 않아 4수준의 여러 경계 사례 학습이라고 보기 어렵다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/README.md",
+                      "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "`guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "제공된 예제로 상대 경로를 학습한 뒤 실제 폴더 배치와 파일명을 연결해 입력을 독립적으로 만든다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "controls": {
+                  "level": 4,
+                  "reason": "정상 공개 응답과 공개 범위 밖 응답의 비교가 목표를 뒷받침한다. 패치 검사는 정상 문서들이 계속 읽히는지와 상대 경로 탈출, 절대 경로, public-other 접두어 오인을 각각 대조하며 존재하지 않는 파일·빈 값·NUL 입력도 다른 결과로 구분한다. 패치는 경로 문자열 접두어가 아닌 정규화된 실제 위치의 경계를 검사한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/patched/test.py",
+                      "quote": "for name in ['welcome.txt', './welcome.txt', 'guide.txt']:",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/test.py",
+                      "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/patched/policy.py",
+                      "quote": "if not path.is_relative_to(public.resolve()):",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "hints": {
+                  "level": 3,
+                  "reason": "기본 브리핑은 시작 자료와 상대 경로 원리를 제공하지만 서로 다른 시작 위치라는 마지막 관계는 직접 말하지 않는다. 단일 힌트가 우선 폴더 위치의 차이를 떠올리게 한 다음 파일 경로를 그려 보고 `..`가 처리되는지 확인하도록 유도하며, 답 경로를 힌트에 직접 노출하지 않는다. 이 수준의 짧은 문제에 힌트 한 개면 충분하다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/hints/1.md",
+                      "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/hints/1.md",
+                      "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "explanation": {
+                  "level": 4,
+                  "reason": "해설은 정상 문서 확인부터 guide의 파일명·폴더 관계, 상대 경로 입력, 키 추출까지 재현 순서를 제시한다. 이어 최종 위치가 공개 폴더 밖이 되는 이유와 패치의 정규화 경계 검증, 접두어 비교의 오류 가능성을 설명하고 실습의 결론을 경로 구현에 한정한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.\n파일이 실제로 public 폴더 안에 있는지 확인해야 한다.",
+                      "kind": "source"
+                    },
+                    {
+                      "path": "challenges/path-parcel/solve/README.md",
+                      "quote": "다른 응답을 만났다면 입력의 폴더 순서와 파일명을 다시 확인하자.\n존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+                      "kind": "source"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "execution": {
+                  "level": 4,
+                  "reason": "날짜가 있는 작성 기록은 2026-10-02 최초 콘텐츠 구현 작업 트리의 실제 HTTP 상대 경로 두 건 및 정상 파일 확인, 패치 경계와 여러 거부 대조, 고정 Python 이미지에서 해답·패치·정리 검증 통과를 기록한다. 이는 과거 실행 증거로 반영했으며 현재 심사 중 새 실행으로 표현하지 않는다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+                      "kind": "recorded-execution"
+                    },
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "`python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+                      "kind": "recorded-execution"
+                    }
+                  ],
+                  "improvement": ""
+                },
+                "browser": {
+                  "level": null,
+                  "reason": "현재 문제에서 검색부터 환경 준비, 브라우저 입력과 제출, 오답 확인 및 종료까지 실제 화면으로 수행한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증을 수행하지 않았다고 명시한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+                      "kind": "browser-session"
+                    }
+                  ],
+                  "improvement": "브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다."
+                },
+                "learner": {
+                  "level": null,
+                  "reason": "선언된 선수 능력을 가진 독립 풀이자의 실제 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성자는 독립 리뷰가 대기 중임을 분명히 한다.",
+                  "evidence": [
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "독립적인 대상 수준 풀이자의 관찰로 재평가한다.",
+                      "kind": "learner-session"
+                    },
+                    {
+                      "path": "challenges/path-parcel/AUTHORING.md",
+                      "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
+                      "kind": "learner-session"
+                    }
+                  ],
+                  "improvement": "브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다."
+                }
+              }
+            }
+          }
+        ],
+        "distribution": {
+          "goal": {
+            "levels": {
+              "path-parcel-learner": 3,
+              "path-parcel-evidence": 4,
+              "path-parcel-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "starting_context": {
+            "levels": {
+              "path-parcel-learner": 3,
+              "path-parcel-evidence": 3,
+              "path-parcel-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 3,
+            "needs_adjudication": false
+          },
+          "reasoning": {
+            "levels": {
+              "path-parcel-learner": 3,
+              "path-parcel-evidence": 3,
+              "path-parcel-designer": 3
+            },
+            "unverified_judges": 0,
+            "proposed_median": 3,
+            "needs_adjudication": false
+          },
+          "controls": {
+            "levels": {
+              "path-parcel-learner": 3,
+              "path-parcel-evidence": 4,
+              "path-parcel-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "hints": {
+            "levels": {
+              "path-parcel-learner": 3,
+              "path-parcel-evidence": 2,
+              "path-parcel-designer": 3
+            },
+            "unverified_judges": 0,
+            "proposed_median": 3,
+            "needs_adjudication": false
+          },
+          "explanation": {
+            "levels": {
+              "path-parcel-learner": 3,
+              "path-parcel-evidence": 4,
+              "path-parcel-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 4,
+            "needs_adjudication": false
+          },
+          "execution": {
+            "levels": {
+              "path-parcel-learner": 3,
+              "path-parcel-evidence": 3,
+              "path-parcel-designer": 4
+            },
+            "unverified_judges": 0,
+            "proposed_median": 3,
+            "needs_adjudication": false
+          },
+          "browser": {
+            "levels": {
+              "path-parcel-learner": null,
+              "path-parcel-evidence": null,
+              "path-parcel-designer": null
+            },
+            "unverified_judges": 3,
+            "proposed_median": null,
+            "needs_adjudication": false
+          },
+          "learner": {
+            "levels": {
+              "path-parcel-learner": null,
+              "path-parcel-evidence": null,
+              "path-parcel-designer": null
+            },
+            "unverified_judges": 3,
+            "proposed_median": null,
+            "needs_adjudication": false
+          }
+        },
+        "needs_adjudication": [],
+        "summary": {
+          "slug": "path-parcel",
+          "points": 68.75,
+          "reviewed_weight": 80,
+          "pending": [
+            "browser",
+            "learner"
+          ],
+          "improvements": [
+            {
+              "criterion": "starting_context",
+              "action": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다.\n첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+            },
+            {
+              "criterion": "reasoning",
+              "action": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다."
+            },
+            {
+              "criterion": "controls",
+              "action": "격리된 테스트에서 검사하는 symlink 경계 사례도 코드 테스트에 포함하면 설명된 경계 조건을 직접 확인할 수 있다."
+            },
+            {
+              "criterion": "hints",
+              "action": "첫 힌트는 상대 위치를 도식화하도록 유지하고, 뒤따르는 힌트에서 파일명과 경로 조합을 단계별로 공개해 정답 입력은 해설에 남긴다."
+            },
+            {
+              "criterion": "explanation",
+              "action": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+            },
+            {
+              "criterion": "execution",
+              "action": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다."
+            },
+            {
+              "criterion": "browser",
+              "action": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다.\n현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다.\n브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다."
+            },
+            {
+              "criterion": "learner",
+              "action": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다.\n브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다."
+            }
+          ]
+        },
+        "adjudications": {},
+        "first_pass_records": {
+          "learner": {
+            "saved_text": "문제: path-parcel — learner-advocate first pass\n\n배정된 초급 대상의 전제는 `web-addresses`와 `file-paths`다. 본문은 `/view?file=...`의 입력값과 URL 인코딩, 상대 경로의 `..` 의미를 설명하므로 기본 용어는 준비되어 있다. 첫 행동도 `welcome.txt` 공개 읽기, 이어 `guide.txt`로 폴더 배치와 복구 파일명을 확인하라는 순서가 구체적이다. 그다음 입력칸에서 경로를 바꾸어 보고 응답 내용으로 어느 파일인지 확인하면 된다.\n\n학습자의 핵심 선택은 안내 파일의 배치·이름을 바탕으로 공개 폴더 바깥의 파일을 가리키는 상대 경로를 구성하는 것이다. 공개 위치를 기준으로 상위 폴더로 이동해야 할 수 있다는 점은 공통 설명의 예시로 이해 가능하다. 폼이 URL 처리를 맡는다고 명시해 인코딩 조작 부담도 덜었다. 그러나 정확한 저장 루트/상대 깊이와 오류 응답 해석은 본문만으로 특정할 수 없고, 우선 guide의 실제 내용을 관찰해야 한다. 지금 단계에서 실행을 수행한 것으로 간주하지 않는다.\n\n막힐 수 있는 지점: guide를 읽은 뒤 공개 폴더에서 별도 복구 폴더로 이동할 경로를 조합하는 방법. 최소한 입력값이 공개 폴더 기준임을 재확인하고 응답을 내용으로 판별하도록 안내되어 있으나, 성공·거부·없는 파일의 응답 차이는 아직 설명되지 않았다. 또한 제출 목표는 `pwnden{...}` 전체 문자열이라고 알려져 있다.\n",
+            "matches_wrapper": true
+          },
+          "evidence": {
+            "saved_text": "배정 관점: evidence-examiner. 기본 본문은 방문자가 파일명을 입력해 배송 안내를 보는 사이트에서 운영자 복구 문서의 복구 키를 제출하게 한다. 첫 입력은 welcome.txt이며 안내상 guide.txt에 폴더 배치와 비공개 문서 파일명이 있다고 한다. 파일명 입력이 경로를 그대로 받는다는 지식과 상대경로의 .. 설명으로 공개 디렉터리 밖을 탐색할 단서는 주어진다. 성공을 입증하려면 응답이 단순히 성공 상태나 열린 포트인지를 넘어 실제 운영자 복구 기록인지, 그 안의 pwnden{...}가 제출 대상인지 확인해야 한다. 지금은 서버 동작과 파일 배치가 보이지 않아 URL 형태나 어느 디렉터리 이동이 성공하는지는 확인할 수 없다. 오탐 대조로는 공개 안내 파일 응답과 복구 문서 응답의 내용을 비교해야 하며, 숨겨진 다른 기능 또는 잘못된 파일 응답을 정답 증거로 혼동하지 않아야 한다.\n",
+            "matches_wrapper": true
+          },
+          "designer": {
+            "saved_text": "힌트·해설·구현을 읽기 전 관찰 (learning-designer)\n\n첫 행동은 분명하다. `welcome.txt`를 공개 폴더에서 먼저 열고 이어서 `guide.txt`로 배치와 파일명을 확인한 뒤 입력칸에서 다른 경로를 시도한다. 선수지식은 URL의 경로/값 구분과 상대 경로, `..`의 동작 및 폼의 URL 인코딩 처리를 설명해 실제 입력 문법의 숨은 부담을 낮춘다. 남은 학습 판단은 공개 폴더를 기준으로 경로가 어디로 해석되는지 이어 붙이고 응답 내용으로 대상 파일을 식별하는 것이다. 성공 관찰도 복구 문서의 `pwnden{...}` 값 제출로 명시되어 있다.\n\n초급 설계자로서 확인할 지점: 복구 파일명을 전달 자료에서 공개 파일과 어떻게 연결하는지, `..`를 반복하는 횟수가 단서로 결정되는지, 정상 안내와 운영 문서 응답을 구분하는 비교가 가능한지다. 초기 브리핑은 폴더 배치를 따로 두는 것이 경계를 보장하는지라는 보안 질문을 주지만 구체적 단서의 순서는 자료에 맡긴다. 브리핑은 경로를 그대로 넣을 수 있다고 명시해 경로 표기를 추측하는 문제로 흐르지 않는다. 명령줄이나 코딩은 선언되지 않았으며 브라우저 조작만으로 원리를 관찰할 수 있다.\n",
+            "matches_wrapper": true
+          }
+        }
+      }
+    },
+    "retained_reason": "",
+    "additional_findings": [
+      {
+        "judge_id": "path-parcel-alternative",
+        "criterion": "reasoning",
+        "finding": "동등상대경로도 같은원리를관찰한다",
+        "already_in_initial": true,
+        "confirmed": "유효한대안이며 새결함아님.",
+        "sources": [
+          "challenges/path-parcel/solve/README.md"
+        ]
+      },
+      {
+        "judge_id": "path-parcel-tooling",
+        "criterion": "starting_context",
+        "finding": "별도CLI설치 없이 브라우저폼으로 경로전달가능",
+        "already_in_initial": true,
+        "confirmed": "기존시작정보 판단을재확인했다.",
+        "sources": [
+          "challenges/path-parcel/README.md"
+        ]
+      }
+    ]
+  },
+  "parent_review": {
+    "reviewer": "Codex parent",
+    "reviewed_at": "2026-10-03",
+    "decision": "public/private 폴더관계와 실제파일명을 연결해 최종읽기 위치를 구성하는 초급판단이 남는다. 상대·절대경로·public-other 접두오인·없는파일·빈입력·NUL 대조와 정상읽기 보존은 적절하다. symlink 추가검사는 확장 제안이며 현재필수결함이 아니다. 힌트는 답경로를제시하지않는 방향지원이고, 전체입력과제출순서는 해설에 있다. symlink대조 단위검사는 tools/test_second_experiments.py에 이미있으므로 symlink검사가없다는 제안은 채택하지 않는다.",
+    "roles_checked": [
+      "learner-advocate",
+      "evidence-examiner",
+      "learning-designer",
+      "alternative-path-reviewer",
+      "tooling-reviewer"
+    ],
+    "source_revision": "327f3a31c85cff70853f6437985996bf0b045a5a",
+    "limitations": [
+      "Same-model personas do not eliminate shared model bias.",
+      "No browser-session or learner-session was performed."
+    ]
+  },
+  "unresolved_after_parent_review": [],
+  "previous_review": {
+    "slug": "path-parcel",
+    "rubric_version": 1,
+    "reviewed_at": "2026-10-03",
+    "reviewer": "Codex — 작성자 관점의 소스 검토",
+    "source_sha256": "01459e4e5e23c3b284a37b6dbcd45d31eccc915f15d82a2523155abe86b7a3b6",
+    "criteria": {
+      "goal": {
+        "level": 3,
+        "reason": "의뢰 목표와 제출 증거가 연결되고 해설에서 보안 원리를 설명한다. 정답 제출만으로 학습자의 원리 이해까지 확인하지는 않는다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "::objective\n파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "## 조사 순서\n\n1. `welcome.txt`가 정상적으로 읽히는지 확인한다.\n2. `guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.\n3. 현재 출발 폴더가 public이므로 `../`로 상위 폴더를 가리킨다.\n4. 파일명 입력칸에 `../private/recovery.txt`를 넣는다.\n5. 운영 복구 기록에 표시된 `pwnden{...}`를 제출한다.\n\n`./../private/recovery.txt`도 같은 위치를 가리킨다.\n\n## 확인된 원리\n\n대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다. 폴더 분리와 접근 제한은 각각 구현해야 한다.\n\n## 고친 동작\n\n수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "starting_context": {
+        "level": 3,
+        "reason": "대상·자료와 시작 행동을 제공하고 web 조작 및 필요한 지식의 범위를 본문에 설명한다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "::resources\n사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.\n공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.\n입력칸은 경로를 그대로 받는다. 응답 내용이 어떤 파일인지 확인하자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "::knowledge\n\n### 주소의 경로와 입력값\n\n`/view?file=welcome.txt`에서 `/view`는 서버의 기능을 가리키는 **경로**,\n`?` 뒤의 `file=welcome.txt`는 그 기능에 전달하는 **입력값**이다.\n`file`이 입력 이름이고 `welcome.txt`가 값이다.\n\n값에 공백이나 `/` 같은 문자가 들어가면 브라우저가 다른 표기로 바꿔 전송할 수 있다.\n`%2F`는 `/`의 URL 인코딩이다. 서버는 보통 이 표기를 풀어서 입력을 읽는다.\n문제 사이트의 입력 폼은 이 전송 처리를 해 주므로, 폼에 원래 문자를 입력하면 된다.\n\n### 폴더와 상대 경로\n\n경로는 파일이 어느 폴더에 있는지 나타낸다. `public/welcome.txt`는\n`public` 폴더의 `welcome.txt`다. `/`는 폴더와 파일 이름을 구분한다.\n\n상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,\n`..`는 한 단계 위의 폴더다. 예를 들어 `books`에서 `../music/song.txt`를 읽으면\n`books`를 벗어나 같은 상위",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "reasoning": {
+        "level": 3,
+        "reason": "안내에서 실제 폴더 관계를 읽고 상대 경로를 구성한다. 의미 있는 경로 판단이 있으나 오답 후보 선택 부담은 작다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "`./../private/recovery.txt`도 같은 위치를 가리킨다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "controls": {
+        "level": 4,
+        "reason": "정답 경로와 대조 사례를 검사한다. 인용한 검사 범위에 한정해 평가하며, 기록에 없는 대조군을 통과했다고 가정하지 않는다.",
+        "evidence": [
+          {
+            "path": "tools/test_second_experiments.py",
+            "quote": "def test_path_patch_checks_directory_boundaries_and_symlink_targets(self):\n        locate = runpy.run_path(str(ROOT / 'path-parcel/patched/policy.py'))['locate']\n        with tempfile.TemporaryDirectory() as name:\n            public = Path(name) / 'public'\n            public.mkdir()\n            outside = Path(name) / 'private'\n            outside.mkdir()\n            self.assertEqual(locate(public, './file.txt'), public / 'file.txt')\n            for request in ['../private/key.txt', '../public-other/key.txt', str(outside / 'key.txt')]:\n         ",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "hints": {
+        "level": 3,
+        "reason": "기본 본문은 조사 시작점을 주고 실제 정답은 해설에 둔다. 첫 힌트는 필요한 비교를 돕는다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/hints/1.md",
+            "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다.\n폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "explanation": {
+        "level": 3,
+        "reason": "재현 행동과 관찰 결과, 원인 및 보호 방법을 연결한다. 파일·서비스별 결론 범위를 해설에서 확인했다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "## 조사 순서\n\n1. `welcome.txt`가 정상적으로 읽히는지 확인한다.\n2. `guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.\n3. 현재 출발 폴더가 public이므로 `../`로 상위 폴더를 가리킨다.\n4. 파일명 입력칸에 `../private/recovery.txt`를 넣는다.\n5. 운영 복구 기록에 표시된 `pwnden{...}`를 제출한다.\n\n`./../private/recovery.txt`도 같은 위치를 가리킨다.\n\n## 확인된 원리\n\n대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다. 폴더 분리와 접근 제한은 각각 구현해야 한다.\n\n## 고친 동작\n\n수정한 서버는 `.`과 `..`를 계산해 실제 파일 위치를 찾은 뒤 공개 폴더 안에 있는지 확인한다.\n위 경로와 절대 경로 입력은 `403`으로 거절하면서 welcome.txt와 guide.txt는 계속 읽힌다.\n폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.\n파일이 실제로 public 폴더 안에 있는지 확인해야 한다.\n\n다른 응답을 만났다면 입력의 폴더 순서와 파일명을 다시 확인하자.\n존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "execution": {
+        "level": 3,
+        "reason": "기존 날짜별 실행 기록에서 해답·선언한 패치·정리를 확인했다. 현재 검토에서 새 실행한 것으로 취급하지 않는다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.\n- 작성자 내용 검토: 의뢰 맥락, 출발 정보, 완료 조건, 점진적 힌트와 해설의 보안 원리를 대조했다.\n- Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.\n- 독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.\n- 공개 준비: 기술 구현은 완료됐으며 독립 학습 리뷰와 난도 확인을 마친 뒤 공식 카탈로그로 공개한다.\n",
+            "kind": "recorded-execution"
+          }
+        ],
+        "improvement": ""
+      },
+      "browser": {
+        "level": null,
+        "reason": "검색부터 종료까지 이 문제의 실제 브라우저 전체 풀이 세션 기록이 없다. PTY 실행 기록은 이 항목을 대신하지 않는다.",
+        "evidence": [],
+        "improvement": "브라우저에서 검색·선택·환경 준비·풀이·정답/오답 제출·종료를 수행하고 현재 소스와 세션 결과를 기록한다."
+      },
+      "learner": {
+        "level": null,
+        "reason": "대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해 결과가 없다. 작성자 평가는 독립 리뷰에 포함하지 않는다.",
+        "evidence": [],
+        "improvement": "난도 2 대상 풀이자가 해설을 닫고 시도한 시간·막힌 단계·힌트 사용과 보안 원리 설명을 기록한다."
+      }
+    }
+  },
+  "final_review": {
+    "slug": "path-parcel",
+    "rubric_version": 1,
+    "reviewed_at": "2026-10-03",
+    "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/path-parcel/2026-10-03-panel.json",
+    "criteria": {
+      "goal": {
+        "level": 4,
+        "reason": "path-parcel-learner (3): 의뢰의 폴더 분리 가정과 관찰 목표가 일치하며, 완료 증거를 실제 복구 문서의 flag로 정했다. 읽기 범위 이탈이라는 학습 원리가 명확하다.\npath-parcel-evidence (4): 의뢰, 관찰 대상, 제출 증거가 일치한다. 사용자가 복구 문서를 파일 읽기로 찾아 키 전체를 제출하도록 하고, 배포된 지식은 최종 파일 위치가 폴더 경계를 벗어나는지를 원리로 제시한다. 취약 앱은 읽은 파일 본문을 반환하므로 상태 코드만이 아니라 비밀이 든 자료 자체를 확인할 수 있다.\npath-parcel-designer (4): 의뢰는 공개 폴더 밖 운영 자료를 읽을 수 있는지 묻고, 목표는 운영 복구 문서의 키를 찾는 것이며 제출값이 완료를 확인한다. 실제 서비스는 파일을 읽어 응답하므로 파일 내용 관찰이 경계의 문제를 직접 드러낸다. 정상 public 문서와 private 복구 기록이 구분된다.\npath-parcel-alternative (4): 의뢰·입력 기능·제출물은 서로 맞고, 취약 구현은 `../private/recovery.txt`의 실제 읽기 내용을 복구 키로 연결한다. 해답은 별도 정상·경계 검사로 원리를 확인한다.\npath-parcel-tooling (3): 파일명 입력으로 private 문서와 키를 찾는 제출 목표가 관찰 가능한 성공 조건이며, 실제 취약 대상은 요청 경로의 파일을 읽어 응답한다. 폴더 경계 검증이라는 학습 목표와 일치한다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "파일 읽기 기능으로 운영자의 복구 문서를 찾아, 그 안의 복구 키를 제출하자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "운영 복구 기록의 `pwnden{...}` 전체를 제출하자.",
+            "kind": "source"
+          },
+          {
+            "path": "knowledge/path-boundaries.md",
+            "quote": "상대 경로를 해석한 최종 위치가 허용 범위에 있는지 확인한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/vulnerable/app.py",
+            "quote": "self.reply(200, locate(PUBLIC, name).read_text(encoding='utf-8'))",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "starting_context": {
+        "level": 4,
+        "reason": "path-parcel-learner (3): 본문은 첫 공개 파일과 guide를 읽는 순서를 주고 입력칸의 경로 처리, URL 인코딩, 상대 경로 개념을 설명한다. guide를 실제로 읽기 전에는 정확한 상대 경로를 만들 수 없지만, 그 정보가 다음 관찰 자료에 있다고 안내한다.\npath-parcel-evidence (3): 첫 행동(welcome.txt), 조사 대상(guide.txt와 파일명 입력), 입력 방식(경로 그대로), URL 입력 처리, 상대 경로의 .. 의미가 플레이어 문서에 있다. 이는 결과 내용을 판별하며 직접 시도하기에 충분하다. 다만 화면 조작 설명은 간결하고 오류별 다음 행동은 뒤의 해설에서야 제공되므로 시작 정보가 모든 막힘을 선제적으로 풀지는 않는다.\npath-parcel-designer (4): 브리핑은 정상 자료부터 확인하고 guide에서 배치·파일명을 얻어 입력칸에 경로를 시험하라고 안내한다. 공통 지식은 URL 값 전달과 상대 경로의 `..`를 사용 전에 예로 설명하고 문제 지식은 파일 제공 범위가 최종 실제 위치에 달렸다고 연결한다. 해설을 열지 않아도 브라우저만으로 시작할 수 있으며 코딩이나 CLI는 요구되지 않는다.\npath-parcel-alternative (4): 브라우저 입력 폼, 공개 자료의 역할, 실제 폴더 배치·파일명을 본문과 선수지식에서 찾을 수 있다. URL 인코딩과 상대 경로 예시도 사용 전에 설명한다.\npath-parcel-tooling (4): 공개 파일부터 순서대로 조사하라는 자료 지시, 폼 조작법, URL 인코딩, 상대경로의 `..` 의미와 선수 지식이 제공된다. 웹 UI에도 기본 파일과 입력 폼이 있으며 CLI나 프로그래밍 설치를 요구하지 않는다. URL은 runner가 전달하는 영역으로 구현 확인은 있으나 학습자 세션은 검증되지 않았다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "공개 파일을 먼저 읽고, 사이트의 파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "입력칸은 경로를 그대로 받는다. 응답 내용이 어떤 파일인지 확인하자.",
+            "kind": "source"
+          },
+          {
+            "path": "knowledge/file-paths.md",
+            "quote": "`..`는 한 단계 위의 폴더다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "입력칸은 경로를 그대로 받는다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "`..`는 한 단계 위의 폴더다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/vulnerable/web/App.vue",
+            "quote": "<form action=\"/view\"><label>파일명<input v-model=\"file\" name=\"file\" maxlength=\"256\" required></label><button>읽기</button></form>",
+            "kind": "source"
+          },
+          {
+            "path": "knowledge/file-paths.md",
+            "quote": "예를 들어 `books`에서 `../music/song.txt`를 읽으면\n`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "폼에 원래 문자를 입력하면 된다.",
+            "kind": "source"
+          },
+          {
+            "path": "knowledge/file-paths.md",
+            "quote": "상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,\n`..`는 한 단계 위의 폴더다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "문제 사이트의 입력 폼은 이 전송 처리를 해 주므로, 폼에 원래 문자를 입력하면 된다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다.\n첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+      },
+      "reasoning": {
+        "level": 3,
+        "reason": "path-parcel-learner (3): 초급에 맞는 연결 과제가 남아 있다. 학습자는 guide에서 private 폴더의 위치와 recovery.txt 이름을 얻고, public에서의 상대 위치를 입력값으로 조합해야 한다. 단순 클릭만으로 정답이 정해지지는 않는다.\npath-parcel-evidence (3): 초급 과제에 필요한 단서 연결이 있다. 플레이어는 guide.txt에서 public/private의 관계와 실제 파일명을 읽고, 제공된 상대경로 개념 및 입력값을 합쳐 경로를 구성해야 한다. 정상 안내 읽기와 운영 기록 읽기의 본문을 구분하는 판단이 남아 있다. 동등 경로 변형은 해설에만 있어 본문만으로 대안 경로 구분을 요구하지 않는다.\npath-parcel-designer (3): 초급 수준에 필요한 단서 연결이 남아 있다. 플레이어는 정상 파일을 열고 guide의 폴더 관계와 recovery.txt 이름을 연결한 뒤 공개 폴더에서 한 단계 위로 올라가는 상대 경로를 구성해야 한다. 수행은 한 번의 핵심 경로 선택이며 복잡한 오답 분석은 요구하지 않아 4수준의 여러 경계 사례 학습이라고 보기 어렵다.\npath-parcel-alternative (3): 초급 수준에 맞게 guide의 폴더 관계·파일명과 출발 폴더를 이어 입력을 구성한다. 취약 응답의 실제 내용이 최종 판단 증거다. 대안 표기 자체는 원리 이해를 바꾸지 않는다.\npath-parcel-tooling (3): 풀이자는 guide에서 두 폴더가 같은 상위 폴더에 있음을 얻고, 공개 루트에서 상위로 이동하는 상대경로를 구성해야 한다. 비교·추론은 초급 목표에 맞지만 한 번의 명확한 경로 결합이며 그럴듯한 오답을 실제 플레이어 절차가 비교시키지는 않는다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "상대 경로는 출발 폴더를 기준으로 읽는다. `.`은 현재 폴더,",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "`guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "값에 공백이나 `/` 같은 문자가 들어가면 브라우저가 다른 표기로 바꿔 전송할 수 있다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "`books`를 벗어나 같은 상위 폴더의 `music/song.txt`로 이동한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "`guide.txt`에서 public과 private가 같은 상위 폴더에 있으며 운영 파일명이 recovery.txt임을 읽는다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "제공된 예제로 상대 경로를 학습한 뒤 실제 폴더 배치와 파일명을 연결해 입력을 독립적으로 만든다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "사이트는 입력받은 파일 이름을 공개 폴더의 위치와 합쳐서 파일을 찾는다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "`./../private/recovery.txt`도 같은 위치를 가리킨다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "현재 출발 폴더가 public이므로 `../`로 상위 폴더를 가리킨다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다.\n정상 공개 파일과 실패하는 오경로를 짧게 비교하는 선택지를 추가하면, 난도를 높이지 않고 경로 구성 근거를 확인할 수 있다."
+      },
+      "controls": {
+        "level": 4,
+        "reason": "path-parcel-learner (3): 패치된 경로 검사는 정규화 후 public 경계 안인지 확인하며, 테스트는 정상 안내 파일을 유지하면서 여러 상대·절대 경로와 public-other를 거절하고 missing·빈 입력·NUL의 상태도 구분한다. 이는 보호와 정상 기능을 함께 확인한다. 다만 테스트는 정해진 사례 중심이며 운영 실행의 대조군 기록은 작성 기록에 요약되어 있다.\npath-parcel-evidence (4): 취약 풀이 스크립트는 공개 안내와 guide 응답을 확인한 뒤 비밀 형식이 든 복구 문서 응답을 확인하고, 동일 파일의 동등 상대경로 결과도 본문 전체로 비교한다. 패치 검사는 정상 파일의 유지, 여러 상대경로·절대경로·public-other 거부, 없는 파일·빈 입력·NUL의 상태를 함께 확인한다. 이는 200 응답을 곧바로 성공으로 오인하지 않게 하고 경계 비교와 정상 기능을 함께 검증한다. 단, 이 평가는 검사 코드와 기록에 근거한다.\npath-parcel-designer (4): 정상 공개 응답과 공개 범위 밖 응답의 비교가 목표를 뒷받침한다. 패치 검사는 정상 문서들이 계속 읽히는지와 상대 경로 탈출, 절대 경로, public-other 접두어 오인을 각각 대조하며 존재하지 않는 파일·빈 값·NUL 입력도 다른 결과로 구분한다. 패치는 경로 문자열 접두어가 아닌 정규화된 실제 위치의 경계를 검사한다.\npath-parcel-alternative (4): 해답은 일반 파일 읽기와 외부 문서 유출을 비교한다. 패치 검사는 정상 공개 파일을 계속 허용하고 상대·절대 경로 이탈, 오도 경로 `public-other`, 누락 파일, 빈 입력, NUL을 대조한다. 테스트 코드의 존재와 과거 실행 기록은 구분한다.\npath-parcel-tooling (3): 기록된 패치 검사는 정상 공개 문서, 여러 상대·절대 경로 거부, 누락 및 빈/NUL 입력의 상태와 health/root 응답을 대조한다. 패치는 정규화한 실제 경로가 공개 폴더 안인지 확인한다. test.py 파일 자체는 호출 코드이며 이번 실행 증거로 간주하지 않았고, 2026-10-02 작성 기록에 실행 범위가 기재돼 있다.\n부모 조정: 정상공개파일과 상대/절대탈출·public-other·빈/NUL/없는파일 대조 외에 공통단위에서 public/link를 private로 연결한 symlink타깃도거부되는지 확인한다. 여러경계와정상기능을구체적으로대조하므로4를수용한다. 이는 검사코드범위이고 이번심사에서새실행했다는뜻은아니다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/patched/policy.py",
+            "quote": "path = (public / name).resolve()",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/policy.py",
+            "quote": "if not path.is_relative_to(public.resolve()):",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/test.py",
+            "quote": "for name in ['welcome.txt', './welcome.txt', 'guide.txt']:",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/test.py",
+            "quote": "'../public-other/test.txt']:",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/solve.py",
+            "quote": "assert 'pwnden{' not in get('/')[1]",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/solve.py",
+            "quote": "assert view('./../private/recovery.txt')[1] == body",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/test.py",
+            "quote": "for name in ['../private/recovery.txt', './../private/recovery.txt', 'sub/../../private/recovery.txt', '/tmp/parcels/private/recovery.txt', '../public-other/test.txt']:",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/test.py",
+            "quote": "assert status == 403 and 'pwnden{' not in body, name",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/test.py",
+            "quote": "assert status == 200 and 'pwnden{' not in body, name",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/policy.py",
+            "quote": "path = (public / name).resolve()\n    if not path.is_relative_to(public.resolve()):",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "실제 HTTP의 두 상대 경로 풀이와 정상 파일을 확인했다. 패치는 정규화된 최종 위치를 폴더 경계로 비교한다.",
+            "kind": "source"
+          },
+          {
+            "path": "tools/test_second_experiments.py",
+            "quote": "(public / 'link').symlink_to(outside, target_is_directory=True)",
+            "kind": "source"
+          },
+          {
+            "path": "tools/test_second_experiments.py",
+            "quote": "locate(public, 'link/key.txt')",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "hints": {
+        "level": 3,
+        "reason": "path-parcel-learner (3): 첫 힌트는 문제의 폴더 관계를 먼저 그리게 한 뒤 출발 위치에서 위로 가는 경로가 유지되는지 시험하라고 안내한다. 핵심 판단을 좁혀 주지만 폴더 관계를 직접 조합하도록 남겨 둔다. 마지막 단계의 정답 입력은 해설에 둔다.\npath-parcel-evidence (2): 단일 힌트는 막히는 지점에 정확히 대응해 폴더 관계를 그리게 하고, 다음 단계에서는 공개 자료 조회, 파일명 발견, 출발 폴더, 사용할 입력, 제출 동작까지 전부 제공한다. 도움의 순서는 명확하지만 점진적으로 작은 단서부터 제공하지 않고 한 번 열면 풀이 경로가 사실상 노출된다.\npath-parcel-designer (3): 기본 브리핑은 시작 자료와 상대 경로 원리를 제공하지만 서로 다른 시작 위치라는 마지막 관계는 직접 말하지 않는다. 단일 힌트가 우선 폴더 위치의 차이를 떠올리게 한 다음 파일 경로를 그려 보고 `..`가 처리되는지 확인하도록 유도하며, 답 경로를 힌트에 직접 노출하지 않는다. 이 수준의 짧은 문제에 힌트 한 개면 충분하다.\npath-parcel-alternative (3): 본문이 파일명을 발견하고 경로 지식을 상기시킨다. 유일한 힌트는 시작 폴더와 운영 파일 위치의 차이를 주목하게 하지만 정확한 경로 조합은 해설에 남긴다.\npath-parcel-tooling (3): 유일한 힌트는 공개 폴더와 문서 위치의 관계를 생각하게 하고 상위 경로 처리를 확인하도록 해 막히는 개념을 안내한다. 정확한 최종 파일명과 전체 경로는 기본 본문에는 없으나, 힌트가 검증할 값의 유형은 상당히 좁혀 준다.\n부모 조정: 실제 단일힌트는 폴더관계를 그리고 출발위치에서 위로올라가는경로가 처리되는지 시험하라고만 한다. 정답경로나 전체제출절차는 해설에 있어 수준2의 직접답노출 주장은 원문과다르다. 초급의막힌 비교를지원하는 기준3으로확정한다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/hints/1.md",
+            "quote": "폴더 관계를 그려 보고, 출발 위치에서 위로 올라가는 경로가 그대로 처리되는지 확인하자.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "파일명 입력칸에 `../private/recovery.txt`를 넣는다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/hints/1.md",
+            "quote": "운영 기록의 위치와 조회 기능이 출발하는 폴더는 서로 다르다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "파일명 입력칸에서 다른 경로를 시도할 수 있다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/README.md",
+            "quote": "사이트의 `welcome.txt`는 배송 안내, `guide.txt`는 폴더 배치와 복구 문서의 파일명을 담고 있다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": ""
+      },
+      "explanation": {
+        "level": 4,
+        "reason": "path-parcel-learner (3): 해설은 정상 파일과 guide를 먼저 확인하고 입력·응답에서 복구 문서를 관찰한 뒤, `..`가 실제 위치를 공개 폴더 밖으로 옮긴다는 원인을 설명한다. 패치 설명도 정규화된 최종 위치와 폴더 경계를 연결한다. 실습의 증거 한계를 과장하지 않는다.\npath-parcel-evidence (4): 해설은 공개 폴더에서의 시작 위치, 실제 응답 파일, 동등 경로, 입력과 실제 파일 위치의 관계를 연결한다. 수정은 정규화된 실제 위치를 공개 폴더와 비교하고, 단순 문자열 접두어 비교의 public-other 오류와 정상·오류 상태를 설명한다. 결론은 이 실습의 파일 읽기 범위에 한정되어 있으며 실제 파일을 읽었다는 근거와 구분된다.\npath-parcel-designer (4): 해설은 정상 문서 확인부터 guide의 파일명·폴더 관계, 상대 경로 입력, 키 추출까지 재현 순서를 제시한다. 이어 최종 위치가 공개 폴더 밖이 되는 이유와 패치의 정규화 경계 검증, 접두어 비교의 오류 가능성을 설명하고 실습의 결론을 경로 구현에 한정한다.\npath-parcel-alternative (4): 해설은 공개 파일 조회에서 폴더 관계를 찾고, 상대 경로를 구성해 응답의 비밀값을 확인하며, 최종 경로 기준의 방어 및 경계 비교 오류까지 설명한다. 범위 주장은 실제 임시 파일 읽기 대상에 한정되어 과장되지 않는다.\npath-parcel-tooling (4): 해설은 정상 파일 읽기와 private 파일 요청을 연결하고, 입력 연결만으로 폴더 경계가 생기지 않는 원인과 정규화된 실제 위치 검증을 설명한다. 상대·절대 경로 거부와 정상 공개 파일 유지, 접두어 판정의 public-other 반례 및 HTTP 오류 구분을 함께 제시한다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "위 경로와 절대 경로 입력은 `403`으로 거절하면서 welcome.txt와 guide.txt는 계속 읽힌다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "최종 위치는 공개 폴더 밖이 된다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/vulnerable/policy.py",
+            "quote": "return public / name",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/patched/policy.py",
+            "quote": "if not path.is_relative_to(public.resolve()):",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "대상은 실제 파일을 읽는다. 입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,\n최종 위치는 공개 폴더 밖이 된다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.\n파일이 실제로 public 폴더 안에 있는지 확인해야 한다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "다른 응답을 만났다면 입력의 폴더 순서와 파일명을 다시 확인하자.\n존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "폴더 이름의 앞부분만 비교하면 public-other도 public으로 잘못 판단할 수 있다.",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "입력을 공개 폴더와 이어 붙여도 `..`의 의미가 사라지지 않아,",
+            "kind": "source"
+          },
+          {
+            "path": "challenges/path-parcel/solve/README.md",
+            "quote": "존재하지 않는 파일은 `404`, 비어 있는 입력은 `400`으로 처리된다.",
+            "kind": "source"
+          }
+        ],
+        "improvement": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+      },
+      "execution": {
+        "level": 3,
+        "reason": "path-parcel-learner (3): 날짜가 명시된 2026-10-02 작성 기록은 실제 HTTP의 두 상대 경로 풀이와 정상 파일, 그리고 고정 Python 이미지의 해답·패치·정리 검증 통과를 보고한다. 이는 이번 심사의 새 실행이 아니라 최초 구현 작업 트리의 과거 기술 검증이다.\npath-parcel-evidence (3): 2026-10-02 작성자 기술 검증 기록은 고정 Python 3.13.15 이미지에서 두 상대경로의 실제 HTTP 풀이, 패치의 거부 및 정상 파일 동작, verify 명령으로 풀이·선언된 패치·자원 정리를 확인했다고 구체적으로 범위를 적는다. 이는 이번 심사에서 새로 실행한 결과가 아니라 기록된 과거 실행이다. 기록에는 양성·음성 경로와 정리가 언급되나 실행 로그 원문은 포함되지 않아 최상 수준의 독립 재현 증거로 보지는 않는다.\npath-parcel-designer (4): 날짜가 있는 작성 기록은 2026-10-02 최초 콘텐츠 구현 작업 트리의 실제 HTTP 상대 경로 두 건 및 정상 파일 확인, 패치 경계와 여러 거부 대조, 고정 Python 이미지에서 해답·패치·정리 검증 통과를 기록한다. 이는 과거 실행 증거로 반영했으며 현재 심사 중 새 실행으로 표현하지 않는다.\npath-parcel-alternative (3): 기록은 2026-10-02의 최초 구현 작업 트리에서 고정 이미지로 해답, 선언된 패치, 정리 검증을 통과했다고 범위를 밝힌다. 이는 이번 2026-10-03 심사 중 새 실행 결과가 아니다.\npath-parcel-tooling (3): 2026-10-02의 작성자 기록은 고정 Python 이미지에서 해답, 선언된 패치, 컨테이너·네트워크·볼륨 정리를 통과했다고 범위를 특정한다. 이는 날짜가 있는 과거 기록이며 이번 심사에서 새로 실행한 결과로 표시하지 않는다. 사용자가 사용할 브라우저 세션 재현은 이 항목의 검증 범위가 아니다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "`python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "실제 HTTP의 두 상대 경로 풀이와 정상 파일을 확인했다.",
+            "kind": "recorded-execution"
+          },
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "- `python3 -B tools/verify.py path-parcel`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
+            "kind": "recorded-execution"
+          }
+        ],
+        "improvement": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다.\n현재 검토 날짜의 실행 재현을 주장하려면 별도 실행을 하고 날짜·결과를 기록한다."
+      },
+      "browser": {
+        "level": null,
+        "reason": "path-parcel-learner (None): 현재 문제를 검색하는 단계부터 환경 준비, 웹 풀이, 정답·오답 제출, 종료까지 확인한 실제 Browser Plugin 세션 기록이 없다. 작성 기록도 화면 조작 검증을 수행하지 않았다고 명시한다.\npath-parcel-evidence (None): 현재 문제의 검색부터 환경 준비, 브라우저 풀이, 정답·오답 제출 및 종료까지를 기록한 실제 browser-session 증거가 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 밝힌다.\npath-parcel-designer (None): 현재 문제에서 검색부터 환경 준비, 브라우저 입력과 제출, 오답 확인 및 종료까지 실제 화면으로 수행한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증을 수행하지 않았다고 명시한다.\npath-parcel-alternative (None): 이번 심사는 자료의 독립 검토이며 실제 브라우저에서 문제 검색·환경 준비·풀이·제출·종료까지 수행한 기록이 없다.\npath-parcel-tooling (None): 실제 브라우저에서 검색·선택, 환경 준비, 웹/터미널 풀이, 정답·오답 제출, 종료까지 확인한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증은 수행하지 않았다고 명시한다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+            "kind": "browser-session"
+          }
+        ],
+        "improvement": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다.\n현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다.\n브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다.\n현재 환경에서 실제 브라우저 전체 풀이 세션을 기록한다.\n실제 브라우저 세션으로 시작부터 정답/오답 제출과 환경 종료까지 기록한다."
+      },
+      "learner": {
+        "level": null,
+        "reason": "path-parcel-learner (None): 선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 모델의 문서 검토는 학습자 세션 근거가 아니다.\npath-parcel-evidence (None): 선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간·막힌 단계·힌트 사용·원리 이해 기록이 없다. 작성자 검토와 자동 해답은 learner-session을 대신할 수 없다.\npath-parcel-designer (None): 선언된 선수 능력을 가진 독립 풀이자의 실제 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성자는 독립 리뷰가 대기 중임을 분명히 한다.\npath-parcel-alternative (None): 초급 persona로 자료를 검토한 것은 대상 수준 학습자의 독립 세션이 아니며, 시간·막힘·힌트·이해 기록이 없다.\npath-parcel-tooling (None): 대상 수준 독립 학습자의 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성 기록은 실제 독립 풀이자 리뷰가 수행되지 않았다고 명시한다.",
+        "evidence": [
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "독립적인 대상 수준 풀이자의 관찰로 재평가한다.",
+            "kind": "learner-session"
+          },
+          {
+            "path": "challenges/path-parcel/AUTHORING.md",
+            "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
+            "kind": "learner-session"
+          }
+        ],
+        "improvement": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다.\n브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다.\n선수 능력을 갖춘 독립 학습자에게 해설을 닫고 수행시켜 세션과 원리 이해 기록을 남긴다.\n선언된 선수 능력을 가진 독립 풀이자로 전체 풀이와 이해 확인 세션을 기록한다."
+      }
+    },
+    "source_sha256": "01459e4e5e23c3b284a37b6dbcd45d31eccc915f15d82a2523155abe86b7a3b6"
+  },
+  "final_summary": {
+    "slug": "path-parcel",
+    "points": 71.25,
+    "reviewed_weight": 80,
+    "pending": [
+      "browser",
+      "learner"
+    ],
+    "improvements": [
+      {
+        "criterion": "starting_context",
+        "action": "정상 파일, 없는 파일, 범위 밖 요청에서 보이는 응답 차이를 본문에 짧게 예고하면 초급자가 관찰 결과를 해석하기 쉽다.\n첫 응답에서 무엇을 정상 동작의 기준으로 삼는지 한 문장으로 덧붙이고, 빈 입력·없는 파일 응답이 의미하는 바를 본문에서 안내한다."
+      },
+      {
+        "criterion": "reasoning",
+        "action": "정답 경로를 직접 주지 않는 선에서 제출 전 응답 본문이 예상한 파일인지 비교하도록 작업 단계를 명시한다.\n정상 공개 파일과 실패하는 오경로를 짧게 비교하는 선택지를 추가하면, 난도를 높이지 않고 경로 구성 근거를 확인할 수 있다."
+      },
+      {
+        "criterion": "explanation",
+        "action": "실습의 결론은 이 파일 읽기 기능의 경계 검증에 관한 것임을 해설에서 한 문장으로 명시하면 일반화 범위를 더욱 분명히 할 수 있다."
+      },
+      {
+        "criterion": "execution",
+        "action": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다.\n현재 검토 날짜의 실행 재현을 주장하려면 별도 실행을 하고 날짜·결과를 기록한다."
+      },
+      {
+        "criterion": "browser",
+        "action": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다.\n현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다.\n브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다.\n현재 환경에서 실제 브라우저 전체 풀이 세션을 기록한다.\n실제 브라우저 세션으로 시작부터 정답/오답 제출과 환경 종료까지 기록한다."
+      },
+      {
+        "criterion": "learner",
+        "action": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다.\n브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다.\n선수 능력을 갖춘 독립 학습자에게 해설을 닫고 수행시켜 세션과 원리 이해 기록을 남긴다.\n선언된 선수 능력을 가진 독립 풀이자로 전체 풀이와 이해 확인 세션을 기록한다."
+      }
+    ]
+  }
+}
