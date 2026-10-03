@@ -2,4 +2,4 @@ account=backup-reader
 algorithm=SHA-256
 encoding=UTF-8
 salt=none
-password_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f
+password_hash=f28d96cb3d35fadc6386dd3d43f448773d7759faafcbd215853f7f0a54c053b1

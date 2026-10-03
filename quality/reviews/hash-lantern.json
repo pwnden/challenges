@@ -2,40 +2,20 @@
   "slug": "hash-lantern",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/hash-lantern/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/hash-lantern/2026-10-04-review.md",
+  "reviewer": "2026-10-04 Codex parent reassessment for direct submission; existing criterion levels retained after source review. Earlier independent panels and text reviews remain historical. Current text gate: quality/text-reviews/hash-lantern/2026-10-04-direct-submission.md",
   "criteria": {
     "goal": {
       "level": 2,
-      "reason": "hash-lantern-learner (3): 의뢰의 비밀번호 찾기, 저장된 SHA-256과 후보의 비교, 일치 비밀번호를 flag로 제출하는 완료 증거가 직접 연결된다. 다만 학습 결과가 실습 목표에 명시되지는 않아 목적 진술이 다소 과업 중심이다.\nhash-lantern-evidence (4): 의뢰는 백업 계정 비밀번호 후보 확인이며, 완료 조건은 저장된 password_hash와 후보의 SHA-256 결과 일치 확인 후 제출이다. 해설은 이 관찰을 후보 대입으로 연결하고 빠른 일반 해시의 한계, 전용 느린 해시와 salt 권고까지 분리한다. 대상 해시 비교가 실제 원문 전체를 복원한다는 주장은 하지 않는다.\nhash-lantern-designer (3): 저장된 SHA-256과 여섯 후보의 계산값을 비교해 일치 후보를 찾는 행동이 objective의 제출 조건과 바로 이어진다. 해설도 후보 대입 비용이라는 보안 원리를 밝혀 입문 수준에서 관찰과 학습 목표가 연결된다.\nhash-lantern-alternative (3): The request, measurable action, and accepted completion form a direct chain: hash listed candidates, find the one matching the stored digest, and submit it. The walkthrough identifies the limited security lesson as testing a short candidate list against a fast, unsalted SHA-256 value. It avoids claiming that arbitrary hashes can be reversed. The observed result establishes which supplied candidate matches the account record; it does not establish that the real-world requester or device is authenticated.\nhash-lantern-tooling (3): 의뢰는 로그인 비밀번호를 여섯 후보 중 찾는 것이고 objective는 기록 해시와 일치하는 비밀번호 제출이다. 풀이가 일치한 후보를 명시하고 동일 형식으로 제출시켜 목표와 완료 증거가 대응한다. 보안 원리(빠른 무염 SHA-256 후보 대입)는 해설에서 결과와 연결된다.\n부모 조정: 여섯 후보 일치 비교는 관찰되지만 작성 기록의 후보 대입 비용 관찰은 시간·다른 저장 방식·후보 규모에 따른 비교 등 실제 관찰 없이 해설에 의존한다. 일치 확인 목표로 선언을 좁히거나 입문 부담 안에서 확인 비용의 관찰을 추가해야 한다.",
+      "reason": "2026-10-04 Codex 부모 변경 검토: 본문의 목표는 계정 해시와 일치하는 후보 비밀번호를 찾는 것이며 정답 자체가 그 전체 비밀번호다. 실제 자료와 해답은 유일한 일치를 입증한다. 다만 teaches의 candidate-cost가 뜻하는 후보 대입 비용을 정량 비교하는 실험은 없어 기존 수준 2와 보완 행동을 유지한다.",
       "evidence": [
         {
-          "path": "challenges/hash-lantern/README.md",
+          "path": "challenges/hash-lantern/BRIEFING.md",
           "quote": "기록의 해시와 일치하는 비밀번호를 찾아 제출하자.",
           "kind": "source"
         },
         {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "이렇게 후보를 하나씩 시험하는 방법을 **사전 대입 공격**이라고 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "일치하는 값은 `rainboat27`이다. `pwnden{rainboat27}`을 제출한다.",
-          "kind": "source"
-        },
-        {
           "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "후보 대입 비용을 관찰한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "SHA-256처럼 빠른 계산을 한 번만 적용하면 많은 후보도 빠르게 비교할 수 있다.",
+          "quote": "후보 대입 비용의\n정량 비교나 실제 초보자 관찰은 이번 변경에서 수행하지 않았다.",
           "kind": "source"
         }
       ],
@@ -43,46 +23,16 @@
     },
     "starting_context": {
       "level": 4,
-      "reason": "hash-lantern-learner (4): 첫 파일 두 개의 이름과 읽기 명령, 해시 알고리즘, 후보를 넣을 자리, 비교할 출력의 위치, 제출 형식을 모두 본문에 제공한다. 선수 지식은 파이프와 printf의 동작 및 해시 비교를 설명하며 줄바꿈 혼동도 짚어 입문자가 준비된 조작을 시작할 수 있다.\nhash-lantern-evidence (4): 플레이어 본문이 입력 자료 두 경로, cat 명령, 교체할 후보 자리, 해시 출력에서 비교할 위치, 제출 형식을 제공한다. 공통 선수 지식은 파이프 입력과 줄바꿈의 영향을 실제 예로 설명하고, 문제는 같은 SHA-256 입력이 같은 결과라는 관계를 설명한다. 초심자가 후보 문자열과 계정의 hash 필드를 직접 확인할 수 있다.\nhash-lantern-designer (4): 브리핑이 입력 자료 경로, 비교 기준, 실행 명령, printf가 줄바꿈을 보태지 않는다는 핵심 함정과 결과에서 비교할 부분까지 안내한다. 난도 1의 단일 후보 검증에 필요한 설명과 명령 환경이 준비되어 있다.\nhash-lantern-alternative (3): The player-facing account record supplies algorithm, encoding, salt state, and digest; the brief explains the candidate files, exact command, expected digest location, and submission format. Shared prerequisite material explains pipes, printf without a newline, and digest comparison. These details leave no hidden tool or salt assumption for the intended action. The backup-device story is thin: no actual login interface or post-login behavior is present, so the result is a record comparison rather than a demonstrated device login.\nhash-lantern-tooling (3): 본문은 두 파일 경로, cat 명령, 후보별 printf/sha256sum 명령, 출력의 64글자 비교 지점을 제공한다. 선수 개념 자료는 파이프와 newline 없는 입력을 설명하며 코드 작성이나 설치는 요구되지 않는다. 환경 실행 여부는 별도 기록으로 평가했다.",
+      "reason": "2026-10-04 Codex 부모 변경 검토: 두 파일의 역할, SHA-256·UTF-8·salt=none, 준비된 printf 명령과 해시 출력의 비교 위치를 설명한다. 후보의 중괄호를 포함한 전체 문자열이 비밀번호이고 일치 값을 그대로 제출하므로 시작 입력과 완료 값이 일치한다.",
       "evidence": [
         {
-          "path": "challenges/hash-lantern/README.md",
-          "quote": "터미널에서 `cat files/account.txt`, `cat files/candidates.txt`로 자료를 읽을 수 있다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/terminal-commands.md",
-          "quote": "`|`는 왼쪽 출력물을 오른쪽 프로그램의 입력으로 전달한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/README.md",
+          "path": "challenges/hash-lantern/BRIEFING.md",
           "quote": "출력 왼쪽의 64글자를 account.txt의 password_hash와 비교하자.",
           "kind": "source"
         },
         {
-          "path": "knowledge/terminal-commands.md",
-          "quote": "`hello` 뒤에 줄바꿈이 추가되면 해시도 달라진다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/challenge.toml",
-          "quote": "cli = [\"sha256sum\"]",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/files/account.txt",
-          "quote": "salt=none\npassword_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/hashing.md",
-          "quote": "해시는 원문으로 되돌리는 변환을 제공하지 않는다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/terminal-commands.md",
-          "quote": "`printf '%s' 'hello'`는 줄바꿈 없이 `hello`를 출력한다.",
+          "path": "challenges/hash-lantern/BRIEFING.md",
+          "quote": "후보에 적힌 `pwnden{...}` 전체가 비밀번호다.",
           "kind": "source"
         }
       ],
@@ -90,41 +40,16 @@
     },
     "reasoning": {
       "level": 3,
-      "reason": "hash-lantern-learner (3): 선수의 명령 조작 외에 여섯 후보를 각각 SHA-256으로 계산하고 64글자 값을 계정 기록과 비교해 일치 후보를 선택해야 한다. 이는 입문 기준의 한 원리 관찰에 충분하다. 대조해 구분할 그럴듯한 오답이나 자동 반복 수단은 없지만 선언 난도는 입문이다.\nhash-lantern-evidence (3): 입문으로 선언된 문제에서 필요한 핵심 결정은 여섯 후보의 해시를 기록과 비교해 유일한 일치를 선택하는 것이다. 후보 수가 제한되고 명령과 비교 위치가 주어져 한 원리 관찰에 맞는다. 각 후보 계산이 반복 작업이어서 후보 우선순위나 가설 선택은 거의 요구하지 않는다. 더 큰 추론을 강제할 필요는 없지만, 실행 전 후보 관찰과 맞지 않는 후보 비교를 남기면 대조 근거가 더 선명해진다.\nhash-lantern-designer (3): 계정 기록의 알고리즘과 후보의 텍스트를 연결하고, 실제 후보별 계산값을 저장값과 비교해 맞는 값을 골라야 한다. 명령과 기준은 제공되지만 후보 여섯 개를 어떻게 비교할지 간단한 절차는 구체화되어 있어 난도 1의 한 원리 관찰에 적합하다.\nhash-lantern-alternative (3): At the declared introductory level, the key judgment is to calculate and compare a small set of plausible strings rather than infer a password from a hash. Six candidates make that judgment observable and do not require coding or a guess based on ordering. The walkthrough's concrete answer arrives after the brief, and the solve script requires exactly one match. This is a single comparison principle, not a richer distinction among candidate cost or password-storage schemes.\nhash-lantern-tooling (3): 입문 수준에서 후보 여섯 개를 각자 해시해 계정 기록과 비교하는 한 원리를 직접 관찰한다. printf의 정확한 입력과 비교할 출력 위치가 안내되어 있어 도구 명령 암기만으로 답을 내는 대신 후보-해시 대응을 선택한다. 여섯 후보의 오답 결과를 별도 요약하는 대조는 없다.",
+      "reason": "2026-10-04 Codex 부모 변경 검토: 여섯 후보를 같은 방식으로 계산하고 계정 기록과 비교해 유일한 일치를 찾는 입문 판단이다. 모든 후보가 같은 정답 형식이므로 포장 여부는 단서가 되지 않는다. 입력의 정확한 바이트와 줄바꿈은 비교 결과에 영향을 준다. 더 복잡한 단서 연결을 추가한 변경은 아니다.",
       "evidence": [
         {
-          "path": "challenges/hash-lantern/README.md",
-          "quote": "여섯 후보 중 어느 것이 이 계정의 비밀번호인지 확인해 보자.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "출력이 다르면 후보 철자, 대소문자와 줄바꿈을 확인하자.",
-          "kind": "source"
-        },
-        {
           "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "1. 계정의 알고리즘·salt·해시와 후보 여섯 개를 읽는다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/solve.py",
-          "quote": "if len(matches) != 1:\n        raise ValueError('evidence must identify exactly one password candidate')",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/files/candidates.txt",
-          "quote": "rainboat27",
+          "quote": "여섯 후보 모두 같은 제출 형식을 사용하므로 형식만으로 정답을 고를 수 없다.",
           "kind": "source"
         },
         {
           "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "후보마다 `printf '%s' '후보' | sha256sum`을 실행한다.",
+          "quote": "`echo`를 그대로 사용하면 줄바꿈까지 입력에 포함될 수 있다.",
           "kind": "source"
         }
       ],
@@ -132,36 +57,16 @@
     },
     "controls": {
       "level": 3,
-      "reason": "hash-lantern-learner (3): 실제 배포 계정 기록과 후보 여섯 개가 있으며 해답은 각 후보를 같은 sha256sum으로 계산해 저장값과 비교하고 정확히 하나의 일치가 있어야 성공하도록 한다. 이 단일 자료 집합은 과업의 근거를 뒷받침하지만 변조·누락 대조군이나 후보별 오답 응답을 제공하지 않는다. 단일 해시의 비밀번호 보안 한계를 실습 밖으로 일반화하지 않는 점은 해설에 있다.\nhash-lantern-evidence (3): 계정 파일은 algorithm, encoding, salt와 hash 필드를 명시하고 후보 파일에는 여섯 입력이 있다. 작성된 자동 풀이에서는 모든 후보를 같은 sha256sum으로 처리하고 저장 hash와 비교하며, 일치가 정확히 하나가 아니면 실패시킨다. 이는 실제 비밀번호 후보 확인에 맞는 관찰이다. 플레이어 본문에는 오답 제출이나 명시적 후보 불일치 기록이 없어 독립 대조를 보는 학습 활동은 제한적이며, 확인된 hash 하나도 평문 자체의 존재 증거 이상으로 확장하면 안 된다.\nhash-lantern-designer (2): 자료에는 단일 계정 해시와 여섯 후보만 있고 정답 구현은 정확히 한 후보를 찾도록 확인한다. 그러나 플레이어 경험에는 비후보 대조, 오답 제출, 후보 철자 변경 같은 대조가 포함되지 않아 유일성이나 줄바꿈 민감성을 학습자가 별도로 확인하지는 않는다. 이는 입문 목표를 달성하는 데 필요한 결함은 아니지만 대조 증거는 제한적이다.\nhash-lantern-alternative (3): The intended evidence is equality between the stored digest and a hash computed for each of all six supplied candidates; the solve implementation rejects zero or multiple matches, which guards against ambiguous evidence. There is no separate wrong-candidate submission demonstration or altered-digest control in the exercise materials. Those controls are not essential to observe this introductory finite-list comparison, but the materials do not earn the highest level for explicitly distinguishing those counterexamples.\nhash-lantern-tooling (2): 해설과 자동 풀이 기록은 여섯 후보를 비교해 유일한 해시 일치가 있음을 주장하고, 구현은 일치 개수가 정확히 하나가 아니면 실패시킨다. 그러나 학습자가 해시 입력의 줄바꿈/대소문자 오류를 구분할 실제 오답 비교나 부정 대조 결과는 제시하지 않는다. 환경 정책 대조 검증은 작성 기록에 요약만 있어 그 범위로 한정했다.",
+      "reason": "2026-10-04 Codex 부모 변경 검토: 회귀 검사는 여섯 후보의 유일 일치, 그대로 제출한 값의 정답 해시, 내부 단어만 해시한 오답을 검사한다. 해답도 일치 개수가 하나가 아니면 실패한다. 본문에서 양성·음성 결과를 직접 기록하는 비교 표는 제공하지 않아 기존 수준과 보완 행동을 유지한다.",
       "evidence": [
-        {
-          "path": "challenges/hash-lantern/files/account.txt",
-          "quote": "password_hash=04c9249ccbc2cba9899be52ade7bd7e1a8bff8a20f65a190f76a11c760ec191f",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/solve.py",
-          "quote": "if len(matches) != 1:\n        raise ValueError('evidence must identify exactly one password candidate')",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/files/candidates.txt",
-          "quote": "rainboat27",
-          "kind": "source"
-        },
         {
           "path": "challenges/hash-lantern/solve/solve.py",
           "quote": "if len(matches) != 1:",
           "kind": "source"
         },
         {
-          "path": "challenges/hash-lantern/solve/solve.py",
-          "quote": "for candidate in candidates:\n        result = subprocess.run(['sha256sum'], input=candidate.encode(), capture_output=True, check=True, timeout=5)\n        if result.stdout.decode().split()[0] == account['password_hash']:\n            matches.append(candidate)",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "출력이 다르면 후보 철자, 대소문자와 줄바꿈을 확인하자.",
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "전체 문자열의 SHA-256이\n계정 기록과 일치하는 후보는 하나이며, 내부 단어만 해시하면 일치하지 않는다.",
           "kind": "source"
         }
       ],
@@ -169,7 +74,7 @@
     },
     "hints": {
       "level": 3,
-      "reason": "hash-lantern-learner (3): 힌트는 선언상 없지만 입문 본문이 파일 경로, 명령 예시, 결과 비교 기준을 이미 안내하므로 별도 힌트가 없어도 시작할 수 있다. 본문이 정답 후보 자체를 노출하지 않는 점도 유지된다.\nhash-lantern-evidence (4): manifest는 힌트 목록을 비워 두었지만 입문 본문은 해시 개념, 후보 파일, 명령 구문, 대조 필드와 제출 형식을 모두 알려 준다. 후보 자체를 결과로 노출하지 않아 기본 본문만으로 조작법은 알 수 있고 답은 계산·비교 후 결정된다. 이 난도에서는 힌트가 없어도 타당하다.\nhash-lantern-designer (3): 힌트는 0개지만 README가 알고리즘, 후보 목록, 명령 템플릿, 해시 출력에서 비교할 위치를 모두 제공한다. 따라서 이 입문 문제에서 힌트를 따로 두지 않아도 핵심 행동을 시작할 수 있고 제출 형식도 예시가 있다.\nhash-lantern-alternative (3): There are no progressive hints, but the brief already states the relevant command, exact string handling, and comparison location, making a hint-free introductory exercise reasonable. The exact candidate and full sequence are kept in the walkthrough, so the opening content does not disclose the answer.\nhash-lantern-tooling (3): manifest에 단계별 힌트는 없지만 입문 과제의 기본 본문이 파일 읽기부터 계산과 비교까지 필요한 행동을 제공한다. 본문은 정답 후보를 노출하지 않고 풀이 해설은 별도 경로다.",
+      "reason": "2026-10-04 Codex 부모 변경 검토: 별도 힌트는 없지만 본문에서 후보 입력 명령과 저장된 해시를 비교할 위치를 제공한다. 여섯 후보를 시험하는 단일 입문 판단은 본문만으로 수행 가능하다. 복잡한 막힘별 힌트를 추가한 변경은 아니다.",
       "evidence": [
         {
           "path": "challenges/hash-lantern/challenge.toml",
@@ -177,23 +82,8 @@
           "kind": "source"
         },
         {
-          "path": "challenges/hash-lantern/README.md",
-          "quote": "후보 하나의 SHA-256은 아래 명령의 `후보`를 실제 값으로 바꿔 확인한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/README.md",
+          "path": "challenges/hash-lantern/BRIEFING.md",
           "quote": "printf '%s' '후보' | sha256sum",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "4. 일치하는 값은 `rainboat27`이다. `pwnden{rainboat27}`을 제출한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "일치하는 값은 `rainboat27`이다.",
           "kind": "source"
         }
       ],
@@ -201,31 +91,16 @@
     },
     "explanation": {
       "level": 3,
-      "reason": "hash-lantern-learner (4): 해설은 실제 비교 절차와 관찰 결과, 후보 대입 공격이라는 원인, 빠른 해시의 위험, 전용 느린 비밀번호 해시와 계정별 salt 및 로그인 시도 제한을 연결한다. 후보가 한정된 실습의 결과로 보안 주장 범위가 합리적이다.\nhash-lantern-evidence (4): 해설은 account 필드 해석, 후보별 실행, 일치 관찰, 결과, 사전 대입 원리, 빠른 SHA-256의 후보 비용, 보호 방법을 차례로 설명한다. 실제 대상은 salt=none의 단일 SHA-256과 제한된 여섯 후보이므로 그 결론을 일반 해시의 원문 복원이나 모든 암호 복구로 확대하지 않는다. 전용 해시, salt, 추측 난도, 로그인 횟수 제한을 권고해 행동과 방어를 연결한다.\nhash-lantern-designer (3): 해설은 조사 순서, 일치 후보, 후보 대입이라는 원리, 빠른 단일 SHA-256의 약점과 salt 및 전용 비밀번호 해시라는 보호 방안을 연결한다. 후보가 여섯 개뿐인 통제된 실험이라는 범위를 설명해 실제 비밀번호 전체가 빠르게 복구된다는 주장도 피한다.\nhash-lantern-alternative (3): The walkthrough gives the comparison steps, candidate result, brute-force term, reason a single fast SHA-256 is weak for password storage, and mitigations using a password-specific slow function, per-user salt, stronger passwords, and attempt limits. The conclusion remains appropriately limited to a short candidate list. It could make the boundary more explicit that a match proves equality to this stored record under the stated encoding and salt settings, rather than independently validating identity or proving the supplied list covers every possible prior password.\nhash-lantern-tooling (3): 해설은 확인 순서, 후보 일치 관찰, 사전 대입이라는 결론, 빠른 단일 SHA-256의 위험, 느린 전용 비밀번호 해시와 salt의 보호 효과 및 로그인 시도 제한을 연결한다. 이 문제는 로컬 후보 집합에 대한 해시 확인만 보이므로 실제 인증 서버 동작이나 일반적인 복구 가능성을 주장하지 않는다.\n2026-10-04 문장 검토: 로그인 사건의 기록처럼 읽히던 첫 대사를 계정에 저장된 비밀번호 해시로 고쳤다. 여섯 후보 중 저장된 해시와 맞는 rainboat27을 실제 자료에서 확인했다.",
+      "reason": "2026-10-04 Codex 부모 변경 검토: 해설은 후보별 계산·일치 관찰·전체 비밀번호 제출과 사전 대입 원리를 연결한다. 줄바꿈, 느린 전용 비밀번호 저장 방식, 사용자별 salt와 시도 제한을 설명한다. 주어진 후보 밖의 비밀번호나 실제 로그인 인증까지 확인한 실험은 아니므로 기존 한계 보완을 유지한다.",
       "evidence": [
         {
           "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "비밀번호는 후보 하나를 계산하는 데 시간이 들도록 설계된 전용 방식으로 저장한다.",
+          "quote": "일치하는 비밀번호는 `pwnden{rainboat27}`이다. 이 값을 그대로 제출한다.",
           "kind": "source"
         },
         {
           "path": "challenges/hash-lantern/solve/README.md",
           "quote": "이렇게 후보를 하나씩 시험하는 방법을 **사전 대입 공격**이라고 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/hashing.md",
-          "quote": "해시는 원문으로 되돌리는 변환을 제공하지 않는다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "후보 여섯 개를 각각 계산해 저장된 값과 비교하자 맞는 비밀번호를 찾을 수 있었다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "사용자마다 다른 추가 값인 **salt**도 함께 계산한다.",
           "kind": "source"
         }
       ],
@@ -233,41 +108,16 @@
     },
     "execution": {
       "level": 3,
-      "reason": "hash-lantern-learner (3): 작성 기록은 2026-10-02의 고정 Python 이미지에서 실제 sha256sum을 호출해 유일한 후보와 제출 해시를 확인하고 검증 및 정리 절차가 통과했다고 기록한다. 이는 과거 작성자 기술 검증 근거이며 이번 심사 실행으로 간주하지 않는다.\nhash-lantern-evidence (3): 작성 기록은 2026-10-02에 고정 Python 3.13.15 이미지에서 풀이 및 선언 패치, 컨테이너·네트워크·볼륨 정리까지 verify.py가 통과했다고 기록한다. 이는 기록된 당시의 기술 실행 범위이며 이번 2026-10-03 심사에서 새로 재실행하지 않았다. 기록은 구체적인 이미지 실행과 cleanup을 보고하지만 이 단순 파일 문제에서 별도 패치/정상 기능 행위의 관찰 상세는 제시하지 않는다.\nhash-lantern-designer (3): 작성 기록은 2026-10-02 실행 범위에서 고정 이미지 sha256sum 풀이, 유일 후보 및 제출 해시, 컨테이너·네트워크·볼륨 정리 검사를 통과했다고 명시한다. 이는 이번 심사에서 실행한 결과가 아닌 과거 기록이며, 기록된 범위에서는 재현 근거가 있다.\nhash-lantern-alternative (3): A dated authoring record reports an execution against the fixed image that called the player's sha256sum, found a unique candidate, and checked it against the declared submission digest; it also reports the challenge verifier and cleanup passing. This is prior execution evidence dated 2026-10-02, not a run performed during this review on 2026-10-03. No patch applies to this file-only challenge. The record is sufficiently concrete for the claimed automatic solve, but this independent review did not reproduce it.\nhash-lantern-tooling (3): 2026-10-02 작성·기술 검증 기록은 고정 Python 3.13.15 이미지에서 sha256sum을 호출해 유일 후보 및 제출 해시를 확인하고, 선언 패치 및 컨테이너·네트워크·볼륨 정리 통과를 기록한다. 이번 심사에서 새로 실행한 결과는 아니다. 기록은 이미지 검증을 뒷받침하지만 이미지 digest 자체의 재검증 로그 전문은 제공하지 않는다.",
+      "reason": "2026-10-04 실제 선언 이미지에서 두 문제의 해답·정리 검증을 다시 실행해 통과했다. 새 자료의 후보 또는 서명 대조도 통과했다. 과거 PTY·브라우저 기록은 이전 판본의 근거이며 이번 판본의 실제 사용자 풀이로 간주하지 않는다. 출력 요약은 AUTHORING.md에 남겼고 독립 사용성 관찰은 수행하지 않아 수준 3을 유지한다.",
       "evidence": [
         {
           "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "- `python3 -B tools/verify.py hash-lantern`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "- 2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "`python3 -B tools/verify.py hash-lantern`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "검증 풀이가 실제 이미지의 sha256sum을 호출해 유일한 후보와 선언한 제출 해시를 확인했다.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/hash-lantern/challenge.toml",
-          "quote": "image = \"python:3.13.15-slim-trixie@sha256:7c61056e61ac89e852de05f3dc6fa51a6dd2181797bceed46aa725dd7cb2cd3b\"",
+          "quote": "`python3 -B tools/verify.py hash-lantern signed-delivery`에서 실제 선언 이미지의\n해답과 정리 검사가 통과했다.",
           "kind": "recorded-execution"
         }
       ],
       "improvement": "최초 구현 작업 트리 기준이라는 범위에 더해 실제 실행 로그나 결과 요약을 날짜별로 남겨 재현 정보를 보존한다."
     }
   },
-  "source_sha256": "b23e2ed89e4185bc32cb6ecec1aca36cda72e1d55db54e280db14124771b7666"
+  "source_sha256": "f63a957a339d064ec462d0a3f2ad3af77fea710795947640d82e21b4614269ab"
 }

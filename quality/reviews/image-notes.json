@@ -2,7 +2,7 @@
   "slug": "image-notes",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/image-notes/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/image-notes/2026-10-04-review.md",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/image-notes/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/image-notes/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -294,5 +294,5 @@
       "improvement": "새 실행 기록을 추가해 현재 배포 도구 이미지에서 해답, 정답·오답 제출, 메타데이터 대조, 원본 보존이 재현되는지 확인한다."
     }
   },
-  "source_sha256": "afb7817ccc8af617513c5c7b3ca11432889b948f0651e48c7d591e41f9042685"
+  "source_sha256": "b51dbabd7720be25b8cdaa09af37835181f82422c798fe2cff1d1314614cdeb0"
 }

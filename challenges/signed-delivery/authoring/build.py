@@ -4,8 +4,8 @@ from pathlib import Path
 import subprocess
 import tempfile
 
-DOCUMENT = b'Lab delivery document\nBatch: LAB-17\nRevision: 2\nQuantity: 120\nDestination: Depot-C\nApproved by: Sender\n'
-OLD_DOCUMENT = DOCUMENT.replace(b'Revision: 2', b'Revision: 1')
+DOCUMENT = b'Lab delivery document\nBatch: LAB-17\nRevision: 2\nQuantity: 120\nDestination: Depot-C\nApproved by: Sender\nConfirmation code: pwnden{delivery_7c28e4a1}\n'
+OLD_DOCUMENT = DOCUMENT.replace(b'Revision: 2', b'Revision: 1').replace(b'7c28e4a1', b'91b3d6f0')
 
 
 def run(*args):
@@ -14,7 +14,7 @@ def run(*args):
 
 def build(output):
     output.mkdir(parents=True, exist_ok=True)
-    copies = {'copy-a.txt': DOCUMENT.replace(b'Depot-C', b'Depot-D'),
+    copies = {'copy-a.txt': DOCUMENT.replace(b'Depot-C', b'Depot-D').replace(b'7c28e4a1', b'4f06a9c2'),
               'copy-b.txt': OLD_DOCUMENT, 'copy-c.txt': DOCUMENT}
     for name, data in copies.items():
         (output / name).write_bytes(data)

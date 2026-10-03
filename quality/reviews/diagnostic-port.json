@@ -2,7 +2,7 @@
   "slug": "diagnostic-port",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/diagnostic-port/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/diagnostic-port/2026-10-04-review.md",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/diagnostic-port/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/diagnostic-port/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -384,5 +384,5 @@
       "improvement": "독립 심사에서 검증 스크립트 자체나 실제 환경을 새로 실행하지 않았으므로, 배포 전 최신 이미지에서 자동 해답·패치 정상 기능·정리 경로를 다시 실행해 현재 재현성을 확인한다.\nbasic-20261003 이미지의 고정 패키지/버전 manifest와 실제 버전 확인 결과를 검증 기록에서 추적 가능하게 남기세요."
     }
   },
-  "source_sha256": "1609f24824df739acdf6ec690bcf947427a60014ac5527e503ad65309cf09db2"
+  "source_sha256": "46376bad8545c6579403ccb9cec80e517ece8d37cc2ded9d84a1c6f330b94013"
 }

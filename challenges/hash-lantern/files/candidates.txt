@@ -1,6 +1,6 @@
-mintmoon42
-riverlamp8
-rainboat27
-quietdock6
-cedarstep3
-paperkite9
+pwnden{mintmoon42}
+pwnden{riverlamp8}
+pwnden{rainboat27}
+pwnden{quietdock6}
+pwnden{cedarstep3}
+pwnden{paperkite9}

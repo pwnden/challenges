@@ -14,7 +14,7 @@ def solve():
             matches.append(candidate)
     if len(matches) != 1:
         raise ValueError('evidence must identify exactly one password candidate')
-    print('pwnden{' + matches[0] + '}')
+    print(matches[0])
 
 
 if __name__ == '__main__':

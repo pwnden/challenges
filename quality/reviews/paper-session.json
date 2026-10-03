@@ -2,7 +2,7 @@
   "slug": "paper-session",
   "rubric_version": 2,
   "reviewed_at": "2026-10-04",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/paper-session/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/paper-session/2026-10-04-review.md",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/paper-session/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json; 2026-10-03 Codex Korean clarity edit; evidence refreshed, scores unchanged; 2026-10-04 text/source reconciliation, learning levels retained: quality/text-reviews/paper-session/2026-10-04-review.md; 2026-10-04 shared signature knowledge removes a submission-only hash step; exercise behavior and cited evidence reviewed, levels unchanged",
   "criteria": {
     "goal": {
       "level": 4,
@@ -329,5 +329,5 @@
       "improvement": "현재 소스 스냅샷에서 선언 검증 실행 결과와 패치의 정상 staff 동작까지 날짜가 있는 재현 기록으로 남긴다.\n최근 배포 기준 커밋에서 검증을 다시 실행하고 실행 로그를 보존한다."
     }
   },
-  "source_sha256": "c938941d88a722aae672e201ae6ce90eed7737b27d28a09717d3707f29f334d1"
+  "source_sha256": "421697fe1e0659512e276739d966199010ad233f6d4f5298650ae053e6ce23bc"
 }

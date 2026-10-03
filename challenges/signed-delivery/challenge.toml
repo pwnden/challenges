@@ -20,7 +20,7 @@ walkthrough = "solve/README.md"
 
 [flag]
 mode = "sha256"
-sha256 = "37ac7f5acd7c27fa38480fe2b43ec932baec57780f143c872159a9707a441010"
+sha256 = "ab57da605bcf93faf5622db30e18eb4fc81a54e363b1b398cff7184813cba967"
 
 [solve]
 image = "pwnden-cli:basic-20261003"

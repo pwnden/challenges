@@ -13,5 +13,6 @@ done
 test "${#valid[@]}" = 1
 grep -qx 'Batch: LAB-17' "${valid[0]}"
 grep -qx 'Revision: 2' "${valid[0]}"
-digest=$(sha256sum "${valid[0]}" | cut -d ' ' -f 1)
-printf 'pwnden{%s}\n' "$digest"
+code=$(sed -n 's/^Confirmation code: //p' "${valid[0]}")
+[[ "$code" =~ ^pwnden\{[a-z0-9_]+\}$ ]]
+printf '%s\n' "$code"

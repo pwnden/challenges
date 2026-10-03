@@ -9,13 +9,11 @@ cat files/trust-note.txt
 openssl dgst -sha256 -verify files/sender-public.pem -signature files/delivery-v2.sig files/copy-a.txt
 openssl dgst -sha256 -verify files/sender-public.pem -signature files/delivery-v2.sig files/copy-b.txt
 openssl dgst -sha256 -verify files/sender-public.pem -signature files/delivery-v2.sig files/copy-c.txt
-sha256sum files/copy-c.txt
+cat files/copy-c.txt
 ```
 
-검증된 원문의 SHA-256은
-`9db69b79d37e536f0df08a0e837861c24c94c5675b4cd6d7ffba64a5d4aba7e5`다.
-제출값은 `pwnden{9db69b79d37e536f0df08a0e837861c24c94c5675b4cd6d7ffba64a5d4aba7e5}`다.
-화면에서 읽은 문장을 다시 입력하지 않고 파일 바이트 자체를 해시해야 한다.
+현재 승인본의 확인 코드는 `pwnden{delivery_7c28e4a1}`이다. 이 문자열을 그대로 제출한다.
+다른 두 사본에도 확인 코드가 있지만 현재 승인본의 코드가 아니므로 정답으로 인정하지 않는다.
 
 ## 드러난 원리
 

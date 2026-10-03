@@ -44,14 +44,18 @@ with tempfile.TemporaryDirectory(dir='/tmp') as name:
     assert len({p.stat().st_mtime_ns for p in other.glob('copy-*.txt')}) == 1
     assert not any(b'PRIVATE KEY' in p.read_bytes() for p in other.iterdir())
 assert not any(b'PRIVATE KEY' in p.read_bytes() for p in files.iterdir())
-native_hash = subprocess.check_output(['sha256sum', str(files / 'copy-c.txt')], text=True).split()[0]
-assert native_hash == hashlib.sha256(DOCUMENT).hexdigest()
-answer = 'pwnden{' + native_hash + '}'
+def confirmation(data):
+    codes = [line.removeprefix('Confirmation code: ') for line in data.decode().splitlines() if line.startswith('Confirmation code: ')]
+    assert len(codes) == 1 and codes[0].startswith('pwnden{') and codes[0].endswith('}')
+    return codes[0]
+
+
+answer = confirmation(DOCUMENT)
 assert hashlib.sha256(answer.encode()).hexdigest() == tomllib.loads(Path('challenge.toml').read_text())['flag']['sha256']
 for copy in copies:
     if copy.read_bytes() != DOCUMENT:
-        wrong = 'pwnden{' + hashlib.sha256(copy.read_bytes()).hexdigest() + '}'
+        wrong = confirmation(copy.read_bytes())
         assert hashlib.sha256(wrong.encode()).hexdigest() != tomllib.loads(Path('challenge.toml').read_text())['flag']['sha256']
 assert answer not in Path('README.md').read_text()
-assert all(b'pwnden{' not in p.read_bytes() for p in copies)
-print('Genuine old and current approvals, rejected stale/tampered answers, equal lengths, changed byte/signature/key, regeneration and native hash passed')
+assert len({confirmation(copy.read_bytes()) for copy in copies}) == 3
+print('Genuine old and current approvals, rejected stale/tampered codes, equal lengths, changed byte/signature/key and regeneration passed')

@@ -20,9 +20,11 @@ class EvidenceTests(unittest.TestCase):
         account = dict(line.split('=', 1) for line in (directory / 'files/account.txt').read_text().splitlines())
         candidates = (directory / 'files/candidates.txt').read_text().splitlines()
         matches = [item for item in candidates if hashlib.sha256(item.encode()).hexdigest() == account['password_hash']]
-        self.assertEqual(matches, ['rainboat27'])
+        self.assertEqual(matches, ['pwnden{rainboat27}'])
+        self.assertTrue(all(item.startswith('pwnden{') and item.endswith('}') for item in candidates))
         metadata = tomllib.loads((directory / 'challenge.toml').read_text())
-        self.assertEqual(hashlib.sha256(('pwnden{' + matches[0] + '}').encode()).hexdigest(), metadata['flag']['sha256'])
+        self.assertEqual(hashlib.sha256(matches[0].encode()).hexdigest(), metadata['flag']['sha256'])
+        self.assertNotEqual(hashlib.sha256(b'rainboat27').hexdigest(), account['password_hash'])
 
     def test_archive_matches_its_reproducible_author_source(self):
         directory = ROOT / 'false-label'
