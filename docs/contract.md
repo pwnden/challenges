@@ -1,6 +1,6 @@
-# Problem contract v6
+# Problem contract v7
 
-This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **6**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
+This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **7**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
 
 Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the problem there and supply its files, Compose configuration, solution, and optional patch. A compatible consumer reads those declarations and implements this contract.
 
@@ -14,7 +14,7 @@ parses execution fields, applies its own filesystem and Docker execution safety
 checks, and tests player integration. See [author verification](verification.md)
 and the [platform integration guide](https://github.com/pwnden/platform/blob/main/docs/verification.md).
 
-The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `6` and retains versions `1`, `2`, `3`, `4` and `5` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
+The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `7` and retains versions `1`, `2`, `3`, `4`, `5` and `6` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
 
 Increment the contract version whenever consumed fields, types, requiredness, allowed values, defaults, or execution and result rules change. Update the document, TOML values, author validator, and problem declarations together. A consumer adds explicit support for the new version before it can execute those problems. Adding problems, changing their content within the same contract, and clarifying documentation without changing a rule keep the version.
 
@@ -22,9 +22,9 @@ Increment the contract version whenever consumed fields, types, requiredness, al
 
 All four fields in `contract.toml` are required. The author validator rejects unknown fields. These values belong to the versioned contract; editing them is a contract change.
 
-| Field | Type | Version 6 value | Rule |
+| Field | Type | Version 7 value | Rule |
 | --- | --- | --- | --- |
-| `version` | Integer | `6` | Positive contract version; matches every problem's `schema`. |
+| `version` | Integer | `7` | Positive contract version; matches every problem's `schema`. |
 | `solve_network` | String | `"default"` | Nonempty default Compose network key for service solutions. |
 | `solve_timeout_seconds` | Integer | `60` | Positive default runtime limit for each toolbox command, in seconds. |
 | `attack_rejected_exit` | Integer | `3` | Expected attack denial code; in the range 1–124. |
@@ -45,6 +45,7 @@ Paths are relative to the problem directory and follow the [files and resource r
 | `category` | String | Required | One of `web`, `pwn`, `rev`, `crypto`, `forensics`, or `misc`. |
 | `difficulty` | Integer | Required | Difficulty from 1 (Intro) to 5 (Expert). |
 | `player` | Table | Required | Solver tools and their order. |
+| `learning` | Table | Required | Prerequisite and taught concept IDs. |
 | `content` | Table | Required | Player description, ordered optional hints and complete walkthrough. |
 | `files` | Array of strings | Defaults to `[]`; nonempty for file problems | Existing distribution files or directories inside this repository. Service problems may also distribute files. |
 | `compose` | String | Defaults to `""` | Existing regular Compose file for a service problem. |
@@ -52,6 +53,34 @@ Paths are relative to the problem directory and follow the [files and resource r
 | `flag` | Table | Required | Flag comparison strategy described below. |
 | `solve` | Table | Required | Toolbox image, command, and execution options. |
 | `patched` | Table | Optional for service problems | Compose override and functional check; file problems omit it. |
+
+### Learning relationships
+
+Version 7 requires `[learning]` with `requires` and `teaches` arrays of at most
+32 unique concept IDs, each matching `[a-z0-9]+(?:-[a-z0-9]+)*` with at most
+64 characters. Empty arrays are valid. A problem cannot require an ability
+it also teaches, including transitive prerequisites.
+
+`knowledge/catalog.toml` declares up to 256 `[[concepts]]` entries with required
+`id`, `title`, `requires` and `related`. Titles contain 1–120 characters;
+references follow the same ID and array limits and resolve in this catalog.
+The catalog is a regular UTF-8 TOML file at most 1 MiB. Each concept has a
+nonempty UTF-8 Markdown document `knowledge/<id>.md`, a regular file at most
+1 MiB within the repository. Its path is derived from the ID.
+
+Concept prerequisites must be acyclic; related concepts may link both ways.
+A taught concept’s prerequisites must be required or taught within the same
+problem. Author verification also rejects cycles between problems: a problem
+teaching an ability required by another is its predecessor. Consumers expand
+prerequisite concepts transitively and preserve declared teaching objectives.
+Shared or related teaching objectives form related practice. CLI names do not
+imply prerequisite relationships.
+
+The player shows prerequisite reading and predecessor/successor problems beside
+the selected exercise. Teaching objectives start collapsed because their labels
+may reveal solving principles. Concept reading uses explicit activation and
+authenticated, bounded document access without preparing an environment.
+Installed versions 1–6 omit learning metadata. Every problem stays accessible.
 
 ### Difficulty
 
@@ -144,7 +173,7 @@ The patch attack uses the original `solve.image` and `solve.command`. Both patch
 ## File problem execution
 
 ```toml
-schema = 6
+schema = 7
 slug = "example-file"
 title = "파일 분석 예제"
 category = "rev"
@@ -154,6 +183,10 @@ files = ["files/example.bin"]
 [player]
 tools = ["files", "terminal"]
 cli = ["python3"]
+
+[learning]
+requires = []
+teaches = []
 
 [content]
 description = "README.md"
@@ -177,7 +210,7 @@ The runner mounts the challenge directory at `/challenge` and runs the solution 
 ## Service problem execution
 
 ```toml
-schema = 6
+schema = 7
 slug = "example-service"
 title = "웹 서비스 예제"
 category = "web"
@@ -187,6 +220,10 @@ compose = "compose.yaml"
 [player]
 tools = ["web"]
 cli = []
+
+[learning]
+requires = []
+teaches = []
 
 [content]
 description = "README.md"
@@ -222,7 +259,7 @@ At each `run`, the runner generates a new `pwnden{...}` flag and passes it to Co
 
 Solutions print exactly one flag to stdout and send diagnostics to stderr. The consumer removes leading and trailing Unicode whitespace before comparing stdout. For file problems, it hashes the UTF-8 bytes of the remaining string with SHA-256. For service problems, it compares the entire remaining string with the current run's generated flag. A successful solution exits 0; a mismatched flag or nonzero exit fails verification.
 
-The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 6: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
+The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 7: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
 
 | Verification step | Required result |
 | --- | --- |

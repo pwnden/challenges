@@ -7,13 +7,13 @@ from pathlib import Path
 import secrets
 
 from runtime import Docker, ExecutionError
-from validate import InvalidChallenge, load_contract, validate_manifest
+from validate import InvalidChallenge, load_contract, validate_manifest, validate_learning_catalog
 
 
 def discover(root, slugs=()):
     definition = load_contract(root)
-    if definition['version'] != 6:
-        raise InvalidChallenge('author execution verifier supports contract version 6')
+    if definition['version'] != 7:
+        raise InvalidChallenge('author execution verifier supports contract version 7')
     manifests = sorted((root / 'challenges').glob('*/challenge.toml'))
     if not manifests:
         raise InvalidChallenge('no challenge.toml files found')
@@ -24,6 +24,7 @@ def discover(root, slugs=()):
                                 'timeout_seconds': definition['solve_timeout_seconds'],
                                 'writable': False}, **metadata['solve']}
         records.append((manifest.parent, metadata))
+    validate_learning_catalog(root, [metadata for _, metadata in records], definition)
     requested = set(slugs)
     missing = requested - {metadata['slug'] for _, metadata in records}
     if missing:

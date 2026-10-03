@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "packet-delivery"
 title = "패킷에 남은 전송 파일"
 category = "forensics"
@@ -8,6 +8,10 @@ files = ["files/delivery.pcap", "files/public-list.txt"]
 [player]
 tools = ["terminal", "files"]
 cli = ["tshark", "tar", "jq", "file"]
+
+[learning]
+requires = ["terminal-commands","file-paths","packet-streams"]
+teaches = ["transfer-evidence"]
 
 [content]
 description = "README.md"

@@ -21,6 +21,8 @@ class CreateTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
         (self.root / 'contract.toml').write_bytes((REPOSITORY / 'contract.toml').read_bytes())
+        (self.root / 'knowledge').mkdir()
+        (self.root / 'knowledge/catalog.toml').write_text('concepts = []\n')
 
     def metadata(self, destination):
         return validate_manifest(self.root, destination / 'challenge.toml', load_contract(self.root))
@@ -117,7 +119,7 @@ class CreateTests(unittest.TestCase):
         self.assertEqual(list(outside.iterdir()), [])
         parent.unlink()
         contract = self.root / 'contract.toml'
-        contract.write_text(contract.read_text().replace('version = 6', 'version = 7'))
+        contract.write_text(contract.read_text().replace('version = 7', 'version = 8'))
         with self.assertRaisesRegex(InvalidChallenge, 'update templates'):
             create(self.root, 'sample', kind='file', category='rev')
         self.assertFalse(parent.exists())

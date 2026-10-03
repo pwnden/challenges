@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "borrowed-badge"
 title = "팀 문서의 읽기 권한"
 category = "misc"
@@ -8,6 +8,10 @@ compose = "compose.yaml"
 [player]
 tools = ["web"]
 cli = []
+
+[learning]
+requires = ["resource-policies"]
+teaches = ["read-path-authorization"]
 
 [content]
 description = "README.md"

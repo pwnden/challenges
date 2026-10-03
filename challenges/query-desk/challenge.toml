@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "query-desk"
 title = "비공개 회원 검색"
 category = "web"
@@ -8,6 +8,10 @@ compose = "compose.yaml"
 [player]
 tools = ["web"]
 cli = []
+
+[learning]
+requires = ["web-addresses","http-messages"]
+teaches = ["query-boundaries"]
 
 [content]
 description = "README.md"

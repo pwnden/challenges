@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "dns-detour"
 title = "DNS 조회에 담긴 데이터"
 category = "forensics"
@@ -8,6 +8,10 @@ files = ["files/dns.jsonl"]
 [player]
 tools = ["files", "terminal"]
 cli = ["base32"]
+
+[learning]
+requires = ["dns-records","base32"]
+teaches = ["data-in-names"]
 
 [content]
 description = "README.md"

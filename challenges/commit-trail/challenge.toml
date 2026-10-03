@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "commit-trail"
 title = "지운 설정 파일의 이전 내용"
 category = "misc"
@@ -8,6 +8,10 @@ files = ["files/source.tar.gz", "files/release-note.txt"]
 [player]
 tools = ["terminal", "files"]
 cli = ["git", "tar", "rg"]
+
+[learning]
+requires = ["terminal-commands","git-history","retained-data"]
+teaches = ["historical-retention"]
 
 [content]
 description = "README.md"

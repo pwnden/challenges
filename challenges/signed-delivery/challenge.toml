@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "signed-delivery"
 title = "서명이 맞는 납품 문서"
 category = "crypto"
@@ -8,6 +8,10 @@ files = ["files/sender-public.pem", "files/delivery.sig", "files/delivery-v2.sig
 [player]
 tools = ["terminal", "files"]
 cli = ["openssl"]
+
+[learning]
+requires = ["terminal-commands","detached-signatures"]
+teaches = ["document-authenticity"]
 
 [content]
 description = "README.md"

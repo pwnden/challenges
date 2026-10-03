@@ -9,6 +9,10 @@ compose = "compose.yaml"
 tools = {{TOOLS}}
 cli = {{CLI}}
 
+[learning]
+requires = {{REQUIRES}}
+teaches = {{TEACHES}}
+
 [content]
 description = "README.md"
 hints = {{HINTS}}

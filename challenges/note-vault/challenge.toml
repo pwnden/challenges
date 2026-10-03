@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "note-vault"
 title = "다른 사람의 메모"
 category = "web"
@@ -8,6 +8,10 @@ compose = "compose.yaml"
 [player]
 tools = ["web"]
 cli = []
+
+[learning]
+requires = ["http-messages","http-cookies"]
+teaches = ["object-ownership"]
 
 [content]
 description = "README.md"

@@ -14,10 +14,11 @@ Intro difficulty. Advanced topics have advanced prerequisites. Assess the
 actual workload and learner evidence for each authored problem.
 
 Learning area IDs and topic keys identify authoring choices independently of
-the manifest's `category`. Contract v6 accepts six `category` values and has no
-learning-area, topic or concept-reference field. Record the learning area and
-topic in `AUTHORING.md` today. Structured catalog declarations and graph
-presentation require their own contract and platform work.
+the manifest's `category`. Contract v7 accepts six `category` values. Record
+learning areas and topics in `AUTHORING.md`; declare prerequisite and teaching
+concept IDs through `[learning]`. `knowledge/catalog.toml` defines concept
+prerequisites and related reading. The player uses these declarations to show
+predecessor, successor and related problems for the selected exercise.
 
 ## Learning areas
 

@@ -102,19 +102,109 @@ def markdown(root, directory, value, name):
     return path
 
 
+def concept_ids(value, name):
+    keys = strings(value, name)
+    if len(keys) > 32 or len(set(keys)) != len(keys) or any(len(key) > 64 or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', key) for key in keys):
+        raise InvalidChallenge(f'{name} needs at most 32 unique lowercase concept IDs')
+    return keys
+
+
+def check_cycles(edges, name):
+    visiting, complete = set(), set()
+    def visit(key):
+        if key in visiting:
+            raise InvalidChallenge(f'{name} has a prerequisite cycle at {key}')
+        if key in complete:
+            return
+        visiting.add(key)
+        for dependency in edges[key]:
+            visit(dependency)
+        visiting.remove(key)
+        complete.add(key)
+    for key in edges:
+        visit(key)
+
+
+def load_concepts(root):
+    path = repository_path(root, root, 'knowledge/catalog.toml', 'knowledge catalog', regular=True)
+    if path.stat().st_size > 1 << 20:
+        raise InvalidChallenge('knowledge catalog must be at most 1 MiB')
+    with path.open('rb') as source:
+        data = tomllib.load(source)
+    table(data, 'knowledge catalog', {'concepts'}, {'concepts'})
+    if not isinstance(data['concepts'], list) or len(data['concepts']) > 256:
+        raise InvalidChallenge('knowledge catalog supports at most 256 concepts')
+    concepts = {}
+    for item in data['concepts']:
+        table(item, 'concept', {'id', 'title', 'requires', 'related'}, {'id', 'title', 'requires', 'related'})
+        key = concept_ids([item['id']], 'concept.id')[0]
+        if key in concepts:
+            raise InvalidChallenge(f'duplicate concept: {key}')
+        if len(text(item['title'], 'concept.title')) > 120:
+            raise InvalidChallenge('concept.title must be at most 120 characters')
+        concept_ids(item['requires'], 'concept.requires')
+        concept_ids(item['related'], 'concept.related')
+        markdown(root, root / 'knowledge', key + '.md', 'concept document')
+        concepts[key] = item
+    for key, item in concepts.items():
+        for dependency in item['requires'] + item['related']:
+            if dependency not in concepts or dependency == key:
+                raise InvalidChallenge(f'{key}: unknown or self concept reference: {dependency}')
+    check_cycles({key: item['requires'] for key, item in concepts.items()}, 'concept catalog')
+    return concepts
+
+
+def required_concepts(keys, concepts):
+    result = set()
+    def add(key):
+        if key not in result:
+            result.add(key)
+            for parent in concepts[key]['requires']:
+                add(parent)
+    for key in keys:
+        add(key)
+    return result
+
+
+def validate_learning_catalog(root, records, definition):
+    if definition['version'] < 7:
+        return
+    concepts = load_concepts(root)
+    required = {item['slug']: required_concepts(item['learning']['requires'], concepts) for item in records}
+    edges = {item['slug']: [other['slug'] for other in records if other['slug'] != item['slug'] and required[item['slug']] & set(other['learning']['teaches'])] for item in records}
+    for item in records:
+        if required[item['slug']] & set(item['learning']['teaches']):
+            raise InvalidChallenge(f"{item['slug']}: teaches a concept already required through its prerequisites")
+        needed = required_concepts(item['learning']['teaches'], concepts) - set(item['learning']['teaches'])
+        if needed - required[item['slug']]:
+            raise InvalidChallenge(f"{item['slug']}: missing prerequisites for taught concepts: {', '.join(sorted(needed - required[item['slug']]))}")
+    check_cycles(edges, 'problem catalog')
+
+
 def validate_manifest(root, manifest, definition):
     root = root.resolve()
     manifest = inside(root, manifest)
     directory = manifest.parent
     with manifest.open('rb') as source:
         data = tomllib.load(source)
-    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'difficulty', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched', 'content', 'player'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve', 'content'} | ({'player'} if definition['version'] >= 4 else set()) | ({'difficulty'} if definition['version'] >= 5 else set()))
+    table(data, 'challenge', {'schema', 'slug', 'title', 'category', 'difficulty', 'files', 'compose', 'endpoints', 'flag', 'solve', 'patched', 'content', 'player', 'learning'}, {'schema', 'slug', 'title', 'category', 'flag', 'solve', 'content'} | ({'player'} if definition['version'] >= 4 else set()) | ({'difficulty'} if definition['version'] >= 5 else set()) | ({'learning'} if definition['version'] >= 7 else set()))
     if integer(data['schema'], 'schema') != definition['version']:
         raise InvalidChallenge(f"schema must match contract version {definition['version']}")
     slug = text(data['slug'], 'slug')
     if len(slug) > 40 or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', slug) or slug != directory.name:
         raise InvalidChallenge('slug must be portable and match the challenge directory')
     text(data['title'], 'title')
+    if 'learning' in data:
+        if definition['version'] < 7:
+            raise InvalidChallenge('learning requires contract 7')
+        learning = table(data['learning'], 'learning', {'requires', 'teaches'}, {'requires', 'teaches'})
+        concepts = load_concepts(root)
+        for field in ('requires', 'teaches'):
+            for key in concept_ids(learning[field], f'learning.{field}'):
+                if key not in concepts:
+                    raise InvalidChallenge(f'unknown learning concept: {key}')
+        if set(learning['requires']) & set(learning['teaches']):
+            raise InvalidChallenge('requires and teaches must describe distinct learning abilities')
     if data['category'] not in ('web', 'pwn', 'rev', 'crypto', 'forensics', 'misc'):
         raise InvalidChallenge('unsupported category')
     if 'difficulty' in data and not 1 <= integer(data['difficulty'], 'difficulty') <= 5:
@@ -198,12 +288,14 @@ def main():
         manifests = sorted((root / 'challenges').glob('*/challenge.toml'))
         if not manifests:
             raise InvalidChallenge('no challenge.toml files found')
+        records = []
         for manifest in manifests:
             try:
-                validate_manifest(root, manifest, definition)
+                records.append(validate_manifest(root, manifest, definition))
             except (OSError, ValueError) as error:
                 raise InvalidChallenge(f"{manifest.relative_to(root)}: {error}") from error
             print(f"valid {manifest.parent.name} (contract {definition['version']})")
+        validate_learning_catalog(root, records, definition)
     except (OSError, ValueError) as error:
         parser.exit(1, f"validate: {error}\n")
     print(f"Validated {len(manifests)} challenges.")

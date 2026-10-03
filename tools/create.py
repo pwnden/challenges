@@ -25,11 +25,11 @@ def render(name, values):
     return re.sub(r'\{\{([A-Z_]+)\}\}', lambda match: values[match[1]], source)
 
 
-def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, patched=False, toolbox=IMAGE, concepts=(), cli=()):
+def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, patched=False, toolbox=IMAGE, concepts=(), cli=(), requires=(), teaches=()):
     root = root.resolve()
     definition = load_contract(root)
-    if definition['version'] != 6:
-        raise InvalidChallenge('creation templates support contract version 6; update templates before using another version')
+    if definition['version'] != 7:
+        raise InvalidChallenge('creation templates support contract version 7; update templates before using another version')
     names = cli_names(list(cli))
     player_tools = ['files', 'terminal'] if kind == 'file' else ['web']
     if names and 'terminal' not in player_tools:
@@ -51,6 +51,7 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, p
     if re.search(r'\s|#', toolbox):
         raise InvalidChallenge('image must be a single Dockerfile image reference')
     values = {'SCHEMA': str(definition['version']), 'SLUG': quoted(slug), 'TITLE': quoted(title), 'CLI': quoted(names), 'TOOLS': quoted(player_tools),
+              'REQUIRES': quoted(list(dict.fromkeys([*requires, *concepts]))), 'TEACHES': quoted(list(teaches)),
               'CATEGORY': quoted(category), 'DIFFICULTY': str(difficulty), 'IMAGE': toolbox, 'IMAGE_TOML': quoted(toolbox),
               'HINTS': quoted([f'hints/{i}.md' for i in range(1, hints + 1)]),
               'NETWORK': quoted(definition['solve_network']), 'SLUG_PATH': slug}
@@ -128,6 +129,8 @@ def main():
     parser.add_argument('--hints', type=int, default=0, help='optional ordered hints, 0–10 (default: 0)')
     parser.add_argument('--concept', dest='concepts', action='append', default=[], help='shared prerequisite ID; repeat for additional concepts')
     parser.add_argument('--cli', action='append', default=[], help='primary learner CLI command name; repeat for additional commands')
+    parser.add_argument('--requires', action='append', default=[], help='required concept ID from knowledge/catalog.toml; repeat for additional concepts')
+    parser.add_argument('--teaches', action='append', default=[], help='taught concept ID from knowledge/catalog.toml; repeat for additional concepts')
     parser.add_argument('--patched', action='store_true', help='add service patch and functional-check scaffolds')
     parser.add_argument('--image', dest='toolbox', default=IMAGE, help='Python 3 toolbox and service base image')
     parser.add_argument('--dry-run', action='store_true', help='list files without writing them')

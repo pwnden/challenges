@@ -18,9 +18,9 @@ the query vocabulary before the player changes input. The `note-vault` scenario 
 access-control experiment. The `rotor-lock` scenario keeps its existing implementation and
 code-analysis workload.
 
-The briefs contain the required background directly. Shared concept declarations
-and a graph UI remain separate work; this batch uses the existing learning map
-and version 6 content contract.
+The briefs contain the required background directly. Contract v7 now connects
+their prerequisite and teaching concepts through shared declarations. The player
+shows predecessor, successor and related exercises for the selected problem.
 
 ## Verification and review
 

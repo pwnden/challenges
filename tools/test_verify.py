@@ -113,7 +113,9 @@ class VerifyTests(unittest.TestCase):
     def test_discovery_defaults_selection_and_contract_version(self):
         with tempfile.TemporaryDirectory(prefix='pwnden-author-discovery-') as tmp:
             root = Path(tmp)
-            (root / 'contract.toml').write_text('version=6\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
+            (root / 'contract.toml').write_text('version=7\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
+            (root / 'knowledge').mkdir()
+            (root / 'knowledge/catalog.toml').write_text('concepts=[]\n')
             create(root, 'one', kind='file', category='rev')
             create(root, 'two', kind='service', category='web')
             definition, records = discover(root, ['two'])
@@ -122,8 +124,8 @@ class VerifyTests(unittest.TestCase):
             self.assertFalse(records[0][1]['solve']['writable'])
             with self.assertRaisesRegex(ValueError, 'unknown challenges'):
                 discover(root, ['missing'])
-            (root / 'contract.toml').write_text('version=7\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
-            with self.assertRaisesRegex(ValueError, 'supports contract version 6'):
+            (root / 'contract.toml').write_text('version=8\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
+            with self.assertRaisesRegex(ValueError, 'supports contract version 7'):
                 discover(root)
 
 

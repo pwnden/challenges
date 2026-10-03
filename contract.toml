@@ -1,6 +1,6 @@
 # Machine-readable values for the problem contract in docs/contract.md.
 # Update the contract version when its format, defaults, or behavior changes.
-version = 6
+version = 7
 solve_network = "default"
 solve_timeout_seconds = 60
 attack_rejected_exit = 3

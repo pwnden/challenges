@@ -18,6 +18,7 @@ class ContentTests(unittest.TestCase):
         (self.root / 'contract.toml').write_bytes((ROOT / 'contract.toml').read_bytes())
         (self.root / 'knowledge').mkdir()
         (self.root / 'knowledge' / 'cookies.md').write_text('# 쿠키\n\n공통 설명 **강조**.\n', encoding='utf-8')
+        (self.root / 'knowledge/catalog.toml').write_text('[[concepts]]\nid="cookies"\ntitle="쿠키"\nrequires=[]\nrelated=[]\n')
 
     def test_creation_compiles_and_shared_change_requires_refresh(self):
         destination, files = create(self.root, 'first', kind='file', category='crypto', concepts=['cookies'])

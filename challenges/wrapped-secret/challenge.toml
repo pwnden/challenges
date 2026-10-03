@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "wrapped-secret"
 title = "문자로 바꾼 복구 키"
 category = "crypto"
@@ -8,6 +8,10 @@ files = ["files/recovery.txt"]
 [player]
 tools = ["files", "terminal"]
 cli = ["base64"]
+
+[learning]
+requires = ["base64"]
+teaches = ["encoding-secrecy"]
 
 [content]
 description = "README.md"

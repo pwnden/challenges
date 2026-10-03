@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "midnight-trace"
 title = "자료 유출 기록"
 category = "forensics"
@@ -8,6 +8,10 @@ files = ["files/access.log", "files/audit.jsonl"]
 [player]
 tools = ["files"]
 cli = []
+
+[learning]
+requires = ["http-messages","object-ownership"]
+teaches = ["transfer-evidence"]
 
 [content]
 description = "README.md"

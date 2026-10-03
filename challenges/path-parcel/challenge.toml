@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "path-parcel"
 title = "공개 폴더 밖의 문서"
 category = "web"
@@ -8,6 +8,10 @@ compose = "compose.yaml"
 [player]
 tools = ["web"]
 cli = []
+
+[learning]
+requires = ["web-addresses","file-paths"]
+teaches = ["path-boundaries"]
 
 [content]
 description = "README.md"

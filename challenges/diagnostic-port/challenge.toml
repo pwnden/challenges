@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "diagnostic-port"
 title = "개발용 점검 포트"
 category = "misc"
@@ -8,6 +8,10 @@ compose = "compose.yaml"
 [player]
 tools = ["terminal"]
 cli = ["nmap", "ncat", "curl"]
+
+[learning]
+requires = ["terminal-commands","http-messages","tcp-services"]
+teaches = ["network-trust"]
 
 [content]
 description = "README.md"

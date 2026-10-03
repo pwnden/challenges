@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "export-gap"
 title = "내보내기에서 빠진 권한 검사"
 category = "web"
@@ -8,6 +8,10 @@ compose = "compose.yaml"
 [player]
 tools = ["terminal"]
 cli = ["curl", "jq"]
+
+[learning]
+requires = ["terminal-commands","http-messages","http-cookies","curl-json","object-ownership"]
+teaches = ["read-path-authorization"]
 
 [content]
 description = "README.md"

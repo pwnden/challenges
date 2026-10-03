@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "hash-lantern"
 title = "비밀번호 후보 찾기"
 category = "crypto"
@@ -8,6 +8,10 @@ files = ["files/account.txt", "files/candidates.txt"]
 [player]
 tools = ["files", "terminal"]
 cli = ["sha256sum"]
+
+[learning]
+requires = ["terminal-commands","hashing"]
+teaches = ["candidate-cost"]
 
 [content]
 description = "README.md"

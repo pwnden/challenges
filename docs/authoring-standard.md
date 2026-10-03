@@ -153,11 +153,12 @@ Related-reading links may connect in both directions. If a concept label would
 reveal the key attack or solving technique, give the brief sufficient starting
 context and put that specific connection in the answer-labelled walkthrough.
 
-Contract v6 currently declares difficulty, tools, primary CLI names and learning-content paths.
-Concepts and these relationships are author records and document links today;
-the platform has no concept graph or prerequisite API. Keep structured concept
-metadata and graph presentation changes within a separately versioned contract
-change when they are implemented.
+Contract v7 declares prerequisites and teaching objectives through `[learning]`.
+Reuse IDs from `knowledge/catalog.toml`, which defines titles, prerequisites and
+related concepts. The platform presents these connections and scoped concept
+reading beside the selected problem. Author verification checks references and
+prerequisite cycles. Keep solution-specific labels in teaching objectives, which
+the player initially collapses.
 
 ## Keep a problem-specific author record
 

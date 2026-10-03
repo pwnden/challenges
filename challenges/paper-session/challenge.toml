@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "paper-session"
 title = "사용자 구분 값 바꾸기"
 category = "web"
@@ -8,6 +8,10 @@ compose = "compose.yaml"
 [player]
 tools = ["web"]
 cli = []
+
+[learning]
+requires = ["http-messages","http-cookies"]
+teaches = ["trusted-identity"]
 
 [content]
 description = "README.md"

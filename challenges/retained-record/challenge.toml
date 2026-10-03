@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "retained-record"
 title = "삭제한 문서가 남은 백업"
 category = "forensics"
@@ -8,6 +8,10 @@ files = ["files/snapshot.sqlite", "files/visible-documents.csv", "files/backup-n
 [player]
 tools = ["terminal", "files"]
 cli = ["sqlite3"]
+
+[learning]
+requires = ["terminal-commands","sqlite-records","retained-data"]
+teaches = ["historical-retention"]
 
 [content]
 description = "README.md"

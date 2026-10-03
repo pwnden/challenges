@@ -51,7 +51,7 @@ Multiple slugs can be supplied. `--repo <path>` selects another challenges
 checkout. All manifests are format-checked before the selected problems run.
 Before running a solution, verification checks every declared `player.cli` command in its toolbox image with network access disabled. Missing commands fail publication.
 
-This author verifier explicitly supports contract version 6; update its
+This author verifier explicitly supports contract version 7; update its
 implementation when the authoring contract changes.
 
 For each selected problem, the verifier:
@@ -184,3 +184,7 @@ catalog acquisition, player tools, browser ingress, submissions and lifecycle.
 They are consumer integration evidence; authoring verification finishes in
 challenges before publication. See the
 [platform integration guide](https://github.com/pwnden/platform/blob/main/docs/verification.md).
+
+Contract v7 verification checks the shared concept catalog, bounded documents,
+resolved prerequisite and teaching references, and cycles in both concept and
+problem prerequisites before executing the selected exercises.

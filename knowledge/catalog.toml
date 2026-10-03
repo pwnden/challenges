@@ -1,0 +1,222 @@
+[[concepts]]
+id = "base32"
+title = "Base32로 적힌 데이터"
+requires = []
+related = []
+
+[[concepts]]
+id = "base64"
+title = "Base64 복원"
+requires = []
+related = []
+
+[[concepts]]
+id = "candidate-cost"
+title = "비밀번호 후보와 확인 비용"
+requires = ["hashing"]
+related = []
+
+[[concepts]]
+id = "curl-json"
+title = "curl로 JSON API 읽기"
+requires = ["terminal-commands", "http-messages", "http-cookies"]
+related = []
+
+[[concepts]]
+id = "data-in-names"
+title = "조회 이름에 담기는 정보"
+requires = []
+related = []
+
+[[concepts]]
+id = "detached-signatures"
+title = "문서와 분리된 서명 확인하기"
+requires = []
+related = []
+
+[[concepts]]
+id = "dns-records"
+title = "DNS 질의 기록 읽기"
+requires = []
+related = []
+
+[[concepts]]
+id = "document-authenticity"
+title = "문서 내용과 서명의 확인"
+requires = ["detached-signatures"]
+related = []
+
+[[concepts]]
+id = "encoding-secrecy"
+title = "표현 변환과 정보 보호"
+requires = []
+related = ["candidate-cost", "data-in-names"]
+
+[[concepts]]
+id = "file-paths"
+title = "폴더와 상대 경로"
+requires = []
+related = []
+
+[[concepts]]
+id = "file-signatures"
+title = "확장자와 파일의 실제 형식"
+requires = []
+related = []
+
+[[concepts]]
+id = "file-type-checks"
+title = "파일 종류를 확인하는 근거"
+requires = []
+related = []
+
+[[concepts]]
+id = "git-history"
+title = "현재 파일과 Git 이력"
+requires = ["terminal-commands", "file-paths"]
+related = []
+
+[[concepts]]
+id = "hashing"
+title = "해시와 비밀번호 후보"
+requires = []
+related = []
+
+[[concepts]]
+id = "hidden-file-data"
+title = "화면에 보이는 내용과 파일의 내용"
+requires = []
+related = []
+
+[[concepts]]
+id = "historical-retention"
+title = "과거 버전과 삭제의 의미"
+requires = ["retained-data"]
+related = []
+
+[[concepts]]
+id = "http-cookies"
+title = "쿠키와 신원"
+requires = ["http-messages"]
+related = []
+
+[[concepts]]
+id = "http-messages"
+title = "Web 요청과 응답 읽기"
+requires = []
+related = []
+
+[[concepts]]
+id = "image-metadata"
+title = "이미지와 메타데이터"
+requires = []
+related = []
+
+[[concepts]]
+id = "input-checks"
+title = "입력 검사와 조건의 근거"
+requires = ["program-reading"]
+related = []
+
+[[concepts]]
+id = "network-trust"
+title = "연결 가능성과 자료 읽기 권한"
+requires = []
+related = []
+
+[[concepts]]
+id = "object-ownership"
+title = "자료의 소유권과 읽기 권한"
+requires = ["http-cookies"]
+related = ["trusted-identity", "path-boundaries"]
+
+[[concepts]]
+id = "packet-streams"
+title = "패킷에서 전송 자료 읽기"
+requires = ["tcp-services"]
+related = []
+
+[[concepts]]
+id = "path-boundaries"
+title = "폴더 경계와 실제 파일 읽기"
+requires = ["file-paths"]
+related = []
+
+[[concepts]]
+id = "program-reading"
+title = "작은 입력 검사 코드 읽기"
+requires = []
+related = []
+
+[[concepts]]
+id = "query-boundaries"
+title = "입력값과 조회 구조의 경계"
+requires = ["http-messages"]
+related = []
+
+[[concepts]]
+id = "read-path-authorization"
+title = "여러 읽기 기능의 권한 일관성"
+requires = ["object-ownership"]
+related = []
+
+[[concepts]]
+id = "resource-policies"
+title = "누가 어떤 문서를 읽을 수 있나"
+requires = ["object-ownership"]
+related = []
+
+[[concepts]]
+id = "response-comparison"
+title = "응답을 비교해 후보 줄이기"
+requires = []
+related = []
+
+[[concepts]]
+id = "response-evidence"
+title = "응답 차이와 내용의 판단"
+requires = []
+related = ["network-trust", "transfer-evidence"]
+
+[[concepts]]
+id = "retained-data"
+title = "공개 자료와 보관 자료의 범위"
+requires = []
+related = ["hidden-file-data", "historical-retention"]
+
+[[concepts]]
+id = "sqlite-records"
+title = "SQLite의 목록과 본문"
+requires = ["terminal-commands"]
+related = []
+
+[[concepts]]
+id = "tcp-services"
+title = "포트와 TCP 연결"
+requires = ["terminal-commands"]
+related = []
+
+[[concepts]]
+id = "terminal-commands"
+title = "준비된 터미널 명령 사용하기"
+requires = []
+related = []
+
+[[concepts]]
+id = "transfer-evidence"
+title = "자료 전달을 입증하는 기록"
+requires = []
+related = []
+
+[[concepts]]
+id = "trusted-identity"
+title = "서버가 확인하는 사용자 신원"
+requires = []
+related = []
+
+[[concepts]]
+id = "web-addresses"
+title = "주소의 경로와 입력값"
+requires = []
+related = []
+

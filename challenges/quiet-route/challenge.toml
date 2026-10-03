@@ -1,4 +1,4 @@
-schema = 6
+schema = 7
 slug = "quiet-route"
 title = "모든 경로가 200을 반환하는 서버"
 category = "web"
@@ -9,6 +9,10 @@ files = ["files/paths.txt", "files/public-policy.txt"]
 [player]
 tools = ["terminal", "files"]
 cli = ["ffuf", "curl", "jq"]
+
+[learning]
+requires = ["terminal-commands","http-messages","response-comparison"]
+teaches = ["response-evidence"]
 
 [content]
 description = "README.md"
