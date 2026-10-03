@@ -4,6 +4,7 @@ import argparse
 from datetime import date
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import tomllib
@@ -14,15 +15,15 @@ from validate import InvalidChallenge, repository_path, table, text
 def load_rubric(root):
     data = json.loads((root / 'quality/rubric.json').read_text())
     table(data, 'rubric', {'version', 'criteria'}, {'version', 'criteria'})
-    if type(data['version']) is not int or data['version'] != 1:
+    if type(data['version']) is not int or data['version'] != 2:
         raise InvalidChallenge('unsupported quality rubric version')
     criteria = data['criteria']
     if not isinstance(criteria, dict) or not criteria:
         raise InvalidChallenge('rubric.criteria must be a nonempty table')
     for key, item in criteria.items():
         table(item, key, {'title', 'weight', 'check', 'evidence_kind'}, {'title', 'weight', 'check', 'evidence_kind'})
-        if type(item['weight']) is not int or item['weight'] <= 0:
-            raise InvalidChallenge('criterion weight must be a positive integer')
+        if type(item['weight']) not in (int, float) or not math.isfinite(item['weight']) or item['weight'] <= 0:
+            raise InvalidChallenge('criterion weight must be a positive finite number')
         for field in ['title', 'check', 'evidence_kind']:
             text(item[field], key + '.' + field)
     if sum(item['weight'] for item in criteria.values()) != 100:

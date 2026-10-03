@@ -29,14 +29,14 @@ class QualityTests(unittest.TestCase):
         self.rubric = load_rubric(self.root)
         criteria = {}
         for key, item in self.rubric['criteria'].items():
-            criteria[key] = {'level': None if key in {'browser', 'learner'} else 3,
+            criteria[key] = {'level': 3,
                              'reason': 'Evidence was inspected.', 'improvement': ''}
             criteria[key]['evidence'] = [] if criteria[key]['level'] is None else [
                 {'path': 'challenges/sample/README.md', 'quote': 'Observed boundary.',
                  'kind': item['evidence_kind']}]
             if criteria[key]['level'] is None:
                 criteria[key]['improvement'] = 'Run and record this session.'
-        self.record = {'slug': 'sample', 'rubric_version': 1, 'reviewed_at': '2026-10-03',
+        self.record = {'slug': 'sample', 'rubric_version': 2, 'reviewed_at': '2026-10-03',
                        'reviewer': 'Test reviewer', 'criteria': criteria}
         self.refresh()
 
@@ -50,17 +50,32 @@ class QualityTests(unittest.TestCase):
 
     def test_unverified_does_not_gain_points_or_coverage(self):
         result = check_catalog(self.root)[0]
-        self.assertEqual((result['points'], result['reviewed_weight']), (60, 80))
-        self.assertEqual(result['pending'], ['browser', 'learner'])
-        self.assertEqual(len(result['improvements']), 2)
-        self.record['criteria']['goal']['level'] = 4
-        self.assertEqual(self.check()['points'], 62.5)
+        self.assertEqual((result['points'], result['reviewed_weight']), (75, 100))
+        self.assertEqual(result['pending'], [])
+        self.assertNotIn('browser', self.rubric['criteria'])
+        self.assertNotIn('learner', self.rubric['criteria'])
+        self.record['criteria']['goal'].update(level=None, evidence=[], improvement='Inspect goal evidence.')
+        result = self.check()
+        self.assertEqual((result['points'], result['reviewed_weight']), (65.625, 87.5))
+        self.assertEqual(result['pending'], ['goal'])
 
     def test_failed_is_evaluated_and_distinct_from_unverified(self):
         self.record['criteria']['goal'].update(level=0, improvement='Correct the missing objective.')
         result = self.check()
-        self.assertEqual((result['points'], result['reviewed_weight']), (52.5, 80))
+        self.assertEqual((result['points'], result['reviewed_weight']), (65.625, 100))
         self.assertNotIn('goal', result['pending'])
+
+    def test_weights_must_be_finite_positive_numbers_totaling_100(self):
+        path = self.root / 'quality/rubric.json'
+        original = path.read_text()
+        for weight in [True, 0, -1, float('nan'), float('inf'), '12.5', 13]:
+            data = json.loads(original)
+            data['criteria']['goal']['weight'] = weight
+            path.write_text(json.dumps(data))
+            with self.subTest(weight=weight), self.assertRaises(InvalidChallenge):
+                load_rubric(self.root)
+        path.write_text(original)
+        self.assertEqual(sum(item['weight'] for item in load_rubric(self.root)['criteria'].values()), 100)
 
     def test_changed_challenge_shared_knowledge_and_rubric_are_stale(self):
         for relative in ['challenges/sample/README.md', 'knowledge/base.md', 'quality/rubric.json']:
@@ -112,18 +127,22 @@ class QualityTests(unittest.TestCase):
         with self.assertRaisesRegex(InvalidChallenge, 'missing'):
             self.check()
         self.record = copy.deepcopy(original)
-        self.record['rubric_version'] = 2
+        self.record['rubric_version'] = 1
         with self.assertRaisesRegex(InvalidChallenge, 'version'):
             self.check()
 
     def test_pending_partial_and_scored_need_actions_or_evidence(self):
         original = copy.deepcopy(self.record)
-        for key, field, value in [('browser', 'improvement', ''), ('goal', 'reason', ''),
+        for key, field, value in [('goal', 'reason', ''),
                                   ('goal', 'evidence', [])]:
             self.record = copy.deepcopy(original)
             self.record['criteria'][key][field] = value
             with self.subTest(key=key, field=field), self.assertRaises(InvalidChallenge):
                 self.check()
+        self.record = copy.deepcopy(original)
+        self.record['criteria']['goal'].update(level=None, evidence=[], improvement='')
+        with self.assertRaisesRegex(InvalidChallenge, 'pending action'):
+            self.check()
         self.record = copy.deepcopy(original)
         self.record['criteria']['goal']['level'] = 2
         with self.assertRaisesRegex(InvalidChallenge, 'improvement'):

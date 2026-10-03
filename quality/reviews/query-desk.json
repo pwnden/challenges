@@ -1,8 +1,8 @@
 {
   "slug": "query-desk",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/query-desk/2026-10-03-panel.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/query-desk/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 4,
@@ -222,19 +222,7 @@
         }
       ],
       "improvement": "현재 snapshot의 문제별 공격/패치/정리 실행 로그와 정상 검색 결과를 남겨 과거 전체 실행 보고를 보완한다.\n향후 실행 결과에 이 문제의 공격·정상 기능·패치 검사와 정리 결과를 분리해 기록하면 개별 재현 범위를 더 직접 확인할 수 있다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "query-desk-learner (None): 현재 브라우저에서 문제 검색·선택부터 준비, 전체 풀이, 제출과 종료까지 수행한 세션 근거가 없다. 작성자의 자동 해답이나 페이지 코드로 대체할 수 없다.\nquery-desk-evidence (None): 이번 검토는 실제 브라우저 세션을 수행하거나 확인하지 않았다. 작성 기록의 기술 검사로 화면 전체 풀이를 입증할 수 없다.\nquery-desk-designer (None): 실제 브라우저에서 시작부터 종료까지 수행한 세션 기록이 제공되지 않았다. 이 심사의 화면 설명과 테스트 코드는 브라우저 전체 풀이 세션이 아니다.",
-      "evidence": [],
-      "improvement": "현재 배포 화면에서 문제 선택, 환경 준비, 검색 입력·결과 관찰, 정답과 오답 제출, 종료까지의 브라우저 세션을 기록한다.\n현재 브라우저 세션에서 검색·문제 선택·환경 준비·정상/공격 입력·정답 및 오답 제출·종료를 기록한다.\n실제 브라우저 세션에서 문제 검색, 준비, 풀이, 정답·오답 제출과 종료를 기록한다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "query-desk-learner (None): 실제 대상 수준 독립 풀이자의 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록은 제공되지 않았다. 본 모델의 본문 읽기는 학습자 세션으로 간주하지 않는다.\nquery-desk-evidence (None): 대상 수준 독립 학습자의 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 작성자 검토와 모델 심사는 학습자 세션이 아니다.\nquery-desk-designer (None): 독립 대상 학습자의 시간, 막힘, 힌트 사용과 원리 이해 기록이 없고 작성 기록도 리뷰가 미수행이라고 명시한다. 본 모델 검토는 학습자 세션이 아니다.",
-      "evidence": [],
-      "improvement": "대상 수준 독립 풀이자에게 해설 없이 수행하게 하고 소요 시간·막힘·힌트 사용·원리 설명을 기록한다.\n대상 수준의 독립 풀이자를 해설 없이 관찰하고 시간·막힘·힌트 사용·원리 설명을 기록한다.\nSQL 작성 경험이 없는 대상 수준 풀이자에게 본문만 제공하고, 걸린 시간·막힘 단계·힌트 사용·학습 원리 설명을 기록한다."
     }
   },
-  "source_sha256": "e6c3a044bcb14c8a0ae38f1acf09184215d058e2efda97ea076f7896a6f31a6b"
+  "source_sha256": "2224b40692b9f6d4e5cb362760ec7fe1106db2f07889909201d5d5c0edb67903"
 }

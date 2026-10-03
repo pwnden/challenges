@@ -1,8 +1,8 @@
 {
   "slug": "path-parcel",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/path-parcel/2026-10-03-panel.json",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/path-parcel/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 4,
@@ -342,36 +342,7 @@
         }
       ],
       "improvement": "최종 콘텐츠 변경 뒤 같은 고정 이미지 검증을 다시 실행하고 새 날짜와 범위를 남기면 현재 snapshot 기준 재현 근거가 된다.\n검증기 출력이나 실행 로그를 날짜·대상 revision과 함께 보존해 기록을 재확인할 수 있게 한다.\n현재 검토 날짜의 실행 재현을 주장하려면 별도 실행을 하고 날짜·결과를 기록한다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "path-parcel-learner (None): 현재 문제를 검색하는 단계부터 환경 준비, 웹 풀이, 정답·오답 제출, 종료까지 확인한 실제 Browser Plugin 세션 기록이 없다. 작성 기록도 화면 조작 검증을 수행하지 않았다고 명시한다.\npath-parcel-evidence (None): 현재 문제의 검색부터 환경 준비, 브라우저 풀이, 정답·오답 제출 및 종료까지를 기록한 실제 browser-session 증거가 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 밝힌다.\npath-parcel-designer (None): 현재 문제에서 검색부터 환경 준비, 브라우저 입력과 제출, 오답 확인 및 종료까지 실제 화면으로 수행한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증을 수행하지 않았다고 명시한다.\npath-parcel-alternative (None): 이번 심사는 자료의 독립 검토이며 실제 브라우저에서 문제 검색·환경 준비·풀이·제출·종료까지 수행한 기록이 없다.\npath-parcel-tooling (None): 실제 브라우저에서 검색·선택, 환경 준비, 웹/터미널 풀이, 정답·오답 제출, 종료까지 확인한 세션 기록이 없다. 작성 기록도 Browser Plugin 화면 조작 검증은 수행하지 않았다고 명시한다.",
-      "evidence": [
-        {
-          "path": "challenges/path-parcel/AUTHORING.md",
-          "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
-          "kind": "browser-session"
-        }
-      ],
-      "improvement": "실제 브라우저 세션으로 검색부터 종료까지 전체 흐름과 정답·오답 제출을 기록한다.\n현재 문제를 대상으로 브라우저에서 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료 과정을 세션 기록으로 남긴다.\n브라우저에서 현재 문제를 시작해 정상 읽기, 경로 입력, 성공·오답 제출, 종료까지 수행한 세션을 기록한다.\n현재 환경에서 실제 브라우저 전체 풀이 세션을 기록한다.\n실제 브라우저 세션으로 시작부터 정답/오답 제출과 환경 종료까지 기록한다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "path-parcel-learner (None): 선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 모델의 문서 검토는 학습자 세션 근거가 아니다.\npath-parcel-evidence (None): 선언된 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간·막힌 단계·힌트 사용·원리 이해 기록이 없다. 작성자 검토와 자동 해답은 learner-session을 대신할 수 없다.\npath-parcel-designer (None): 선언된 선수 능력을 가진 독립 풀이자의 실제 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성자는 독립 리뷰가 대기 중임을 분명히 한다.\npath-parcel-alternative (None): 초급 persona로 자료를 검토한 것은 대상 수준 학습자의 독립 세션이 아니며, 시간·막힘·힌트·이해 기록이 없다.\npath-parcel-tooling (None): 대상 수준 독립 학습자의 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 작성 기록은 실제 독립 풀이자 리뷰가 수행되지 않았다고 명시한다.",
-      "evidence": [
-        {
-          "path": "challenges/path-parcel/AUTHORING.md",
-          "quote": "독립적인 대상 수준 풀이자의 관찰로 재평가한다.",
-          "kind": "learner-session"
-        },
-        {
-          "path": "challenges/path-parcel/AUTHORING.md",
-          "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
-          "kind": "learner-session"
-        }
-      ],
-      "improvement": "대상 수준의 독립 풀이자가 해설을 보지 않고 푼 세션을 관찰해 완료 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n브라우저와 텍스트 읽기 능력을 가진 독립 초급 풀이자가 해설 없이 푼 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다.\n브리핑과 해설을 닫은 대상 수준의 독립 풀이자 세션을 관찰하고 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다.\n선수 능력을 갖춘 독립 학습자에게 해설을 닫고 수행시켜 세션과 원리 이해 기록을 남긴다.\n선언된 선수 능력을 가진 독립 풀이자로 전체 풀이와 이해 확인 세션을 기록한다."
     }
   },
-  "source_sha256": "01459e4e5e23c3b284a37b6dbcd45d31eccc915f15d82a2523155abe86b7a3b6"
+  "source_sha256": "d3a2cd0257e72e09e17ec2f700edb85b2028b83562c781a93756ccea4449634d"
 }

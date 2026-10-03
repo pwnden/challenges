@@ -1,0 +1,31 @@
+{
+  "slug": "hash-lantern",
+  "recorded_at": "2026-10-03",
+  "source": "rubric-v1 migration; no new session performed",
+  "observations": {
+    "browser": {
+      "status": "not-observed",
+      "reason": "hash-lantern-learner (None): 현재 문제를 검색하고 환경을 준비해 웹과 터미널로 풀고 정답·오답 제출 후 종료하는 실제 브라우저 세션 증거가 없다. 작성 기록은 Browser Plugin을 통한 화면 조작 검증이 없었다고 밝힌다.\nhash-lantern-evidence (None): 지정된 자료에는 브라우저로 문제 검색부터 종료까지 수행한 세션 기록이 확인되지 않았다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 명시한다. 이번 모델 심사는 브라우저 풀이가 아니다.\nhash-lantern-designer (None): 현재 문제의 검색부터 환경 준비, 풀이, 정답·오답 제출, 종료까지 확인한 실제 브라우저 세션 기록이 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 명시한다.\nhash-lantern-alternative (None): No actual browser session evidence was provided or performed in this review, so the full search, workspace preparation, solve, wrong-answer check, and cleanup flow remains unverified.\nhash-lantern-tooling (None): 현재 문제를 검색하고 준비·풀이·정오답 제출·종료하는 실제 브라우저 세션 근거가 없다. 작성 기록도 Browser Plugin 화면 검증을 수행하지 않았다고 명시한다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+          "kind": "browser-session"
+        }
+      ],
+      "next_action": "독립 브라우저 세션으로 검색부터 종료까지 수행하고 화면 경로와 제출 결과를 기록한다.\n현재 문제를 브라우저에서 검색·선택하고 환경 준비, 터미널 풀이, 정답 및 오답 제출, 종료를 기록한다.\nBrowser Plugin으로 검색, 문제 선택, 준비, 터미널 풀이, 정답·오답 제출 및 종료를 확인하고 세션 기록을 남긴다.\nRecord a real browser session covering problem selection, environment preparation, terminal comparison, correct and incorrect submission behavior, and ending the workspace.\n실제 브라우저에서 검색부터 환경 준비, 풀이, 정답·오답 제출, 종료까지 한 세션을 기록한다."
+    },
+    "learner": {
+      "status": "not-observed",
+      "reason": "hash-lantern-learner (None): 선언된 수준의 독립 풀이자가 해설을 닫고 진행한 실제 시간, 막힘, 힌트 사용, 원리 이해 기록이 없다. 본 심사의 첫 독서는 모델의 텍스트 검토이며 학습자 세션 증거가 아니다.\nhash-lantern-evidence (None): 대상 수준의 독립 학습자가 해설을 닫고 수행한 시간·막힘·힌트·이해도 기록은 없다. 작성 기록도 독립 리뷰가 대기 상태라고 밝힌다. 현재 모델 검토를 학습자 세션으로 간주하지 않는다.\nhash-lantern-designer (None): 작성 기록은 실제 대상 수준 풀이자의 독립 리뷰가 아직 없다고 밝힌다. 모델의 내용 검토나 자동 해답은 학습자의 시간, 막힘, 힌트 사용, 원리 이해 자료를 대신하지 못한다.\nhash-lantern-alternative (None): There is no independent target-level learner session. The authoring record explicitly says that independent learner review is pending, and this model review is not a learner session.\nhash-lantern-tooling (None): 작성자 검토와 자동 해답만 있으며 대상 수준 독립 풀이자의 시간·막힌 단계·힌트·원리 이해 기록은 없다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
+          "kind": "learner-session"
+        }
+      ],
+      "next_action": "대상 수준 독립 풀이자에게 풀이 시간, 막힌 단계, 도움 요청, 후보 비교 원리 이해를 기록해 평가한다.\n선언된 선수 능력을 가진 독립 풀이자에게 해설을 닫은 상태로 풀게 하고 소요 시간, 막힘, 힌트, 원리 설명을 기록한다.\n대상 수준의 독립 학습자가 해설 없이 풀도록 하고 시간, 막힌 단계, 힌트 사용 및 원리 이해를 기록한다.\nObserve an independent learner without the walkthrough, recording time, blocked steps, hint use, and their explanation of the security lesson.\n대상 수준의 독립 풀이자로부터 실제 풀이 시간, 막힌 단계, 힌트 사용 및 원리 설명을 기록한다."
+    }
+  }
+}

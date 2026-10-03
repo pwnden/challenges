@@ -1,8 +1,8 @@
 {
   "slug": "signed-delivery",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/signed-delivery/2026-10-03-panel.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/signed-delivery/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 4,
@@ -272,19 +272,7 @@
         }
       ],
       "improvement": "자동 해답과 주요 대조군의 출력 결과를 날짜가 붙은 기록으로 남기면 실행 증거를 독립적으로 검토하기 쉽다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "signed-delivery-learner (None): 이 snapshot에는 현재 문제의 검색부터 종료까지 실제 브라우저 세션을 기록한 자료가 확인되지 않았다. PTY 기록은 브라우저 풀이 근거가 아니다.\nsigned-delivery-evidence (None): 현재 문제의 검색부터 종료까지 브라우저 전체 풀이를 확인하는 세션 기록이 제공되지 않았다. 기술 PTY 기록은 이를 대신하지 않는다.\nsigned-delivery-designer (None): 현재 문제를 검색하고 준비·풀이·정답/오답 제출·종료하는 전체 브라우저 세션 기록을 확인하지 않았다.",
-      "evidence": [],
-      "improvement": "실제 브라우저 세션에서 문제 선택, 환경 준비, 전체 풀이, 정답·오답 제출, 종료를 기록한다.\n실제 브라우저에서 문제 탐색, 준비, 풀이, 정답·오답 제출, 종료를 기록한다.\n브라우저에서 문제 선택부터 종료까지 진행하며 터미널과 제출 결과를 기록한다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "signed-delivery-learner (None): 독립 학습자가 해설을 보지 않고 푼 시간·막힘·힌트 사용·원리 이해 기록이 없다. 작성자와 자동 해답 기록은 독립 학습자 세션이 아니다.\nsigned-delivery-evidence (None): 독립 학습자 세션 자료가 없어 시간·막힘·힌트 사용·원리 이해를 판단할 수 없다. 작성자 해답과 모델의 읽기 평가는 이에 해당하지 않는다.\nsigned-delivery-designer (None): 독립 학습자가 해설 없이 푼 시간, 막힌 단계, 힌트 사용 및 원리 이해를 기록한 세션은 없다. 작성자 기록도 이를 배포 전 별도 확인으로 남긴다.",
-      "evidence": [],
-      "improvement": "대상 수준의 독립 학습자 세션을 기록해 소요 시간, 막힌 단계, 힌트 사용과 원리 이해를 평가한다.\n선수 능력을 갖춘 독립 학습자가 해설 없이 푼 세션과 사후 이해 기록을 수집한다.\n선언된 초급 능력을 가진 독립 학습자에게 해설을 닫고 풀게 한 뒤 시간·막힘·힌트·원리 이해를 기록한다."
     }
   },
-  "source_sha256": "45c4c41e7dcc332e432ad829acc8c99c9afa6f179bfdaa5a305b77c89b5c6b66"
+  "source_sha256": "068d8d641de435ebded5ab22d302930d05ba245cad8f6849030eba1457d82236"
 }

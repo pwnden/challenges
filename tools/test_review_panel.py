@@ -38,7 +38,7 @@ class ReviewPanelTests(unittest.TestCase):
     def ballot(self, index):
         criteria = {}
         for key, definition in PANEL.load_rubric(self.snapshot)['criteria'].items():
-            pending = key in {'browser', 'learner'}
+            pending = key == 'explanation'
             criteria[key] = {'level': None if pending else 3,
                              'reason': f'Judge {index} inspected {key}.',
                              'improvement': 'Record a real session.' if pending else '',
@@ -46,7 +46,7 @@ class ReviewPanelTests(unittest.TestCase):
                                                             'quote': 'Boundary observed.',
                                                             'kind': definition['evidence_kind']}]}
         identity = f'judge-{index}'
-        review = {'slug': 'sample', 'rubric_version': 1, 'reviewed_at': '2026-10-03',
+        review = {'slug': 'sample', 'rubric_version': 2, 'reviewed_at': '2026-10-03',
                   'reviewer': identity, 'criteria': criteria}
         references = [e['path'] for item in criteria.values() for e in item['evidence']]
         review['source_sha256'] = source_digest(self.snapshot, 'sample', references)
@@ -71,8 +71,8 @@ class ReviewPanelTests(unittest.TestCase):
         original = copy.deepcopy(self.ballots)
         candidate, audit = self.aggregate()
         self.assertEqual(candidate['criteria']['goal']['level'], 4)
-        self.assertEqual(audit['summary']['points'], 62.5)
-        self.assertEqual(audit['summary']['reviewed_weight'], 80)
+        self.assertEqual(audit['summary']['points'], 68.75)
+        self.assertEqual(audit['summary']['reviewed_weight'], 87.5)
         self.assertEqual(audit['distribution']['goal']['levels'], {'judge-1': 3, 'judge-2': 4, 'judge-3': 4})
         self.assertEqual(audit['ballots'], original)
         self.assertEqual(self.ballots, original)
@@ -85,7 +85,7 @@ class ReviewPanelTests(unittest.TestCase):
         self.assertIsNone(candidate['criteria']['goal']['level'])
         self.assertEqual(audit['distribution']['goal']['proposed_median'], 3)
         self.assertIn('goal', audit['needs_adjudication'])
-        self.assertEqual(audit['summary']['points'], 52.5)
+        self.assertEqual(audit['summary']['points'], 56.25)
         self.assertIn('Fix objective evidence.', candidate['criteria']['goal']['improvement'])
 
     def test_minority_failure_is_not_hidden_by_close_scores(self):
@@ -101,9 +101,9 @@ class ReviewPanelTests(unittest.TestCase):
         candidate, audit = self.aggregate()
         self.assertIsNone(candidate['criteria']['goal']['level'])
         self.assertIn('goal', audit['needs_adjudication'])
-        self.assertIsNone(candidate['criteria']['browser']['level'])
-        self.assertNotIn('browser', audit['needs_adjudication'])
-        self.assertEqual(audit['distribution']['browser']['unverified_judges'], 3)
+        self.assertIsNone(candidate['criteria']['explanation']['level'])
+        self.assertNotIn('explanation', audit['needs_adjudication'])
+        self.assertEqual(audit['distribution']['explanation']['unverified_judges'], 3)
 
     def test_five_judges_have_an_odd_median(self):
         ballots = [self.ballot(index) for index in range(1, 6)]

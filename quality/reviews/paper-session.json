@@ -1,8 +1,8 @@
 {
   "slug": "paper-session",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/paper-session/2026-10-03-panel.json",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/paper-session/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 4,
@@ -327,36 +327,7 @@
         }
       ],
       "improvement": "현재 소스 스냅샷에서 선언 검증 실행 결과와 패치의 정상 staff 동작까지 날짜가 있는 재현 기록으로 남긴다.\n최근 배포 기준 커밋에서 검증을 다시 실행하고 실행 로그를 보존한다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "paper-session-learner (None): 현재 문제를 브라우저에서 검색·선택하고 환경 준비부터 풀이, 오답·정답 제출, 종료까지 진행한 세션 기록이 없다. 이번 모델의 본문 열람은 브라우저 풀이가 아니다.\npaper-session-evidence (None): 현재 스냅샷에는 이 문제를 실제 브라우저로 검색·선택하고 환경 준비, 전 과정 풀이, 정오답 제출, 종료까지 진행한 세션 기록이 없다. 작성 기록은 Browser Plugin 화면 검증을 수행하지 않았다고 명시한다.\npaper-session-designer (None): 현재 검토에서 실제 브라우저 세션을 수행하지 않았고 작성 기록도 Browser Plugin 화면 조작 검증을 하지 않았다고 명시한다. 터미널 또는 HTTP 검증으로 브라우저 전체 풀이를 대체할 수 없다.\npaper-session-alternative (None): 현재 문제의 검색부터 종료까지 확인한 실제 브라우저 세션 기록이 없다.\npaper-session-tooling (None): 현재 심사에서 검색부터 문제 선택, 준비, 전체 풀이, 정오답 제출과 종료까지 이어진 브라우저 세션을 확인하지 못했다. 작성 기록도 실제 화면 검증이 수행되지 않았다고 명시한다.",
-      "evidence": [
-        {
-          "path": "challenges/paper-session/AUTHORING.md",
-          "quote": "- Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
-          "kind": "browser-session"
-        },
-        {
-          "path": "challenges/paper-session/AUTHORING.md",
-          "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
-          "kind": "browser-session"
-        }
-      ],
-      "improvement": "실제 브라우저에서 전체 플레이 흐름과 정답·오답 제출 및 종료를 기록한다.\n현재 문제를 브라우저에서 시작부터 종료까지 수행하고 제출 정답과 오답 거부를 포함한 세션 기록을 남긴다.\n현재 문제를 선택하는 순간부터 환경 준비, 브라우저 조작, 정답·오답 제출, 종료까지 실제 브라우저 세션을 기록한다.\n실제 브라우저에서 검색부터 종료까지 수행하고 기록한다.\nBrowser Plugin에서 문제 검색·선택, 환경 준비, 쿠키 변경 풀이, 정답·오답 제출, 종료까지 기록한다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "paper-session-learner (None): 대상 수준의 독립 풀이자가 힌트와 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 이번 persona 기반 문서 심사는 실제 학습자 세션으로 볼 수 없다.\npaper-session-evidence (None): 실제 대상 수준의 독립 풀이 기록은 없으며 작성기록도 리뷰 대기라고 구분한다. 이 심사는 학습자 세션으로 대체할 수 없다.\npaper-session-designer (None): 모델 심사는 실제 학습자 세션이 아니며 작성 기록도 대상 수준 풀이자의 독립 리뷰가 아직 없다고 밝힌다. 실제 풀이 시간, 막힘, 힌트 사용과 원리 이해를 확인할 자료가 없다.\npaper-session-alternative (None): 대상 수준 학습자가 해설 없이 독립 풀이한 시간·막힘·힌트·원리 이해 기록이 없다. 작성자 검토와 자동 풀이는 독립 학습자 검증이 아니다.\npaper-session-tooling (None): 대상 수준 학습자의 독립 풀이 시간·막힌 단계·힌트 사용·이해 기록이 없다. 작성자와 자동 해답 결과는 이 근거를 대신하지 않는다.",
-      "evidence": [
-        {
-          "path": "challenges/paper-session/AUTHORING.md",
-          "quote": "독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다.",
-          "kind": "learner-session"
-        }
-      ],
-      "improvement": "대상 수준 풀이자에게 독립 수행을 요청하고 시간·막힘·힌트 사용·원리 설명을 기록한다.\n대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 이해 확인을 기록한다.\n해설을 닫은 대상 수준 독립 풀이자가 수행한 시간·막힘 단계·힌트 사용·원리 설명을 기록하고 난도를 재평가한다.\n대상 수준의 독립 풀이자에게 해설 없이 수행하게 하고 시간, 막힘, 힌트, 원리 이해를 기록한다.\n대상 수준 독립 풀이 세션을 기록해 시간, 막힌 단계, 힌트 사용, 원리 이해를 확인한다."
     }
   },
-  "source_sha256": "1129c8da2d454cb7fd8eae9414fbe5670f3a1e78184b8505b9c168772989ce0c"
+  "source_sha256": "2f5cf9ca1c0be0dfca29e0f47b4b9c812077a696cdf9b07632ee9bbe0a709fbf"
 }

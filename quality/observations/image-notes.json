@@ -1,0 +1,19 @@
+{
+  "slug": "image-notes",
+  "recorded_at": "2026-10-03",
+  "source": "rubric-v1 migration; no new session performed",
+  "observations": {
+    "browser": {
+      "status": "not-observed",
+      "reason": "image-notes-learner (None): 현재 문제를 검색해 준비부터 풀이와 정답·오답 제출, 종료까지 확인한 브라우저 세션 기록이 없다. PTY 검증 기록은 이 항목의 증거가 아니다.\nimage-notes-evidence (None): 현재 문제에 대해 검색에서 종료까지의 브라우저 세션 기록이 제공되지 않았다. PTY 보고는 rubric이 요구하는 브라우저 풀이를 대체하지 않는다.\nimage-notes-designer (None): 현재 문제에서 검색·선택, 환경 준비, 브라우저 터미널 풀이, 정답 및 오답 제출, 종료를 확인한 browser-session 기록이 제공되지 않았다. PTY 실행 기록은 화면을 통한 전체 풀이를 입증하지 않는다.",
+      "evidence": [],
+      "next_action": "실제 브라우저 세션에서 문제 선택부터 종료까지 전체 플레이를 기록한다.\n브라우저에서 검색·선택, 환경 준비, 파일/터미널 풀이, 정답과 오답 제출, 종료까지 실제 세션을 기록한다.\n현재 배포 화면에서 검색부터 종료까지 전체 풀이를 수행하고 정답/오답 제출과 브라우저 터미널 흐름을 기록한다."
+    },
+    "learner": {
+      "status": "not-observed",
+      "reason": "image-notes-learner (None): 선언된 대상 수준의 독립 학습자가 해설 없이 푼 시간·막힌 단계·힌트 사용·원리 이해 기록이 없다. 이 모델 검토는 learner session이 아니다.\nimage-notes-evidence (None): 대상 수준 독립 학습자의 시간·막힘·힌트 사용·원리 이해를 기록한 세션이 확인되지 않았다. 작성 기록의 자동 해답이나 모델 심사는 학습자 세션이 아니다.\nimage-notes-designer (None): 선언된 초급 대상 독립 학습자가 해설을 닫고 풀이한 시간·막힘·힌트 사용·원리 이해 기록이 없다. 작성자 기록과 자동 해답은 학습자 세션 증거가 아니다.",
+      "evidence": [],
+      "next_action": "초급 독립 학습자에게 해설을 숨긴 세션을 진행해 시간, 막힘, 힌트와 원리 설명을 기록한다.\n선수 능력을 갖춘 독립 학습자가 해설을 닫고 푼 세션과 시간·힌트·막힘·이해 기록을 수집한다.\n초급 독립 학습자에게 해설을 닫고 풀게 한 뒤 소요 시간, 막힘, 힌트 사용, 원리 설명을 기록한다."
+    }
+  }
+}

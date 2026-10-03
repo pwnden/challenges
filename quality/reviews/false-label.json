@@ -1,8 +1,8 @@
 {
   "slug": "false-label",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/false-label/2026-10-03-panel.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/false-label/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 3,
@@ -237,19 +237,7 @@
         }
       ],
       "improvement": "독립 검토에서 재현성을 더 확인하려면 현재 snapshot 기준 실제 검증 실행과 결과를 날짜가 포함된 기록으로 보존한다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "false-label-learner (None): 실제 브라우저에서 문제를 선택해 환경을 준비하고 풀이·정오답 제출·종료까지 진행한 세션 기록이 없다. 자동 해답 또는 작성자 검증 기록은 화면 풀이 증거가 아니다.\nfalse-label-evidence (None): 현재 브라우저에서 검색부터 종료까지 수행한 세션 기록을 확인하지 못했다. 작성 기록도 Browser Plugin 실제 화면 조작 검증이 없다고 명시한다.\nfalse-label-designer (None): 현재 문제를 검색해 선택하는 단계부터 환경 준비, 풀이, 정답·오답 제출, 종료까지 수행한 실제 브라우저 세션 기록이 확인되지 않았다. 작성 기록도 Browser Plugin 화면 검증을 수행하지 않았다고 명시한다.",
-      "evidence": [],
-      "improvement": "Browser Plugin으로 현재 문제의 검색·선택부터 종료까지 전체 플레이어 흐름을 기록한다.\n현재 문제의 검색, 선택, 환경 준비, 웹/터미널 풀이, 정답·오답 제출 및 종료를 실제 브라우저 세션으로 기록한다.\n실제 브라우저에서 검색·선택부터 오답과 정답 제출, 종료까지 한 세션을 기록한다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "false-label-learner (None): 대상 수준의 독립 학습자가 해설을 닫고 푼 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 작성자 검토와 이 모델의 텍스트 읽기는 독립 학습자 세션으로 볼 수 없다.\nfalse-label-evidence (None): 독립적인 대상 수준 학습자 세션은 확인되지 않았고 작성 기록도 리뷰가 아직 수행되지 않았다고 명시한다. 자동 해답은 학습자 경험을 증명하지 않는다.\nfalse-label-designer (None): 선언된 대상 수준의 독립 풀이자가 해설 없이 수행한 시간, 막힘, 힌트 사용, 원리 이해 기록이 없다. 모델의 문제 읽기와 작성자의 자동 해답은 이를 대신하지 않는다.",
-      "evidence": [],
-      "improvement": "선수 지식이 같은 독립 초급 학습자가 해설 없이 풀도록 하고 시간·막힌 단계·힌트·원리 설명을 기록한다.\n대상 수준 학습자가 해설을 닫고 푼 실제 시간, 막힌 단계, 힌트 사용과 원리 이해를 기록한다.\n대상 수준 풀이자가 해설을 닫고 해결하게 한 뒤 소요 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다."
     }
   },
-  "source_sha256": "fad1f8323dbf6574c47610dc3ef0566b8cafb0567e27ccf7014da4a3cf35cf95"
+  "source_sha256": "2aaa1a243c99a12d21b0037295860ef10a9ba0d51ff74680b9cc8313633cbb08"
 }

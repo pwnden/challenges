@@ -1,0 +1,19 @@
+{
+  "slug": "dns-detour",
+  "recorded_at": "2026-10-03",
+  "source": "rubric-v1 migration; no new session performed",
+  "observations": {
+    "browser": {
+      "status": "not-observed",
+      "reason": "dns-detour-learner (None): 현재 문제를 검색·선택해 준비하고 웹/터미널 풀이, 오답·정답 제출, 종료까지 수행한 실제 브라우저 세션은 확인되지 않았다.\ndns-detour-evidence (None): 현재 문제의 검색부터 종료까지 수행한 실제 브라우저 세션 증거가 없다. 작성 기록은 Browser Plugin 화면 조작을 하지 않았다고 밝힌다.\ndns-detour-designer (None): 현재 문제를 브라우저에서 검색·선택하고 준비, 터미널 풀이, 정답·오답 제출과 종료까지 수행한 세션 기록을 확인하지 못했다. PTY나 작성자 실행 기록은 이 항목의 근거가 아니다.",
+      "evidence": [],
+      "next_action": "Browser Plugin으로 전체 화면 풀이 세션을 기록한다.\n브라우저에서 문제 검색, 준비, 풀이, 정답·오답 제출과 종료까지 세션을 기록한다.\n실제 브라우저 세션에서 검색부터 문제 종료까지 전체 흐름을 수행해 단계와 결과를 기록한다."
+    },
+    "learner": {
+      "status": "not-observed",
+      "reason": "dns-detour-learner (None): 대상 수준의 독립 학습자가 해설을 닫고 풀이한 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록은 없다. 모델의 본문 검토와 작성자 자동 해답은 이를 대신하지 않는다.\ndns-detour-evidence (None): 독립 대상 수준 학습자의 풀이 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록이 없다. 모델 심사나 작성자 풀이를 학습자 세션으로 취급하지 않았다.\ndns-detour-designer (None): 선언된 대상 수준의 독립 학습자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용 및 원리 이해 기록은 확인되지 않았다. 작성자 검토나 자동 해답은 독립 학습자 세션이 아니다.",
+      "evidence": [],
+      "next_action": "선언된 대상 수준의 독립 학습자 풀이 세션과 원리 이해 확인 기록을 수집한다.\n선수 능력에 맞는 독립 풀이자의 세션을 수집하고 시간·막힘·힌트·이해 결과를 기록한다.\n대상 수준의 독립 풀이자에게 해설 없이 문제를 풀게 하고 시간, 막힘, 힌트 사용과 원리 설명을 기록한다."
+    }
+  }
+}

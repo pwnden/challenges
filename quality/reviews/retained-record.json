@@ -1,8 +1,8 @@
 {
   "slug": "retained-record",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/retained-record/2026-10-03-panel.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/retained-record/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 4,
@@ -262,19 +262,7 @@
         }
       ],
       "improvement": "배포 전 재검토에서 현 실행 기록의 대상 이미지 태그와 각 consumer 단계의 출력 요약을 함께 남기면 이후 재현 검토가 쉬워진다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "retained-record-learner (None): 이 심사는 본문·소스 정적 검토이며, 현재 날짜에 검색부터 제출과 종료까지 진행한 브라우저 풀이 세션 기록은 제공 자료에 없다. 작성 기록의 PTY 실행은 브라우저 전체 풀이를 입증하지 않는다.\nretained-record-evidence (None): 이번 심사에는 검색부터 종료까지 현재 문제를 실제 브라우저에서 수행한 기록이 제공되지 않았다. 작성 기록은 PTY를 명시하며 브라우저 전체 풀이 증거를 대신하지 않는다.\nretained-record-designer (None): 이 심사에서 브라우저를 통한 검색부터 준비, 풀이, 정오답 제출 및 종료의 실제 세션 증거를 확인하지 않았다. 작성 기록은 이를 검증했다고 말하지만 browser-session 증거가 아니므로 이 항목의 근거로 쓰지 않는다.",
-      "evidence": [],
-      "improvement": "실제 브라우저에서 문제 검색·선택, 준비, 풀이, 정답과 오답 제출, 종료까지 포함한 세션을 기록한다.\n실제 브라우저 세션에서 문제 검색·선택, 환경 준비, 터미널 풀이, 정답/오답 제출과 종료를 기록한다.\n현재 빌드에서 브라우저 전체 풀이 세션을 기록하고 검색·준비·풀이·오답/정답 제출·종료 단계를 확인한다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "retained-record-learner (None): 선수 능력과 힌트의 충분성을 문서상 검토했을 뿐, 대상 수준 독립 학습자의 시간·막힌 단계·힌트 사용·원리 이해 세션 기록은 확인되지 않았다.\nretained-record-evidence (None): 대상 수준의 독립 학습자가 해설 없이 푼 시간, 막힘, 힌트 사용과 원리 이해를 기록한 자료가 없다. 작성자/자동 해답과 이 모델의 문서 검토는 learner-session 증거가 아니다.\nretained-record-designer (None): 선언된 수준의 독립 학습자 세션, 시간·막힌 단계·힌트 사용·원리 이해 자료가 없다. 작성자 문서도 난도 확인을 별도 과제로 남긴다.",
-      "evidence": [],
-      "improvement": "초급 독립 학습자가 해설을 닫고 푼 세션을 기록해 소요 시간, 막힘, 힌트 사용과 목록·백업 차이에 대한 설명을 수집한다.\n초급 독립 학습자 세션을 기록해 소요 시간, 막힌 단계, 힌트 사용 및 원리 설명을 수집한다.\n초급 독립 학습자에게 해설 없이 풀게 하고 소요 시간, 막힘, 힌트 사용, 논리 삭제/백업 보관 원리 이해를 기록한다."
     }
   },
-  "source_sha256": "860cbd7ef87e8cc64e4539e18154dee86589df7d9e8992c2f3e8f77c5cf3c60b"
+  "source_sha256": "b811697fdadbfd22d9cbe7d3d2303bdbbc4f198a3c6ae2856925493459744690"
 }

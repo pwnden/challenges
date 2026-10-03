@@ -1,8 +1,8 @@
 {
   "slug": "forgotten-shelf",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/forgotten-shelf/2026-10-03-panel.json",
+  "reviewer": "3-to-3 independent judges; Codex parent reconciliation; quality/panels/forgotten-shelf/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 4,
@@ -227,19 +227,7 @@
         }
       ],
       "improvement": "문제별 해답·패치·정리 결과를 해당 날짜와 실행 범위를 유지한 채 따로 남기면 재현 근거를 더 직접 확인할 수 있다.\n이 문제의 이미지/실행별로 취약 해답, 패치 공격 거부, 정상 경로, 정리의 결과를 날짜와 함께 별도 기록한다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "forgotten-shelf-learner (None): 현재 문제를 검색하고 환경을 준비해 전체 풀이, 정답·오답 제출 및 종료를 거친 실제 브라우저 세션 기록을 확인하지 못했다.\nforgotten-shelf-evidence (None): 현재 문제를 검색하고 선택한 뒤 준비·풀이·정답/오답 제출·종료까지 수행한 실제 브라우저 세션 기록이 없다.\nforgotten-shelf-designer (None): 현재 문제에서 검색·선택부터 환경 준비, 풀이, 정답/오답 제출, 종료까지 진행한 실제 브라우저 세션 기록을 확인하지 못했다.",
-      "evidence": [],
-      "improvement": "실제 브라우저에서 문제 선택부터 풀이, 정답과 오답 제출, 종료까지 세션을 기록한다.\n실제 브라우저에서 문제 검색부터 종료까지 세션을 기록한다.\n실제 브라우저에서 전체 풀이 흐름을 수행하고 세션 기록을 남긴다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "forgotten-shelf-learner (None): 작성 기록은 실제 독립 풀이자 리뷰가 아직 없다고 명시한다. 이 모델의 자료 검토는 독립 학습자 풀이 세션으로 계산하지 않는다.\nforgotten-shelf-evidence (None): 대상 수준 독립 학습자의 시간·막힘·힌트 사용·원리 이해 기록이 없다. 작성자 검토와 자동 해답은 학습자 세션으로 볼 수 없다.\nforgotten-shelf-designer (None): 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간·막힘·힌트 사용·원리 이해 기록이 아직 없다. 작성자/모델의 문서 검토는 학습자 세션을 대신하지 않는다.",
-      "evidence": [],
-      "improvement": "선수 능력에 맞는 독립 학습자에게 해설 없이 풀게 하고 시간, 막힘, 힌트 사용, 원리 이해를 기록한다.\n대상 수준의 독립 풀이자를 관찰하고 시간, 막힌 단계, 힌트 사용과 원리 설명을 기록한다.\n선언된 입문 대상 풀이자에게 해설을 닫고 수행하게 한 뒤 풀이 시간, 막힘, 힌트 사용, 원리 설명을 기록한다."
     }
   },
-  "source_sha256": "840090984725e6a4e8b032de0c0e472cd991b100a20f57915bf2bb76dc90cedf"
+  "source_sha256": "beb6f2d000681e944760a31306bdd8110e2a320da715a29e9e8357ee8ab94057"
 }

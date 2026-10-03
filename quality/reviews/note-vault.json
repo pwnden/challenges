@@ -1,8 +1,8 @@
 {
   "slug": "note-vault",
-  "rubric_version": 1,
+  "rubric_version": 2,
   "reviewed_at": "2026-10-03",
-  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/note-vault/2026-10-03-panel.json",
+  "reviewer": "3-to-5 independent judges; Codex parent reconciliation; quality/panels/note-vault/2026-10-03-panel.json; rubric-v2 rescaling: quality/panels/2026-10-03-rubric-v2-migration.json",
   "criteria": {
     "goal": {
       "level": 4,
@@ -307,19 +307,7 @@
         }
       ],
       "improvement": "문제별 이미지·실행날짜·해답/패치/정상 기능/정리 결과를 연결한 전용 작성 기록을 남겨 모음 검증보다 직접적으로 감사할 수 있게 한다."
-    },
-    "browser": {
-      "level": null,
-      "reason": "note-vault-learner (None): 이번 모델 검토는 브라우저로 검색부터 환경 준비, 풀이, 정답·오답 제출, 종료까지 수행한 세션이 아니다.\nnote-vault-evidence (None): 현재 문제를 검색하는 단계부터 환경 준비, 브라우저 풀이, 정답과 오답 제출, 종료까지 확인한 실제 브라우저 세션 기록이 스냅샷에 없다.\nnote-vault-designer (None): 현재 문제를 검색하고 실행 환경을 준비한 뒤 웹으로 끝까지 풀고 정답·오답 제출과 종료까지 수행한 브라우저 세션 기록이 제공되지 않았다. 코드나 자동 해답은 브라우저 증거가 아니다.\nnote-vault-alternative (None): 실제 브라우저에서 검색부터 준비, 풀이, 정답·오답 제출, 종료까지 수행한 세션 기록이 없다.\nnote-vault-tooling (None): 현재 문제를 검색·선택하고 환경 준비부터 풀이, 정답/오답 제출, 종료까지 수행한 실제 브라우저 세션 기록은 snapshot에 없다. 코드 및 해설은 화면 조작 세션을 대신하지 않는다.",
-      "evidence": [],
-      "improvement": "독립 브라우저 세션에서 검색·선택, 환경 준비, 전체 풀이, 정답 및 오답 제출, 종료를 기록한다.\n현재 플레이어에서 검색부터 환경 종료까지 수행한 전체 브라우저 세션을 기록한다.\n브라우저에서 문제 발견부터 실행 환경 종료까지의 전체 풀이 세션을 기록한다.\n실제 브라우저 전체 풀이 세션을 기록한다.\n플랫폼 브라우저에서 현재 인스턴스를 열어 검색, 준비, 메모 탐색, 정답 및 오답 제출, 종료까지의 실제 세션 기록을 남긴다."
-    },
-    "learner": {
-      "level": null,
-      "reason": "note-vault-learner (None): 이번 검토는 대상 수준 학습자의 독립 풀이 세션이 아니며, 시간·막힌 단계·힌트 사용·원리 이해 관찰 기록도 제공되지 않았다.\nnote-vault-evidence (None): 대상 수준의 독립 학습자가 해설을 닫고 수행한 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 이 모델의 자료 검토는 학습자 세션으로 간주하지 않았다.\nnote-vault-designer (None): 대상 수준의 독립 학습자가 해설 없이 푼 시간, 막힌 단계, 힌트 사용과 원리 이해를 기록한 자료가 없다. 이번 문서 심사는 학습자 세션으로 취급하지 않는다.\nnote-vault-alternative (None): 선언된 대상 수준의 독립 학습자가 해설을 닫고 풀이한 세션 기록이 없다. 모델의 자료 검토는 학습자 풀이 증거가 아니다.\nnote-vault-tooling (None): 대상 수준의 독립 학습자가 해설을 닫고 푼 시간, 막힌 단계, 힌트 사용, 원리 이해 기록이 없다. 작성자 해설과 자동 solve 스크립트는 독립 학습자 세션 근거가 아니다.",
-      "evidence": [],
-      "improvement": "해설을 닫은 대상 수준 학습자의 풀이 시간, 막힘, 힌트 사용, 원리 설명을 기록한다.\n대상 수준 독립 풀이자의 시간·막힌 단계·힌트 사용·원리 이해를 기록한다.\n대상 수준의 독립 학습자가 해설을 닫고 푸는 세션에서 시간·막힘·힌트 사용·원리 설명을 기록한다.\n대상 프로필의 독립 학습자에게 시간을 재고 풀이를 맡겨 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n선언된 선수 능력을 가진 독립 풀이자를 대상으로 해설을 닫은 세션을 관찰하고 시간·막힘·힌트·원리 이해를 기록한다."
     }
   },
-  "source_sha256": "29ae41d60a59279072d6917573495c90685865f1b816d944ceb30be830e25e48"
+  "source_sha256": "baf1cf72ef565050f821fb8779e3426418260a0c4f8b3489cbed7d55fabe761c"
 }

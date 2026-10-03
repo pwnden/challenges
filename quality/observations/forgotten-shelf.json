@@ -1,0 +1,19 @@
+{
+  "slug": "forgotten-shelf",
+  "recorded_at": "2026-10-03",
+  "source": "rubric-v1 migration; no new session performed",
+  "observations": {
+    "browser": {
+      "status": "not-observed",
+      "reason": "forgotten-shelf-learner (None): 현재 문제를 검색하고 환경을 준비해 전체 풀이, 정답·오답 제출 및 종료를 거친 실제 브라우저 세션 기록을 확인하지 못했다.\nforgotten-shelf-evidence (None): 현재 문제를 검색하고 선택한 뒤 준비·풀이·정답/오답 제출·종료까지 수행한 실제 브라우저 세션 기록이 없다.\nforgotten-shelf-designer (None): 현재 문제에서 검색·선택부터 환경 준비, 풀이, 정답/오답 제출, 종료까지 진행한 실제 브라우저 세션 기록을 확인하지 못했다.",
+      "evidence": [],
+      "next_action": "실제 브라우저에서 문제 선택부터 풀이, 정답과 오답 제출, 종료까지 세션을 기록한다.\n실제 브라우저에서 문제 검색부터 종료까지 세션을 기록한다.\n실제 브라우저에서 전체 풀이 흐름을 수행하고 세션 기록을 남긴다."
+    },
+    "learner": {
+      "status": "not-observed",
+      "reason": "forgotten-shelf-learner (None): 작성 기록은 실제 독립 풀이자 리뷰가 아직 없다고 명시한다. 이 모델의 자료 검토는 독립 학습자 풀이 세션으로 계산하지 않는다.\nforgotten-shelf-evidence (None): 대상 수준 독립 학습자의 시간·막힘·힌트 사용·원리 이해 기록이 없다. 작성자 검토와 자동 해답은 학습자 세션으로 볼 수 없다.\nforgotten-shelf-designer (None): 대상 수준의 독립 풀이자가 해설을 닫고 수행한 시간·막힘·힌트 사용·원리 이해 기록이 아직 없다. 작성자/모델의 문서 검토는 학습자 세션을 대신하지 않는다.",
+      "evidence": [],
+      "next_action": "선수 능력에 맞는 독립 학습자에게 해설 없이 풀게 하고 시간, 막힘, 힌트 사용, 원리 이해를 기록한다.\n대상 수준의 독립 풀이자를 관찰하고 시간, 막힌 단계, 힌트 사용과 원리 설명을 기록한다.\n선언된 입문 대상 풀이자에게 해설을 닫고 수행하게 한 뒤 풀이 시간, 막힘, 힌트 사용, 원리 설명을 기록한다."
+    }
+  }
+}

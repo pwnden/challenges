@@ -1,0 +1,19 @@
+{
+  "slug": "packet-delivery",
+  "recorded_at": "2026-10-03",
+  "source": "rubric-v1 migration; no new session performed",
+  "observations": {
+    "browser": {
+      "status": "not-observed",
+      "reason": "packet-delivery-learner (None): 현재 문제를 UI에서 검색·선택해 준비하고 브라우저에서 터미널 풀이, 정답/오답 제출, 종료를 모두 수행한 세션 기록이 없다. PTY 기록은 이 항목의 증거가 아니다.\npacket-delivery-evidence (None): 검색·선택부터 준비, 풀이, 정답/오답 제출과 종료까지의 실제 브라우저 세션 기록은 확인되지 않았다. 작성자 PTY 기록은 브라우저 풀이 기준을 입증하지 않는다.\npacket-delivery-designer (None): 기록된 검증은 PTY 검증이며 검색·선택부터 문제 환경 준비, 화면 풀이, 오답/정답 제출, 종료까지의 브라우저 세션 근거는 제공 자료에 없다.",
+      "evidence": [],
+      "next_action": "실제 브라우저 세션에서 검색부터 종료까지 수행하고 기록한다.\n현재 문제를 실제 브라우저에서 처음부터 종료까지 풀고, 정답과 오답 제출 및 종료 상태를 기록한다.\n현재 버전에서 검색, 선택, 준비, 터미널 풀이, 오답 및 정답 제출, 종료를 수행하는 브라우저 세션을 기록한다."
+    },
+    "learner": {
+      "status": "not-observed",
+      "reason": "packet-delivery-learner (None): 초급 대상 독립 학습자의 실제 시간·막힘·힌트 사용·원리 이해 기록이 없다. 이 리뷰의 읽기 관찰과 작성자 자동 해답은 learner session을 대체하지 않는다.\npacket-delivery-evidence (None): 대상 수준의 독립 학습자가 해설을 닫고 수행한 시간·막힌 단계·힌트 사용·원리 이해 기록은 확인되지 않았다. 작성자 자동 해답이나 이 모델 심사는 학습자 세션이 아니다.\npacket-delivery-designer (None): 작성 기록은 독립 학습자 검토와 최종 난도 확인을 배포 전 별도 수행한다고 적으며, 대상 수준 학습자의 시간·막힘·힌트·이해 결과는 없다.",
+      "evidence": [],
+      "next_action": "해설을 닫은 초급 독립 풀이자로 검토를 진행하고 시간, 막힌 단계, 힌트 사용, 원리 설명을 기록한다.\n선언된 선수 능력을 가진 독립 학습자가 해설 없이 풀이하도록 하고 시간, 막힘, 힌트 사용, 원리 설명을 기록한다.\n대상 선수 능력을 가진 독립 풀이자에게 해설을 닫고 수행하게 한 뒤 시간, 막힌 단계, 힌트 사용, 원리 이해를 기록한다."
+    }
+  }
+}
