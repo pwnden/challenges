@@ -23,7 +23,7 @@ python3 -B -m unittest discover -s tools -p 'test_*.py'
 
 The validator discovers `challenges/*/challenge.toml`, reads `contract.toml`, and
 checks version, fields, values, file/service rules, endpoints, patches, player
-tools, difficulty and declared player documents. Paths and symlink targets stay
+tools, primary CLI names, difficulty and declared player documents. Paths and symlink targets stay
 inside the repository. Declared Markdown files are distinct, nonempty UTF-8,
 at most 1 MiB, with up to 10 ordered hints.
 
@@ -49,7 +49,9 @@ python3 tools/verify.py
 
 Multiple slugs can be supplied. `--repo <path>` selects another challenges
 checkout. All manifests are format-checked before the selected problems run.
-This author verifier explicitly supports contract version 5; update its
+Before running a solution, verification checks every declared `player.cli` command in its toolbox image with network access disabled. Missing commands fail publication.
+
+This author verifier explicitly supports contract version 6; update its
 implementation when the authoring contract changes.
 
 For each selected problem, the verifier:

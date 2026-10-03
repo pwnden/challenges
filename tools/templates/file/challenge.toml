@@ -6,7 +6,8 @@ difficulty = {{DIFFICULTY}}
 files = ["files/data.txt"]
 
 [player]
-tools = ["files", "terminal"]
+tools = {{TOOLS}}
+cli = {{CLI}}
 
 [content]
 description = "README.md"

@@ -38,6 +38,7 @@ class CreateTests(unittest.TestCase):
                 self.assertIn('선언한 값: 1', authoring)
                 self.assertNotIn('{{', authoring)
                 self.assertEqual(metadata['player']['tools'], ['web'] if kind == 'service' else ['files', 'terminal'])
+                self.assertEqual(metadata['player']['cli'], [])
                 self.assertEqual(metadata['content']['hints'], [])
                 self.assertFalse((destination / 'hints').exists())
                 self.assertEqual('patched' in metadata, patched)
@@ -116,7 +117,7 @@ class CreateTests(unittest.TestCase):
         self.assertEqual(list(outside.iterdir()), [])
         parent.unlink()
         contract = self.root / 'contract.toml'
-        contract.write_text(contract.read_text().replace('version = 5', 'version = 6'))
+        contract.write_text(contract.read_text().replace('version = 6', 'version = 7'))
         with self.assertRaisesRegex(InvalidChallenge, 'update templates'):
             create(self.root, 'sample', kind='file', category='rev')
         self.assertFalse(parent.exists())
@@ -127,6 +128,14 @@ class CreateTests(unittest.TestCase):
         destination, _ = create(self.root, 'network-test', kind='service', category='web')
         self.assertIn('networks: ["exercise-net"]', (destination / 'compose.yaml').read_text())
         self.assertNotIn('network', self.metadata(destination)['solve'])
+
+    def test_primary_cli_and_terminal_selection(self):
+        destination, _ = create(self.root, 'cli-service', kind='service', category='web', cli=['curl', 'jq'])
+        self.assertEqual(self.metadata(destination)['player'], {'tools': ['web', 'terminal'], 'cli': ['curl', 'jq']})
+        for names in [['Nmap'], ['nmap -sT'], ['curl', 'curl']]:
+            with self.subTest(names=names), self.assertRaises(InvalidChallenge):
+                create(self.root, 'invalid-cli', kind='file', category='misc', cli=names)
+        self.assertFalse((self.root / 'challenges' / 'invalid-cli').exists())
 
     def test_failed_generation_cleans_only_its_new_directory(self):
         destination = self.root / 'challenges' / 'failed'
@@ -151,7 +160,7 @@ class CreateTests(unittest.TestCase):
         self.metadata(self.root / 'challenges' / 'shared')
 
     def test_cli_from_another_directory(self):
-        command = [sys.executable, '-B', str(REPOSITORY / 'tools' / 'create.py'), 'cli-test', '--kind', 'file', '--category', 'rev', '--repo', str(self.root)]
+        command = [sys.executable, '-B', str(REPOSITORY / 'tools' / 'create.py'), 'cli-test', '--kind', 'file', '--category', 'rev', '--cli', 'python3', '--cli', 'sha256sum', '--repo', str(self.root)]
         preview = subprocess.run(command + ['--dry-run'], cwd=self.root, capture_output=True, text=True, check=False)
         self.assertEqual(preview.returncode, 0, preview.stderr)
         self.assertIn('Would create challenges/cli-test', preview.stdout)
@@ -159,7 +168,7 @@ class CreateTests(unittest.TestCase):
         created = subprocess.run(command, cwd=self.root, capture_output=True, text=True, check=False)
         self.assertEqual(created.returncode, 0, created.stderr)
         self.assertIn('Format validation passed', created.stdout)
-        self.metadata(self.root / 'challenges' / 'cli-test')
+        self.assertEqual(self.metadata(self.root / 'challenges' / 'cli-test')['player']['cli'], ['python3', 'sha256sum'])
         default = subprocess.run(command[:-2] + ['--dry-run'], cwd=self.root, capture_output=True, text=True, check=False)
         self.assertEqual(default.returncode, 0, default.stderr)
         self.assertIn('Would create challenges/cli-test', default.stdout)

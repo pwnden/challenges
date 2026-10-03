@@ -1,4 +1,4 @@
-schema = 5
+schema = 6
 slug = "rotor-lock"
 title = "잠금장치의 입력 검사"
 category = "rev"
@@ -7,6 +7,7 @@ files = ["files/checker.py"]
 
 [player]
 tools = ["files", "terminal"]
+cli = ["python3"]
 
 [content]
 description = "README.md"

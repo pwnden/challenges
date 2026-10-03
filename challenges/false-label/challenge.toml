@@ -1,4 +1,4 @@
-schema = 5
+schema = 6
 slug = "false-label"
 title = "확장자가 바뀐 파일"
 category = "forensics"
@@ -7,6 +7,7 @@ files = ["files/banner.png"]
 
 [player]
 tools = ["files", "terminal"]
+cli = ["od", "tar"]
 
 [content]
 description = "README.md"

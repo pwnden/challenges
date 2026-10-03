@@ -28,7 +28,7 @@ learning-content paths and initial runtime configuration. The author supplies
 the actual exercise, resources, intended vulnerability, solution and explanation.
 Templates live under `tools/templates`; update them centrally when authoring
 conventions change. CI discovers their regression tests with the existing tools
-test command. The generator supports contract version 5 and uses its existing
+test command. The generator supports contract version 6 and uses its existing
 validator before reporting success. Update the templates explicitly for another
 contract version.
 
@@ -43,6 +43,7 @@ contract version.
 | `--title` | Korean display title; defaults to the authoring placeholder `새 시나리오`. Set the final title before publication. |
 | `--difficulty` | 1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert; defaults to 1. Review the intended solution against the contract criteria before publication. |
 | `--hints` | Generates 0–10 optional declared hints; defaults to 0. Choose the count for distinct points where a learner may get stuck. |
+| `--cli` | Primary learner executable name; repeat for additional commands. Adds the terminal tool for service scenarios. |
 | `--concept` | Connects a shared prerequisite from `knowledge/<id>.md`; repeat for additional concepts. Creates `BRIEFING.md` and compiles the player brief. |
 | `--patched` | Adds a service Compose override, patch source and functional-check scaffold. |
 | `--image` | Python 3 image used by the toolbox and starter service; defaults to the repository's current pinned Python image and digest. |
@@ -104,7 +105,7 @@ python3 tools/content.py --check
 
 The first command refreshes all compiled briefs. The second checks equality
 without writing; ordinary format and execution verification also reject stale
-compiled prerequisites. The generated `README.md` remains the contract v5 player
+compiled prerequisites. The generated `README.md` remains the contract v6 player
 document and displays the notes within the existing website reading pane.
 Author records receive the concept reference links. Scenarios authored directly
 in `README.md` retain their existing workflow.

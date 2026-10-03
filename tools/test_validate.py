@@ -79,6 +79,21 @@ class ValidateTests(unittest.TestCase):
             with self.subTest(name=name), self.assertRaises(InvalidChallenge):
                 self.check(metadata)
 
+    def test_primary_cli_metadata(self):
+        import json
+        self.definition = {**self.definition, 'version': 6}
+        metadata = FILE.replace('schema = 2', 'schema = 6\ndifficulty = 1') + '\n[player]\ntools = ["files", "terminal"]\n'
+        for names in [[], ['nmap', 'ncat'], ['testssl.sh', 'python3', 'g++']]:
+            with self.subTest(names=names):
+                self.assertEqual(self.check(metadata + 'cli = ' + json.dumps(names))['player']['cli'], names)
+        for names in ['nmap', [1], [''], ['Nmap'], ['nmap -sT'], ['/bin/nmap'], ['curl', 'curl'], ['a' * 65], ['tool' + str(i) for i in range(33)]]:
+            with self.subTest(names=names), self.assertRaises(InvalidChallenge):
+                self.check(metadata + 'cli = ' + json.dumps(names))
+        with self.assertRaises(InvalidChallenge):
+            self.check(metadata)
+        with self.assertRaisesRegex(InvalidChallenge, 'terminal'):
+            self.check(metadata.replace('["files", "terminal"]', '["files"]') + 'cli = ["nmap"]')
+
     def test_required_difficulty(self):
         self.definition = {**self.definition, 'version': 5}
         metadata = FILE.replace('schema = 2', 'schema = 5') + '\n[player]\ntools = ["files", "terminal"]\n'

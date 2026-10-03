@@ -6,7 +6,8 @@ difficulty = {{DIFFICULTY}}
 compose = "compose.yaml"
 
 [player]
-tools = ["web"]
+tools = {{TOOLS}}
+cli = {{CLI}}
 
 [content]
 description = "README.md"

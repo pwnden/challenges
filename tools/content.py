@@ -1,4 +1,4 @@
-"""Compile shared prerequisite notes into player briefs using contract v5 Markdown."""
+"""Compile shared prerequisite notes into player briefs using contract v6 Markdown."""
 
 import argparse
 from pathlib import Path

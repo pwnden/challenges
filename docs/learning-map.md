@@ -14,7 +14,7 @@ Intro difficulty. Advanced topics have advanced prerequisites. Assess the
 actual workload and learner evidence for each authored problem.
 
 Learning area IDs and topic keys identify authoring choices independently of
-the manifest's `category`. Contract v5 accepts six `category` values and has no
+the manifest's `category`. Contract v6 accepts six `category` values and has no
 learning-area, topic or concept-reference field. Record the learning area and
 topic in `AUTHORING.md` today. Structured catalog declarations and graph
 presentation require their own contract and platform work.

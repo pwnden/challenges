@@ -44,6 +44,13 @@ def strings(value, name, nonempty=False):
     return value
 
 
+def cli_names(value):
+    names = strings(value, 'player.cli')
+    if len(names) > 32 or len(set(names)) != len(names) or any(not re.fullmatch(r'[a-z0-9][a-z0-9.+_-]{0,63}', name) for name in names):
+        raise InvalidChallenge('player.cli must contain at most 32 unique lowercase command names without paths or arguments')
+    return names
+
+
 def image(value, name):
     value = text(value, name)
     if value.startswith('-') or value != value.strip():
@@ -160,7 +167,8 @@ def validate_manifest(root, manifest, definition):
             raise InvalidChallenge('endpoint needs a unique name and http or tcp protocol')
         names.add(name)
     if 'player' in data:
-        player = table(data['player'], 'player', {'tools'}, {'tools'})
+        fields = {'tools', 'cli'} if definition['version'] >= 6 else {'tools'}
+        player = table(data['player'], 'player', fields, fields)
         tools = strings(player['tools'], 'player.tools', nonempty=True)
         if len(set(tools)) != len(tools) or any(tool not in ('web', 'files', 'terminal') for tool in tools):
             raise InvalidChallenge('player.tools must contain unique web, files or terminal tools')
@@ -168,6 +176,8 @@ def validate_manifest(root, manifest, definition):
             raise InvalidChallenge('web tool requires a declared HTTP endpoint')
         if 'files' in tools and not files:
             raise InvalidChallenge('files tool requires distribution files')
+        if 'cli' in player and cli_names(player['cli']) and 'terminal' not in tools:
+            raise InvalidChallenge('player.cli requires the terminal tool')
     if 'patched' in data:
         patched = table(data['patched'], 'patched', {'compose', 'check', 'image'}, {'compose', 'check'})
         if not compose:

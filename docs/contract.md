@@ -1,6 +1,6 @@
-# Problem contract v5
+# Problem contract v6
 
-This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **5**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
+This contract defines player learning content, problem metadata, execution environment, solution and patch results, and resource lifecycle shared by problem authors and consumers. The challenges repository owns this document and the machine-readable values in [`contract.toml`](../contract.toml). Together they define contract version **6**. The TOML file contains the version, execution defaults, and a result code; this document specifies the complete rules.
 
 Each challenge lives at `challenges/<slug>/challenge.toml`. Authors describe the problem there and supply its files, Compose configuration, solution, and optional patch. A compatible consumer reads those declarations and implements this contract.
 
@@ -14,7 +14,7 @@ parses execution fields, applies its own filesystem and Docker execution safety
 checks, and tests player integration. See [author verification](verification.md)
 and the [platform integration guide](https://github.com/pwnden/platform/blob/main/docs/verification.md).
 
-The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `5` and retains versions `1`, `2`, `3` and `4` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
+The repository declares one positive integer `version`. Every problem's `schema` equals that version. The platform explicitly supports version `6` and retains versions `1`, `2`, `3`, `4` and `5` execution support for installed snapshots, with the current network isolation policy applied to all supported versions. It rejects an unsupported repository or problem version before decoding execution fields or starting resources. Version agreement selects the behavior the consumer implements. Authors remain responsible for publishing valid declarations.
 
 Increment the contract version whenever consumed fields, types, requiredness, allowed values, defaults, or execution and result rules change. Update the document, TOML values, author validator, and problem declarations together. A consumer adds explicit support for the new version before it can execute those problems. Adding problems, changing their content within the same contract, and clarifying documentation without changing a rule keep the version.
 
@@ -22,9 +22,9 @@ Increment the contract version whenever consumed fields, types, requiredness, al
 
 All four fields in `contract.toml` are required. The author validator rejects unknown fields. These values belong to the versioned contract; editing them is a contract change.
 
-| Field | Type | Version 5 value | Rule |
+| Field | Type | Version 6 value | Rule |
 | --- | --- | --- | --- |
-| `version` | Integer | `5` | Positive contract version; matches every problem's `schema`. |
+| `version` | Integer | `6` | Positive contract version; matches every problem's `schema`. |
 | `solve_network` | String | `"default"` | Nonempty default Compose network key for service solutions. |
 | `solve_timeout_seconds` | Integer | `60` | Positive default runtime limit for each toolbox command, in seconds. |
 | `attack_rejected_exit` | Integer | `3` | Expected attack denial code; in the range 1–124. |
@@ -76,6 +76,16 @@ badge colors, filtering and sorting belong to the platform UI.
 ### `player`
 
 `tools` is a required nonempty array of unique `web`, `files` and `terminal` values. It names only tools required to solve the exercise; declaration order determines the tab order and the first tool opens by default. `web` requires a declared HTTP endpoint; `files` requires distribution files. The platform prepares and retains the problem environment independently of opening a terminal. A terminal shell starts only for a declared terminal tool when the player opens it. Author starter templates supply the appropriate declaration.
+
+`cli` is required in version 6 and contains up to 32 unique primary learner CLI command names. Use canonical lowercase executable names matching `[a-z0-9][a-z0-9.+_-]{0,63}`, without paths or arguments; use `[]` for problems with no primary CLI. A nonempty list requires `terminal` in `tools`. Declare the commands learners use to investigate the problem, independently of solver dependencies or the complete image inventory. For example:
+
+```toml
+[player]
+tools = ["terminal"]
+cli = ["nmap", "ncat", "curl"]
+```
+
+The consumer exposes this metadata to catalog search alongside titles, identifiers and categories. Installed versions 1–5 provide no CLI metadata. Author execution verification checks every declared command with `command -v` inside the toolbox image without network access.
 
 Version 4 introduces these declarations. For installed versions 1–3 the consumer derives web for HTTP endpoints, files for distribution files and terminal for problems with TCP endpoints or without HTTP endpoints. The current isolation policy applies to all versions.
 
@@ -134,11 +144,16 @@ The patch attack uses the original `solve.image` and `solve.command`. Both patch
 ## File problem execution
 
 ```toml
-schema = 3
+schema = 6
 slug = "example-file"
 title = "파일 분석 예제"
 category = "rev"
+difficulty = 1
 files = ["files/example.bin"]
+
+[player]
+tools = ["files", "terminal"]
+cli = ["python3"]
 
 [content]
 description = "README.md"
@@ -162,11 +177,16 @@ The runner mounts the challenge directory at `/challenge` and runs the solution 
 ## Service problem execution
 
 ```toml
-schema = 3
+schema = 6
 slug = "example-service"
 title = "웹 서비스 예제"
 category = "web"
+difficulty = 1
 compose = "compose.yaml"
+
+[player]
+tools = ["web"]
+cli = []
 
 [content]
 description = "README.md"
@@ -202,7 +222,7 @@ At each `run`, the runner generates a new `pwnden{...}` flag and passes it to Co
 
 Solutions print exactly one flag to stdout and send diagnostics to stderr. The consumer removes leading and trailing Unicode whitespace before comparing stdout. For file problems, it hashes the UTF-8 bytes of the remaining string with SHA-256. For service problems, it compares the entire remaining string with the current run's generated flag. A successful solution exits 0; a mismatched flag or nonzero exit fails verification.
 
-The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 5: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
+The patched attack succeeds as a verification step only when trimmed stdout differs from the current flag and the command either exits 0 or completes with the expected denial code from `contract.toml` (version 6: **3**). Reserve that denial code for a confirmed denial, such as the expected access-control response. Connection errors, timeouts, parsing failures, and other unexpected errors fail verification. Returning the current flag as trimmed stdout always fails the patch check, regardless of exit code. Docker launch failures, cancellation, and signal exits are execution failures, even if no flag was printed. Codes 125 and above cannot express expected denial. The functional check must exit 0; its stdout does not participate in flag comparison.
 
 | Verification step | Required result |
 | --- | --- |

@@ -1,6 +1,6 @@
 # Second security experiments
 
-Six scenarios add prepared starting knowledge to the current version 5 catalog.
+Six scenarios add prepared starting knowledge to the current version 6 catalog.
 Players read it in the problem pane and use the declared web or file/terminal
 tools. The authoring workflow, solutions and publication finish in this repository.
 
@@ -29,7 +29,7 @@ rejects an outdated compiled brief. The website displays the explanation locally
 without requiring a separate learning service or an external reference visit.
 
 These documents and author references provide the current content reuse.
-The version 5 runtime consumes the compiled player document. Structured concept
+The version 6 runtime consumes the compiled player document. Structured concept
 relationships and a graph UI belong to the later learning model.
 
 ## Verification

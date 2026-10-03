@@ -1,4 +1,4 @@
-schema = 5
+schema = 6
 slug = "quiet-route"
 title = "모든 경로가 200을 반환하는 서버"
 category = "web"
@@ -8,6 +8,7 @@ files = ["files/paths.txt", "files/public-policy.txt"]
 
 [player]
 tools = ["terminal", "files"]
+cli = ["ffuf", "curl", "jq"]
 
 [content]
 description = "README.md"

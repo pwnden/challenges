@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 import shutil
 
-from validate import InvalidChallenge, image, inside, load_contract, validate_manifest
+from validate import InvalidChallenge, cli_names, image, inside, load_contract, validate_manifest
 from content import compile_brief
 
 
@@ -25,11 +25,15 @@ def render(name, values):
     return re.sub(r'\{\{([A-Z_]+)\}\}', lambda match: values[match[1]], source)
 
 
-def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, patched=False, toolbox=IMAGE, concepts=()):
+def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, patched=False, toolbox=IMAGE, concepts=(), cli=()):
     root = root.resolve()
     definition = load_contract(root)
-    if definition['version'] != 5:
-        raise InvalidChallenge('creation templates support contract version 5; update templates before using another version')
+    if definition['version'] != 6:
+        raise InvalidChallenge('creation templates support contract version 6; update templates before using another version')
+    names = cli_names(list(cli))
+    player_tools = ['files', 'terminal'] if kind == 'file' else ['web']
+    if names and 'terminal' not in player_tools:
+        player_tools.append('terminal')
     if len(slug) > 40 or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', slug) or slug in RESERVED:
         raise InvalidChallenge('slug must be 1–40 lowercase letters/digits separated by hyphens, and usable as a Windows directory')
     if kind not in ('file', 'service') or category not in CATEGORIES:
@@ -46,7 +50,7 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, p
     image(toolbox, 'image')
     if re.search(r'\s|#', toolbox):
         raise InvalidChallenge('image must be a single Dockerfile image reference')
-    values = {'SCHEMA': str(definition['version']), 'SLUG': quoted(slug), 'TITLE': quoted(title),
+    values = {'SCHEMA': str(definition['version']), 'SLUG': quoted(slug), 'TITLE': quoted(title), 'CLI': quoted(names), 'TOOLS': quoted(player_tools),
               'CATEGORY': quoted(category), 'DIFFICULTY': str(difficulty), 'IMAGE': toolbox, 'IMAGE_TOML': quoted(toolbox),
               'HINTS': quoted([f'hints/{i}.md' for i in range(1, hints + 1)]),
               'NETWORK': quoted(definition['solve_network']), 'SLUG_PATH': slug}
@@ -123,6 +127,7 @@ def main():
                         help='1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert (default: 1)')
     parser.add_argument('--hints', type=int, default=0, help='optional ordered hints, 0–10 (default: 0)')
     parser.add_argument('--concept', dest='concepts', action='append', default=[], help='shared prerequisite ID; repeat for additional concepts')
+    parser.add_argument('--cli', action='append', default=[], help='primary learner CLI command name; repeat for additional commands')
     parser.add_argument('--patched', action='store_true', help='add service patch and functional-check scaffolds')
     parser.add_argument('--image', dest='toolbox', default=IMAGE, help='Python 3 toolbox and service base image')
     parser.add_argument('--dry-run', action='store_true', help='list files without writing them')

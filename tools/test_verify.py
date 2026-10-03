@@ -12,11 +12,12 @@ from verify import check_attack, check_solution, discover, verify_problem
 
 
 class FakeDocker:
-    def __init__(self, *, bad_attack=False, bad_check=False):
+    def __init__(self, *, bad_attack=False, bad_check=False, missing_cli=False):
         self.commands = Commands()
         self.events = []
         self.bad_attack = bad_attack
         self.bad_check = bad_check
+        self.missing_cli = missing_cli
 
     def project(self, root, directory, metadata, flag, *, patched=False):
         self.flag = flag
@@ -36,6 +37,8 @@ class FakeDocker:
 
     def tool(self, directory, metadata, network, image, args):
         self.events.append(('tool', network, image, args))
+        if network == 'none' and args[0] == 'sh':
+            return Result(1 if self.missing_cli else 0)
         if network == 'vulnerable':
             return Result(0, ' \n' + self.flag + '\n')
         if args == ['check']:
@@ -93,10 +96,24 @@ class VerifyTests(unittest.TestCase):
                                {'attack_rejected_exit': 3})
             self.assertEqual(docker.events[-2:], [('stop', True), ('stop', False)])
 
+    def test_cli_checked_offline_before_target_start(self):
+        metadata = {'slug': 'sample', 'compose': 'compose.yaml',
+                    'player': {'cli': ['nmap', 'ncat']},
+                    'solve': {'network': 'default', 'image': 'image', 'command': ['solve']}}
+        docker = FakeDocker()
+        verify_problem(docker, Path('/root'), Path('/root/sample'), metadata, {'attack_rejected_exit': 3})
+        probe = docker.events[0]
+        self.assertEqual(probe[:3], ('tool', 'none', 'image'))
+        self.assertEqual(probe[3][-3:], ['pwnden-cli-check', 'nmap', 'ncat'])
+        docker = FakeDocker(missing_cli=True)
+        with self.assertRaisesRegex(ExecutionError, 'CLI is unavailable'):
+            verify_problem(docker, Path('/root'), Path('/root/sample'), metadata, {'attack_rejected_exit': 3})
+        self.assertEqual(len(docker.events), 1)
+
     def test_discovery_defaults_selection_and_contract_version(self):
         with tempfile.TemporaryDirectory(prefix='pwnden-author-discovery-') as tmp:
             root = Path(tmp)
-            (root / 'contract.toml').write_text('version=5\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
+            (root / 'contract.toml').write_text('version=6\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
             create(root, 'one', kind='file', category='rev')
             create(root, 'two', kind='service', category='web')
             definition, records = discover(root, ['two'])
@@ -105,8 +122,8 @@ class VerifyTests(unittest.TestCase):
             self.assertFalse(records[0][1]['solve']['writable'])
             with self.assertRaisesRegex(ValueError, 'unknown challenges'):
                 discover(root, ['missing'])
-            (root / 'contract.toml').write_text('version=6\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
-            with self.assertRaisesRegex(ValueError, 'supports contract version 5'):
+            (root / 'contract.toml').write_text('version=7\nsolve_network="default"\nsolve_timeout_seconds=60\nattack_rejected_exit=3\n')
+            with self.assertRaisesRegex(ValueError, 'supports contract version 6'):
                 discover(root)
 
 

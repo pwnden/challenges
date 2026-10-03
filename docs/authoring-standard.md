@@ -153,7 +153,7 @@ Related-reading links may connect in both directions. If a concept label would
 reveal the key attack or solving technique, give the brief sufficient starting
 context and put that specific connection in the answer-labelled walkthrough.
 
-Contract v5 currently declares difficulty, tools and learning-content paths.
+Contract v6 currently declares difficulty, tools, primary CLI names and learning-content paths.
 Concepts and these relationships are author records and document links today;
 the platform has no concept graph or prerequisite API. Keep structured concept
 metadata and graph presentation changes within a separately versioned contract

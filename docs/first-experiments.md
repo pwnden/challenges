@@ -20,7 +20,7 @@ code-analysis workload.
 
 The briefs contain the required background directly. Shared concept declarations
 and a graph UI remain separate work; this batch uses the existing learning map
-and version 5 content contract.
+and version 6 content contract.
 
 ## Verification and review
 

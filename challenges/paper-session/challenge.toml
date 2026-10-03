@@ -1,4 +1,4 @@
-schema = 5
+schema = 6
 slug = "paper-session"
 title = "사용자 구분 값 바꾸기"
 category = "web"
@@ -7,6 +7,7 @@ compose = "compose.yaml"
 
 [player]
 tools = ["web"]
+cli = []
 
 [content]
 description = "README.md"

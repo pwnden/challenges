@@ -12,8 +12,8 @@ from validate import InvalidChallenge, load_contract, validate_manifest
 
 def discover(root, slugs=()):
     definition = load_contract(root)
-    if definition['version'] != 5:
-        raise InvalidChallenge('author execution verifier supports contract version 5')
+    if definition['version'] != 6:
+        raise InvalidChallenge('author execution verifier supports contract version 6')
     manifests = sorted((root / 'challenges').glob('*/challenge.toml'))
     if not manifests:
         raise InvalidChallenge('no challenge.toml files found')
@@ -54,6 +54,12 @@ def check_attack(result, flag, rejected_exit):
 
 def verify_problem(docker, root, directory, metadata, definition):
     solve = metadata['solve']
+    names = metadata.get('player', {}).get('cli', [])
+    if names:
+        probe = ['sh', '-c', 'for cli in "$@"; do command -v "$cli" >/dev/null || { printf "Missing CLI: %s\\n" "$cli" >&2; exit 1; }; done', 'pwnden-cli-check', *names]
+        result = docker.tool(directory, metadata, 'none', solve['image'], probe)
+        if result.code:
+            raise ExecutionError(f'declared player CLI is unavailable in the toolbox image: {result.stderr.strip()}')
     if not metadata.get('compose'):
         result = docker.tool(directory, metadata, 'none', solve['image'], solve['command'])
         check_solution(result, metadata['flag']['sha256'], digest=True)
