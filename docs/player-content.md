@@ -37,6 +37,11 @@ context needed to understand the assignment in the default brief.
 
 ### Plain, concrete language
 
+Write Korean actions with an explicit actor and verb, following the
+[scenario tone rules](scenario-authoring.md#어투). When the actor is unknown,
+describe the observed state or what someone can do. Preserve the scenario's
+facts when replacing passive phrasing, including requester dialogue and hints.
+
 Name the actual account, document, file, permission or operation the player will
 encounter. Introduce the target through familiar actions: signing in, reading a
 document, searching a name, or comparing records. Use the same terms in requester
