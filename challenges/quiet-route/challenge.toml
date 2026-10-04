@@ -11,7 +11,7 @@ tools = ["terminal", "files"]
 cli = ["ffuf", "curl", "jq"]
 
 [learning]
-requires = ["terminal-commands","http-messages","response-comparison"]
+requires = ["terminal-commands","file-paths","http-messages","response-comparison"]
 teaches = ["response-evidence"]
 
 [content]

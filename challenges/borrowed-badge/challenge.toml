@@ -10,7 +10,7 @@ tools = ["web"]
 cli = []
 
 [learning]
-requires = ["resource-policies"]
+requires = ["web-addresses","resource-policies","historical-retention"]
 teaches = ["read-path-authorization"]
 
 [content]

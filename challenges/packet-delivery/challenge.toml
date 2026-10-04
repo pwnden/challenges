@@ -10,7 +10,7 @@ tools = ["terminal", "files"]
 cli = ["tshark", "tar", "jq", "file"]
 
 [learning]
-requires = ["terminal-commands","file-paths","packet-streams"]
+requires = ["terminal-commands","file-paths","packet-streams","file-type-checks","response-comparison"]
 teaches = ["transfer-evidence"]
 
 [content]

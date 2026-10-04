@@ -10,7 +10,7 @@ tools = ["web"]
 cli = []
 
 [learning]
-requires = ["http-messages","http-cookies"]
+requires = ["web-addresses","http-cookies","trusted-identity"]
 teaches = ["object-ownership"]
 
 [content]

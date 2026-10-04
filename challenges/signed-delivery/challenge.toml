@@ -10,7 +10,7 @@ tools = ["terminal", "files"]
 cli = ["openssl"]
 
 [learning]
-requires = ["terminal-commands","detached-signatures"]
+requires = ["terminal-commands","file-paths","hashing","detached-signatures"]
 teaches = ["document-authenticity"]
 
 [content]

@@ -10,7 +10,7 @@ tools = ["files", "terminal"]
 cli = ["od", "tar"]
 
 [learning]
-requires = ["file-signatures"]
+requires = ["terminal-commands","file-paths","file-signatures"]
 teaches = ["file-type-checks"]
 
 [content]

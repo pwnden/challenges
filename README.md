@@ -17,6 +17,8 @@ briefing, progressive additional information and a complete investigation report
 The [learning map](docs/learning-map.md) defines areas, topics, observable
 experiments, scoped prerequisites and required tool capabilities.
 Learning areas are independent of contract categories; the
+[current learning order](docs/learning-order.md) places all 20 exercises in a
+recommended sequence and separates prerequisites from parallel practice. The
 [execution feasibility map](docs/execution-feasibility.md) distinguishes current
 execution shapes, artifact-only scope and unverified runtime profiles.
 The [CLI tooling inventory](docs/cli-tooling.md) maps common analysis commands
@@ -61,7 +63,7 @@ background needed to begin without writing Python.
 
 The [second experiment guide](docs/second-experiments.md) covers six additional
 scenarios and their scoped learning evidence. Reusable [starting knowledge](knowledge/README.md)
-is maintained once and compiled into the new player briefs by the author tools.
+is maintained once and offered as optional reading through the learning declarations.
 
 Each challenge declares its player brief, ordered hints and complete walkthrough in `[content]`. Players read these in the website, open analysis materials there, use its prepared terminal and submit flags. Follow the [player content standard](docs/player-content.md). Executable solutions and patch sources support author verification; maintainer commands belong in [verification](docs/verification.md).
 
@@ -70,8 +72,8 @@ for complete target, solution, patch and cleanup verification. These author tool
 use Python 3.11 or newer and Docker Engine 28 or newer with Compose, independently
 of platform, Go or frontend tools. See [author verification](docs/verification.md).
 After reviewing and committing the completed catalog, run
-`python3 tools/publish.py --check` to check that exact commit and
-`python3 tools/publish.py` to publish it to `origin/main`.
+`python3 tools/publish.py` to verify that exact commit and publish it to `origin/main`.
+Use `--check` for a rehearsal without publication.
 See [catalog publication](docs/publishing.md) for gates and prerequisites.
 The [platform repository](https://github.com/pwnden/platform) independently consumes
 published catalogs and checks their integration with the player.

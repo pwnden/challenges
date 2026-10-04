@@ -20,6 +20,11 @@ concept IDs through `[learning]`. `knowledge/catalog.toml` defines concept
 prerequisites and related reading. The player uses these declarations to show
 predecessor, successor and related problems for the selected exercise.
 
+The [current learning order](learning-order.md) covers all published exercises,
+their recommended sequence, scoped preparation and parallel practice branches.
+Use it for the existing catalog; the topic patterns below describe future design
+possibilities rather than requiring completion of all areas in a fixed order.
+
 ## Learning areas
 
 This is the current authoring coverage, which can grow as learning objectives

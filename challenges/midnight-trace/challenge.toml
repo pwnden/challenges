@@ -10,7 +10,7 @@ tools = ["files"]
 cli = []
 
 [learning]
-requires = ["http-messages","object-ownership"]
+requires = ["file-paths","http-messages","object-ownership","response-comparison"]
 teaches = ["transfer-evidence"]
 
 [content]

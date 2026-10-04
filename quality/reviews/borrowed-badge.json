@@ -45,7 +45,7 @@
       "level": null,
       "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
       "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
+      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다. 학습 순서 정리 후 선수 개념의 관계와 문제별 requires가 실제 풀이에 필요한 능력의 범위를 다루는지도 함께 확인한다."
     },
     "reasoning": {
       "level": null,
@@ -166,5 +166,5 @@
       "improvement": "향후 재설계된 snapshot에서 verify.py를 다시 실행하고 날짜·작업 트리 식별자를 기록해 현 상태와 연결한다.\n검증 실행의 날짜, 대상 revision 또는 이미지 digest, 명령별 결과를 별도 실행 기록으로 보존한다."
     }
   },
-  "source_sha256": "368ccc63ff07dbb3e7c4ddbb3840a7b1e791f4c0a9e5a6d71fc92bfae6f5cb66"
+  "source_sha256": "518dc05ddfa67d8d68f6926dbbb32f9dd9f2f70eee75303dbdd7ce59a3ad40d2"
 }

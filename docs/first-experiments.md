@@ -12,22 +12,22 @@ The usual player path requires text reading and supplied tool operations.
 | [문자로 바꾼 복구 키](../challenges/wrapped-secret/README.md) | `crypto-representation-protection` | 입문 | Files, terminal | A public Base64 operation recovers an exposed key. |
 | [자료 유출 기록](../challenges/midnight-trace/README.md) | `forensics-event-reconstruction` | 입문 | Files | Matching request IDs connect a guest's successful request to another owner's export. |
 
-The `forgotten-shelf`, `wrapped-secret` and `midnight-trace` scenarios are independent starting
-experiments. The `query-desk` scenario adds condition syntax and inference; its brief explains
-the query vocabulary before the player changes input. The `note-vault` scenario remains an
-access-control experiment. The `rotor-lock` scenario keeps its existing implementation and
-code-analysis workload.
+The [complete learning order](learning-order.md) places this batch within the
+current catalog. `forgotten-shelf` prepares later history exercises;
+`midnight-trace` follows identity and object-ownership preparation. `query-desk`
+needs scoped database vocabulary, while `rotor-lock` remains a separate code-analysis branch.
 
-The briefs contain the required background directly. Contract v7 now connects
-their prerequisite and teaching concepts through shared declarations. The player
-shows predecessor, successor and related exercises for the selected problem.
+The briefs provide the situation, goal and supplied access. Contract v7 connects
+optional concept reading, predecessors, successors and related practice through
+shared declarations. Hints help blocked decisions; walkthroughs contain the
+reproducible commands and criteria.
 
 ## Verification and review
 
 The service scenarios include a patch and a functional check. Verification runs
 actual target and solution containers, then checks attack denial, normal behavior
 and resource cleanup. The `wrapped-secret` solution executes the same `base64`
-command supplied to the player. The `midnight-trace` scenario distributes records captured from
+command available in the toolbox. The `midnight-trace` scenario distributes records captured from
 six real HTTP exchanges with a local teaching fixture; its author capture script
 regenerates the files. These records model an incident in that fixture.
 

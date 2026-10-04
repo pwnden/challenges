@@ -10,7 +10,7 @@ tools = ["web"]
 cli = []
 
 [learning]
-requires = ["web-addresses","http-messages"]
+requires = ["web-addresses","http-messages","sqlite-records"]
 teaches = ["query-boundaries"]
 
 [content]

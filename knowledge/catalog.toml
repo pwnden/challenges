@@ -14,7 +14,7 @@ related = []
 id = "candidate-cost"
 title = "비밀번호 후보와 확인 비용"
 requires = ["hashing"]
-related = []
+related = ["document-authenticity"]
 
 [[concepts]]
 id = "curl-json"
@@ -31,7 +31,7 @@ related = []
 [[concepts]]
 id = "detached-signatures"
 title = "문서와 분리된 서명 확인하기"
-requires = []
+requires = ["hashing"]
 related = []
 
 [[concepts]]
@@ -67,7 +67,7 @@ related = []
 [[concepts]]
 id = "file-type-checks"
 title = "파일 종류를 확인하는 근거"
-requires = []
+requires = ["file-signatures"]
 related = []
 
 [[concepts]]
@@ -103,7 +103,7 @@ related = []
 [[concepts]]
 id = "http-messages"
 title = "Web 요청과 응답 읽기"
-requires = []
+requires = ["web-addresses"]
 related = []
 
 [[concepts]]
@@ -116,24 +116,24 @@ related = []
 id = "input-checks"
 title = "입력 검사와 조건의 근거"
 requires = ["program-reading"]
-related = []
+related = ["encoding-secrecy", "query-boundaries"]
 
 [[concepts]]
 id = "network-trust"
 title = "연결 가능성과 자료 읽기 권한"
-requires = []
+requires = ["tcp-services"]
 related = []
 
 [[concepts]]
 id = "object-ownership"
 title = "자료의 소유권과 읽기 권한"
-requires = ["http-cookies"]
+requires = ["trusted-identity"]
 related = ["trusted-identity", "path-boundaries"]
 
 [[concepts]]
 id = "packet-streams"
 title = "패킷에서 전송 자료 읽기"
-requires = ["tcp-services"]
+requires = ["tcp-services", "http-messages"]
 related = []
 
 [[concepts]]
@@ -169,25 +169,25 @@ related = []
 [[concepts]]
 id = "response-comparison"
 title = "응답을 비교해 후보 줄이기"
-requires = []
+requires = ["http-messages"]
 related = []
 
 [[concepts]]
 id = "response-evidence"
 title = "응답 차이와 내용의 판단"
-requires = []
+requires = ["response-comparison"]
 related = ["network-trust", "transfer-evidence"]
 
 [[concepts]]
 id = "retained-data"
 title = "공개 자료와 보관 자료의 범위"
 requires = []
-related = ["hidden-file-data", "historical-retention"]
+related = ["hidden-file-data", "historical-retention", "path-boundaries"]
 
 [[concepts]]
 id = "sqlite-records"
 title = "SQLite의 목록과 본문"
-requires = ["terminal-commands"]
+requires = []
 related = []
 
 [[concepts]]
@@ -211,7 +211,7 @@ related = []
 [[concepts]]
 id = "trusted-identity"
 title = "서버가 확인하는 사용자 신원"
-requires = []
+requires = ["http-cookies"]
 related = []
 
 [[concepts]]

@@ -10,7 +10,7 @@ tools = ["terminal"]
 cli = ["curl", "jq"]
 
 [learning]
-requires = ["terminal-commands","http-messages","http-cookies","curl-json","object-ownership"]
+requires = ["file-paths","curl-json","object-ownership","response-comparison"]
 teaches = ["read-path-authorization"]
 
 [content]

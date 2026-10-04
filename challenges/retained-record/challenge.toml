@@ -10,7 +10,7 @@ tools = ["terminal", "files"]
 cli = ["sqlite3"]
 
 [learning]
-requires = ["terminal-commands","sqlite-records","retained-data"]
+requires = ["terminal-commands","file-paths","sqlite-records","retained-data"]
 teaches = ["historical-retention"]
 
 [content]

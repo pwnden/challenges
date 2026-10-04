@@ -10,7 +10,7 @@ tools = ["terminal", "files"]
 cli = ["exiftool", "file", "jq"]
 
 [learning]
-requires = ["terminal-commands","image-metadata"]
+requires = ["terminal-commands","file-paths","file-type-checks","image-metadata"]
 teaches = ["hidden-file-data"]
 
 [content]

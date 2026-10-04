@@ -10,7 +10,7 @@ tools = ["terminal"]
 cli = ["nmap", "ncat", "curl"]
 
 [learning]
-requires = ["terminal-commands","http-messages","tcp-services"]
+requires = ["terminal-commands","http-messages","tcp-services","response-comparison"]
 teaches = ["network-trust"]
 
 [content]

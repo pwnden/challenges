@@ -1,16 +1,43 @@
 """Concept identities, references and prerequisite graph validation."""
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
 
 from create import create
-from validate import InvalidChallenge, load_concepts, load_contract, validate_learning_catalog, validate_manifest
+from validate import InvalidChallenge, load_concepts, load_contract, required_concepts, validate_learning_catalog, validate_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class LearningTests(unittest.TestCase):
+    def test_concept_index_covers_catalog_in_prerequisite_order(self):
+        concepts = load_concepts(ROOT)
+        reading = re.findall(r'^\| `([^`]+)` \|', (ROOT / 'knowledge/README.md').read_text(), re.MULTILINE)
+        self.assertEqual(len(reading), len(set(reading)))
+        self.assertEqual(set(reading), set(concepts))
+        positions = {key: index for index, key in enumerate(reading)}
+        for key, item in concepts.items():
+            for parent in item['requires']:
+                self.assertLess(positions[parent], positions[key], f'{parent} prepares {key}')
+
+    def test_published_learning_order_covers_catalog_and_precedes_required_practice(self):
+        guide = (ROOT / 'docs/learning-order.md').read_text()
+        order = re.findall(r'^\| \d+ \| \[[^\]]+\]\(\.\./challenges/([^/]+)/README\.md\)', guide, re.MULTILINE)
+        records = [validate_manifest(ROOT, path, load_contract(ROOT))
+                   for path in sorted((ROOT / 'challenges').glob('*/challenge.toml'))]
+        self.assertEqual(len(order), len(set(order)), 'each exercise has one recommended position')
+        self.assertEqual(set(order), {item['slug'] for item in records}, 'update the guide when exercises change')
+        concepts = load_concepts(ROOT)
+        positions = {slug: index for index, slug in enumerate(order)}
+        for item in records:
+            needed = required_concepts(item['learning']['requires'], concepts)
+            for teacher in records:
+                if needed & set(teacher['learning']['teaches']):
+                    self.assertLess(positions[teacher['slug']], positions[item['slug']],
+                                    f'{teacher["slug"]} prepares {item["slug"]}')
+
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)

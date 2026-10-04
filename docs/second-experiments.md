@@ -1,8 +1,10 @@
 # Second security experiments
 
-Six scenarios add prepared starting knowledge to the current version 7 catalog.
-Players read it in the problem pane and use the declared web or file/terminal
-tools. The authoring workflow, solutions and publication finish in this repository.
+Six scenarios use shared concepts and declared web or file/terminal tools.
+The [complete learning order](learning-order.md) places them within the current
+version 7 catalog. Concept reading is optional in the learning panel; specific
+solving guidance belongs in hints and walkthroughs. Authoring, solutions and
+publication finish in this repository.
 
 | Scenario | Primary topic | Proposed level | Tools | Evidence |
 | --- | --- | --- | --- | --- |
@@ -21,12 +23,12 @@ are declared and tested. It is separate from a provider's complete IAM implement
 
 ## Shared starting notes
 
-Ten [concept notes](../knowledge/README.md) cover the actual terms and tool
-operations needed to begin. `--concept` connects them through `BRIEFING.md` and
-the generated author record. `tools/content.py` embeds their contents into
-the existing `::knowledge` block in the deployed README. Format validation
-rejects an outdated compiled brief. The website displays the explanation locally
-without requiring a separate learning service or an external reference visit.
+The [concept index](../knowledge/README.md) lists the scoped preparation and
+teaching objectives for the current catalog in prerequisite order. `[learning]`
+connects those notes to each problem. Optional `--concept` generation embeds
+neutral background through `BRIEFING.md`; `tools/content.py` and format validation
+keep explicitly compiled briefs consistent. Default templates keep concept
+reading separate from the brief.
 
 The version 7 runtime consumes compiled player documents and shared concept
 declarations. The player also offers prerequisite reading and predecessor,

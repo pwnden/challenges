@@ -10,7 +10,7 @@ tools = ["files", "terminal"]
 cli = ["base64"]
 
 [learning]
-requires = ["base64"]
+requires = ["terminal-commands","file-paths","base64"]
 teaches = ["encoding-secrecy"]
 
 [content]
