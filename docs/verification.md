@@ -169,11 +169,21 @@ network isolation and every declared solution/patch/cleanup check. New manifests
 join discovery automatically. No platform revision, Go setup, frontend build
 or consumer artifact is used by these publication checks.
 
+Runs for the same workflow and Git ref share a concurrency group. An active run
+finishes before another starts; queued runs may be superseded by newer queued
+updates. Distinct refs still run independently. An active verification is allowed
+to finish its cleanup rather than being cancelled by a new push.
+
+During authoring, use format checks and selected-problem execution checks to get
+feedback on the change. Run the complete committed-snapshot gate once when
+publishing. Keep heavyweight local Docker checks sequential; CI's independent
+check remains required even after a local pass.
+
 ## Publication gate
 
-`python3 tools/publish.py --check` runs regressions, actual network isolation and
-the complete execution check on an immutable committed snapshot. After a pass,
-`python3 tools/publish.py` publishes the checked commit. See
+`python3 tools/publish.py` runs regressions, actual network isolation and
+the complete execution check on an immutable committed snapshot, then publishes
+that commit. `--check` uses the same gates for a rehearsal without pushing. See
 [catalog publication](publishing.md) for the author workflow and Git requirements.
 
 ## Consumer integration

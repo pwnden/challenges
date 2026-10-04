@@ -15,7 +15,6 @@ python3 tools/create.py example --kind service --category web --patched
 python3 -B tools/quality.py
 python3 tools/verify.py example
 # Review and commit the completed changes on main.
-python3 tools/publish.py --check
 python3 tools/publish.py
 ```
 
@@ -56,6 +55,28 @@ selects another configured Git remote; `--repo <path>` selects a checkout.
 limits. Failed or interrupted checks prevent the push. Child execution checks
 receive an orderly termination signal and a bounded cleanup period when the
 publication gate reaches its own time limit.
+
+Use `publish.py` once when ready to publish: it verifies and then pushes within
+the same invocation. Use `--check` for a deliberate rehearsal without publication;
+a later publication runs the gates again. Results are not reused across runs,
+because Docker, resource availability and the host environment can change.
+
+Each gate prints its start, completion time and a progress message every 15
+seconds while waiting. Successful gate output follows completion; failures name
+the gate and show a bounded tail of stdout and stderr with known generated flags
+redacted. The execution verifier reports each problem's position and elapsed time.
+To retain a local log without hiding progress or losing the exit status, use Bash:
+
+```sh
+set -o pipefail
+python3 -B tools/publish.py 2>&1 | tee /tmp/pwnden-publish.log
+```
+
+One publication check may run per checkout. An overlapping invocation fails
+before starting its gates; the file lock is released automatically when the
+process exits. Run manual Docker checks sequentially alongside this workflow so
+they do not compete for runtime capacity. Player environments continue to count
+toward the existing aggregate resource limits.
 
 Use this command for the verified publication path. GitHub Actions independently
 repeats the checks on pushes and pull requests; branch protection is a separate

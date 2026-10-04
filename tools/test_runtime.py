@@ -1,9 +1,10 @@
 """Execution boundaries, interruption and cleanup of author-owned verification."""
 
 import copy
-from contextlib import nullcontext
+from contextlib import nullcontext, redirect_stdout
 import csv
 import json
+import io
 import os
 from pathlib import Path
 import signal
@@ -291,6 +292,28 @@ class RuntimeTests(unittest.TestCase):
         with self.assertRaises(ExecutionError) as caught:
             commands.run([sys.executable, '-c', 'import sys; sys.stderr.write("pwnden{secret}"); sys.exit(1)'])
         self.assertNotIn('pwnden{secret}', str(caught.exception))
+
+    def test_failure_includes_stdout_diagnostics_and_redacts_before_truncation(self):
+        commands = Commands()
+        secret = 'pwnden{' + 's' * 5000 + '}'
+        commands.secrets.add(secret)
+        with self.assertRaises(ExecutionError) as caught:
+            commands.run([sys.executable, '-c',
+                          'import sys; print("failed problem: " + sys.argv[1]); sys.exit(1)', secret])
+        self.assertIn('failed problem: [redacted flag]', str(caught.exception))
+        self.assertNotIn('s' * 20, str(caught.exception))
+
+    def test_long_stage_reports_progress_while_preserving_captured_output(self):
+        monotonic = time.monotonic
+        origin = monotonic()
+        output = io.StringIO()
+        with patch('runtime.time.monotonic', side_effect=lambda: (monotonic() - origin) * 100), redirect_stdout(output):
+            result = Commands().run([sys.executable, '-c',
+                                     'import time; print("captured"); time.sleep(0.5)'],
+                                    progress='Isolation', timeout=300)
+        self.assertIn('Isolation: running', output.getvalue())
+        self.assertEqual(result.stdout, 'captured\n')
+        self.assertNotIn('captured', output.getvalue())
 
     @unittest.skipIf(sys.platform == 'win32', 'POSIX child signal handler')
     def test_parent_timeout_allows_child_cleanup(self):

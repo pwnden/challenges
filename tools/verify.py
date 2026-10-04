@@ -5,6 +5,7 @@ from budget import BudgetError
 import hashlib
 from pathlib import Path
 import secrets
+import time
 
 from runtime import Docker, ExecutionError
 from validate import InvalidChallenge, load_contract, validate_manifest, validate_learning_catalog
@@ -91,16 +92,20 @@ def verify_catalog(root, slugs=(), *, docker=None, prepare_timeout=300):
     try:
         with docker.commands.signals():
             docker.prerequisites()
-            for directory, metadata in records:
-                print(f'Verifying {metadata["slug"]}...', flush=True)
+            for index, (directory, metadata) in enumerate(records, 1):
+                print(f'[{index}/{len(records)}] Verifying {metadata["slug"]}...', flush=True)
+                started = time.monotonic()
                 try:
-                    verify_problem(docker, root, directory, metadata, definition)
-                finally:
-                    if isinstance(docker, Docker):
-                        from workspace import remove_workspace
-                        for project in list(docker.workspaces):
-                            remove_workspace(docker, project)
-                print(f'verified {metadata["slug"]} (solution, declared patch checks, cleanup)', flush=True)
+                    try:
+                        verify_problem(docker, root, directory, metadata, definition)
+                    finally:
+                        if isinstance(docker, Docker):
+                            from workspace import remove_workspace
+                            for project in list(docker.workspaces):
+                                remove_workspace(docker, project)
+                except (OSError, ValueError, ExecutionError, BudgetError) as error:
+                    raise ExecutionError(f'{metadata["slug"]}: {error}') from error
+                print(f'verified {metadata["slug"]} (solution, declared patch checks, cleanup; {time.monotonic() - started:.1f}s)', flush=True)
     except (OSError, ValueError, ExecutionError, BudgetError) as error:
         raise ExecutionError(docker.commands.redact(str(error))) from error
     return len(records)

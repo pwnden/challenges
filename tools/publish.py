@@ -1,12 +1,14 @@
 """Verify a committed catalog snapshot and publish that commit to main."""
 
 import argparse
+from contextlib import contextmanager
 from pathlib import Path, PurePosixPath
 import shutil
 import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 
 from runtime import Commands, ExecutionError
 from validate import InvalidChallenge, inside
@@ -52,18 +54,40 @@ def extract_snapshot(archive, destination):
 
 
 def gate_snapshot(snapshot, commands, prepare_timeout):
-    result = commands.run([sys.executable, '-B', 'tools/quality.py'], cwd=snapshot, timeout=60)
-    print(result.stdout, end='', flush=True)
-    commands.run([sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools', '-p', 'test_*.py'],
-                 cwd=snapshot, timeout=300)
-    commands.run(['docker', 'build', '--file', 'web/Dockerfile', '--target', 'check', '.'],
-                 cwd=snapshot, timeout=prepare_timeout, timeout_grace=30)
-    result = commands.run([sys.executable, '-B', 'tools/check_isolation.py'], cwd=snapshot,
-                          timeout=300, timeout_grace=300)
-    print(result.stdout, end='', flush=True)
-    result = commands.run([sys.executable, '-B', 'tools/verify.py', '--prepare-timeout', str(prepare_timeout)],
-                          cwd=snapshot, timeout=1800, timeout_grace=300)
-    print(result.stdout, end='', flush=True)
+    stages = [
+        ('Quality evidence', [sys.executable, '-B', 'tools/quality.py'], 60, 0),
+        ('Author-tool regressions', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools', '-p', 'test_*.py'], 300, 0),
+        ('Vue checks', ['docker', 'build', '--file', 'web/Dockerfile', '--target', 'check', '.'], prepare_timeout, 30),
+        ('Network isolation', [sys.executable, '-B', 'tools/check_isolation.py'], 300, 300),
+        ('Solutions, patches and cleanup', [sys.executable, '-B', 'tools/verify.py', '--prepare-timeout', str(prepare_timeout)], 1800, 300),
+    ]
+    for index, (name, args, timeout, grace) in enumerate(stages, 1):
+        label = f'[{index}/{len(stages)}] {name}'
+        print(f'{label}: started', flush=True)
+        started = time.monotonic()
+        try:
+            result = commands.run(args, cwd=snapshot, timeout=timeout,
+                                  timeout_grace=grace, progress=label)
+        except ExecutionError as error:
+            raise ExecutionError(f'{label}: failed ({time.monotonic() - started:.1f}s)\n{error}') from error
+        print(commands.redact(result.stdout), end='', flush=True)
+        print(commands.redact(result.stderr), end='', flush=True)
+        print(f'{label}: passed ({time.monotonic() - started:.1f}s)', flush=True)
+
+
+@contextmanager
+def publication_lock(state):
+    import fcntl
+    # Keep the inode: deleting a flock file permits concurrent locks on different files.
+    with (state / 'publish.lock').open('a') as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise InvalidChallenge('another publication check is running in this repository') from error
+        try:
+            yield
+        finally:
+            fcntl.flock(lock, fcntl.LOCK_UN)
 
 
 def publish(root, *, remote='origin', check=False, prepare_timeout=300, commands=None, gate=gate_snapshot):
@@ -78,7 +102,7 @@ def publish(root, *, remote='origin', check=False, prepare_timeout=300, commands
         if state.exists() and (state.is_symlink() or not state.is_dir()):
             raise InvalidChallenge('.authoring must be a directory inside the repository')
         state.mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(prefix='publish-', dir=state) as tmp:
+        with publication_lock(state), tempfile.TemporaryDirectory(prefix='publish-', dir=state) as tmp:
             directory = Path(tmp)
             snapshot = directory / 'catalog'
             snapshot.mkdir()

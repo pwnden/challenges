@@ -5,10 +5,11 @@ import hashlib
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import Mock, patch
 
 from create import create
 from runtime import Commands, ExecutionError, Result
-from verify import check_attack, check_solution, discover, verify_problem
+from verify import check_attack, check_solution, discover, verify_catalog, verify_problem
 
 
 class FakeDocker:
@@ -49,6 +50,17 @@ class FakeDocker:
 
 
 class VerifyTests(unittest.TestCase):
+    def test_catalog_failure_names_problem_redacts_flag_and_stops_next_problem(self):
+        docker = Mock()
+        docker.commands = Commands()
+        docker.commands.secrets.add('pwnden{secret}')
+        records = [(Path('/first'), {'slug': 'first'}), (Path('/second'), {'slug': 'second'})]
+        with patch('verify.discover', return_value=({}, records)), \
+             patch('verify.verify_problem', side_effect=ExecutionError('bad pwnden{secret}')) as run:
+            with self.assertRaisesRegex(ExecutionError, r'first: bad \[redacted flag\]'):
+                verify_catalog(Path('/repo'), docker=docker)
+        self.assertEqual(run.call_count, 1)
+
     def test_file_flag_matches_trimmed_utf8_and_requires_success(self):
         flag = 'pwnden{한글}'
         digest = hashlib.sha256(flag.encode('utf-8')).hexdigest()

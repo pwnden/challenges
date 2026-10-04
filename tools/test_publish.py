@@ -2,13 +2,15 @@
 
 import io
 from pathlib import Path
+from contextlib import redirect_stdout
 import subprocess
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import Mock
 
-from publish import extract_snapshot, publish
-from runtime import ExecutionError
+from publish import extract_snapshot, gate_snapshot, publish
+from runtime import ExecutionError, Result
 from validate import InvalidChallenge
 
 
@@ -60,7 +62,29 @@ class PublishTests(unittest.TestCase):
         with self.assertRaisesRegex(ExecutionError, 'verification failed'):
             publish(self.root, gate=fail)
         self.assertNotEqual(self.remote_revision().returncode, 0)
-        self.assertEqual(list((self.root / '.authoring').iterdir()), [])
+        self.assertEqual([p.name for p in (self.root / '.authoring').iterdir()], ['publish.lock'])
+
+    def test_overlapping_check_is_rejected_and_lock_released_after_failure(self):
+        def overlap(*args):
+            with self.assertRaisesRegex(InvalidChallenge, 'another publication check'):
+                publish(self.root, gate=lambda *args: self.fail('must not run concurrently'))
+            raise ExecutionError('failed gate')
+        with self.assertRaisesRegex(ExecutionError, 'failed gate'):
+            publish(self.root, gate=overlap)
+        self.assertNotEqual(self.remote_revision().returncode, 0)
+        publish(self.root, check=True, gate=lambda *args: None)
+        self.assertNotEqual(self.remote_revision().returncode, 0)
+
+    def test_gate_reports_failure_stage_and_stops_following_checks(self):
+        commands = Mock()
+        commands.redact.side_effect = lambda message: message
+        commands.run.side_effect = [Result(0, 'quality passed\n'), ExecutionError('regression broke')]
+        output = io.StringIO()
+        with redirect_stdout(output), self.assertRaisesRegex(ExecutionError, r'\[2/5\] Author-tool regressions: failed'):
+            gate_snapshot(self.root, commands, 123)
+        self.assertIn('[1/5] Quality evidence: passed', output.getvalue())
+        self.assertEqual(commands.run.call_count, 2)
+        self.assertEqual(commands.run.call_args.kwargs['progress'], '[2/5] Author-tool regressions')
 
     def test_dirty_tree_and_edit_during_verification_block_publication(self):
         (self.root / 'data').write_text('edited')

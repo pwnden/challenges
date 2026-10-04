@@ -92,7 +92,7 @@ class Commands:
                 signal.signal(sig, handler)
 
     def run(self, args, *, cwd=None, env=None, input=None, timeout=60,
-            cleanup=False, check=True, timeout_grace=0):
+            cleanup=False, check=True, timeout_grace=0, progress=None):
         if self.interrupted and not cleanup:
             raise ExecutionError('verification interrupted')
         options = {'start_new_session': True} if os.name != 'nt' else {
@@ -110,9 +110,14 @@ class Commands:
             if self.interrupted and not cleanup:
                 self.interrupt(self.interrupted, None)
             try:
-                deadline = time.monotonic() + timeout
+                started = time.monotonic()
+                deadline = started + timeout
+                next_update = started + 15
                 pending = None if input is None or hasattr(input, 'read') else input if isinstance(input, bytes) else input.encode('utf-8')
                 while True:
+                    if progress and time.monotonic() >= next_update:
+                        print(f'{progress}: running ({time.monotonic() - started:.0f}s elapsed)', flush=True)
+                        next_update = time.monotonic() + 15
                     if overflow.is_set():
                         self.kill_child()
                         raise ExecutionError('command output exceeded 8 MiB per stream')
@@ -147,7 +152,8 @@ class Commands:
             if self.interrupted and not cleanup:
                 raise ExecutionError('verification interrupted')
             if check and result.code:
-                raise ExecutionError(self.redact(f'{args[0]} failed ({result.code}): {result.stderr.strip()}'))
+                diagnostics = self.redact(result.stdout + '\n' + result.stderr).strip()[-4000:]
+                raise ExecutionError(f'{args[0]} failed ({result.code}): {diagnostics}')
             return result
         finally:
             self.child = None
