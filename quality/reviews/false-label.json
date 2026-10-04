@@ -125,5 +125,5 @@
       "improvement": "독립 검토에서 재현성을 더 확인하려면 현재 snapshot 기준 실제 검증 실행과 결과를 날짜가 포함된 기록으로 보존한다."
     }
   },
-  "source_sha256": "9807e40184cf660cdbc91fa168cdd44ea9d02a67c818faf248c99a81a3b15a8d"
+  "source_sha256": "039275150afa91bac93f5d781b85653f0548fcde7f31a08e3c5bead17fd0a056"
 }

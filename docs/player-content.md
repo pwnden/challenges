@@ -86,7 +86,7 @@ Use the named `message` block for dialogue from the requester:
 
 ```markdown
 ::message{from="moru17"}
-복구 키를 내보낸 파일이 공개됐어요. 다른 사람도 원래 값을 읽을 수 있나요?
+장비 복구 키를 파일로 내보내 보관했는데, 지금은 다른 사람도 그 파일을 내려받을 수 있어요. 파일에는 알아보기 어려운 글자만 보여요. 제가 내보낸 파일을 보내 드릴 테니, 다른 사람도 원래 복구 키를 알아낼 수 있는지 확인해 주세요.
 ::
 ```
 
