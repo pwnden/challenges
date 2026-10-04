@@ -50,8 +50,10 @@ to be present and contributes to the assessment of prerequisites and difficulty.
 
 Prefer player actions that directly reveal the security behavior: change an
 input, compare responses, follow access to a resource, inspect an artifact or
-observe a boundary being crossed. Provide prepared commands, analysis tools or
-small visual experiments when these let the player focus on the principle.
+observe a boundary being crossed. Prepare analysis tools and small experiments
+that support the observation. The default brief supplies access and scope;
+players choose tools, inputs and comparison criteria. Optional hints help with
+one blocked decision, and the walkthrough provides exact reproducible commands.
 
 Keep Python primarily an authoring and automated verification tool. Target
 implementation and solution-script languages are separate from the abilities
@@ -83,7 +85,9 @@ concept. Decide which role each has. An installed interpreter makes execution
 available; the ability to understand or write code still needs to be accounted for.
 
 Intro problems are approachable from the common starting point through the brief
-and a small amount of supporting explanation. When coding knowledge or specialized
+and optional concept references. Even at this level, retain a choice or an
+observation for the player instead of supplying a command sequence to copy.
+When coding knowledge or specialized
 operations are prerequisites, state them explicitly and assess the complete
 workload for a higher level. A learning reference should cover the ability needed
 for this exercise. Requiring study of an entire language or domain adds substantial
@@ -93,6 +97,38 @@ Before publication, place the required abilities and starting context in the
 player brief or link to an available player-facing document. Author records and
 answer-containing walkthroughs serve their own readers; first-time players need
 enough context before they open a hint or answer.
+
+### Place information by its role
+
+Use the [player content standard](player-content.md#brief) for the presentation
+boundary. Distinguish a fact needed to access the exercise from a discovery the
+player should make while investigating it.
+
+| Location | Information |
+| --- | --- |
+| Default brief | Situation, goal, scope, supplied files, credentials, addresses and submission target. |
+| Concept reference | A general principle and an example independent of the exercise's files, fields and requests. |
+| Optional hint | One observation or connection that helps a blocked decision; retain the next decision for the player. |
+| Walkthrough | Tool choice, exact requests and commands, intermediate observations, selection criteria and the complete result. |
+| Author record | Intended solution, prerequisite scope, publication checks and evidence. |
+
+For example, a hash exercise can supply account information and candidate
+passwords. Comparing their hashes is part of the investigation. The exact
+hashing command and the exercise's comparison field belong in hints or the
+walkthrough, rather than a recipe in the default resource list.
+
+Review with hints and the walkthrough closed. Write down what the player must
+still decide. If changing a filename in a supplied command completes the task,
+or the brief supplies the decisive filter and selection condition, relocate that
+instruction and check that the remaining context still identifies the target.
+Scope and access facts remain explicit; removing them would create guessing
+about the assignment rather than an investigation.
+
+The generator's `--requires` option declares optional prerequisite reading.
+Use `--concept` only when neutral background must also be embedded in the brief;
+it preserves the shared-content compilation and refresh checks. Default file and
+service templates provide no knowledge block. Add scoped background only when
+it is needed to understand the situation, rather than to execute the solution.
 
 ## Select difficulty from evidence
 

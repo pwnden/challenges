@@ -65,10 +65,8 @@ Describe the intended objective and the actions the player can take directly. Ea
 - A concrete scenario that explains what the player has and why the target matters.
 - One explicit objective and an observable success condition.
 - Supplied resources and legitimate access, including credentials when appropriate.
-- Enough prerequisite context to begin; explain unfamiliar concepts needed for the first action.
-- Scoped prerequisite abilities and available learning references before the step
-  that needs them. Supply the supporting explanation in the brief when a separate
-  player-facing resource is unavailable.
+- Scoped prerequisite abilities and optional learning references. Add neutral
+  background to the brief when it is essential to understand the situation.
 - Starting access: supplied credentials, target address, scope and resource locations.
 - The answer format and any instance-specific behavior, such as keys changing after restart.
 
@@ -160,8 +158,8 @@ Review the rendered problem as a first-time solver, independently of whether `so
   calculations and tool operations? Does the exercise demonstrate its stated
   security learning objective?
 - Can I inspect each required resource and perform every exercise step in the prepared environment?
-- Are credentials, submission format, expected output and restart effects clear where relevant?
-- Does each optional hint address a distinct reasoning obstacle and add useful help? Is the answer absent from the initial brief?
+- Are credentials, submission target and restart effects clear where relevant? Does the success condition identify completion without describing the solving procedure?
+- Does each optional hint address a distinct reasoning obstacle and leave a next decision? Does the initial brief leave tool selection, decisive filters and comparison criteria for investigation?
 - Does the walkthrough explain why the approach works and reproduce the result?
 - Does a failure to load content offer a retry, rather than sending players into repository files?
 

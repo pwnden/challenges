@@ -71,7 +71,8 @@ def scaffold(root, slug, *, kind, category, title=None, difficulty=1, hints=0, p
             path = inside(root, root / 'knowledge' / f'{key}.md')
             if not path.is_file():
                 raise InvalidChallenge(f'unknown concept: {key}')
-        files['BRIEFING.md'] = re.sub(r'::knowledge\n.*?\n::', '::knowledge{concepts="' + ','.join(concepts) + '"}\n::', files['README.md'], flags=re.DOTALL)
+        include = '::knowledge{concepts="' + ','.join(concepts) + '"}\n::\n\n'
+        files['BRIEFING.md'] = files['README.md'].replace('::submission', include + '::submission', 1)
         files['AUTHORING.md'] += '\n## 연결된 공통 시작 지식\n\n' + '\n'.join(
             f'- requires `{key}`: [공통 설명](../../knowledge/{key}.md).' for key in concepts
         ) + '\n'
@@ -127,7 +128,7 @@ def main():
     parser.add_argument('--difficulty', type=int, choices=range(1, 6), default=1,
                         help='1 Intro, 2 Easy, 3 Medium, 4 Hard, 5 Expert (default: 1)')
     parser.add_argument('--hints', type=int, default=0, help='optional ordered hints, 0–10 (default: 0)')
-    parser.add_argument('--concept', dest='concepts', action='append', default=[], help='shared prerequisite ID; repeat for additional concepts')
+    parser.add_argument('--concept', dest='concepts', action='append', default=[], help='embed neutral prerequisite background in the brief; prefer --requires for optional reading')
     parser.add_argument('--cli', action='append', default=[], help='primary learner CLI command name; repeat for additional commands')
     parser.add_argument('--requires', action='append', default=[], help='required concept ID from knowledge/catalog.toml; repeat for additional concepts')
     parser.add_argument('--teaches', action='append', default=[], help='taught concept ID from knowledge/catalog.toml; repeat for additional concepts')
