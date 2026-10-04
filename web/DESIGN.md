@@ -46,7 +46,7 @@ The background and foreground tokens set the document palette. The surface suppo
 
 ## Typography
 
-Pretendard Variable and D2Coding are bundled locally and load with `font-display: swap`. Body text, controls and document output share Pretendard; titles and section headings use the recorded scales. Explicit `code` elements use D2Coding through `--font-code`, including SQL and JSON blocks. Document output preserves whitespace, wraps long text and allows scrolling.
+Pretendard Variable and D2Coding are bundled locally and load with `font-display: optional`. Body text, controls and document output share Pretendard; titles and section headings use the recorded scales. Explicit `code` elements use D2Coding through `--font-code`, including SQL and JSON blocks. Document output preserves whitespace, wraps long text and allows scrolling. Critical fonts are preloaded from the document head. If a font arrives too late, the page retains its fallback face rather than replacing already visible text.
 
 ## Layout
 

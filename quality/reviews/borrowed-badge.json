@@ -166,5 +166,5 @@
       "improvement": "향후 재설계된 snapshot에서 verify.py를 다시 실행하고 날짜·작업 트리 식별자를 기록해 현 상태와 연결한다.\n검증 실행의 날짜, 대상 revision 또는 이미지 digest, 명령별 결과를 별도 실행 기록으로 보존한다."
     }
   },
-  "source_sha256": "7521d9c088644b2be7c99e0f310e8f2c90427ae81199fe9d76f257e77a5904fe"
+  "source_sha256": "08064eead0f62976cc2000a46bfce273e8ded61df1cfdd08788442df0072aa70"
 }

@@ -1,5 +1,5 @@
-@font-face { font-family: 'Pretendard Variable'; src: url('./fonts/PretendardVariable.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: 'D2Coding'; src: url('./fonts/D2Coding-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Pretendard Variable'; src: url('./fonts/PretendardVariable.woff2') format('woff2'); font-weight: 100 900; font-display: optional; }
+@font-face { font-family: 'D2Coding'; src: url('./fonts/D2Coding-Regular.woff2') format('woff2'); font-weight: 400; font-display: optional; }
 :root { color-scheme: dark; font-family: 'Pretendard Variable', sans-serif; color: #dae4f2; background: #101722; font-size: 16px; line-height: 1.65; --font-code: 'D2Coding', monospace; --inset: 1rem; --radius: 0.5rem; --control: 2.75rem; }
 * { box-sizing: border-box; }
 body { margin: 0; }
