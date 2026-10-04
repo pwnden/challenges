@@ -39,12 +39,17 @@ class TargetHandler(BaseHTTPRequestHandler):
 
     def page(self, status, data, cookies=()):
         if 'text/html' in self.headers.get('Accept', ''):
-            self.send(status, (PUBLIC / 'index.html').read_bytes(), 'text/html', cookies)
+            # Data is inert JSON, including when a document contains HTML text.
+            payload = json.dumps({'status': status, 'data': data}, ensure_ascii=False)
+            payload = payload.replace('&', '\\u0026').replace('<', '\\u003c').replace('>', '\\u003e')
+            bootstrap = '<script id="pwnden-page-data" type="application/json">' + payload + '</script>'
+            page = (PUBLIC / 'index.html').read_text(encoding='utf-8')
+            self.send(status, page.replace('</head>', bootstrap + '</head>', 1), 'text/html', cookies)
         else:
             self.send(status, json.dumps(data, ensure_ascii=False), 'application/json', cookies)
 
     def document(self, status, body, cookies=()):
         if 'text/html' in self.headers.get('Accept', ''):
-            self.page(status, {}, cookies)
+            self.page(status, {'body': body}, cookies)
         else:
             self.send(status, body, cookies=cookies)

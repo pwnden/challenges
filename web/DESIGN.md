@@ -60,7 +60,7 @@ Controls and document output share the rounded control shape. Thin borders frame
 
 ## Components
 
-`TargetPage` provides one page heading and a home link on inner pages. Initial loading marks the main region busy and displays a status message. Internal page navigation retains the current content while requesting the destination data, then replaces the page with ready content. Network failures retain the current page and display an alert; HTTP errors render the destination's error state. Native browser history owns back and forward navigation. Raw documents and downloads retain ordinary browser navigation.
+`TargetPage` provides one page heading and a home link on inner pages. HTML responses include inert JSON with the current page data and HTTP status, so full-document navigation and history restoration render ready content without a second request. The entry module blocks rendering until the synchronous mount completes. Internal page navigation retains the current content while requesting the destination data, then replaces the page with ready content. Network failures retain the current page and display an alert; HTTP errors render the destination's error state. Native browser history owns back and forward navigation. Raw documents and downloads retain ordinary browser navigation. Standalone development without server-supplied page data retains the initial loading status.
 
 Forms use visible labels and native inputs. Links navigate through ordinary anchors; search and document lookup use normal GET forms with named query fields. Login submits JSON, disables its button while pending and reserves a feedback line. The user-role form saves the browser cookie and reloads the page.
 

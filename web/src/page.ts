@@ -7,13 +7,27 @@ export const pagePending = ref(false);
 export const navigationError = ref('');
 const connectionError = '사이트 연결을 확인하고 다시 시도하세요.';
 
+function pageResult(status: number, payload: unknown): Page {
+  if (status >= 200 && status < 300) return { data: payload, error: '' };
+  const failure = payload as { body?: string; error?: string };
+  const reasons: Record<string, string> = { sign_in_required: '메모를 읽으려면 먼저 로그인하세요.', not_found: '자료를 찾을 수 없습니다.', invalid_note_id: '메모 번호를 확인하세요.' };
+  return { error: failure.body ?? reasons[failure.error ?? ''] ?? failure.error ?? '자료를 읽을 수 없습니다.' };
+}
+
+function documentPage(): Page | undefined {
+  if (typeof document === 'undefined') return;
+  const element = document.getElementById('pwnden-page-data');
+  if (!element?.textContent) return;
+  const initial = JSON.parse(element.textContent) as { status: number; data: unknown };
+  element.remove();
+  return pageResult(initial.status, initial.data);
+}
+
 async function readPage(path: string, signal?: AbortSignal): Promise<Page> {
   const response = await fetch(path, { headers: { Accept: 'application/json' }, cache: 'no-store', signal });
   const json = response.headers.get('Content-Type')?.includes('application/json');
   const payload = json ? await response.json() : { body: await response.text() };
-  if (response.ok) return { data: payload, error: '' };
-  const reasons: Record<string, string> = { sign_in_required: '메모를 읽으려면 먼저 로그인하세요.', not_found: '자료를 찾을 수 없습니다.', invalid_note_id: '메모 번호를 확인하세요.' };
-  return { error: payload.body ?? reasons[payload.error] ?? payload.error ?? '자료를 읽을 수 없습니다.' };
+  return pageResult(response.status, payload);
 }
 
 export function navigatePages(render: () => Promise<void>) {
@@ -66,7 +80,7 @@ export function link(path: string, parameters: Record<string, string>): string {
 export function usePage<T>(paths: readonly string[] = ['/']) {
   routes = paths;
   const path = location.pathname + location.search;
-  const initial = prepared;
+  const initial = prepared ?? documentPage();
   const data = ref(initial?.data as T | undefined);
   const loading = ref(!initial);
   const error = ref(initial?.error ?? '');

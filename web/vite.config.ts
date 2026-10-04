@@ -6,6 +6,17 @@ import { resolve } from 'node:path';
 const scenario = process.env.SCENARIO_DIR ?? '../challenges/note-vault/vulnerable/web';
 export default defineConfig({
   plugins: [vue(), {
+    name: 'target-page-paint',
+    'transformIndexHtml': {
+      order: 'post',
+      handler(html) {
+        // Vite recreates the production module tag, so restore its paint gate.
+        return html.replace(/<script\b[^>]*>/g, tag =>
+          tag.includes('type="module"') && !tag.includes('blocking=')
+            ? tag.replace('<script', '<script blocking="render"') : tag);
+      },
+    },
+  }, {
     name: 'target-font-licenses',
     generateBundle() {
       for (const name of ['Pretendard-OFL.txt', 'D2Coding-OFL.txt']) {

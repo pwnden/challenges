@@ -32,13 +32,16 @@ function deferred<T>() {
   const promise = new Promise<T>((yes, no) => { resolve = yes; reject = no; });
   return { promise, resolve, reject };
 }
-async function mount(precommit = true) {
+async function mount(precommit = true, bootstrap?: { status: number; data: { body?: string; error?: string } }) {
   const listeners: Record<string, (event: NavigateEvent) => void> = {};
   const navigation = { addEventListener: (name: string, listener: (event: NavigateEvent) => void) => { listeners[name] = listener; } };
   vi.stubGlobal('window', { navigation, ...(precommit ? { NavigationPrecommitController: {} } : {}) });
   vi.stubGlobal('location', new URL('http://target.test/'));
-  const fetch = vi.fn().mockResolvedValueOnce(response('previous'));
+  const fetch = vi.fn();
+  if (!bootstrap) fetch.mockResolvedValueOnce(response('previous'));
   vi.stubGlobal('fetch', fetch);
+  const seed = bootstrap ? { textContent: JSON.stringify(bootstrap), remove: vi.fn() } : undefined;
+  vi.stubGlobal('document', { getElementById: () => seed?.remove.mock.calls.length ? null : seed });
   navigationError.value = ''; pagePending.value = false;
   const root = node();
   const revision = ref(0);
@@ -49,7 +52,8 @@ async function mount(precommit = true) {
   } });
   const app = renderer.createApp({ render: () => h(Scenario, { key: revision.value }) });
   app.mount(root); unmounts.push(() => app.unmount());
-  await vi.waitFor(() => expect(text(root)).toContain('previous'));
+  const initialText = text(root);
+  await vi.waitFor(() => expect(text(root)).toContain(bootstrap?.status === 401 ? '먼저 로그인' : bootstrap?.data.body ?? 'previous'));
   navigatePages(async () => { revision.value++; await nextTick(); });
   function navigate(path: string, patch: Partial<NavigateEvent> = {}) {
     const abort = new AbortController();
@@ -72,8 +76,25 @@ async function mount(precommit = true) {
     };
     return { event, abort, finish };
   }
-  return { root, fetch, navigate };
+  return { root, fetch, navigate, initialText, seed };
 }
+
+it('mounts full-document history restores with ready server data and no second request', async () => {
+  const body = 'Ready document </script><script>alert(1)</script>& 한글';
+  const view = await mount(true, { status: 200, data: { body } });
+  expect(view.initialText).toContain(body); expect(view.initialText).not.toContain('불러오는 중');
+  expect(view.fetch).not.toHaveBeenCalled(); expect(view.seed?.remove).toHaveBeenCalledOnce();
+  view.fetch.mockResolvedValueOnce(response('next'));
+  await view.navigate('/notes/1').finish();
+  expect(text(view.root)).toContain('next'); expect(text(view.root)).not.toContain(body);
+  expect(view.fetch).toHaveBeenCalledTimes(1);
+});
+
+it('mounts server-provided HTTP errors without loading or refetching', async () => {
+  const view = await mount(true, { status: 401, data: { error: 'sign_in_required' } });
+  expect(view.initialText).toContain('먼저 로그인'); expect(view.initialText).not.toContain('불러오는 중');
+  expect(view.fetch).not.toHaveBeenCalled();
+});
 
 it('keeps the old content and address until ready, then renders once without a second fetch', async () => {
   const view = await mount(); const next = deferred<Response>();
