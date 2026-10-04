@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { usePage } from '@target/page';
 import TargetPage from '@target/TargetPage.vue';
-const { data, loading, error } = usePage<{ user?: string | null; notes?: { id: number; title: string }[]; title?: string; body?: string }>();
+const { data, loading, error } = usePage<{ user?: string | null; notes?: { id: number; title: string }[]; title?: string; body?: string }>(['/', '/notes/']);
 const username = ref('guest');
 const password = ref('');
 const pending = ref(false);

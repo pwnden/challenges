@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePage } from '@target/page';
 import TargetPage from '@target/TargetPage.vue';
-const { data, loading, error } = usePage<{ collections?: string[]; export?: string; crawler?: string }>();
+const { data, loading, error } = usePage<{ collections?: string[]; export?: string; crawler?: string }>(['/', '/about']);
 </script>
 <template>
   <TargetPage title="작은 웹 보관소" :loading="loading" :error="error">

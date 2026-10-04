@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { usePage } from '@target/page';
 import TargetPage from '@target/TargetPage.vue';
-const { data, loading, error } = usePage<{ role?: string; body?: string }>();
+const { data, loading, error } = usePage<{ role?: string; body?: string }>(['/', '/key']);
 const stored = document.cookie.split('; ').find(item => item.startsWith('paper_role='))?.slice('paper_role='.length);
 const claim = ref(stored ? decodeURIComponent(stored) : 'guest');
 function save() { document.cookie = `paper_role=${encodeURIComponent(claim.value)}; Path=/; SameSite=Lax`; location.reload(); }

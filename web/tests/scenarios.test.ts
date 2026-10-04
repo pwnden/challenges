@@ -11,7 +11,7 @@ import ForgottenShelf from '../../challenges/forgotten-shelf/vulnerable/web/App.
 const page = vi.hoisted(() => ({ data: {} as unknown }));
 vi.mock('../src/page', async () => {
   const { ref } = await import('vue');
-  return { usePage: () => ({ data: ref(page.data), loading: ref(false), error: ref('') }), link: (path: string, parameters: Record<string, string>) => `${path}?${new URLSearchParams(parameters)}` };
+  return { navigationError: ref(''), pagePending: ref(false), usePage: () => ({ data: ref(page.data), loading: ref(false), error: ref('') }), link: (path: string, parameters: Record<string, string>) => `${path}?${new URLSearchParams(parameters)}` };
 });
 afterEach(() => vi.unstubAllGlobals());
 function globals(path = '/') {

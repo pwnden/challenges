@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { usePage, link } from '@target/page';
 import TargetPage from '@target/TargetPage.vue';
-const { data, loading, error } = usePage<{ policy?: unknown; user?: string; resource?: string; versions?: { version: string; title: string }[]; body?: string }>();
+const { data, loading, error } = usePage<{ policy?: unknown; user?: string; resource?: string; versions?: { version: string; title: string }[]; body?: string }>(['/', '/read', '/history', '/version']);
 const resource = ref(new URLSearchParams(location.search).get('resource') ?? 'locker/team-notes');
 </script>
 <template>

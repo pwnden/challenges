@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { usePage, link } from '@target/page';
 import TargetPage from '@target/TargetPage.vue';
-const { data, loading, error } = usePage<{ files?: string[]; body?: string }>();
+const { data, loading, error } = usePage<{ files?: string[]; body?: string }>(['/', '/view']);
 const file = ref(new URLSearchParams(location.search).get('file') ?? 'welcome.txt');
 </script>
 <template>
