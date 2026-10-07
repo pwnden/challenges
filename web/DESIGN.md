@@ -1,6 +1,6 @@
 ---
 name: pwnden challenge targets
-description: Shared presentation for the six Vue challenge target sites.
+description: Shared presentation for the seven Vue challenge target sites.
 colors:
   background: "#101722"
   foreground: "#dae4f2"
@@ -38,7 +38,7 @@ spacing:
 
 ## Overview
 
-The six target sites share a dark blue canvas, readable Korean text and simple document sections. Their site titles and content identify the individual challenge. [style.css](src/style.css) and [TargetPage.vue](src/TargetPage.vue) own the shared presentation.
+The seven target sites share a dark blue canvas, readable Korean text and simple document sections. Their site titles and content identify the individual challenge. [style.css](src/style.css) and [TargetPage.vue](src/TargetPage.vue) own the shared presentation.
 
 ## Colors
 
@@ -63,5 +63,7 @@ Controls and document output share the rounded control shape. Thin borders frame
 `TargetPage` provides one page heading and a home link on inner pages. HTML responses include inert JSON with the current page data and HTTP status, so full-document navigation and history restoration render ready content without a second request. The entry module blocks rendering until the synchronous mount completes. Internal page navigation retains the current content while requesting the destination data, then replaces the page with ready content. Network failures retain the current page and display an alert; HTTP errors render the destination's error state. Native browser history owns back and forward navigation. Raw documents and downloads retain ordinary browser navigation. Standalone development without server-supplied page data retains the initial loading status.
 
 Forms use visible labels and native inputs. Links navigate through ordinary anchors; search and document lookup use normal GET forms with named query fields. Login submits JSON, disables its button while pending and reserves a feedback line. The user-role form saves the browser cookie and reloads the page.
+
+The workshop shop groups balance, product offers and order history in separate sections. Product cards wrap into one column when space is limited. Each order shows its original price, actual payment, refund and status together. Buying and cancelling update server-supplied state and share a reserved feedback line. A receipt appears beside its completed order. Refresh recovers current state after an uncertain request; reset starts a new attempt for the current account.
 
 Vue text interpolation displays server content, queries, policy JSON, filenames and document bodies as escaped text. Search results use a semantic table with column headings. Lists of notes, files and revisions use semantic lists and links. All interactive elements receive the shared visible keyboard focus outline. Fonts and built assets are served locally.

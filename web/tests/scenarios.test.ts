@@ -7,6 +7,7 @@ import QueryDesk from '../../challenges/query-desk/vulnerable/web/App.vue';
 import PaperSession from '../../challenges/paper-session/vulnerable/web/App.vue';
 import PathParcel from '../../challenges/path-parcel/vulnerable/web/App.vue';
 import ForgottenShelf from '../../challenges/forgotten-shelf/vulnerable/web/App.vue';
+import RefundLoop from '../../challenges/refund-loop/vulnerable/web/App.vue';
 
 const page = vi.hoisted(() => ({ data: {} as unknown }));
 vi.mock('../src/page', async () => {
@@ -18,6 +19,25 @@ function globals(path = '/') {
   vi.stubGlobal('location', { pathname: path, search: '' });
   vi.stubGlobal('document', { cookie: 'paper_role=guest' });
 }
+it('shows shop controls and renders receipts only from completed backend orders', async () => {
+  globals();
+  const shop = { balance: 1000, products: [{ id: 'cable', name: '케이블', price: 1000, description: '행사 상품' }], coupon: { code: 'CABLE50', product: 'cable', percent: 50 }, orders: [] as unknown[] };
+  page.data = shop;
+  const initial = await renderToString(createSSRApp(RefundLoop));
+  expect(initial).toContain('1,000원');
+  expect(initial).toContain('CABLE50');
+  expect(initial).toContain('coupon-cable');
+  expect(initial).not.toContain('pwnden{');
+  page.data = { ...shop, balance: 0, orders: [{ id: 5, name: '한정판 키캡', price: 3000, paid: 3000, refunded: 0, status: 'paid', receipt: 'pwnden{receipt}' }] };
+  const purchased = await renderToString(createSSRApp(RefundLoop));
+  expect(purchased).toContain('pwnden{receipt}');
+  expect(purchased).toContain('주문 #5 취소');
+  page.data = { ...shop, orders: [{ id: 1, name: '케이블', price: 1000, paid: 500, refunded: 1000, status: 'cancelled' }] };
+  const cancelled = await renderToString(createSSRApp(RefundLoop));
+  expect(cancelled).toContain('환불액');
+  expect(cancelled).toContain('500원');
+  expect(cancelled).not.toContain('주문 #1 취소');
+});
 it('shows only backend-authorized notes and escapes note bodies', async () => {
   globals('/notes/1'); page.data = { title: 'Welcome', body: '<script>alert(1)</script>' };
   const html = await renderToString(createSSRApp(NoteVault));
