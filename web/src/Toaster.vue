@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { ToastClose, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from '@sectile/vue/toast';
+import { onBeforeUnmount, onMounted } from 'vue';
 import type { ToastMessage } from './toasts';
 // A notification that appears at the top of the page, announces itself and closes by itself.
 const props = defineProps<{ toasts: readonly ToastMessage[] }>();
 const emit = defineEmits<{ 'update:toasts': [toasts: readonly ToastMessage[]] }>();
 // The provider reports the list it still holds after a timeout or a close; every item came from this list.
+// Escape closes the notifications from anywhere on the page, not only when one has focus.
+onMounted(() => document.addEventListener('keydown', closeOnEscape));
+onBeforeUnmount(() => document.removeEventListener('keydown', closeOnEscape));
+function closeOnEscape(event: KeyboardEvent) { if (event.key === 'Escape' && props.toasts.length) emit('update:toasts', []); }
 const keep = (items: readonly { id: string }[]) => emit('update:toasts', props.toasts.filter(toast => items.some(item => item.id === toast.id)));
 </script>
 <template>

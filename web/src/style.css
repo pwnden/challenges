@@ -12,7 +12,8 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); word-break: keep-all; overflow-wrap: break-word; }
-main { max-width: 62rem; margin: auto; padding: var(--inset); }
+.site { max-width: 62rem; margin: 0 auto; padding: 0 var(--inset) 2rem; }
+main { padding: var(--inset) 0; }
 h1, h2, h3, h4 { line-height: 1.35; }
 h1 { margin: 0; font-size: 1.35rem; }
 h2 { margin: 0 0 0.75rem; font-size: 1.15rem; }
@@ -47,7 +48,9 @@ input::placeholder, textarea::placeholder { color: #6b6b64; }
 button { padding-inline: 1rem; background: var(--paper); font-weight: 650; cursor: pointer; }
 button:hover { background: var(--tint); }
 button:active { background: #dedbd2; }
-button:disabled { opacity: 0.6; cursor: wait; }
+button:disabled, button[aria-disabled='true'] { opacity: 0.6; cursor: wait; }
+button[aria-disabled='true']:hover { background: var(--paper); }
+button.primary[aria-disabled='true']:hover { background: var(--accent); }
 button.primary { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
 button.primary:hover { background: var(--accent-dark); }
 button.primary:active { background: var(--accent-darker); }
