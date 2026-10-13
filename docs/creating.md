@@ -65,6 +65,7 @@ tool; players receive completed problems through the platform's existing setup.
 
 ## Generated layouts
 
+The result follows the [shared layout](layout.md), which `tools/layout.py` checks.
 Every problem gets `challenge.toml`, `README.md`, `AUTHORING.md`, `solve/solve.py`,
 `solve/README.md` and the chosen number of hint files under `hints/`.
 

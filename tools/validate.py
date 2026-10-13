@@ -5,6 +5,7 @@ from pathlib import Path, PurePosixPath
 import re
 import tomllib
 from content import check_brief
+from layout import check_catalog as check_layout
 
 
 class InvalidChallenge(ValueError):
@@ -296,6 +297,10 @@ def main():
                 raise InvalidChallenge(f"{manifest.relative_to(root)}: {error}") from error
             print(f"valid {manifest.parent.name} (contract {definition['version']})")
         validate_learning_catalog(root, records, definition)
+        # Review files follow authoring; tools/layout.py checks them with the rest in CI.
+        problems = check_layout(root, reviews=False)
+        if problems:
+            raise InvalidChallenge('shared layout: ' + '; '.join(problems))
     except (OSError, ValueError) as error:
         parser.exit(1, f"validate: {error}\n")
     print(f"Validated {len(manifests)} challenges.")

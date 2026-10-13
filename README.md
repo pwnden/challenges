@@ -69,6 +69,7 @@ is maintained once and offered as optional reading through the learning declarat
 
 Each challenge declares its player brief, ordered hints and complete walkthrough in `[content]`. Players read these in the website, open analysis materials there, use its prepared terminal and submit flags. Follow the [player content standard](docs/player-content.md). Executable solutions and patch sources support author verification; maintainer commands belong in [verification](docs/verification.md).
 
+Every problem follows the [shared layout](docs/layout.md); `python3 tools/layout.py` checks it.
 Run `python3 tools/validate.py` for format checks and `python3 tools/verify.py`
 for complete target, solution, patch and cleanup verification. These author tools
 use Python 3.11 or newer and Docker Engine 28 or newer with Compose, independently
