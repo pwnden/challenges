@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { usePage } from '@target/page';
+import { FormRoot, FormSubmit, TextField } from '@target/sectile';
 import TargetPage from '@target/TargetPage.vue';
 interface Ticket { id: number; title: string; owner: string; body: string; invitation_code?: string }
 interface Desk { user: string; role: string; tickets: { id: number; title: string }[] }
@@ -44,12 +45,12 @@ function lookup(id: string) { ticketId.value = id; return request(`/api/ticket?i
       <section>
         <h2>내 문의</h2><p>문의 본문은 작성자만 읽을 수 있어야 합니다. 알림에 적힌 번호로도 문의를 조회할 수 있습니다.</p>
         <ul><li v-for="item in data.tickets" :key="item.id"><button :disabled="busy" @click="lookup(String(item.id))">#{{ item.id }} · {{ item.title }}</button></li></ul>
-        <form @submit.prevent="lookup(ticketId)"><label for="ticket-id">문의 번호<input id="ticket-id" v-model="ticketId" inputmode="numeric" maxlength="8" required :disabled="busy"></label><button :disabled="busy">문의 조회</button></form>
+        <FormRoot :on-submit="() => lookup(ticketId)"><label for="ticket-id">문의 번호<TextField id="ticket-id" v-model="ticketId" inputmode="numeric" maxlength="8" required :disabled="busy" /></label><FormSubmit as-child><button type="submit" :disabled="busy">문의 조회</button></FormSubmit></FormRoot>
         <article v-if="ticket" class="detail"><h3>#{{ ticket.id }} · {{ ticket.title }}</h3><p>작성자 <code>{{ ticket.owner }}</code></p><p>{{ ticket.body }}</p><p v-if="ticket.invitation_code">초대 코드 <code>{{ ticket.invitation_code }}</code></p></article>
       </section>
       <section>
         <h2>운영 초대</h2><p>초대를 받은 계정은 코드를 등록해 합류합니다. 다른 사람에게 발급된 코드는 사용할 수 없어야 합니다.</p>
-        <form @submit.prevent="request('/api/invitation', { code: invitation })"><label for="invitation-code">초대 코드<input id="invitation-code" v-model="invitation" maxlength="128" required autocomplete="off" :disabled="busy"></label><button :disabled="busy">초대 등록</button></form>
+        <FormRoot :on-submit="() => request('/api/invitation', { code: invitation })"><label for="invitation-code">초대 코드<TextField id="invitation-code" v-model="invitation" maxlength="128" required autocomplete="off" :disabled="busy" /></label><FormSubmit as-child><button type="submit" :disabled="busy">초대 등록</button></FormSubmit></FormRoot>
       </section>
       <section>
         <h2>운영 화면</h2><p>운영 담당자가 접속 확인 코드를 조회하는 화면입니다.</p><button :disabled="busy" @click="request('/api/staff')">운영 화면 열기</button>

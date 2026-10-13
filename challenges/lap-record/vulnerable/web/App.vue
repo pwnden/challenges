@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { usePage } from '@target/page';
+import { FormRoot, FormSubmit, ProgressIndicator, ProgressRoot, ProgressTrack, TextField } from '@target/sectile';
 import TargetPage from '@target/TargetPage.vue';
 interface Row { name: string; time_ms: number; mine: boolean }
 interface Track { rules: { stars: number; segment_m: number; max_speed: number }; leaderboard: Row[]; best_ms: number | null; trophy?: string }
@@ -75,10 +76,12 @@ const reset = () => act(async () => {
       <section v-if="runId !== null">
         <h2>달리기 {{ runId }}번</h2>
         <p>주운 별 {{ marks.length }} / {{ stars }}개<template v-if="!finished"> · 다음 별까지 {{ waitMs > 0 ? (waitMs / 1000).toFixed(1) + '초' : '도착' }}</template></p>
-        <progress :max="stars" :value="marks.length" aria-label="주운 별"></progress>
+        <ProgressRoot class="progress" :value="marks.length" :max="stars" label="주운 별" :format-value="count => `${count}/${stars}개`"><ProgressTrack class="track"><ProgressIndicator class="bar" /></ProgressTrack></ProgressRoot>
         <div class="actions"><button :disabled="busy || finished || waitMs > 0" @click="pick">별 줍기</button></div>
-        <label for="replay">기록 코드<textarea id="replay" v-model="replay" rows="12" spellcheck="false" :disabled="busy"></textarea></label>
-        <div class="actions"><button :disabled="busy || !finished" @click="submit">기록 등록</button></div>
+        <FormRoot class="replay-form" :on-submit="submit">
+          <label for="replay">기록 코드<TextField id="replay" v-model="replay" multiline rows="12" :spellcheck="false" :disabled="busy" /></label>
+          <FormSubmit as-child><button type="submit" :disabled="busy || !finished">기록 등록</button></FormSubmit>
+        </FormRoot>
       </section>
       <section>
         <h2>순위표</h2>
@@ -97,7 +100,11 @@ const reset = () => act(async () => {
 .detail { margin-top: var(--inset); padding: var(--inset); background: #182334; border-radius: var(--radius); }
 .detail code { overflow-wrap: anywhere; }
 textarea { width: 100%; box-sizing: border-box; font-family: var(--mono, monospace); }
-progress { width: 100%; }
+.progress { margin: 0.5rem 0; }
+.track { height: 0.6rem; overflow: hidden; background: #182334; border: 1px solid #34455c; border-radius: 999px; }
+.bar { width: var(--sectile-progress-percentage); height: 100%; background: #94c5ff; }
+.replay-form { grid-template-columns: 1fr; align-items: start; }
+.replay-form button { justify-self: start; }
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 0.35rem 0.5rem; text-align: left; }
 tr.mine { font-weight: 700; }

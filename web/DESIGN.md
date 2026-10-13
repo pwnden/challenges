@@ -40,6 +40,8 @@ spacing:
 
 The nine target sites share a dark blue canvas, readable Korean text and simple document sections. Their site titles and content identify the individual challenge. [style.css](src/style.css) and [TargetPage.vue](src/TargetPage.vue) own the shared presentation.
 
+Interactive controls come from sectile (`@sectile/vue` and `@sectile/form`, the same pinned releases the player uses): forms use `FormRoot` and `FormSubmit`, text inputs and text areas use `TextField`, and progress uses `ProgressRoot` with its track and indicator. Sectile is headless, so each site styles the parts through its own classes and the shared form and input rules still apply. Scenarios import these parts from `@target/sectile`, one module under `src/`, because scenario files sit outside this package. Native elements stay where sectile offers no better primitive, such as tables, links and plain buttons.
+
 A site may instead present itself as the kind of site it stands for. It passes `bare` to `TargetPage`, which keeps the loading and error handling but leaves the layout to the scenario, and draws its own header, palette and sections in its component. The workshop shop is the first such site. Its identity stays inside its component: scoped styles, a page-level palette and inline SVG illustrations, with no external fonts or images. Its controls, labels and text remain the ones the walkthrough and tests rely on.
 
 ## Colors

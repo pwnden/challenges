@@ -166,6 +166,12 @@ importers:
 
   .:
     dependencies:
+      '@sectile/form':
+        specifier: 0.14.9
+        version: 0.14.9
+      '@sectile/vue':
+        specifier: 0.18.2
+        version: 0.18.2(@sectile/form@0.14.9)(vue@3.5.43(typescript-native-bridge@6.0.3-bridge.18.tsgo.7.0.2))
       vue:
         specifier: 3.5.43
         version: 3.5.43(typescript-native-bridge@6.0.3-bridge.18.tsgo.7.0.2)
@@ -319,6 +325,57 @@ packages:
 
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
+
+  '@sectile/core@0.14.8':
+    resolution: {integrity: sha512-2oSFyD1YU4QDd0PI5SmOQ7bragltPpsQmevIB8wZj7uk4fbxrOtq6y6/M8PwuK6fKBq/UtkJyMEmPWs192uwtQ==}
+    engines: {node: '>=24'}
+
+  '@sectile/dom@0.18.3':
+    resolution: {integrity: sha512-vKesHOfOYx/h/OeOiKqqod/t0Mj8YEhwQVJJs6GXfYpW5AHvupTgJmNtZcObyooHOwjhi/y6F9A8+CB1t0d5mw==}
+    engines: {node: '>=24'}
+    peerDependencies:
+      '@sectile/chart': ^0.15.7
+      '@sectile/form': ^0.14.10
+      '@sectile/tabular': ^0.16.3
+      '@sectile/temporal': ^0.14.10
+      '@sectile/virtual': ^0.15.6
+    peerDependenciesMeta:
+      '@sectile/chart':
+        optional: true
+      '@sectile/form':
+        optional: true
+      '@sectile/tabular':
+        optional: true
+      '@sectile/temporal':
+        optional: true
+      '@sectile/virtual':
+        optional: true
+
+  '@sectile/form@0.14.9':
+    resolution: {integrity: sha512-QSQBKg2Lizyvl81vJTObItv5Ui2j3oYf5GyOs5AfNPsJjt6SgAE7Mm4jXIfKlW2yoOqAFh76jjDJdweaTqxt9A==}
+    engines: {node: '>=24'}
+
+  '@sectile/vue@0.18.2':
+    resolution: {integrity: sha512-J1iRoJvX+evA/tBAmfDE11SEcMmyNfcqFgRdrsXuTIjyV0jyDYWZNunJ5SS1ytiFIJlooSaQCuthmZn6GsJ4NQ==}
+    engines: {node: '>=24'}
+    peerDependencies:
+      '@sectile/chart': ^0.15.6
+      '@sectile/form': ^0.14.9
+      '@sectile/tabular': ^0.16.2
+      '@sectile/temporal': ^0.14.9
+      '@sectile/virtual': ^0.15.5
+      vue: ^3.5.0
+    peerDependenciesMeta:
+      '@sectile/chart':
+        optional: true
+      '@sectile/form':
+        optional: true
+      '@sectile/tabular':
+        optional: true
+      '@sectile/temporal':
+        optional: true
+      '@sectile/virtual':
+        optional: true
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -791,6 +848,26 @@ snapshots:
     optional: true
 
   '@rolldown/pluginutils@1.0.1': {}
+
+  '@sectile/core@0.14.8': {}
+
+  '@sectile/dom@0.18.3(@sectile/form@0.14.9)':
+    dependencies:
+      '@sectile/core': 0.14.8
+    optionalDependencies:
+      '@sectile/form': 0.14.9
+
+  '@sectile/form@0.14.9':
+    dependencies:
+      '@sectile/core': 0.14.8
+
+  '@sectile/vue@0.18.2(@sectile/form@0.14.9)(vue@3.5.43(typescript-native-bridge@6.0.3-bridge.18.tsgo.7.0.2))':
+    dependencies:
+      '@sectile/core': 0.14.8
+      '@sectile/dom': 0.18.3(@sectile/form@0.14.9)
+      vue: 3.5.43(typescript-native-bridge@6.0.3-bridge.18.tsgo.7.0.2)
+    optionalDependencies:
+      '@sectile/form': 0.14.9
 
   '@types/chai@5.2.3':
     dependencies:

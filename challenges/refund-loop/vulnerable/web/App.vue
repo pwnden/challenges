@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { usePage } from '@target/page';
+import { FormRoot, FormSubmit, TextField } from '@target/sectile';
 import TargetPage from '@target/TargetPage.vue';
 interface Product { id: string; name: string; price: number; description: string }
 interface Order { id: number; name: string; price: number; paid: number; refunded: number; status: string; receipt?: string }
@@ -8,7 +9,6 @@ interface Store { balance: number; products: Product[]; orders: Order[]; coupon:
 const onOrders = location.pathname === '/orders';
 const { data, loading, error } = usePage<Store>(['/', '/orders']);
 const ordered = ref(false);
-const coupons = ref<Record<string, string>>({});
 const busy = ref(false);
 const feedback = ref('');
 const failed = ref(false);
@@ -61,13 +61,13 @@ async function refresh() {
         <section id="products" aria-labelledby="products-title">
           <h2 id="products-title">상품</h2>
           <div class="products">
-            <form v-for="product in data.products" :key="product.id" class="product" @submit.prevent="action('/api/orders', { product: product.id, coupon: coupons[product.id] ?? '' })">
+            <FormRoot v-for="product in data.products" :key="product.id" class="product" :on-submit="event => action('/api/orders', { product: product.id, coupon: String(event.values.coupon ?? '') })">
               <div class="head"><h3>{{ product.name }}</h3><span v-if="product.id === data.coupon.product" class="label">쿠폰 대상</span></div>
               <p class="price">{{ money(product.price) }}</p>
               <p class="desc">{{ product.description }}</p>
-              <label :for="`coupon-${product.id}`">쿠폰 (선택)<input :id="`coupon-${product.id}`" v-model="coupons[product.id]" maxlength="32" autocomplete="off" :disabled="busy"></label>
-              <button class="primary" :disabled="busy">{{ product.name }} 구매</button>
-            </form>
+              <label :for="`coupon-${product.id}`">쿠폰 (선택)<TextField :id="`coupon-${product.id}`" name="coupon" maxlength="32" autocomplete="off" :disabled="busy" /></label>
+              <FormSubmit as-child><button class="primary" type="submit" :disabled="busy">{{ product.name }} 구매</button></FormSubmit>
+            </FormRoot>
           </div>
         </section>
         </template>
