@@ -21,9 +21,9 @@ const keep = (items: readonly { id: string }[]) => emit('update:toasts', props.t
 <style>
 /* Zero height and sticky: below the page header at the top, pinned to the viewport edge once the page scrolls. */
 .toaster { position: sticky; z-index: 10; top: 0.75rem; display: grid; gap: 0.5rem; width: min(34rem, 100%); height: 0; margin: 0 auto; padding: 0; overflow: visible; list-style: none; pointer-events: none; }
-.toast { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; padding: 0.7rem 0.9rem; color: #1f1f1c; background: #fff; border: 1px solid #8c8c84; border-radius: 0.5rem; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); pointer-events: auto; word-break: keep-all; overflow-wrap: break-word; }
-.toast[data-kind='error'] { color: #7a1510; background: #fdecea; border-color: #a3201a; }
-.toast[data-kind='success'] { color: #14472f; background: #e7f3ec; border-color: #2c7a54; }
+.toast { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; padding: 0.7rem 0.9rem; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 0.5rem; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); pointer-events: auto; word-break: keep-all; overflow-wrap: break-word; }
+.toast[data-kind='error'] { color: var(--danger); background: var(--danger-tint); border-color: var(--danger); }
+.toast[data-kind='success'] { color: var(--success); background: var(--success-tint); border-color: var(--success); }
 .toast-title { flex: 1 1 auto; font-weight: 650; }
 .toast a { color: inherit; font-weight: 650; }
 .toast-close { height: 2rem; padding: 0 0.6rem; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 0.4rem; font-size: 0.85rem; font-weight: 600; }

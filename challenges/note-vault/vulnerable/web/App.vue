@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { usePage } from '@target/page';
+import Field from '@target/Field.vue';
 import TargetPage from '@target/TargetPage.vue';
 const { data, loading, error } = usePage<{ user?: string | null; notes?: { id: number; title: string }[]; title?: string; body?: string }>(['/', '/notes/']);
 const username = ref('guest');
@@ -23,7 +24,7 @@ async function login() {
     <section v-if="data?.body !== undefined"><h2>{{ data.title }}</h2><pre>{{ data.body }}</pre><a href="/">내 메모 목록</a></section>
     <section v-else-if="data?.user"><h2>{{ data.user }}의 메모</h2><ul><li v-for="note in data.notes" :key="note.id"><a :href="`/notes/${note.id}`">{{ note.title }}</a> · #{{ note.id }}</li></ul></section>
     <section v-else><h2>로그인</h2><p>로그인하면 내 메모를 읽을 수 있습니다.</p>
-      <form class="login" @submit.prevent="login"><label>아이디<input v-model="username" name="username" autocomplete="username" required></label><label>비밀번호<input v-model="password" name="password" type="password" autocomplete="current-password" required></label><button :disabled="pending">로그인</button><p class="feedback error" role="status">{{ loginError }}</p></form>
+      <form class="login" @submit.prevent="login"><Field v-model="username" label="아이디" name="username" autocomplete="username" required /><Field v-model="password" label="비밀번호" name="password" type="password" autocomplete="current-password" required /><button class="primary" :disabled="pending">로그인</button><p class="error" role="status">{{ loginError }}</p></form>
     </section>
   </TargetPage>
 </template>

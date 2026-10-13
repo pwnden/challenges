@@ -2,17 +2,20 @@
 name: pwnden challenge targets
 description: Shared presentation for the nine Vue challenge target sites.
 colors:
-  background: "#101722"
-  foreground: "#dae4f2"
-  surface: "#182334"
-  divider: "#34455c"
-  control-border: "#6489ad"
-  accent: "#94c5ff"
-  link-hover: "#c0ddff"
-  button: "#263b54"
-  button-hover: "#314c69"
-  button-pressed: "#1c3048"
-  error: "#ffb7b7"
+  background: "#f6f6f3"
+  surface: "#ffffff"
+  tint: "#eceae4"
+  foreground: "#1f1f1c"
+  muted: "#55554f"
+  divider: "#d4d4cc"
+  control-border: "#8c8c84"
+  accent: "#1c5db3"
+  accent-hover: "#154a91"
+  accent-pressed: "#0f3a73"
+  danger: "#a3201a"
+  danger-tint: "#fdecea"
+  success: "#1d6b47"
+  success-tint: "#e7f3ec"
 typography:
   body:
     fontFamily: "'Pretendard Variable', sans-serif"
@@ -20,60 +23,52 @@ typography:
     lineHeight: 1.65
   title:
     fontFamily: "'Pretendard Variable', sans-serif"
-    fontSize: "1.5rem"
+    fontSize: "1.35rem"
     lineHeight: 1.35
   section-heading:
     fontFamily: "'Pretendard Variable', sans-serif"
-    fontSize: "1.1rem"
+    fontSize: "1.15rem"
   code:
     fontFamily: "'D2Coding', monospace"
 rounded:
-  control: "0.5rem"
+  control: "0.4rem"
 spacing:
   inset: "1rem"
-  control-inset: "calc((2.75rem - 1.5rem - 2px) / 2)"
+  control-height: "2.75rem"
 ---
 
-# Design System: challenge targets
+# Design system: challenge targets
 
 ## Overview
 
-The nine target sites share a dark blue canvas, readable Korean text and simple document sections. Their site titles and content identify the individual challenge. [style.css](src/style.css) and [TargetPage.vue](src/TargetPage.vue) own the shared presentation.
+The nine target sites share one light design system in [style.css](src/style.css), built on a few shared parts in `src/`: [TargetPage.vue](src/TargetPage.vue) (loading, errors and the page frame), [SiteHeader.vue](src/SiteHeader.vue), [Field.vue](src/Field.vue), [SubmitButton.vue](src/SubmitButton.vue), [Toaster.vue](src/Toaster.vue), the [useAction](src/useAction.ts) helper and [sectile.ts](src/sectile.ts), the one module that exposes sectile to scenario files. A site keeps its own file small: structure, its texts, and styles that only it needs. Site names and content identify the individual challenge; sites do not carry explanatory disclaimers such as footers about being a practice site.
 
-Interactive controls come from sectile (`@sectile/vue` and `@sectile/form`, the same pinned releases the player uses): forms use `FormRoot` and `FormSubmit`, text inputs and text areas use `TextField`, and progress uses `ProgressRoot` with its track and indicator. Sectile is headless, so each site styles the parts through its own classes and the shared form and input rules still apply. Scenarios import these parts from `@target/sectile`, one module under `src/`, because scenario files sit outside this package. Native elements stay where sectile offers no better primitive, such as tables, links and plain buttons.
-
-Outcomes appear as toasts from `Toaster.vue`, built on sectile's toast parts. A toast is a zero-height sticky region placed right after the page header, so it sits below the header with the balance and links and stays pinned to the top of the viewport while the page scrolls. Errors are red and stay seven seconds, confirmations are green and stay four, both announce themselves, close with a button or Escape, and keep the latest three. Only changes the user needs to notice get a toast: errors, purchases, cancellations, registrations and resets, not every lookup or star. Sites do not add explanatory disclaimers such as footers about the site being a practice site.
-
-A site may instead present itself as the kind of site it stands for. It passes `bare` to `TargetPage`, which keeps the loading and error handling but leaves the layout to the scenario, and draws its own header, palette and sections in its component. The workshop shop is the first such site. Its identity stays inside its component: scoped styles, a page-level palette and inline SVG illustrations, with no external fonts or images. Its controls, labels and text remain the ones the walkthrough and tests rely on.
+A scenario draws its own whole page by passing `bare` to `TargetPage`, which keeps loading and error handling and leaves the layout to the scenario. The workshop shop does this to look like a store; the other sites use the shared frame.
 
 ## Colors
 
-The background and foreground tokens set the document palette. The surface supports inputs and document output; dividers separate headers, sections and table rows. Accent marks links, input carets and keyboard focus. Buttons use their resting, hover and pressed colors. Errors use the error token with readable feedback text.
+Tokens are CSS variables on `:root`: `--bg` and `--paper` for the page and its surfaces, `--tint` for table headers and chips, `--ink` and `--muted` for text, `--line` and `--line-strong` for dividers and control borders, one blue `--accent` with its darker states, and `--danger` and `--success` with their tints. Text pairs are measured at 4.5:1 or better (muted text 6.9:1 on the page, white on the accent 6.4:1, toast text 5.7:1 or better). Links use the accent. Errors use `--danger` text with a text message, never color alone.
 
 ## Typography
 
-Pretendard Variable and D2Coding are bundled locally and load with `font-display: optional`. Body text, controls and document output share Pretendard; titles and section headings use the recorded scales. Explicit `code` elements use D2Coding through `--font-code`, including SQL and JSON blocks. Document output preserves whitespace, wraps long text and allows scrolling. Critical fonts are preloaded from the document head. If a font arrives too late, the page retains its fallback face rather than replacing already visible text.
+Pretendard Variable and D2Coding are bundled locally and load with `font-display: optional`. Body text, controls and output share Pretendard; `code` uses D2Coding through `--font-code`. Korean text breaks at word boundaries and long identifiers wrap. Critical fonts are preloaded from the document head; a font that arrives late does not replace visible text.
 
 ## Layout
 
-The main document is centered with a maximum width of (52rem). Main, header, sections, table cells and document output use equal four-sided inset padding. The header wraps its title and home link with an inset-sized gap.
-
-Standard forms place a labeled field beside its action and stack at (28rem). Login forms use one column with a maximum width of (26rem). Fields and buttons share a height of (2.75rem), a content line height of (1.5rem) and equal four-sided padding calculated from height, line height and border thickness.
-
-## Shapes
-
-Controls and document output share the rounded control shape. Thin borders frame controls and separate content sections.
+The main column is centered at 62rem with a one-rem inset. A `section` is a bordered surface (`section.plain` removes the surface); cards reuse the same look. Forms place a labeled field beside its action and stack at 28rem. Fields and buttons share a height of 2.75rem (small buttons 2.25rem). Tables sit in a `.scroll` region that scrolls on its own, so the page never scrolls sideways at 320px.
 
 ## Components
 
-`TargetPage` provides one page heading and a home link on inner pages. HTML responses include inert JSON with the current page data and HTTP status, so full-document navigation and history restoration render ready content without a second request. The entry module blocks rendering until the synchronous mount completes. Internal page navigation retains the current content while requesting the destination data, then replaces the page with ready content. Network failures retain the current page and display an alert; HTTP errors render the destination's error state. Native browser history owns back and forward navigation. Raw documents and downloads retain ordinary browser navigation. Standalone development without server-supplied page data retains the initial loading status.
+Buttons are neutral by default; `primary` is the accent, `danger` an outlined red, and `small` the compact size. Inputs and text areas come from sectile's `TextField` through `Field`, which supplies the label. Forms that submit through script use sectile's `FormRoot` and `SubmitButton`; forms that navigate with a GET stay native. Progress uses sectile's progress parts, styled by each site from the `--sectile-progress-percentage` variable.
 
-Forms use visible labels and native inputs. Links navigate through ordinary anchors; search and document lookup use normal GET forms with named query fields. Login submits JSON, disables its button while pending and reserves a feedback line. The user-role form saves the browser cookie and reloads the page.
+Outcomes appear as toasts from `Toaster.vue`, built on sectile's toast parts. A toast is a zero-height sticky region placed right after the page header, so it sits below the header with its balance and links and stays pinned to the top of the viewport while the page scrolls. Errors are red and stay seven seconds, confirmations are green and stay four, both announce themselves, close with a button or Escape, and keep the latest three. Only changes the user needs to notice get a toast: errors, purchases, cancellations, registrations and resets, not every lookup or star.
 
-The workshop shop is drawn as a plain online store whose layout follows what a buyer does. It has two pages with their own addresses: the products at `/` and the order history at `/orders`. Both share a top bar with the store name, links to the two pages (the current one marked with `aria-current`) and the buyer account with its balance and the refresh and reset buttons. After a purchase the notice line links to the order page. The product page has a bordered notice that lists the weekly coupon, the cancellation rule and the receipt rule as labeled rows, then product cards with the name, price, description and the coupon field beside the buy button, with a text label on the coupon target; the cards wrap into one column when space is limited. The order page lists orders as a table so the original price, actual payment and refund of every order can be compared in columns; the table scrolls inside its own region on narrow screens and the page never scrolls sideways. A receipt for the limited item is a bordered block below the table. The palette is neutral with one blue accent chosen for contrast (text pairs measured at 5.3:1 or higher), and there are no illustrations, gradients or shadows because the site has no brand evidence to depict. Buying and cancelling update server-supplied state and report their outcome in a toast. Korean text breaks at word boundaries. Refresh recovers current state after an uncertain request; reset starts a new attempt for the current account.
+## Sites
 
-The support desk groups the current account, its own inquiries, staff invitation and staff page in separate sections. An inquiry or the staff confirmation opens in a detail panel below its form; the panel clears when the next request starts. All requests report their outcome in a toast and disable the controls while pending. Reset restores the member account and clears the forms.
+The workshop shop has two pages with their own addresses: the products at `/` and the order history at `/orders`. Both share a top bar with the store name, links to the two pages (the current one marked with `aria-current`) and the buyer account with its balance and the refresh and reset buttons. After a purchase the toast links to the order page. The product page lists the weekly coupon, the cancellation rule and the receipt rule as labeled rows, then product cards with the name, price, description and the coupon field beside the buy button, with a text label on the coupon target; the cards wrap into one column when space is limited. The order page is a table so the original price, actual payment and refund of every order can be compared in columns, with a bordered receipt for the limited item below it.
 
-The star run groups the track rules, the current run and the record board in separate sections. The current run shows the stars picked so far with a progress bar and a button that stays disabled until the next star is available. The record code is an editable text box beside its submit button. The board is a semantic table and highlights the player's row; the trophy appears in a detail panel only when the server returns it. Outcomes appear in a toast and controls are disabled while a request is pending.
+The support desk groups the current account, its own inquiries, the staff invitation and the staff page in sections. An inquiry or the staff confirmation opens in a card below its form; the card clears when the next request starts.
 
-Vue text interpolation displays server content, queries, policy JSON, filenames and document bodies as escaped text. Search results use a semantic table with column headings. Lists of notes, files and revisions use semantic lists and links. All interactive elements receive the shared visible keyboard focus outline. Fonts and built assets are served locally.
+The star run groups the track rules, the current run and the record board in sections. The current run shows the stars picked so far with a progress bar and a button that stays disabled until the next star is available. The record code is an editable text area with its submit button, and the board is a semantic table that highlights the player's row. The trophy appears in a card only when the server returns it.
+
+The remaining sites are document pages built from sections, labeled fields and the shared tables and code blocks. Text from the server, queries, policy JSON, filenames and document bodies is displayed as escaped text. Search results use a semantic table with column headings. Lists of notes, files and revisions use semantic lists and links. All interactive elements receive the shared visible focus outline. Fonts and built assets are served locally.

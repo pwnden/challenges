@@ -70,11 +70,11 @@ it('shows the star run rules and the board, and renders the trophy only from bac
   expect(initial).toContain('12.64초');
   expect(initial).toContain('달리기 시작');
   expect(initial).not.toContain('pwnden{');
-  expect(initial).not.toContain('class="detail"');
+  expect(initial).not.toContain('class="card trophy"');
   page.data = { ...track, best_ms: 6000, leaderboard: [{ name: '나', time_ms: 6000, mine: true }, ...track.leaderboard], trophy: 'pwnden{trophy}' };
   const earned = await renderToString(createSSRApp(LapRecord));
   expect(earned).toContain('6.00초');
-  expect(earned).toContain('class="detail"');
+  expect(earned).toContain('class="card trophy"');
   expect(earned).toContain('pwnden{trophy}');
 });
 it('shows only backend-authorized notes and escapes note bodies', async () => {
