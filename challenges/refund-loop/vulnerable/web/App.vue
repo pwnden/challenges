@@ -76,13 +76,14 @@ async function refresh() {
 .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--inset); }
 .product { grid-template-columns: 1fr; align-content: start; padding: var(--inset); background: #182334; border-radius: var(--radius); }
 h3 { margin: 0; font-size: 1rem; }
+.order-heading { margin-bottom: 0.75rem; }
 .orders { display: grid; gap: var(--inset); list-style: none; padding: 0; margin: 0; }
 .order { padding: var(--inset); border: 1px solid #34455c; border-radius: var(--radius); }
 .orders li + li { margin-top: 0; }
-dl { display: flex; flex-wrap: wrap; gap: var(--inset); }
+dl { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin: 0 0 var(--inset); }
 dt { color: #a9bed6; font-size: 0.875rem; }
 dd { margin: 0; font-variant-numeric: tabular-nums; }
 .receipt { padding: var(--inset); margin-bottom: var(--inset); background: #182334; border-radius: var(--radius); }
 .receipt code { overflow-wrap: anywhere; }
-.feedback { padding: var(--inset); min-height: 5.3rem; margin: 0; }
+.feedback { padding: 0.5rem var(--inset); margin: 0; }
 </style>

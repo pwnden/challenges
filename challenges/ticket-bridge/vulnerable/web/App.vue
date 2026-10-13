@@ -62,6 +62,6 @@ function lookup(id: string) { ticketId.value = id; return request(`/api/ticket?i
 .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .detail { margin-top: var(--inset); padding: var(--inset); background: #182334; border-radius: var(--radius); }
 .detail code { overflow-wrap: anywhere; }
-.feedback { padding: var(--inset); min-height: 5.3rem; margin: 0; }
+.feedback { padding: 0.5rem var(--inset); margin: 0; }
 h3 { font-size: 1rem; }
 </style>

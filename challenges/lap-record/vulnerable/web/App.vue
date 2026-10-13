@@ -93,7 +93,7 @@ const reset = () => act(async () => {
 </template>
 <style scoped>
 .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-.feedback { padding: var(--inset); min-height: 5.3rem; margin: 0; }
+.feedback { padding: 0.5rem var(--inset); margin: 0; }
 .detail { margin-top: var(--inset); padding: var(--inset); background: #182334; border-radius: var(--radius); }
 .detail code { overflow-wrap: anywhere; }
 textarea { width: 100%; box-sizing: border-box; font-family: var(--mono, monospace); }
