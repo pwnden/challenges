@@ -1,6 +1,8 @@
 """Runtime-owned limits shared by author service and toolbox execution."""
 
+from functools import lru_cache
 import os
+import subprocess
 from execution import ExecutionError
 
 CPU_LIMIT = 2
@@ -16,8 +18,23 @@ SECURITY_OPTIONS = {'no-new-privileges', 'no-new-privileges:true',
                     'no-new-privileges=false'}
 
 
+@lru_cache(maxsize=None)
+def daemon_cpus():
+    """CPUs reported by the Docker daemon, or 0 when they cannot be read."""
+    try:
+        result = subprocess.run(['docker', 'info', '--format', '{{.NCPU}}'], capture_output=True,
+                                text=True, timeout=15, check=True)
+        return int(result.stdout.strip())
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return 0
+
+
 def cpu_limit():
-    value = os.environ.get('PWNDEN_CONTAINER_CPUS') or str(CPU_LIMIT)
+    """Explicit setting first; otherwise 2, or 1 when the daemon cannot fit two 2-CPU containers."""
+    value = os.environ.get('PWNDEN_CONTAINER_CPUS')
+    if not value:
+        available = daemon_cpus()
+        return 1 if 0 < available < 2 * CPU_LIMIT else CPU_LIMIT
     if value not in ('1', '2'):
         raise ExecutionError('PWNDEN_CONTAINER_CPUS must be 1 or 2')
     return int(value)

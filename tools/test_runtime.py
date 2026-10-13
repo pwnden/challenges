@@ -18,7 +18,7 @@ from unittest.mock import patch
 from runtime import (Commands, Docker, ExecutionError, GATEWAY_KEYS, OWNER_LABEL,
                      Project, Result, check_network, isolated_config, toolbox_mount)
 from validate import InvalidChallenge
-from policy import tool_options
+from policy import cpu_limit, tool_options
 from budget import limits, tool_cost
 
 
@@ -27,6 +27,9 @@ class RuntimeTests(unittest.TestCase):
         admission_mock = patch('runtime.admission', side_effect=lambda *a, **kw: nullcontext())
         admission_mock.start()
         self.addCleanup(admission_mock.stop)
+        daemon_mock = patch('policy.daemon_cpus', return_value=8)
+        daemon_mock.start()
+        self.addCleanup(daemon_mock.stop)
         temporary = tempfile.TemporaryDirectory(prefix='pwnden-author-policy-')
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
@@ -58,6 +61,16 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(limits({'NCPU': 4, 'MemTotal': 8*1024**3}).cpus, 4_000_000_000)
             self.assertEqual(result['mem_limit'], '2g')
             self.assertTrue(result['read_only'])
+
+    def test_default_cpu_ceiling_adapts_to_daemon_capacity(self):
+        env = {key: value for key, value in os.environ.items() if key != 'PWNDEN_CONTAINER_CPUS'}
+        for reported, expected in ((0, 2), (1, 1), (3, 1), (4, 2), (8, 2)):
+            with self.subTest(reported=reported), patch.dict(os.environ, env, clear=True), \
+                    patch('policy.daemon_cpus', return_value=reported):
+                self.assertEqual(cpu_limit(), expected)
+        with patch.dict(os.environ, {**env, 'PWNDEN_CONTAINER_CPUS': '2'}), \
+                patch('policy.daemon_cpus', return_value=3):
+            self.assertEqual(cpu_limit(), 2)
 
     def test_invalid_cpu_ceiling_is_rejected_before_execution(self):
         for value in ('0', '3', '-1', '1.5', ' 1', 'one'):

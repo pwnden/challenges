@@ -106,7 +106,8 @@ increase these limits. Memory is not reserved in advance. Toolboxes run as
 provides a writable home; caches and compiled exercises use `/tmp`.
 
 `PWNDEN_CONTAINER_CPUS=1` tightens the service and toolbox CPU ceiling to one
-CPU; the default is 2, and only 1 or 2 are accepted. Aggregate limits still apply
+CPU; only 1 or 2 are accepted. Without it the ceiling is 2, or 1 when the
+Docker daemon reports fewer than four CPUs so a service and a toolbox fit. Aggregate limits still apply
 and remain clipped to daemon capacity. CI uses 1 so vulnerable and patched
 targets, the active toolbox and their temporary workspace keepers fit its
 four-core runner. Default-policy regressions run with 2.
