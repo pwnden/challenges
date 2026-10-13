@@ -9,7 +9,7 @@
       "reason": "2026-10-04 Codex 부모 변경 검토: 승인 안내의 현재 버전과 해당 서명의 검증 결과로 현재 승인본을 고른다. 그 문서의 확인 코드가 완료 증거이며 세 사본의 서로 다른 코드 때문에 형식만으로 정답을 고를 수 없다. 공개키의 출처를 확인한 실습이라는 범위도 본문에 있다.",
       "evidence": [
         {
-          "path": "challenges/signed-delivery/BRIEFING.md",
+          "path": "challenges/signed-delivery/README.md",
           "quote": "그 문서에 적힌 납품 확인 코드를 그대로 제출하자.",
           "kind": "source"
         },
@@ -96,5 +96,5 @@
       "improvement": "자동 해답과 주요 대조군의 출력 결과를 날짜가 붙은 기록으로 남기면 실행 증거를 독립적으로 검토하기 쉽다."
     }
   },
-  "source_sha256": "063ff54109237d215c30d04d18febd31d6070356b306e1206c4d5c8a83d36448"
+  "source_sha256": "75591225fa41f7d4579830b737e9ffa6821a059e0331954350e1e03ca627bd62"
 }

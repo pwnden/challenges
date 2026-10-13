@@ -166,5 +166,5 @@
       "improvement": "배포 전 재검토에서 현 실행 기록의 대상 이미지 태그와 각 consumer 단계의 출력 요약을 함께 남기면 이후 재현 검토가 쉬워진다."
     }
   },
-  "source_sha256": "c359be48bcfc7ae4c946b3ba3601215af26e39ffe32e094c95cf5b5d24a67228"
+  "source_sha256": "aa2baf6ab443a23a26377ce29841fb8a67753f6f048865312146f68bd297223b"
 }

@@ -14,7 +14,7 @@ file, and `tools/create.py` output passes the check once the problem has its tex
 | `challenge.toml`, `AUTHORING.md`, `solve/README.md` | Required. |
 | `hints/<n>.md` | As many as the manifest declares. Plain text without headings; the hint list numbers them. |
 | `solve/solve.py` or `solve/solve.sh`, `patched/test.py` or `patched/test.sh` | The runner commands declared in the manifest. |
-| `BRIEFING.md` | Optional source of `README.md` for a brief that inlines shared notes with a `::knowledge{concepts="…"}` include; see [creating](creating.md). Prerequisite reading otherwise comes from `[learning].requires`, so a new problem without an include has none. |
+| `BRIEFING.md` | Only when the brief inlines shared notes with a `::knowledge{concepts="…"}` include; `tools/content.py` compiles it into `README.md`. A copy without an include adds nothing and fails the check. Prerequisite reading otherwise comes from `[learning].requires`. |
 | `compose.yaml`, `vulnerable/Dockerfile`, `vulnerable/app.py` | Service problems. The compose file declares an internal default network and publishes no ports; the platform provides ingress. |
 | `.dockerignore` | Required when the service has `vulnerable/web/App.vue`. |
 | `compose.patched.yaml`, `patched/` | Patch checks. A patch replaces either the whole app (`patched/app.py` with `APP_SOURCE`) or one policy module. |

@@ -9,7 +9,7 @@
       "reason": "2026-10-04 Codex 부모 변경 검토: 본문의 목표는 계정 해시와 일치하는 후보 비밀번호를 찾는 것이며 정답 자체가 그 전체 비밀번호다. 실제 자료와 해답은 유일한 일치를 입증한다. 다만 teaches의 candidate-cost가 뜻하는 후보 대입 비용을 정량 비교하는 실험은 없어 기존 수준 2와 보완 행동을 유지한다.",
       "evidence": [
         {
-          "path": "challenges/hash-lantern/BRIEFING.md",
+          "path": "challenges/hash-lantern/README.md",
           "quote": "기록의 해시와 일치하는 비밀번호를 찾아 제출하자.",
           "kind": "source"
         },
@@ -86,5 +86,5 @@
       "improvement": "최초 구현 작업 트리 기준이라는 범위에 더해 실제 실행 로그나 결과 요약을 날짜별로 남겨 재현 정보를 보존한다."
     }
   },
-  "source_sha256": "1c0a76a389971e3bf4d99b9b29d7901773f9143d14586d2c479aeffda437c2e3"
+  "source_sha256": "120fb1493a8097bb048742189fd4d69596c903b6c58acdb36682cbd612cd3392"
 }

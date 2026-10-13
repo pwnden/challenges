@@ -20,8 +20,7 @@
 - requires `web-addresses`: [공통 시작 지식](../../knowledge/web-addresses.md).
 - requires `file-paths`: [공통 시작 지식](../../knowledge/file-paths.md).
 
-BRIEFING.md의 개념 참조는 공통 지식을 배포용 README.md에 반영한다.
-풀이자가 필요한 설명을 문제 본문에서 읽는다. teaches는 위 보안 학습 목표이며,
+선수 지식 문서는 `[learning].requires`의 학습 연결에서 읽는다. teaches는 위 보안 학습 목표이며,
 구체적인 공격 식과 결과는 힌트·해설에 배치한다.
 Python 문법 읽기나 코드 작성은 일반 풀이의 선수 능력에 포함하지 않는다.
 

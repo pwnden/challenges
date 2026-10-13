@@ -59,6 +59,10 @@ def check_challenge(root, directory, reviews=True):
         if found not in (README_BLOCKS, README_BLOCKS[1:]):
             add('readme-blocks', f'README.md blocks {found} must be {README_BLOCKS} in order; message is optional')
 
+    briefing = directory / 'BRIEFING.md'
+    if briefing.is_file() and '::knowledge{concepts=' not in briefing.read_text(encoding='utf-8'):
+        add('briefing', 'BRIEFING.md without a ::knowledge include only duplicates README.md; remove it')
+
     authoring = directory / 'AUTHORING.md'
     if authoring.is_file():
         if headings(authoring, 1) != [AUTHORING_TITLE[2:]]:
