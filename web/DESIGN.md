@@ -40,6 +40,8 @@ spacing:
 
 The nine target sites share a dark blue canvas, readable Korean text and simple document sections. Their site titles and content identify the individual challenge. [style.css](src/style.css) and [TargetPage.vue](src/TargetPage.vue) own the shared presentation.
 
+A site may instead present itself as the kind of site it stands for. It passes `bare` to `TargetPage`, which keeps the loading and error handling but leaves the layout to the scenario, and draws its own header, palette and sections in its component. The workshop shop is the first such site. Its identity stays inside its component: scoped styles, a page-level palette and inline SVG illustrations, with no external fonts or images. Its controls, labels and text remain the ones the walkthrough and tests rely on.
+
 ## Colors
 
 The background and foreground tokens set the document palette. The surface supports inputs and document output; dividers separate headers, sections and table rows. Accent marks links, input carets and keyboard focus. Buttons use their resting, hover and pressed colors. Errors use the error token with readable feedback text.
@@ -64,7 +66,7 @@ Controls and document output share the rounded control shape. Thin borders frame
 
 Forms use visible labels and native inputs. Links navigate through ordinary anchors; search and document lookup use normal GET forms with named query fields. Login submits JSON, disables its button while pending and reserves a feedback line. The user-role form saves the browser cookie and reloads the page.
 
-The workshop shop groups balance, product offers and order history in separate sections. Product cards wrap into one column when space is limited. Each order shows its original price, actual payment, refund and status together. Buying and cancelling update server-supplied state and share a reserved feedback line. A receipt appears beside its completed order. Refresh recovers current state after an uncertain request; reset starts a new attempt for the current account.
+The workshop shop is drawn as a small online store on a warm paper palette. A top bar holds the brand, in-page navigation and the buyer account with its balance and the refresh and reset buttons. A promotion banner states the weekly coupon, the cancellation policy and the receipt rule. Product cards show an illustration, a badge, the price and the coupon field beside the buy button, and wrap into one column when space is limited. Each order is a card with a status badge, its original price, actual payment and refund, a ticket-style receipt for the limited item and a cancel button. Buying and cancelling update server-supplied state and share one compact notice line under the top bar. Refresh recovers current state after an uncertain request; reset starts a new attempt for the current account.
 
 The support desk groups the current account, its own inquiries, staff invitation and staff page in separate sections. An inquiry or the staff confirmation opens in a detail panel below its form; the panel clears when the next request starts. All requests share a reserved feedback line and disable the controls while pending. Reset restores the member account and clears the forms.
 
