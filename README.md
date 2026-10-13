@@ -17,7 +17,7 @@ briefing, progressive additional information and a complete investigation report
 The [learning map](docs/learning-map.md) defines areas, topics, observable
 experiments, scoped prerequisites and required tool capabilities.
 Learning areas are independent of contract categories; the
-[current learning order](docs/learning-order.md) covers all 21 exercises with a
+[current learning order](docs/learning-order.md) covers all 22 exercises with a
 recommended sequence and separate browser practice. The
 [execution feasibility map](docs/execution-feasibility.md) distinguishes current
 execution shapes, artifact-only scope and unverified runtime profiles.
@@ -57,6 +57,7 @@ See [creating scenarios](docs/creating.md) for options and the authoring workflo
 | [패킷에 남은 전송 파일](challenges/packet-delivery/README.md) | forensics | Reassemble repeated HTTP deliveries and compare archive receipts |
 | [서명이 맞는 납품 문서](challenges/signed-delivery/README.md) | crypto | Distinguish current approval from an authentic earlier document |
 | [천 원으로 한정 상품 사기](challenges/refund-loop/README.md) | web | Browser-only shopping, coupon and refund accounting |
+| [회원 계정으로 운영 화면 열기](challenges/ticket-bridge/README.md) | web | Browser-only chain from an unowned inquiry to a staff invitation |
 
 The [first experiment guide](docs/first-experiments.md) maps the new scenarios to
 their learning topics, tools and review status. Each brief supplies the scoped
