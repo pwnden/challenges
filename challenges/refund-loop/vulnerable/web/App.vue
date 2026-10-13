@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { usePage } from '@target/page';
 import { FormRoot, FormSubmit, TextField } from '@target/sectile';
 import TargetPage from '@target/TargetPage.vue';
+import Toaster from '@target/Toaster.vue';
+import { addToast, type ToastMessage } from '@target/toasts';
 interface Product { id: string; name: string; price: number; description: string }
 interface Order { id: number; name: string; price: number; paid: number; refunded: number; status: string; receipt?: string }
 interface Store { balance: number; products: Product[]; orders: Order[]; coupon: { code: string; product: string; percent: number }; notice?: string }
@@ -10,18 +12,18 @@ const onOrders = location.pathname === '/orders';
 const { data, loading, error } = usePage<Store>(['/', '/orders']);
 const ordered = ref(false);
 const busy = ref(false);
-const feedback = ref('');
-const failed = ref(false);
+const toasts = ref<ToastMessage[]>([]);
+const notify = (kind: ToastMessage['kind'], text: string) => { toasts.value = addToast(toasts.value, kind, text); };
 const money = (value: number) => `${value.toLocaleString('ko-KR')}원`;
 async function action(path: string, body: Record<string, unknown>) {
   if (busy.value) return;
-  busy.value = true; failed.value = false; feedback.value = '';
+  busy.value = true;
   try {
     const response = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const result = await response.json();
-    if (!response.ok) { failed.value = true; feedback.value = result.error; }
-    else { data.value = result as Store; feedback.value = result.notice; ordered.value = path === '/api/orders'; }
-  } catch { failed.value = true; feedback.value = '처리 결과를 확인하지 못했습니다. 현재 상태를 다시 확인한 뒤 시도하세요.'; }
+    if (!response.ok) notify('error', result.error);
+    else { data.value = result as Store; ordered.value = path === '/api/orders'; notify('success', result.notice); }
+  } catch { notify('error', '처리 결과를 확인하지 못했습니다. 현재 상태를 다시 확인한 뒤 시도하세요.'); }
   finally { busy.value = false; }
 }
 async function refresh() {
@@ -30,8 +32,8 @@ async function refresh() {
   try {
     const response = await fetch('/api/shop', { headers: { Accept: 'application/json' } });
     if (!response.ok) throw new Error('connection');
-    data.value = await response.json(); feedback.value = '현재 잔액과 주문 기록을 확인했습니다.'; failed.value = false;
-  } catch { feedback.value = '상점 연결을 확인하고 다시 시도하세요.'; failed.value = true; }
+    data.value = await response.json(); notify('success', '현재 잔액과 주문 기록을 확인했습니다.');
+  } catch { notify('error', '상점 연결을 확인하고 다시 시도하세요.'); }
   finally { busy.value = false; }
 }
 </script>
@@ -47,7 +49,7 @@ async function refresh() {
           <button class="quiet" :disabled="busy" @click="action('/api/reset', {})">처음부터 다시</button>
         </div>
       </header>
-      <p class="notice" :class="{ error: failed }" role="status" aria-live="polite">{{ feedback }}<template v-if="ordered && !failed && !onOrders"> <a href="/orders">주문 기록 보기</a></template></p>
+      <Toaster v-model:toasts="toasts"><template #extra="{ item }"><a v-if="item.kind === 'success' && ordered && !onOrders" href="/orders">주문 기록 보기</a></template></Toaster>
       <main class="content">
         <template v-if="!onOrders">
         <section class="rules" aria-labelledby="rules-title">
@@ -98,7 +100,6 @@ async function refresh() {
           </template>
         </section>
       </main>
-      <footer class="foot">이 상점은 실습용입니다. 실제 결제와 배송은 하지 않습니다.</footer>
     </div>
   </TargetPage>
 </template>
@@ -119,8 +120,6 @@ nav a:hover { color: var(--accent-dark); }
 .account p { display: grid; margin: 0 0.5rem 0 0; text-align: right; line-height: 1.35; }
 .account span { font-size: 0.8rem; color: var(--muted); }
 .balance { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
-.notice { min-height: 1.65rem; margin: 0; padding: 0.4rem 0; font-size: 0.95rem; color: #1d6b47; }
-.notice.error { color: var(--danger); }
 .content { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; max-width: none; margin: 0; padding: 0; }
 .content h2 { margin: 0 0 0.75rem; font-size: 1.15rem; }
 .content section { padding: 0; border: 0; }
@@ -165,7 +164,6 @@ code { background: var(--tint); padding: 0.05rem 0.35rem; border-radius: 0.25rem
 .receipt h3 { margin: 0 0 0.25rem; font-size: 1rem; }
 .receipt p { margin: 0 0 0.25rem; color: var(--muted); font-size: 0.9rem; }
 .receipt code { overflow-wrap: anywhere; font-weight: 700; }
-.foot { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
 @media (max-width: 40rem) {
   .account { margin-left: 0; width: 100%; }
   .account p { text-align: left; margin-right: auto; }

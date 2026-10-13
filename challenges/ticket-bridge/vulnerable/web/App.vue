@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { usePage } from '@target/page';
 import { FormRoot, FormSubmit, TextField } from '@target/sectile';
 import TargetPage from '@target/TargetPage.vue';
+import Toaster from '@target/Toaster.vue';
+import { addToast, type ToastMessage } from '@target/toasts';
 interface Ticket { id: number; title: string; owner: string; body: string; invitation_code?: string }
 interface Desk { user: string; role: string; tickets: { id: number; title: string }[] }
 interface Staff { user: string; role: string; confirmation: string }
@@ -12,24 +14,24 @@ const invitation = ref('');
 const ticket = ref<Ticket | null>(null);
 const staff = ref<Staff | null>(null);
 const busy = ref(false);
-const feedback = ref('');
-const failed = ref(false);
+const toasts = ref<ToastMessage[]>([]);
+const notify = (kind: ToastMessage['kind'], text: string) => { toasts.value = addToast(toasts.value, kind, text); };
 async function request(path: string, body?: Record<string, unknown>) {
   if (busy.value) return;
-  busy.value = true; failed.value = false; feedback.value = '';
+  busy.value = true;
   if (path.startsWith('/api/ticket')) ticket.value = null;
   if (path === '/api/staff' || path === '/api/reset') staff.value = null;
   try {
     const response = await fetch(path, { method: body ? 'POST' : 'GET', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
     const result = await response.json();
-    if (!response.ok) { failed.value = true; feedback.value = result.error; }
-    else if (result.ticket) { ticket.value = result.ticket; feedback.value = '문의 내용을 확인했습니다.'; }
-    else if (result.staff) { staff.value = result.staff; feedback.value = '운영 화면을 열었습니다.'; }
+    if (!response.ok) notify('error', result.error);
+    else if (result.ticket) ticket.value = result.ticket;
+    else if (result.staff) staff.value = result.staff;
     else {
-      data.value = result as Desk; feedback.value = result.notice ?? '현재 계정을 확인했습니다.';
+      data.value = result as Desk; if (result.notice) notify('success', result.notice);
       if (path === '/api/reset') { ticket.value = null; invitation.value = ''; ticketId.value = ''; }
     }
-  } catch { failed.value = true; feedback.value = '처리 결과를 확인하지 못했습니다. 현재 계정을 다시 확인하세요.'; }
+  } catch { notify('error', '처리 결과를 확인하지 못했습니다. 현재 계정을 다시 확인하세요.'); }
   finally { busy.value = false; }
 }
 function lookup(id: string) { ticketId.value = id; return request(`/api/ticket?id=${encodeURIComponent(id)}`); }
@@ -41,7 +43,7 @@ function lookup(id: string) { ticketId.value = id; return request(`/api/ticket?i
         <h2>내 시험 계정</h2><p>계정 <code>{{ data.user }}</code> · 권한 <strong>{{ data.role === 'staff' ? '운영 담당자' : '일반 회원' }}</strong></p>
         <div class="actions"><button :disabled="busy" @click="request('/api/desk')">현재 계정 확인</button><button :disabled="busy" @click="request('/api/reset', {})">처음부터 다시</button></div>
       </section>
-      <p class="feedback" :class="{ error: failed }" role="status" aria-live="polite">{{ feedback }}</p>
+      <Toaster v-model:toasts="toasts" />
       <section>
         <h2>내 문의</h2><p>문의 본문은 작성자만 읽을 수 있어야 합니다. 알림에 적힌 번호로도 문의를 조회할 수 있습니다.</p>
         <ul><li v-for="item in data.tickets" :key="item.id"><button :disabled="busy" @click="lookup(String(item.id))">#{{ item.id }} · {{ item.title }}</button></li></ul>
@@ -63,6 +65,5 @@ function lookup(id: string) { ticketId.value = id; return request(`/api/ticket?i
 .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .detail { margin-top: var(--inset); padding: var(--inset); background: #182334; border-radius: var(--radius); }
 .detail code { overflow-wrap: anywhere; }
-.feedback { padding: 0.5rem var(--inset); margin: 0; }
 h3 { font-size: 1rem; }
 </style>

@@ -3,6 +3,8 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { usePage } from '@target/page';
 import { FormRoot, FormSubmit, ProgressIndicator, ProgressRoot, ProgressTrack, TextField } from '@target/sectile';
 import TargetPage from '@target/TargetPage.vue';
+import Toaster from '@target/Toaster.vue';
+import { addToast, type ToastMessage } from '@target/toasts';
 interface Row { name: string; time_ms: number; mine: boolean }
 interface Track { rules: { stars: number; segment_m: number; max_speed: number }; leaderboard: Row[]; best_ms: number | null; trophy?: string }
 const { data, loading, error } = usePage<Track>();
@@ -12,8 +14,8 @@ const replay = ref('');
 const clock = ref(0);
 const lastAt = ref(0);
 const busy = ref(false);
-const feedback = ref('');
-const failed = ref(false);
+const toasts = ref<ToastMessage[]>([]);
+const notify = (kind: ToastMessage['kind'], text: string) => { toasts.value = addToast(toasts.value, kind, text); };
 const GAP_MS = 2000;
 let timer: number | undefined;
 onMounted(() => { timer = window.setInterval(() => { clock.value = Date.now(); }, 100); });
@@ -31,34 +33,32 @@ async function send(path: string, body: Record<string, unknown>) {
 }
 async function act(job: () => Promise<void>) {
   if (busy.value) return;
-  busy.value = true; failed.value = false; feedback.value = '';
-  try { await job(); } catch { failed.value = true; feedback.value = '처리 결과를 확인하지 못했습니다. 순위표를 다시 확인하세요.'; }
+  busy.value = true;
+  try { await job(); } catch { notify('error', '처리 결과를 확인하지 못했습니다. 순위표를 다시 확인하세요.'); }
   finally { busy.value = false; }
 }
 const start = () => act(async () => {
   const { ok, result } = await send('/api/run/start', {});
-  if (!ok) { failed.value = true; feedback.value = result.error; return; }
+  if (!ok) { notify('error', result.error); return; }
   runId.value = result.run_id; marks.value = []; lastAt.value = Date.now(); clock.value = Date.now(); writeReplay();
-  feedback.value = '달리기를 시작했습니다.';
 });
 const pick = () => act(async () => {
   const { ok, result } = await send('/api/run/checkpoint', { run_id: runId.value, id: marks.value.length + 1 });
-  if (!ok) { failed.value = true; feedback.value = result.error; return; }
+  if (!ok) { notify('error', result.error); return; }
   marks.value = [...marks.value, result.t_ms]; lastAt.value = Date.now(); writeReplay();
-  feedback.value = `별 ${result.id}개를 주웠습니다.`;
 });
 const submit = () => act(async () => {
   let parsed: { run_id?: number; checkpoints?: unknown };
-  try { parsed = JSON.parse(replay.value); } catch { failed.value = true; feedback.value = '기록 코드의 형식을 확인하세요.'; return; }
+  try { parsed = JSON.parse(replay.value); } catch { notify('error', '기록 코드의 형식을 확인하세요.'); return; }
   const { ok, result } = await send('/api/run/finish', { run_id: parsed.run_id, checkpoints: parsed.checkpoints });
-  if (!ok) { failed.value = true; feedback.value = result.error; return; }
-  data.value = result as Track; feedback.value = result.notice;
+  if (!ok) { notify('error', result.error); return; }
+  data.value = result as Track; notify('success', result.notice);
   runId.value = null; marks.value = []; replay.value = '';
 });
 const reset = () => act(async () => {
   const { ok, result } = await send('/api/reset', {});
-  if (!ok) { failed.value = true; feedback.value = result.error; return; }
-  data.value = result as Track; feedback.value = result.notice;
+  if (!ok) { notify('error', result.error); return; }
+  data.value = result as Track; notify('success', result.notice);
   runId.value = null; marks.value = []; replay.value = '';
 });
 </script>
@@ -72,7 +72,7 @@ const reset = () => act(async () => {
           한계 기록보다 빠른 기록을 올리면 전설 트로피 코드가 지급됩니다.</p>
         <div class="actions"><button :disabled="busy" @click="start">달리기 시작</button><button :disabled="busy" @click="reset">처음부터 다시</button></div>
       </section>
-      <p class="feedback" :class="{ error: failed }" role="status" aria-live="polite">{{ feedback }}</p>
+      <Toaster v-model:toasts="toasts" />
       <section v-if="runId !== null">
         <h2>달리기 {{ runId }}번</h2>
         <p>주운 별 {{ marks.length }} / {{ stars }}개<template v-if="!finished"> · 다음 별까지 {{ waitMs > 0 ? (waitMs / 1000).toFixed(1) + '초' : '도착' }}</template></p>
@@ -96,7 +96,6 @@ const reset = () => act(async () => {
 </template>
 <style scoped>
 .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-.feedback { padding: 0.5rem var(--inset); margin: 0; }
 .detail { margin-top: var(--inset); padding: var(--inset); background: #182334; border-radius: var(--radius); }
 .detail code { overflow-wrap: anywhere; }
 textarea { width: 100%; box-sizing: border-box; font-family: var(--mono, monospace); }
