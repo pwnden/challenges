@@ -74,15 +74,16 @@ def verify_problem(docker, root, directory, metadata, definition):
         network = vulnerable.network(solve['network'])
         result = docker.tool(directory, metadata, network, solve['image'], solve['command'])
         check_solution(result, flag)
-        if patched is not None:
-            with patched.running():
-                network = patched.network(solve['network'])
-                attack = docker.tool(directory, metadata, network, solve['image'], solve['command'])
-                check_attack(attack, flag, definition['attack_rejected_exit'])
-                image = metadata['patched'].get('image') or solve['image']
-                result = docker.tool(directory, metadata, network, image, metadata['patched']['check'])
-                if result.code:
-                    raise ExecutionError(f'patched functional check failed with exit code {result.code}: {result.stderr.strip()}')
+    # The vulnerable target is stopped first so the two targets never need resources together.
+    if patched is not None:
+        with patched.running():
+            network = patched.network(solve['network'])
+            attack = docker.tool(directory, metadata, network, solve['image'], solve['command'])
+            check_attack(attack, flag, definition['attack_rejected_exit'])
+            image = metadata['patched'].get('image') or solve['image']
+            result = docker.tool(directory, metadata, network, image, metadata['patched']['check'])
+            if result.code:
+                raise ExecutionError(f'patched functional check failed with exit code {result.code}: {result.stderr.strip()}')
 
 
 def verify_catalog(root, slugs=(), *, docker=None, prepare_timeout=300):

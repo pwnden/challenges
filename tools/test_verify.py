@@ -93,7 +93,8 @@ class VerifyTests(unittest.TestCase):
         verify_problem(docker, Path('/root'), Path('/root/challenges/sample'), metadata,
                        {'attack_rejected_exit': 3})
         self.assertEqual(docker.events[:3], [('resolve', False), ('resolve', True), ('start', False)])
-        self.assertEqual(docker.events[-2:], [('stop', True), ('stop', False)])
+        self.assertEqual(docker.events[-1], ('stop', True))
+        self.assertLess(docker.events.index(('stop', False)), docker.events.index(('start', True)))
         self.assertRegex(docker.flag, r'^pwnden\{[0-9a-f]{32}\}$')
         self.assertIn(('tool', 'patched', 'check-image', ['check']), docker.events)
 
@@ -106,7 +107,8 @@ class VerifyTests(unittest.TestCase):
             with self.subTest(options=options), self.assertRaises(ExecutionError):
                 verify_problem(docker, Path('/root'), Path('/root/sample'), metadata,
                                {'attack_rejected_exit': 3})
-            self.assertEqual(docker.events[-2:], [('stop', True), ('stop', False)])
+            self.assertEqual(docker.events[-1], ('stop', True))
+            self.assertLess(docker.events.index(('stop', False)), docker.events.index(('start', True)))
 
     def test_cli_checked_offline_before_target_start(self):
         metadata = {'slug': 'sample', 'compose': 'compose.yaml',
