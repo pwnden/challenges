@@ -3,3 +3,4 @@ __pycache__/
 .authoring/
 web/node_modules/
 web/dist/
+.DS_Store
