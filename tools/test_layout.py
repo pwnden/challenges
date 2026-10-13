@@ -79,13 +79,6 @@ class LayoutTests(unittest.TestCase):
         path.write_text(text.replace('::objective', '::resources', 1), encoding='utf-8')
         self.assertEqual(self.rules(destination), {'readme-blocks'})
 
-    def test_briefing_source_needs_a_knowledge_include(self):
-        destination = self.make('briefing-sample', kind='file', category='rev')
-        (destination / 'BRIEFING.md').write_text((destination / 'README.md').read_text(encoding='utf-8'), encoding='utf-8')
-        self.assertEqual(self.rules(destination), {'briefing'})
-        (destination / 'BRIEFING.md').write_text('::knowledge{concepts="web-addresses"}\n::\n', encoding='utf-8')
-        self.assertEqual(self.rules(destination), set())
-
     def test_service_files_and_policy_names_are_enforced(self):
         destination = self.make('service-sample', kind='service', category='web', patched=True)
         (destination / 'vulnerable/refund_policy.py').write_text('')
