@@ -131,6 +131,12 @@ requires = ["trusted-identity"]
 related = ["trusted-identity", "path-boundaries"]
 
 [[concepts]]
+id = "invitation-boundaries"
+title = "초대 코드와 초대받은 계정"
+requires = ["object-ownership"]
+related = ["read-path-authorization"]
+
+[[concepts]]
 id = "order-accounting"
 title = "구매와 환불 금액의 일관성"
 requires = ["http-messages"]
