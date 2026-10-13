@@ -14,14 +14,16 @@ def load(root=ROOT):
     return tomllib.loads((root / 'images/cli/images.toml').read_text(encoding='utf-8'))
 
 
-def build_args(tag, root=ROOT):
+def build_args(tag, root=ROOT, quiet=True):
     """The docker build arguments for a known local tag, or None for an image to pull."""
     recipes = load(root)
     recipe = recipes['images'].get(tag)
     if recipe is None:
         return None
     platform = os.environ.get('PWNDEN_IMAGE_PLATFORM') or recipes['platform']
-    args = ['build', '--progress=quiet', '--platform', platform, '--target', recipe['target']]
+    args = ['build', '--platform', platform, '--target', recipe['target']]
+    if quiet:
+        args.insert(1, '--progress=quiet')
     if 'dockerfile' in recipe:
         args += ['-f', str(root / 'images/cli' / recipe['dockerfile'])]
     return args + ['-t', tag, str(root / 'images/cli')]
@@ -42,7 +44,7 @@ def main():
     parser.add_argument('tags', nargs='*', help='image tags; defaults to every tag a problem declares')
     options = parser.parse_args()
     for tag in options.tags or declared():
-        args = build_args(tag)
+        args = build_args(tag, quiet=False)
         if args is None:
             parser.exit(1, f'images: no recipe for {tag}\n')
         print(f'building {tag}', flush=True)

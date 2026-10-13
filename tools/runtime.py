@@ -351,11 +351,10 @@ class Docker:
         if self.call('image', 'inspect', image, check=False).code:
             args = build_args(image)
             if args is None:
-                self.call('pull', image, timeout=self.prepare_timeout)
+                self.call('pull', image, timeout=self.prepare_timeout, progress=f'pulling {image}')
             else:
                 # A shared toolbox tag exists only locally, so build it on first use.
-                print(f'building {image} (first use only)', file=sys.stderr, flush=True)
-                self.call(*args, timeout=max(self.prepare_timeout, 3600))
+                self.call(*args, timeout=max(self.prepare_timeout, 3600), progress=f'building {image} (first use only)')
         volumes = self.call('image', 'inspect', '--format', '{{json .Config.Volumes}}', image).stdout
         if json.loads(volumes):
             raise ExecutionError('toolbox images must not declare anonymous VOLUME storage')
