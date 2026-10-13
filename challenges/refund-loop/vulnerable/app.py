@@ -75,7 +75,7 @@ class Handler(TargetHandler):
         path = urlsplit(self.path).path
         if path == '/healthz':
             self.send(200, 'ok')
-        elif path in ('/', '/api/shop'):
+        elif path in ('/', '/orders', '/api/shop'):
             with LOCK:
                 sid = self.session()
                 cookies = ()

@@ -21,15 +21,21 @@ function globals(path = '/') {
   vi.stubGlobal('location', { pathname: path, search: '' });
   vi.stubGlobal('document', { cookie: 'paper_role=guest' });
 }
-it('shows shop controls and renders receipts only from completed backend orders', async () => {
+it('shows the product page and renders receipts only on the order page from completed backend orders', async () => {
   globals();
   const shop = { balance: 1000, products: [{ id: 'cable', name: '케이블', price: 1000, description: '행사 상품' }], coupon: { code: 'CABLE50', product: 'cable', percent: 50 }, orders: [] as unknown[] };
   page.data = shop;
-  const initial = await renderToString(createSSRApp(RefundLoop));
-  expect(initial).toContain('1,000원');
-  expect(initial).toContain('CABLE50');
-  expect(initial).toContain('coupon-cable');
-  expect(initial).not.toContain('pwnden{');
+  const products = await renderToString(createSSRApp(RefundLoop));
+  expect(products).toContain('1,000원');
+  expect(products).toContain('CABLE50');
+  expect(products).toContain('coupon-cable');
+  expect(products).toContain('href="/orders"');
+  expect(products).not.toContain('pwnden{');
+  expect(products).not.toContain('id="orders"');
+  globals('/orders');
+  const empty = await renderToString(createSSRApp(RefundLoop));
+  expect(empty).toContain('아직 주문이 없습니다.');
+  expect(empty).not.toContain('coupon-cable');
   page.data = { ...shop, balance: 0, orders: [{ id: 5, name: '한정판 키캡', price: 3000, paid: 3000, refunded: 0, status: 'paid', receipt: 'pwnden{receipt}' }] };
   const purchased = await renderToString(createSSRApp(RefundLoop));
   expect(purchased).toContain('pwnden{receipt}');

@@ -5,7 +5,9 @@ import TargetPage from '@target/TargetPage.vue';
 interface Product { id: string; name: string; price: number; description: string }
 interface Order { id: number; name: string; price: number; paid: number; refunded: number; status: string; receipt?: string }
 interface Store { balance: number; products: Product[]; orders: Order[]; coupon: { code: string; product: string; percent: number }; notice?: string }
-const { data, loading, error } = usePage<Store>();
+const onOrders = location.pathname === '/orders';
+const { data, loading, error } = usePage<Store>(['/', '/orders']);
+const ordered = ref(false);
 const coupons = ref<Record<string, string>>({});
 const busy = ref(false);
 const feedback = ref('');
@@ -18,7 +20,7 @@ async function action(path: string, body: Record<string, unknown>) {
     const response = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const result = await response.json();
     if (!response.ok) { failed.value = true; feedback.value = result.error; }
-    else { data.value = result as Store; feedback.value = result.notice; }
+    else { data.value = result as Store; feedback.value = result.notice; ordered.value = path === '/api/orders'; }
   } catch { failed.value = true; feedback.value = '처리 결과를 확인하지 못했습니다. 현재 상태를 다시 확인한 뒤 시도하세요.'; }
   finally { busy.value = false; }
 }
@@ -38,15 +40,16 @@ async function refresh() {
     <div v-if="data" class="shop">
       <header class="top">
         <h1 class="brand"><a href="/">작은 작업실 상점</a></h1>
-        <nav aria-label="상점 메뉴"><a href="#products">상품</a><a href="#orders">주문 기록</a></nav>
+        <nav aria-label="상점 메뉴"><a href="/" :aria-current="onOrders ? undefined : 'page'">상품</a><a href="/orders" :aria-current="onOrders ? 'page' : undefined">주문 기록</a></nav>
         <div class="account">
           <p><span>구매 계정 잔액</span><strong class="balance">{{ money(data.balance) }}</strong></p>
           <button class="quiet" :disabled="busy" @click="refresh">현재 상태 확인</button>
           <button class="quiet" :disabled="busy" @click="action('/api/reset', {})">처음부터 다시</button>
         </div>
       </header>
-      <p class="notice" :class="{ error: failed }" role="status" aria-live="polite">{{ feedback }}</p>
+      <p class="notice" :class="{ error: failed }" role="status" aria-live="polite">{{ feedback }}<template v-if="ordered && !failed && !onOrders"> <a href="/orders">주문 기록 보기</a></template></p>
       <main class="content">
+        <template v-if="!onOrders">
         <section class="rules" aria-labelledby="rules-title">
           <h2 id="rules-title">구매 안내</h2>
           <dl>
@@ -67,9 +70,10 @@ async function refresh() {
             </form>
           </div>
         </section>
-        <section id="orders" aria-labelledby="orders-title">
+        </template>
+        <section v-else id="orders" aria-labelledby="orders-title">
           <h2 id="orders-title">주문 기록</h2>
-          <p v-if="!data.orders.length" class="empty">아직 주문이 없습니다.</p>
+          <p v-if="!data.orders.length" class="empty">아직 주문이 없습니다. <a href="/">상품 보기</a></p>
           <template v-else>
             <div class="scroll" role="region" aria-label="주문 기록 표" tabindex="0">
               <table>
@@ -109,6 +113,7 @@ body { background: #f6f6f3; }
 .brand a { color: inherit; text-decoration: none; font-weight: 750; }
 nav { display: flex; gap: 1.25rem; }
 nav a { color: var(--muted); font-weight: 600; text-underline-offset: 0.3em; }
+nav a[aria-current='page'] { color: var(--ink); font-weight: 750; text-decoration-thickness: 2px; text-decoration-color: var(--accent); }
 nav a:hover { color: var(--accent-dark); }
 .account { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-left: auto; }
 .account p { display: grid; margin: 0 0.5rem 0 0; text-align: right; line-height: 1.35; }
@@ -136,6 +141,8 @@ code { background: var(--tint); padding: 0.05rem 0.35rem; border-radius: 0.25rem
 .shop input { background: var(--paper); color: var(--ink); border-color: #8c8c84; caret-color: var(--accent); }
 .shop input::placeholder { color: #6b6b64; }
 .shop button { border-radius: 0.4rem; font-weight: 650; }
+.shop a { color: var(--accent); }
+.shop a:hover { color: var(--accent-dark); }
 .shop :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .primary { margin-top: 0.4rem; background: var(--accent); border-color: var(--accent-dark); color: #fff; }
 .primary:hover { background: var(--accent-dark); }
