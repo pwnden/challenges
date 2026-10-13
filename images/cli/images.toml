@@ -1,0 +1,24 @@
+# Local build recipes for the shared CLI toolbox images.
+# Problems name an image tag in [solve].image; tools/images.py builds a missing tag from here.
+platform = "linux/amd64"
+
+[images."pwnden-cli:basic-20261003"]
+target = "basic"
+
+[images."pwnden-cli:pcap-20261003"]
+target = "pcap"
+
+[images."pwnden-cli:lab-20261003"]
+target = "lab"
+
+[images."pwnden-cli:extended-20261003"]
+target = "extended"
+dockerfile = "Dockerfile.toolbox"
+
+[images."pwnden-cli:specialized-20261003"]
+target = "specialized"
+dockerfile = "Dockerfile.toolbox"
+
+[images."pwnden-cli:all-20261003"]
+target = "all"
+dockerfile = "Dockerfile.toolbox"

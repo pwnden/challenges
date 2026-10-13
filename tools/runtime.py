@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+import sys
 import threading
 import time
 import uuid
@@ -17,6 +18,7 @@ import uuid
 from validate import InvalidChallenge, inside
 from policy import OUTPUT_LIMIT, SECURITY_OPTIONS, service_policy, tool_options
 from budget import admission, Cost, tool_cost, MANAGED_LABEL
+from images import build_args
 from execution import ExecutionError
 
 
@@ -347,7 +349,13 @@ class Docker:
 
     def prepare_image(self, image):
         if self.call('image', 'inspect', image, check=False).code:
-            self.call('pull', image, timeout=self.prepare_timeout)
+            args = build_args(image)
+            if args is None:
+                self.call('pull', image, timeout=self.prepare_timeout)
+            else:
+                # A shared toolbox tag exists only locally, so build it on first use.
+                print(f'building {image} (first use only)', file=sys.stderr, flush=True)
+                self.call(*args, timeout=max(self.prepare_timeout, 3600))
         volumes = self.call('image', 'inspect', '--format', '{{json .Config.Volumes}}', image).stdout
         if json.loads(volumes):
             raise ExecutionError('toolbox images must not declare anonymous VOLUME storage')

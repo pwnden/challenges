@@ -51,8 +51,6 @@ jobs:
       - name: Check actual network isolation against host and peer controls
         run: python3 -B tools/check_isolation.py
       - name: Prepare the selected CLI toolboxes
-        run: |
-          docker build --platform linux/amd64 --target basic --tag pwnden-cli:basic-20261003 images/cli
-          docker build --platform linux/amd64 --target pcap --tag pwnden-cli:pcap-20261003 images/cli
+        run: python3 -B tools/images.py
       - name: Verify every challenge solution, patch and cleanup
         run: python3 -B tools/verify.py

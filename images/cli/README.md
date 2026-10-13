@@ -19,11 +19,10 @@
 사용한다. 취약점 DB·메모리 분석·디버거·컴파일러는 해당 분석을 수행하는 문제의
 이미지에 추가한다.
 
-```sh
-cd /path/to/challenges
-docker build --platform linux/amd64 --target basic -t pwnden-cli:basic-20261003 images/cli
-docker build --platform linux/amd64 --target pcap -t pwnden-cli:pcap-20261003 images/cli
-```
+`tools/verify.py`는 문제가 처음 필요로 할 때 없는 태그를 [images.toml](images.toml)의
+레시피로 빌드한다. 직접 준비할 필요는 없다. 미리 빌드하려면 `python3 tools/images.py`가
+문제들이 선언한 태그를 모두 빌드한다. 레시피의 `linux/amd64`는
+`PWNDEN_IMAGE_PLATFORM`으로 바꿀 수 있다.
 
 이미지 준비에는 인터넷과 디스크 공간이 필요하다. 기본 Dockerfile의 최종 단계도
 pcap이므로 target을 생략하면 pcap을 빌드한다. 선택한 이미지의 검증 결과는
@@ -85,14 +84,8 @@ PCAP은 `tshark -r`로 제공된 파일을 읽는다. 라이브 캡처용 권한
 all의 큰 경로는 Grype DB 약 3.15GB, Trivy DB 1.48GB, Ghidra 0.79GB,
 Metasploit 자료 0.68GB, Pwndbg portable 0.75GB, 별도 Python 환경 0.81GB다.
 DB는 공식 취약점 자료의 고정 snapshot이며, 문제용 데이터셋과 구분한다.
-추가 분석용 구성을 빌드할 때만 아래의 해당 명령을 실행한다.
-
-```sh
-docker build --platform linux/amd64 --target lab -t pwnden-cli:lab-20261003 images/cli
-docker build --platform linux/amd64 --target extended -f images/cli/Dockerfile.toolbox -t pwnden-cli:extended-20261003 images/cli
-docker build --platform linux/amd64 --target specialized -f images/cli/Dockerfile.toolbox -t pwnden-cli:specialized-20261003 images/cli
-docker build --platform linux/amd64 --target all -f images/cli/Dockerfile.toolbox -t pwnden-cli:all-20261003 images/cli
-```
+추가 분석용 구성은 해당 이미지를 쓰는 문제가 생기면 `images.toml`에 이미 있는
+레시피로 같은 방식으로 빌드된다. 직접 빌드하려면 `python3 tools/images.py <태그>`를 실행한다.
 
 확장 이미지의 파일 capability와 setuid/setgid는 제거한다. CPU Hashcat은 PoCL
 backend를 포함하고 CPU 스레드를 2개로 제한한다. Java에도 CPU·힙 상한을 지정한다.
