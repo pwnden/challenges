@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { usePage } from '@target/page';
 import { FormRoot } from '@target/sectile';
 import Field from '@target/Field.vue';
-import SiteHeader from '@target/SiteHeader.vue';
 import SubmitButton from '@target/SubmitButton.vue';
 import TargetPage from '@target/TargetPage.vue';
 import Toaster from '@target/Toaster.vue';
@@ -28,18 +27,15 @@ const refresh = () => run(async () => {
 }, '상점 연결을 확인하고 다시 시도하세요.');
 </script>
 <template>
-  <TargetPage bare title="작은 작업실 상점" :loading="loading" :error="error">
-    <div v-if="data" class="shop">
-      <SiteHeader title="작은 작업실 상점">
-        <template #nav><a href="/" :aria-current="onOrders ? undefined : 'page'">상품</a><a href="/orders" :aria-current="onOrders ? 'page' : undefined">주문 기록</a></template>
-        <template #actions>
-          <p class="balance-box"><span>구매 계정 잔액</span><strong class="balance">{{ money(data.balance) }}</strong></p>
-          <button class="small" :disabled="busy" @click="refresh">현재 상태 확인</button>
-          <button class="small" :disabled="busy" @click="action('/api/reset', {})">처음부터 다시</button>
-        </template>
-      </SiteHeader>
-      <Toaster v-model:toasts="toasts"><template #extra="{ item }"><a v-if="item.kind === 'success' && ordered && !onOrders" href="/orders">주문 기록 보기</a></template></Toaster>
-      <main class="content">
+  <TargetPage title="작은 작업실 상점" :loading="loading" :error="error">
+    <template #nav><a href="/" :aria-current="onOrders ? undefined : 'page'">상품</a><a href="/orders" :aria-current="onOrders ? 'page' : undefined">주문 기록</a></template>
+    <template v-if="data" #actions>
+      <p class="balance-box"><span>구매 계정 잔액</span><strong class="balance">{{ money(data.balance) }}</strong></p>
+      <button class="small" :disabled="busy" @click="refresh">현재 상태 확인</button>
+      <button class="small" :disabled="busy" @click="action('/api/reset', {})">처음부터 다시</button>
+    </template>
+    <Toaster v-model:toasts="toasts"><template #extra="{ item }"><a v-if="item.kind === 'success' && ordered && !onOrders" href="/orders">주문 기록 보기</a></template></Toaster>
+    <div v-if="data" class="content">
         <template v-if="!onOrders">
           <section aria-labelledby="rules-title">
             <h2 id="rules-title">구매 안내</h2>
@@ -88,16 +84,14 @@ const refresh = () => run(async () => {
             </div>
           </template>
         </section>
-      </main>
     </div>
   </TargetPage>
 </template>
 <style scoped>
-.shop { max-width: 62rem; margin: 0 auto; padding: 0 var(--inset) 2rem; }
 .balance-box { display: grid; margin: 0 0.5rem 0 0; text-align: right; line-height: 1.35; }
 .balance-box span { font-size: 0.8rem; color: var(--muted); }
 .balance { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
-.content { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; max-width: none; margin: 0; padding: 0; }
+.content { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; padding-top: 1rem; }
 .content section { margin: 0; }
 dl { display: grid; gap: 0.5rem; margin: 0; }
 dl > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.25rem 1rem; }

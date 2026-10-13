@@ -43,7 +43,7 @@ spacing:
 
 The nine target sites share one light design system in [style.css](src/style.css), built on a few shared parts in `src/`: [TargetPage.vue](src/TargetPage.vue) (loading, errors and the page frame), [SiteHeader.vue](src/SiteHeader.vue), [Field.vue](src/Field.vue), [SubmitButton.vue](src/SubmitButton.vue), [Toaster.vue](src/Toaster.vue), the [useAction](src/useAction.ts) helper and [sectile.ts](src/sectile.ts), the one module that exposes sectile to scenario files. A site keeps its own file small: structure, its texts, and styles that only it needs. Site names and content identify the individual challenge; sites do not carry explanatory disclaimers such as footers about being a practice site.
 
-A scenario draws its own whole page by passing `bare` to `TargetPage`, which keeps loading and error handling and leaves the layout to the scenario. The workshop shop does this to look like a store; the other sites use the shared frame.
+`TargetPage` always draws the header, so a page that fails to load or is refused still shows its name and links. A site adds its page links and account actions through the `nav` and `actions` slots and puts everything else in the default slot.
 
 ## Colors
 
@@ -71,4 +71,10 @@ The support desk groups the current account, its own inquiries, the staff invita
 
 The star run groups the track rules, the current run and the record board in sections. The current run shows the stars picked so far with a progress bar and a button that stays disabled until the next star is available. The record code is an editable text area with its submit button, and the board is a semantic table that highlights the player's row. The trophy appears in a card only when the server returns it.
 
-The remaining sites are document pages built from sections, labeled fields and the shared tables and code blocks. Text from the server, queries, policy JSON, filenames and document bodies is displayed as escaped text. Search results use a semantic table with column headings. Lists of notes, files and revisions use semantic lists and links. All interactive elements receive the shared visible focus outline. Fonts and built assets are served locally.
+The memo site (`note-vault`) is a small notes app: a centered login card, then the signed-in account's notes as a list of rows with their numbers, and each note on its own page with a link back to the list. The header shows the signed-in account as a chip, and a wrong password appears as a toast.
+
+The document site (`paper-session`) has two pages, the working notes and the recovery key, linked from the header, with the role the server decided shown as a chip. The cookie experiment is its own section with the editable role field.
+
+The parcel box (`path-parcel`) puts a file-name search above a list of files and a viewer; the open file is marked in the list and the viewer says how to open one when none is open. The member search (`query-desk`) is a search field, the condition the search used in a code block, and a results table with an empty row when nothing matches. The web archive (`forgotten-shelf`) has a collections page of tiles and an operations page, linked from the header. The team document site (`borrowed-badge`) lists its documents in a table with the links each one allows and an open-by-name field, then the account's access rules as formatted JSON and the function names, and its history and version pages as lists and a document card.
+
+All six keep their server requests, links and texts; text from the server, queries, policy JSON, filenames and document bodies is displayed as escaped text. Search results and document lists use semantic tables inside a scrolling region, and lists of notes, files and revisions use semantic lists and links. All interactive elements receive the shared visible focus outline. Fonts and built assets are served locally.
