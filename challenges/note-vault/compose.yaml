@@ -5,8 +5,7 @@ services:
       dockerfile: challenges/note-vault/vulnerable/Dockerfile
     environment:
       FLAG: ${FLAG:?Start this challenge with the pwnden runner}
-    ports:
-      - "127.0.0.1::8000"
+    networks: ["default"]
     read_only: true
     cap_drop: [ALL]
     security_opt: ["no-new-privileges:true"]
@@ -16,3 +15,7 @@ services:
       interval: 2s
       timeout: 3s
       retries: 15
+
+networks:
+  "default":
+    internal: true
