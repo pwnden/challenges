@@ -448,7 +448,7 @@ class Project:
                 from workspace import remove_workspace
                 failures = []
                 for cleanup in (lambda: remove_workspace(self.docker, self.name),
-                                lambda: self.compose('down', '--volumes', '--remove-orphans', timeout=120, cleanup=True),
+                                lambda: self.compose('down', '--volumes', '--remove-orphans', '--rmi', 'local', timeout=120, cleanup=True),
                                 self.assert_removed):
                     try:
                         cleanup()
