@@ -129,12 +129,16 @@ workspace contents retained after a command exits. Commands and PTYs see the
 same copy, while patched projects receive a separate copy. Originals never change.
 
 On Linux/WSL, the Go consumer and Python author runner share a per-user, per-daemon
-lock in `/tmp`. Creation reserves actual container ceilings before processes
-start. The default aggregate budget is 8 CPUs, 8 GiB RAM, 1024 processes and
+lock in `/tmp` that serializes creation. Each keeps its own budget: the author runner
+counts only the containers it created (names or compose projects starting with
+`pwnden-author-`, or the `pwnden.author-verification` label), and the player counts
+everything else it manages, so a running player environment never blocks verification
+and verification never blocks the player. Creation reserves actual container ceilings
+before processes start. The default aggregate budget is 8 CPUs, 8 GiB RAM, 1024 processes and
 12 containers, clipped to the daemon's CPU/RAM capacity. Connectors and keepers
 also count. Exceeding any dimension rejects creation, without interrupting
 existing environments. Created and stopped managed containers count until removed;
-unrelated applications do not count. Operator settings are positive integers:
+unrelated applications and the other runner's environments do not count. Operator settings are positive integers:
 `PWNDEN_RUNTIME_CPUS`, `PWNDEN_RUNTIME_MEMORY_MIB`, `PWNDEN_RUNTIME_PIDS`,
 `PWNDEN_RUNTIME_CONTAINERS`. This admission policy assumes the controllers run
 as the same local OS user; it is not a daemon-wide quota for other users or hosts.

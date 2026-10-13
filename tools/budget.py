@@ -75,12 +75,26 @@ def managed(labels, name):
     return name.startswith(('pwnden-author-tool-', 'pwnden-tool-'))
 
 
+AUTHOR_PREFIX = 'pwnden-author-'
+
+
+def author_owned(labels, name):
+    """Containers this author runner created; the platform's own environments are not its to count."""
+    if name.startswith(AUTHOR_PREFIX):
+        return True
+    for entry in labels.split(','):
+        key, _, value = entry.partition('=')
+        if key == 'pwnden.author-verification' or key == 'com.docker.compose.project' and value.startswith(AUTHOR_PREFIX):
+            return True
+    return False
+
+
 def live_cost(call):
     rows = call('container', 'ls', '--all', '--format', '{{json .}}').stdout.splitlines()
     used = Cost()
     for line in rows:
         row = json.loads(line)
-        if not managed(row.get('Labels', ''), row.get('Names', '')):
+        if not managed(row.get('Labels', ''), row.get('Names', '')) or not author_owned(row.get('Labels', ''), row.get('Names', '')):
             continue
         result = call('container', 'inspect', '--format', '{{json .HostConfig}}', row['ID'], check=False)
         if result.code:
