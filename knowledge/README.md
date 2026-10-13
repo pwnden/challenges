@@ -48,6 +48,7 @@
 | `input-checks` | [입력 검사와 조건의 근거](input-checks.md) | [작은 입력 검사 코드 읽기](program-reading.md) |
 | `order-accounting` | [구매와 환불 금액의 일관성](order-accounting.md) | [Web 요청과 응답 읽기](http-messages.md) |
 | `invitation-boundaries` | [초대 코드와 초대받은 계정](invitation-boundaries.md) | [자료의 소유권과 읽기 권한](object-ownership.md) |
+| `client-reported-values` | [클라이언트가 보고한 값과 서버의 검증](client-reported-values.md) | [Web 요청과 응답 읽기](http-messages.md) |
 
 기본 브리핑은 문제의 상황과 자료를 소개한다. 공통 개념은 `[learning]` 관계를
 통해 학습 연결에서 선택해 읽는다. 개념 문서는 문제와 독립된 원리와 예시를 다룬다.
@@ -64,7 +65,7 @@
 함께 생성된다. `--requires`와 `--teaches`는 관계 선언만 추가한다.
 원문과 생성 결과의 일치는 validator와 verifier가 검사한다.
 
-계약 v7의 [catalog.toml](catalog.toml)이 39개 개념의 ID, 제목, 선수 개념과 관련
+계약 v7의 [catalog.toml](catalog.toml)이 40개 개념의 ID, 제목, 선수 개념과 관련
 개념을 관리한다. 위 표는 시작 지식 문서이며, 같은 폴더의 학습 목표 문서도
 등록부에 포함되며 위 표에서 모두 확인할 수 있다. 각 문서의 경로는 `knowledge/<id>.md`다. 문제는
 `[learning].requires`와 `teaches`로 개념을 참조한다. 플랫폼에서 선수 문서를

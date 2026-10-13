@@ -23,6 +23,12 @@ requires = ["terminal-commands", "http-messages", "http-cookies"]
 related = []
 
 [[concepts]]
+id = "client-reported-values"
+title = "클라이언트가 보고한 값과 서버의 검증"
+requires = ["http-messages"]
+related = ["order-accounting"]
+
+[[concepts]]
 id = "data-in-names"
 title = "조회 이름에 담기는 정보"
 requires = []
