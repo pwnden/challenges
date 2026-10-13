@@ -1,0 +1,473 @@
+{
+  "slug": "backup-relay",
+  "input_sha256": "fcd4b556a1a39b6f0953413831b10eb8e22955327f0e2c5d3633b3a1e6557f57",
+  "model": "claude-sonnet-5-5",
+  "reasoning_effort": "low",
+  "judge_count": 3,
+  "method": "criterion median",
+  "ballots": [
+    {
+      "judge_id": "judge-1",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learner-advocate",
+      "first_pass": "힌트·해설을 열기 전 1단계 관찰: README의 resources 섹션이 호스트(app:9000)와 프로토콜 명령 4개(HELLO/AUTH/STATUS/READ)를 명확히 제공해 접속 시작 행동은 결정 가능. tcp-services.md가 ncat 사용법(printf | ncat)을 예시로 주지만 '여러 명령을 한 연결에서 순서대로 보내는 법'은 직접 예시화되어 있지 않아 추론이 필요. connection-state.md는 '상태는 한 명령만으로 알 수 없다'는 일반 원리만 제공하고 이 문제의 구체 단서는 주지 않음(의도된 설계로 보임). 1단계 자료만으로는 '현재 백업'의 정확한 자원 이름(READ 인자)을 알 수 없어 힌트 확인 전까지 READ 명령의 정확한 호출법이 막힐 지점이었음. 손님 토큰과 폐기 백업 이름이 오답 유도 방지용으로 명시된 점은 긍정적.",
+      "review": {
+        "slug": "backup-relay",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-1",
+        "source_sha256": "ad0811e1b410cca12625467741a3dba5faaf146a5d9f3fc73bb3b133181a2878",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "의뢰(자물쇠지기의 제보)와 보안 원리(세션 상태를 모든 명령이 확인하지 않음), 완료 증거(AUTH 없이 READ backup-current에서 현재 flag 획득)가 README·solve/README에서 일치한다. 해당 동작(STATUS는 인증 반영, READ는 미반영)으로 목표를 직접 관찰할 수 있다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/README.md",
+                "quote": "AUTH 단계를 거치지 않고도 현재 백업을 읽을 수 있는지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/solve/README.md",
+                "quote": "중계기는 `STATUS`에는 인증 상태를 반영하지만, `READ`는 인증 여부를 전혀",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "선수 지식(tcp-services)만으로 접속 수단(ncat)과 조사 범위(호스트·포트·4개 명령)는 본문이 제공한다. 비교 기준(AUTH 전후 STATUS 비교, READ 생략 시도)은 풀이자가 직접 설계해야 하며 본문은 이를 미리 알려주지 않는다. 다만 READ의 정확한 자원 이름(backup-current)은 본문에 없고 힌트에서만 공개되어, 1단계 자료만으로는 READ 명령의 정확한 호출 형식을 알 수 없는 간극이 있다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/README.md",
+                "quote": "- 프로토콜: 줄바꿈으로 끝나는 텍스트 명령. `HELLO`, `AUTH <token>`, `STATUS`, `READ <name>`.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/tcp-services.md",
+                "quote": "HTTP 이외의 텍스트 프로토콜에는 `ncat`을 사용할 수 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "현재 백업의 자원 이름(backup-current)을 본문 resources에 추가하거나, 본문에서 'READ <name>'의 name을 어떻게 알아내는지(예: HELLO 응답이나 추가 안내) 설명을 보강하면 시작 정보 간극이 줄어든다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "난도 2(초급)에 맞게 STATUS 전후 비교로 '서버가 상태를 기억한다'는 가설을 세운 뒤, READ에도 같은 확인이 있는지 별도로 시험하는 2단계 추론을 요구한다. backup-retired와의 대조로 그럴듯한 오답(모든 READ가 원래 공개됐을 가능성)을 구분한다. 명령 수가 아니라 단서 연결 자체가 난도를 구성한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/AUTHORING.md",
+                "quote": "발견 난도: STATUS 비교로 상태 추적을 확인한 뒤, READ에도 같은 확인이 있는지 스스로 시험해야 한다. 단서 연결이 필요해 입문보다 높다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "patched/test.sh는 정상 배너·명령목록, STATUS guest 상태, READ backup-current 거부(패치 후), backup-retired 불변, 틀린 토큰 거부, 올바른 토큰 인증 성공, 존재하지 않는 자원 오류, 줄바꿈 누락 오류, 미지원 명령 오류까지 폭넓게 확인해 정상·거부·오답·누락 대조군을 모두 포함한다. 패치가 공격을 막으면서도 HELLO/STATUS/backup-retired 정상 기능을 유지함을 같은 스크립트로 검증한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/patched/test.sh",
+                "quote": "printf '%s\\n' 'HELLO, STATUS and the retired backup stay reachable; the current backup now needs AUTH first'",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/vulnerable/app.py",
+                "quote": "if authenticated or not READ_REQUIRES_AUTH:",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 2,
+            "reason": "힌트1은 STATUS 비교라는 관찰 방향만 제시해 적절하지만, 힌트2는 '접속한 뒤 AUTH를 한 번도 보내지 않은 상태에서 바로 READ backup-current만 보내 보자'처럼 정확한 자원 이름과 완성된 절차를 통째로 제공한다. 이는 '선택형 힌트는 한 판단을 돕는다'는 기준보다 완성된 풀이 순서에 가까워 힌트와 정답의 분리가 부분적으로만 이루어진다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/hints/2.md",
+                "quote": "접속한 뒤 `AUTH`를 한 번도 보내지 않은 상태에서 바로 `READ backup-current`만",
+                "kind": "source"
+              }
+            ],
+            "improvement": "힌트2를 완성된 명령 대신 판단 단서로 축소한다. 예: 'READ와 STATUS 중 어느 쪽이 인증 분기를 거치지 않을 수 있는지 코드 구조를 생각해보라'처럼 방향만 제시하고, 정확한 자원 이름과 완전한 명령 조합은 해설(solve/README.md)로 옮긴다."
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "solve/README.md는 조사 과정(HELLO→STATUS 비교→AUTH 생략 READ)과 관찰, 결론(READ가 인증을 확인하지 않음), 대조군(backup-retired)의 역할, 보안 원리, 패치 동작을 모두 연결한다. '이 둘의 차이로 뒷받침된다'처럼 근거의 범위를 명시해 과도한 일반화를 피한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/solve/README.md",
+                "quote": "`READ backup-retired`(폐기 백업, 제출 대상 아님)는 인증 여부와 무관하게 항상\n같은 값을 돌려주므로 대조군이 된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "작성 기록에 날짜가 있는 실행 근거가 있다: tools/verify.py가 취약 서버에서 flag 회수와 패치 서버에서의 거부를 확인했다고 기록되어 있다. 이 인용은 2026-10-14 범위의 기록이며 이번 심사에서 새로 실행한 것이 아니다. 학습 리뷰(독립 관찰)는 별도로 미완료라고 명시되어 있어 이 항목과 구분된다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-14, `tools/verify.py backup-relay` 통과. `patched/test.sh`가 HELLO·STATUS·AUTH 성공/실패·READ 성공/거부·미지원 명령·형식 오류를 모두 확인한다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": ""
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-2",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "evidence-examiner",
+      "first_pass": "의뢰인은 자물쇠지기(백업 중계기 운영자), 보호 자료는 \"현재 백업\"(backup-current)의 flag이며 backup-retired는 제출 대상 아님이 명시된 오답 대조군이다. 조사 이유는 손님 계정이 AUTH 없이 READ만 보냈는데 응답이 왔다는 제보이며, 자물쇠지기는 직접 재현하지 못했고 STATUS가 인증 전후로 다르다는 것만 확인했다고 해서 \"AUTH가 실제로 READ의 허용 여부에 쓰이는지는 아직 확인되지 않았다\"는 미확인 지점이 남는다. 시작 행동은 ncat으로 app:9000 접속, HELLO/AUTH/STATUS/READ 명령과 손님 토큰 relay-guest-7f2c 사용. README 수준에서는 현재 백업의 정확한 이름(backup-current)이 resources에 나오지 않아 설명 없는 연결 지점으로 보였으나(힌트2에서 비로소 공개), compose.yaml 확인 결과 app 서비스는 포트 9000 단일 노출의 격리된 TCP 서비스로 README 설명과 배포 구조가 일치했다. 오탐 가능성: \"응답이 왔다\"는 제보만으로는 거부 메시지와 실제 flag 반환을 구분할 수 없어 2단계에서 구현을 봐야 한다고 적어 두었다.",
+      "review": {
+        "slug": "backup-relay",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-2",
+        "source_sha256": "ad0811e1b410cca12625467741a3dba5faaf146a5d9f3fc73bb3b133181a2878",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "README의 objective(\"AUTH 단계를 거치지 않고도 현재 백업을 읽을 수 있는지 확인\")와 submission(\"AUTH 단계 없이 현재 백업에서 읽은 pwnden{...} 값 제출\")이 solve/solve.py의 동작(HELLO 후 AUTH 생략, READ backup-current만 전송해 OK pwnden{...} 확인) 및 vulnerable/app.py의 실제 로직(READ backup-current가 authenticated 여부와 무관하게 OK FLAG를 반환)과 정확히 일치한다. 의뢰·보안 원리·완료 증거가 연결 상태 미확인이라는 하나의 관찰 가능한 결함으로 수렴한다. 다만 README 자체에는 \"어떤 명령이 성공하는가\"를 알려주는 추가 설명(예: 왜 STATUS가 제공되는지)이 없어 목표-수단 연결을 전부 본문만으로 보여주지는 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/README.md",
+                "quote": "AUTH 단계를 거치지 않고도 현재 백업을 읽을 수 있는지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/vulnerable/app.py",
+                "quote": "elif command == 'READ backup-current':\n                    if authenticated or not READ_REQUIRES_AUTH:\n                        self._send('OK ' + FLAG)",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "README resources에 호스트·포트, 네 개 명령 구문(HELLO, AUTH <token>, STATUS, READ <name>), 손님 토큰, 폐기 백업 이름이 모두 주어져 tcp-services/terminal-commands 선수 지식만으로 접속·탐색을 시작할 수 있다. 다만 조회해야 할 \"현재 백업\"의 정확한 자원 이름(backup-current)은 본문에 나오지 않고 힌트2에서 처음 공개되므로, 본문만으로는 READ 대상 이름을 스스로 추론해야 하는 추가 탐색이 필요하다 — 이는 선수 능력 범위 내 정상적 탐색(HELLO 응답이나 추측)으로 보이나 본문이 직접 보장하지는 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/README.md",
+                "quote": "손님용 테스트 토큰: `relay-guest-7f2c` (AUTH 동작 확인용이며 현재 백업 열람 권한은 주지 않는다).",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/hints/2.md",
+                "quote": "접속한 뒤 `AUTH`를 한 번도 보내지 않은 상태에서 바로 `READ backup-current`만\n보내 보자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "본문 또는 STATUS 설명에 \"현재 백업의 자원 이름을 알아내는 방법\"에 대한 최소한의 단서(예: HELLO 응답이 자원 목록을 알려준다는 설명)를 추가하면 시작 정보의 완결성이 높아진다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "난도 2(초급)에 맞게, STATUS를 AUTH 전후로 비교해 \"서버가 상태를 기억한다\"는 가설을 세우고(힌트1), 그 상태를 READ도 확인하는지 직접 시험하는(힌트2) 2단계 단서 연결이 요구된다. backup-retired는 인증 여부와 무관하게 항상 같은 값을 반환하는 그럴듯한 오답/대조 자료로 기능하여, 폐기 자료 노출과 현재 백업 인가 누락을 구분하게 만든다. solve/README.md가 이 비교를 명시적으로 서술한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/solve/README.md",
+                "quote": "`READ backup-retired`(폐기 백업, 제출 대상 아님)는 인증 여부와 무관하게 항상\n같은 값을 돌려주므로 대조군이 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/hints/1.md",
+                "quote": "`STATUS`는 AUTH 전후로 다른 값을 돌려준다. 이 값은 중계기가 연결마다 인증\n여부를 실제로 기억한다는 뜻이다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "patched/test.sh는 공격 차단과 정상 기능 유지를 모두 검증한다: HELLO/STATUS 응답 유지, READ backup-current가 패치 후 DENIED staff_auth_required로 거부되고(pwnden{ 노출 없음 확인 포함), 잘못된 토큰 AUTH 실패 후에도 STATUS/READ가 거부 상태를 유지하며, 올바른 토큰 AUTH 성공 후에는 STATUS가 staff로 바뀌고 READ가 정상적으로 flag를 반환하는 정상 기능 유지까지 확인한다. 또한 backup-retired, 알 수 없는 자원, 줄바꿈 누락, 미지원 명령 등 변조·누락 대조군도 포함한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/patched/test.sh",
+                "quote": "probe $'READ backup-current\\n'\ngrep -q '^DENIED staff_auth_required' \"$work/tcp\"\nif grep -q 'pwnden{' \"$work/tcp\"; then exit 1; fi",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/patched/test.sh",
+                "quote": "probe $'AUTH relay-guest-7f2c\\nSTATUS\\nREAD backup-current\\n'\ngrep -qx '^OK authenticated' \"$work/tcp\"\ngrep -q '^OK role=staff' \"$work/tcp\"\ngrep -q '^OK pwnden{' \"$work/tcp\"",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "본문(README.md)은 명령 구문과 토큰만 제공하며 어떤 조합이 성공하는지는 말하지 않아, HELLO→AUTH→READ 정상 경로만 자연스럽게 재현되도록 설계되어 있다. 힌트1은 STATUS 비교라는 관찰 방향만 제공하고, 힌트2에서야 비로소 완성된 공격 절차(\"AUTH 생략 후 READ backup-current\")를 구체적으로 공개한다. 선택형 힌트 2개로 판단을 단계적으로 돕는 구조는 기준에 부합하지만, 힌트2가 사실상 정답 절차 전체(자원 이름 포함)를 그대로 알려줘 해당 힌트를 연 플레이어에게는 남는 판단이 거의 없다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/hints/2.md",
+                "quote": "접속한 뒤 `AUTH`를 한 번도 보내지 않은 상태에서 바로 `READ backup-current`만\n보내 보자. 안내 문서의 순서를 따르지 않은 요청에 중계기가 어떻게 응답하는지\n확인하면 된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "solve/README.md는 행동(ncat 접속, HELLO, STATUS 전후 비교, READ backup-current)과 관찰(OK pwnden{...} vs DENIED 기대 불일치), 결론(READ가 인증 상태를 확인하지 않음), 원인(코드가 authenticated 상태를 읽지 않음), 보호 방법(패치가 같은 상태를 READ 처리 전에 확인)까지 연결한다. 다만 이 실습 증거로 말할 수 있는 한계(예: 다른 명령에도 같은 결함이 있을 수 있는지, 이 결함이 왜 발생했는지에 대한 더 넓은 일반화 경계)에 대한 명시적 논의는 부족하다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/solve/README.md",
+                "quote": "이 중계기는 세션의 인증 상태를 실제로\n기억했지만(`STATUS`가 이를 보여 준다), `READ`를 처리하는 코드가 그 상태를\n읽지 않아 안내한 순서를 지키지 않아도 보호된 자료를 읽을 수 있었다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "해설에 이 관찰이 \"이 중계기의 READ 경로\"에 한정된 결론이며 다른 명령이나 구현 전반에 일반화할 근거는 아니라는 점을 한 문장 추가하면 좋다."
+          },
+          "execution": {
+            "level": 3,
+            "reason": "AUTHORING.md에 날짜가 명시된 실행 기록이 있다: tools/verify.py backup-relay가 취약한 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다는 기록이 2026-10-14로 날짜가 찍혀 있다. patched/test.sh 자체도 정상 기능 유지와 정리(mktemp 임시 디렉터리 trap으로 정리)를 포함한 재현 가능한 스크립트로 저장소에 존재한다. 다만 이 심사에서 직접 이미지를 빌드해 재실행한 기록은 아니며, 과거 날짜의 작성자 인용임을 구분해 둔다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-14, `tools/verify.py backup-relay` 통과. `patched/test.sh`가 HELLO·STATUS·AUTH 성공/실패·READ 성공/거부·미지원 명령·형식 오류를 모두 확인한다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "독립 심사 과정에서 실제로 solve.py와 patched/test.sh를 재실행해 날짜가 있는 새 실행 기록을 남기면 execution 항목의 근거가 더 직접적이 된다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-3",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learning-designer",
+      "first_pass": "의뢰인은 자물쇠지기(백업 중계기 관리자), 보호 자료는 '현재 백업'(READ backup-current), 조사 이유는 손님 계정이 AUTH 없이 READ만 보냈는데 응답이 왔다는 제보(AUTH가 실제 READ 허용에 쓰이는지 미확인). 시작 행동은 README의 호스트(app:9000)·4개 명령(HELLO/AUTH/STATUS/READ)·손님 테스트 토큰을 knowledge/tcp-services.md의 ncat 사용법과 조합해 직접 명령을 보내보는 것. 완료 증거는 AUTH 없이 READ backup-current로 얻은 pwnden{...}. 힌트를 열기 전에는 '현재 백업'의 정확한 자원 이름이 본문에 명시되어 있지 않아(폐기 백업 이름만 공개) 플레이어가 READ 명령의 인자를 어떻게 알아내는지, AUTH 생략이 핵심 판단 지점인지가 본문만으로는 확정되지 않았다. 또한 HELLO의 정확한 역할과 AUTH 실패/성공 응답의 차이가 본문에 없어, '안내된 순서를 어겼을 때의 비교'를 스스로 설계해야 하는지 불명확했다.",
+      "review": {
+        "slug": "backup-relay",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-3",
+        "source_sha256": "ad0811e1b410cca12625467741a3dba5faaf146a5d9f3fc73bb3b133181a2878",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "의뢰(AUTH 단계를 건너뛴 READ 제보 조사)와 보안 원리(세션 상태 추적은 있으나 모든 명령이 그 상태를 확인하지 않음)와 완료 증거(AUTH 없이 READ backup-current로 pwnden{...} 획득)가 README·vulnerable/app.py·solve/solve.py에서 정확히 일치한다. vulnerable/app.py의 'READ backup-current' 분기는 STATUS와 달리 authenticated를 확인하지 않아 목표가 실제 동작으로 관찰 가능하다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/README.md",
+                "quote": "AUTH 단계를 거치지 않고도 현재 백업을 읽을 수 있는지 확인하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/vulnerable/app.py",
+                "quote": "elif command == 'READ backup-current':\n                    if authenticated or not READ_REQUIRES_AUTH:",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "README의 resources가 호스트·포트·4개 명령 구문·손님 테스트 토큰·폐기 백업 이름을 제공해 선언한 선수 지식(terminal-commands, tcp-services)으로 시작할 수 있다. 다만 '현재 백업'의 정확한 자원 이름(backup-current)은 본문에 직접 노출되지 않고 힌트 2에서 처음 등장하므로, 어느 명령을 어떤 인자로 시도할지의 판단 일부는 본문이 아니라 힌트가 제공한다. 그래도 도구 선택(ncat)과 핵심 비교(AUTH 전후 STATUS/READ)는 풀이자의 판단으로 남는다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/README.md",
+                "quote": "프로토콜: 줄바꿈으로 끝나는 텍스트 명령. `HELLO`, `AUTH <token>`, `STATUS`, `READ <name>`.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/hints/2.md",
+                "quote": "접속한 뒤 `AUTH`를 한 번도 보내지 않은 상태에서 바로 `READ backup-current`만\n보내 보자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "자원 이름 노출이 힌트에 의존하는 정도가 커지지 않도록, 본문에 '현재 백업의 이름은 조사로 알아내야 한다'는 안내를 추가하면 시작 정보와 힌트 역할의 경계가 더 분명해질 수 있다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "난도 2(초급) 선언에 맞게, STATUS가 AUTH 전후로 role=guest/staff로 바뀐다는 관찰과 READ가 같은 확인을 하는지 별도로 시험해야 한다는 단서 연결이 필요하다. AUTHORING.md의 의도된 풀이 표가 2단계(STATUS 비교)가 3단계(READ 시험) 가설을 만든다고 명시하며, 이는 한 원리 관찰(입문)보다 높은 2-3개 단서 연결(초급) 수준에 해당한다. backup-retired와 backup-current의 응답 차이는 그럴듯한 오답(인증 없이 아무 자원이나 읽힌다는 오해)을 구분하는 대조군 역할을 한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/AUTHORING.md",
+                "quote": "풀이 의존성: 2단계(STATUS 비교)가 3단계(READ 시험)의 가설을 만든다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/vulnerable/app.py",
+                "quote": "elif command == 'STATUS':\n                    self._send('OK role=' + ('staff' if authenticated else 'guest'))",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "patched/test.sh가 정상(HELLO 배너, STATUS guest/staff), 거부(AUTH wrong-token 후 READ backup-current가 DENIED), 성공(올바른 AUTH 후 READ backup-current가 pwnden{ 포함), 오답(READ missing의 ERR unknown_resource), 변조/형식 오류(개행 없는 HELLO의 ERR newline_required), 폐기 자료 불변(backup-retired는 인증 전후 동일)까지 모두 검사한다. 패치(policy.py의 READ_REQUIRES_AUTH=True)는 공격을 막고 HELLO/STATUS/backup-retired 정상 기능을 유지함을 test.sh 마지막 출력문이 확인한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/patched/test.sh",
+                "quote": "probe $'AUTH wrong-token\\nSTATUS\\nREAD backup-current\\n'\ngrep -qx '^DENIED bad_token' \"$work/tcp\"\ngrep -q '^OK role=guest' \"$work/tcp\"\ngrep -q '^DENIED staff_auth_required' \"$work/tcp\"",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/patched/test.sh",
+                "quote": "printf '%s\\n' 'HELLO, STATUS and the retired backup stay reachable; the current backup now needs AUTH first'",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "본문은 명령 구문과 테스트 토큰만 제공하고 어떤 조합이 성공하는지는 말하지 않는다. 힌트 1(STATUS 비교 방향)은 관찰 방향만 주고, 힌트 2가 'AUTH 없이 READ backup-current를 보내 보라'는 구체적 시도를 처음으로 알려준다. 완전한 절차(전체 재현·패치 후 동작)는 solve/README.md(해설)에만 있다. 힌트 2가 핵심 판별 조건(자원 이름 포함)을 상당히 구체적으로 제공하지만, 이는 README가 미처 주지 않은 자원 이름까지 포함하는 수준이라 선택형 힌트와 정답의 경계가 약간 느슨하다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/hints/1.md",
+                "quote": "STATUS`는 AUTH 전후로 다른 값을 돌려준다. 이 값은 중계기가 연결마다 인증\n여부를 실제로 기억한다는 뜻이다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/hints/2.md",
+                "quote": "접속한 뒤 `AUTH`를 한 번도 보내지 않은 상태에서 바로 `READ backup-current`만\n보내 보자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "힌트 2에서 자원 이름 'backup-current'를 직접 명시하는 대신 '현재 백업의 이름을 알아낸 뒤'처럼 표현해, 본문이 제공하지 않은 자원 이름 탐색이라는 작은 판단을 남길 수 있는지 검토할 여지가 있다."
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "solve/README.md가 행동(HELLO→STATUS 전후 비교→AUTH 없이 READ)→관찰(OK pwnden{...} 응답)→결론(READ가 인증 상태를 확인하지 않음)→원인(코드가 authenticated를 읽지 않음)→보호 방법(patched에서 READ 처리 전 authenticated 확인)까지 연결한다. '드러난 보안 원리' 절에서 다단계 프로토콜의 일반 원칙(각 명령이 스스로 상태를 확인해야 함)으로 결론을 확장하면서도 patched/test.sh로 입증되는 범위(이 중계기의 READ/STATUS/backup-retired 거동)에 한정해 설명한다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/solve/README.md",
+                "quote": "`READ`를 처리하는 코드가 그 상태를\n읽지 않아 안내한 순서를 지키지 않아도 보호된 자료를 읽을 수 있었다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/backup-relay/solve/README.md",
+                "quote": "수정한 서버는 `READ backup-current`를 처리하기 전에 같은 `authenticated`\n상태를 확인하며, `patched/test.sh`가 AUTH 없이는 거부되고 올바른 토큰으로\nAUTH한 뒤에만 현재 백업을 읽을 수 있음을 확인한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "AUTHORING.md가 날짜 있는 실행 기록을 인용한다: 2026-10-14 `tools/verify.py backup-relay` 통과, patched/test.sh가 모든 대조군을 확인함. 이는 작성자 기록의 인용이며 이번 심사에서 새로 실행한 것은 아니다. 범위(취약 서버의 solve 성공, 패치 서버의 거부)와 날짜가 명시되어 있어 recorded-execution으로 인정할 수 있으나, 이번 독립 심사가 직접 재실행하지는 않았다.",
+            "evidence": [
+              {
+                "path": "challenges/backup-relay/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-14, `tools/verify.py backup-relay` 통과. `patched/test.sh`가 HELLO·STATUS·AUTH 성공/실패·READ 성공/거부·미지원 명령·형식 오류를 모두 확인한다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "독립 심사 범위에서 직접 tools/verify.py backup-relay를 재실행한 기록이 추가되면 실행 재현 근거가 보강된다."
+          }
+        }
+      }
+    }
+  ],
+  "distribution": {
+    "goal": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "starting_context": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "reasoning": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "controls": {
+      "levels": {
+        "judge-1": 4,
+        "judge-2": 4,
+        "judge-3": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "hints": {
+      "levels": {
+        "judge-1": 2,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "explanation": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "execution": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    }
+  },
+  "needs_adjudication": [],
+  "summary": {
+    "slug": "backup-relay",
+    "points": 79.6875,
+    "reviewed_weight": 100.0,
+    "pending": [],
+    "improvements": [
+      {
+        "criterion": "starting_context",
+        "action": "현재 백업의 자원 이름(backup-current)을 본문 resources에 추가하거나, 본문에서 'READ <name>'의 name을 어떻게 알아내는지(예: HELLO 응답이나 추가 안내) 설명을 보강하면 시작 정보 간극이 줄어든다.\n본문 또는 STATUS 설명에 \"현재 백업의 자원 이름을 알아내는 방법\"에 대한 최소한의 단서(예: HELLO 응답이 자원 목록을 알려준다는 설명)를 추가하면 시작 정보의 완결성이 높아진다.\n자원 이름 노출이 힌트에 의존하는 정도가 커지지 않도록, 본문에 '현재 백업의 이름은 조사로 알아내야 한다'는 안내를 추가하면 시작 정보와 힌트 역할의 경계가 더 분명해질 수 있다."
+      },
+      {
+        "criterion": "hints",
+        "action": "힌트2를 완성된 명령 대신 판단 단서로 축소한다. 예: 'READ와 STATUS 중 어느 쪽이 인증 분기를 거치지 않을 수 있는지 코드 구조를 생각해보라'처럼 방향만 제시하고, 정확한 자원 이름과 완전한 명령 조합은 해설(solve/README.md)로 옮긴다.\n힌트 2에서 자원 이름 'backup-current'를 직접 명시하는 대신 '현재 백업의 이름을 알아낸 뒤'처럼 표현해, 본문이 제공하지 않은 자원 이름 탐색이라는 작은 판단을 남길 수 있는지 검토할 여지가 있다."
+      },
+      {
+        "criterion": "explanation",
+        "action": "해설에 이 관찰이 \"이 중계기의 READ 경로\"에 한정된 결론이며 다른 명령이나 구현 전반에 일반화할 근거는 아니라는 점을 한 문장 추가하면 좋다."
+      },
+      {
+        "criterion": "execution",
+        "action": "독립 심사 과정에서 실제로 solve.py와 patched/test.sh를 재실행해 날짜가 있는 새 실행 기록을 남기면 execution 항목의 근거가 더 직접적이 된다.\n독립 심사 범위에서 직접 tools/verify.py backup-relay를 재실행한 기록이 추가되면 실행 재현 근거가 보강된다."
+      }
+    ]
+  },
+  "adjudications": {}
+}

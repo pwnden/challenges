@@ -87,8 +87,8 @@ manifest의 difficulty를 바꾸면 이 기록도 함께 갱신하세요.
 
 - 실행 범위: 실제 대상. `tools/verify.py backup-relay`로 취약한 서버에서 solve가 flag를 회수하고, 패치 서버에서는 거부됨을 확인했다(날짜는 검증 로그 참고).
 - 기술 검증: 2026-10-14, `tools/verify.py backup-relay` 통과. `patched/test.sh`가 HELLO·STATUS·AUTH 성공/실패·READ 성공/거부·미지원 명령·형식 오류를 모두 확인한다.
-- 학습 리뷰: 미완료(독립 리뷰어 관찰 필요).
-- 리뷰 관찰: 미완료.
+- 학습 리뷰: 2026-10-14, 3인 패널(초급 학습자 관점·증거 검토자·교육 설계자, claude-sonnet-5-5 low effort; 사용자 승인에 따라 스킬이 정한 gpt-6-luna의 대체). 기준표 가중 합산 79.69/100. `needs_adjudication` 없음(3명 전원 2단계 이상 차이 없이 수렴), 5인 확대 조건 미충족. 감사 기록: `quality/panels/backup-relay/2026-10-14-panel.json`.
+- 리뷰 관찰: 세 심사자 모두 README의 자원 이름(`backup-current`)이 본문에 없고 힌트 2에서 처음 공개되며, 힌트 2가 "AUTH 생략 후 READ backup-current" 절차 전체를 그대로 알려준다는 같은 간극을 지적했다(starting_context·hints 3/4). controls(패치 전후 대조의 폭)·explanation(원인→결론 연결)은 3~4로 고르게 높았다. execution은 저자가 기록한 날짜 있는 실행(`tools/verify.py`, 2026-10-14)을 심사자가 재실행하지 않고 인용만 확인했다는 한계가 공통으로 남았다.
 - 맥락 확인: 처음 읽는 사람이 자물쇠지기·중계기·AUTH 제보·조사할 일을 첫 메시지만으로 식별할 수 있는지 `quality/text-reviews/backup-relay/`에서 확인한다.
 - 용어 확인: 본문·힌트·해설이 모두 같은 명령 이름(HELLO, AUTH, STATUS, READ)과 같은 자원 이름(backup-current, backup-retired)을 쓴다.
-- 배포 준비 상태: 기술 검증 통과. 학습 리뷰(독립 관찰)는 아직 비어 있어 배포 전 보완이 필요하다.
+- 배포 준비 상태: 기술 검증과 학습 리뷰 모두 통과. 패널이 공통으로 지적한 starting_context/hints 간극(현재 백업의 자원 이름이 본문에 없음)은 배포 전 보완을 권고하는 개선 사항으로 남아 있으나, 배포를 막는 결함(needs_adjudication)은 없다.

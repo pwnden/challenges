@@ -2,50 +2,182 @@
   "slug": "vault-gate",
   "rubric_version": 2,
   "reviewed_at": "2026-10-14",
-  "reviewer": "author (technical and text review; independent learning review pending)",
-  "source_sha256": "9fc1d6374e2f1101a9f5795dbad3523f308e257fb59e86403aee58cc84825771",
+  "reviewer": "3-judge panel (judge-1 learner-advocate, judge-2 evidence-examiner, judge-3 learning-designer; claude-sonnet-5-5, low effort, substituted for the skill's configured gpt-6-luna with explicit user approval); audit record quality/panels/vault-gate/2026-10-14-panel.json",
   "criteria": {
     "goal": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): README의 ::objective('이름 입력만으로 직원 전용 자료가 나오게 만들고, 그 안에 담긴 flag를 읽자')는 vulnerable/vault.c의 실제 분기(is_staff가 0이 아니면 직원 전용 자료 출력)와 일치하고, 이 동작은 네트워크 응답만으로 관찰 가능하다. 의뢰 메시지의 '직원 전용 자료가 나왔다는 제보'와 목표가 동일한 현상을 가리켜 일치도가 높다. 다만 README는 is_staff라는 변수명이나 정확한 메커니즘을 공개하지 않아(AUTHORING에 명시) 목표-보안원리-완료증거의 연결이 해설을 읽어야 완전히 드러나는 수준이라 4보다는 3이 적절하다.\njudge-2 (4): README의 목표('이름 입력만으로 직원 전용 자료가 나오게 만들고, 그 안에 담긴 flag를 읽자')와 실제 구현(vault.c의 is_staff 플래그, app.py의 FLAG 노출)이 정확히 일치한다. '직원 전용 자료: %s' 출력은 is_staff가 0이 아닐 때만 나오며, flag는 getenv('FLAG')로 매 실행 생성값을 읽어온다. 200·열린 포트 같은 형태적 신호가 아니라 실제 flag 문자열 전달이 성공 조건이며, solve.py가 그 줄만 파싱해 표준출력에 내는 것으로 관찰 가능성이 확인된다.\njudge-3 (3): 의뢰(문지기가 재현 못한 긴 이름→직원 전용 자료 제보), 보안 원리(인접 스택 변수 덮어쓰기), 완료 증거(이름 입력만으로 flag 획득)가 일치한다. README의 objective와 vulnerable/vault.c의 is_staff 분기가 정확히 대응되며, 이름 입력만으로(코드 실행 없이) 관찰 가능한 동작이다.",
+      "evidence": [
+        {
+          "path": "challenges/vault-gate/README.md",
+          "quote": "이름 입력만으로 직원 전용 자료가 나오게 만들고, 그 안에 담긴 flag를 읽자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/vulnerable/vault.c",
+          "quote": "if (is_staff) {\n        const char *flag = getenv(\"FLAG\");\n        printf(\"직원 전용 자료: %s\\n\", flag ? flag : \"(no flag)\");",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/vulnerable/vault.c",
+          "quote": "if (is_staff) {\n        const char *flag = getenv(\"FLAG\");",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "starting_context": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): README의 ::resources가 호스트(app:9100)·파일(files/vault)·프로토콜(한 줄 입력 후 응답하고 연결 종료)을 제공하고, challenge.toml의 player.cli=[\"ncat\",\"objdump\"]가 사용 가능한 도구를 명시해 플레이어가 도구 선택과 비교 기준(길이를 바꿔 비교, 또는 디스어셈블리 확인)을 스스로 정할 수 있다. 다만 knowledge/terminal-commands.md는 ncat으로 호스트:포트에 접속해 한 줄을 보내는 구체적 사용법을 전혀 다루지 않아('명령의 사용법은 해당 명령의 도움말에서 확인'), 선언된 선수지식만으로는 첫 접속 명령 구성에 플랫폼 공통 관례에 대한 가정이 필요해 보여 4가 아닌 3으로 판단했다.\njudge-2 (3): 선수 지식(terminal-commands, program-reading)만으로 시작 가능한 범위가 명확히 주어진다: files/vault 실행 파일과 app:9100 접속 주소, 한 줄 프로토콜 설명. challenge.toml의 player.cli=[\"ncat\",\"objdump\"]가 두 가지 접근 경로(블랙박스 접속 비교, 화이트박스 디스어셈블리) 모두를 뒷받침한다. 다만 '직원 전용 자료'가 응답에서 정확히 어떤 형태로 나타나는지(문자열 스펙)는 본문에 없어 플레이어가 짧은 이름으로 먼저 정상 응답을 관찰해야 하는데, 이는 설계된 탐색 과정으로 보이며 과도한 공백은 아니다.\njudge-3 (3): 선언한 선수 능력(terminal-commands, program-reading)으로 시작할 수 있는 자료(files/vault 실행 파일, app:9100 접속 정보, 한 줄 프로토콜)가 README에 명시되어 있다. 도구 선택(objdump vs 블랙박스 길이 비교)과 핵심 비교 기준(경계 길이 탐색)은 본문이 미리 정해주지 않고 플레이어가 판단하도록 남겨져 있다.",
+      "evidence": [
+        {
+          "path": "challenges/vault-gate/README.md",
+          "quote": "대상 호스트: 문제 네트워크 안의 `app`, 포트 9100.",
+          "kind": "source"
+        },
+        {
+          "path": "knowledge/terminal-commands.md",
+          "quote": "명령의 사용법은 해당 명령의 도움말에서 확인할 수 있다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/challenge.toml",
+          "quote": "cli = [\"ncat\", \"objdump\"]",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/README.md",
+          "quote": "대상 호스트: 문제 네트워크 안의 `app`, 포트 9100.\n- 프로그램 파일: `files/vault`",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/README.md",
+          "quote": "직접 분석하거나, 접속해서 다양한 길이의 이름을 넣어 비교할 수 있다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": "ncat으로 app:9100에 한 줄을 보내는 최소 예시(또는 호스트명이 그대로 접속 가능한 DNS 이름임을 알리는 문장)를 본문이나 terminal-commands.md에 추가하면 첫 행동 결정 부담이 줄어든다."
     },
     "reasoning": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): AUTHORING.md의 '의도된 풀이' 표가 보여주듯 2단계(경계값 블랙박스 탐색)와 3단계(objdump 오프셋 계산+fgets 크기 확인)가 서로 다른 경로로 같은 결론에 수렴하도록 설계되어, 단순 명령 수가 아니라 실제 비교·추론을 요구한다. solve/README.md는 디스어셈블리만으로는 경계(76)가 실제 경계(77/78)와 다르다는 것을 보여주며, trim 코드가 같은 바이트를 다시 덮어쓰는지까지 확인해야 정답에 이른다는 추가 추론 단계를 제시한다. 이는 초급 난도(2)에 맞는 '단서 연결과 그럴듯한 오답 구분'(디스어셈블리 오프셋만으로 끝났다고 오판하면 1바이트 차이로 실패)을 보여준다.\njudge-2 (4): 난이도 2(초급)에 맞는 단서 연결과 그럴듯한 오답 구분이 해설에 명시적으로 드러난다. 디스어셈블리만으로 계산한 오프셋 차이(76바이트)는 그럴듯하지만 실제로는 틀린 답이며, strcspn 트림 코드가 같은 위치에 NUL을 재작성하기 때문에 실제 경계는 77/78바이트임을 접속 시험으로 교정해야 한다. 이는 '화이트박스 계산'과 '블랙박스 관찰'이라는 두 독립 경로가 같은 결론에 수렴하는지 대조하는 실제 추론 단계이며, 명령 수가 아니라 실제 판단 지점을 요구한다.\njudge-3 (3): 난도 2(초급)에 맞게 두 가지 독립 경로(블랙박스 경계값 탐색, 화이트박스 오프셋 계산)가 같은 결론에 수렴하도록 설계되어 있어 단서 연결이 요구된다. 특히 76바이트(오프셋 차이)와 77바이트(실제 경계) 사이의 차이는 디스어셈블리만으로 끝나지 않고 trim 코드(name[strcspn...]='\\0')가 같은 바이트를 재작성한다는 점까지 추적해야 하는, 그럴듯한 오답(76바이트로 충분하다는 추정)을 구분하는 실제 추론 단계다.",
+      "evidence": [
+        {
+          "path": "challenges/vault-gate/solve/README.md",
+          "quote": "오프셋을 디스어셈블리만으로 계산해도 끝이 아니라,\n그 뒤에 나오는 트림 코드까지 같은 메모리를 다시 건드리는지 확인해야 정확한\n경계를 알 수 있다는 뜻이다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/solve/README.md",
+          "quote": "실제 접속에서 길이를 하나씩 늘려 가며 확인하면 경계는 76바이트가 아니라\n77바이트다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/AUTHORING.md",
+          "quote": "2026-10-14, `objdump`로 확인한 오프셋(name=rbp-0x50, is_staff=rbp-0x4, 차이 76)만으로는 경계를 다 설명하지 못해 실제 접속 시험으로 보완했다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/solve/README.md",
+          "quote": "오프셋을 디스어셈블리만으로 계산해도 끝이 아니라,",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "controls": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): patched/test.py가 평소 이름(guest), 경계값(63바이트, 통과해야 함), 이전 overflow payload(77바이트 A+줄바꿈, 거부되어야 함), 훨씬 긴 입력(200바이트, 거부)까지 네 가지 조건을 모두 확인해 정상 기능 유지와 공격 차단을 함께 검증한다. 다만 vault.c 자체의 fgets 호출은 패치에서 그대로 두고 앞단 계층에서 길이를 제한하는 방식이라(README 해설에 명시), 이 대조군이 vault 바이너리 자체의 수정이 아니라 우회 경로 차단임을 해설이 분명히 밝히고 있어 범위를 벗어난 과장이 없다.\njudge-2 (4): patched/test.py가 정상 자기 자료(평범한 'guest' 이름), 경계값(63바이트, 정상 통과), 과거 공격 입력(77개 A+줄바꿈=78바이트, 이제 차단), 더 긴 입력(200바이트, 차단)을 모두 대조한다. 각 케이스가 'pwnden{' not in overflow까지 확인해 거부 응답이 실제로 flag 비전달과 일치하는지 검증한다. 패치는 fgets 호출 자체는 그대로 두고 앞단 계층에서 65바이트로 줄 길이를 제한해(policy.py의 MAX_LINE_BYTES=65) 공격은 막고 정상 기능(평상시 이름 입력)은 유지한다.\njudge-3 (3): 정상 입력(guest), 경계값(63바이트), 이전 overflow 길이(77바이트 A), 더 긴 입력(200바이트)에 대한 대조 검사가 patched/test.py에 있고, 각각 손님 응답 유지/ERR name_too_long 거부를 확인한다. 패치는 취약한 fgets 호출 자체는 그대로 두고 앞단에서 줄 길이를 제한하는 방식으로 정상 기능(64바이트 이하 이름)을 유지하면서 공격을 막는다.",
+      "evidence": [
+        {
+          "path": "challenges/vault-gate/patched/test.py",
+          "quote": "check(overflow.strip() == 'ERR name_too_long', 'the former overflow payload was not rejected before reaching the vault binary')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/patched/test.py",
+          "quote": "boundary = ask(b'C' * 63 + b'\\n')\n    check('손님 접근만 허용됩니다.' in boundary, 'a name at the buffer boundary was rejected or changed behavior')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/patched/test.py",
+          "quote": "overflow = ask(b'A' * 77 + b'\\n')\n    check(overflow.strip() == 'ERR name_too_long', 'the former overflow payload was not rejected before reaching the vault binary')\n    check('pwnden{' not in overflow, 'the former overflow payload still leaked a flag')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/patched/policy.py",
+          "quote": "MAX_LINE_BYTES = 65  # the declared name buffer (64 bytes) plus its newline",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "hints": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): README 본문은 정확한 경계 길이나 is_staff라는 이름을 노출하지 않는다. hints/1.md는 '하나씩 늘려 가며' 비교해 경계를 찾으라는 방향만 제시하고 구체적 숫자(76/77/78)는 주지 않는다. hints/2.md는 objdump 명령과 확인할 대상(스택 오프셋, fgets 허용 크기)을 알려주지만 '두 오프셋의 차이가 곧 넘쳐야 하는 길이'라고만 하고 실제 trim 코드로 인한 1바이트 보정은 알려주지 않아, 완성된 풀이 순서는 해설(solve/README.md)에만 있다. 기본 본문-힌트-해설의 분리가 설계대로 지켜진다.\njudge-2 (3): 본문은 정확한 임계 길이나 변수 이름(is_staff)을 전혀 노출하지 않는다(AUTHORING.md에 '소스 코드나 `is_staff`라는 변수 이름은 공개하지 않는다'고 명시). 힌트 1은 길이를 늘려가며 비교하라는 방향만 제공하고 숫자를 주지 않는다. 힌트 2는 objdump로 오프셋을 읽는 방법을 알려주지만 '두 오프셋의 차이가 곧 넘쳐야 하는 길이다'라고만 하여 정확한 77/78 경계(트림 코드의 부작용)까지는 주지 않는다. 완전한 풀이 순서와 정확한 경계값은 해설(solve/README.md)에서만 공개되어 힌트-해설 분리가 잘 지켜진다.\njudge-3 (3): 본문(README)은 프로그램 파일과 접속 방법만 제공하고 정확한 경계 길이나 변수 이름을 노출하지 않는다. 힌트1은 경계값 탐색이라는 '방향'만 제공하고 구체적 수치는 주지 않으며, 힌트2는 objdump 명령과 오프셋 '계산 방법'을 제공하되 실제 수치(76/77/78)나 trim 코드와의 상호작용은 해설에만 남겨, 완성된 풀이 절차와 선택형 힌트가 분리되어 있다.",
+      "evidence": [
+        {
+          "path": "challenges/vault-gate/hints/1.md",
+          "quote": "짧은 이름과 긴 이름을 하나씩 늘려 가며 보내 보자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/hints/2.md",
+          "quote": "두 오프셋의 차이가 곧 넘쳐야 하는 길이다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/AUTHORING.md",
+          "quote": "이번에 공개할 정보: 컴파일된 프로그램 파일과 접속 주소. 소스 코드나 `is_staff`라는 변수 이름은 공개하지 않는다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/AUTHORING.md",
+          "quote": "공개 위치: 프로그램 파일과 접속 방법은 본문에서 공개. 정확한 경계 길이(77/78)와 어느 변수가 겹치는지는 힌트·해설에서만 명시한다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "explanation": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 4,
+      "reason": "judge-1 (4): solve/README.md는 행동(길이 증가 시험, objdump 분석)→관찰(76 오프셋 차이, 256바이트 fgets 한도, 실제 경계는 77/78)→결론(trim 코드가 같은 바이트를 다시 0으로 되돌리는 메커니즘)→원인(fgets가 선언 크기의 4배를 그대로 받음)→보호 방법(앞단에서 65바이트로 제한)까지 모두 연결하며, '디스어셈블리만으로 계산해도 끝이 아니다'라는 문장으로 실습 증거의 한계(오프셋 계산만으로는 정확한 경계를 보장하지 못함)를 명시적으로 설명한다.\njudge-2 (4): 해설은 행동(objdump 읽기, 접속 시험)→관찰(오프셋 76, 실제 경계 77/78)→결론(fgets가 4배 크기를 받음)→원인(소스의 sizeof(name)*4)→보호 방법(패치는 fgets 호출은 유지하되 앞단에서 줄 길이를 제한)을 모두 연결한다. 특히 '오프셋을 디스어셈블리만으로 계산해도 끝이 아니라, 그 뒤에 나오는 트림 코드까지 같은 메모리를 다시 건드리는지 확인해야 정확한 경계를 알 수 있다는 뜻이다'라고 명시해, 실습 증거(디스어셈블리)만으로 말할 수 있는 한계와 그를 보완한 실제 시험의 필요성을 설명한다.\njudge-3 (4): 해설이 행동(objdump 실행)-관찰(오프셋 76, fgets 크기 256)-결론(77/78 경계)-원인(fgets가 선언 크기의 4배를 그대로 받음)-보호 방법(연결 계층에서 줄 길이 제한)을 모두 연결하고, '디스어셈블리만으로는 끝이 아니다'라는 결론의 한계를 명시해 비슷한 문제(트림/정규화 코드가 있는 다른 오버플로우)에도 적용 가능한 원리를 제공한다.",
+      "evidence": [
+        {
+          "path": "challenges/vault-gate/solve/README.md",
+          "quote": "실제 원인은 `vault` 프로그램의 `fgets` 호출이 선언된 배열 크기의 4배를\n그대로 받아들이는 것이다. 수정한 서비스는 그 호출 자체는 그대로 두고, 연결을\n받는 계층에서 이름 한 줄의 길이를 배열의 실제 크기(64바이트)와 줄바꿈을 더한\n65바이트로 제한해 더 긴 줄은 `vault` 프로그램에 전달하기 전에 거부한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/solve/README.md",
+          "quote": "오프셋을 디스어셈블리만으로 계산해도 끝이 아니라,\n그 뒤에 나오는 트림 코드까지 같은 메모리를 다시 건드리는지 확인해야 정확한\n경계를 알 수 있다는 뜻이다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/vault-gate/solve/README.md",
+          "quote": "우회할 수 있다. 변수의 선언 순서와 실제 메모리 배치, 그리고 코드가 실제로",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "execution": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): AUTHORING.md의 '검증과 리뷰' 절이 2026-10-14 날짜로 'tools/verify.py vault-gate'를 실행해 취약 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다고 기록하며, 컴파일에 쓰는 Debian 패키지 스냅샷을 고정해 76/77 경계가 빌드마다 바뀌지 않음을 확인했다는 보강 조사까지 날짜와 함께 남겼다. 다만 같은 문서가 '학습 리뷰: 미완료(독립 리뷰어 관찰 필요)'라고 명시해, 기술 검증은 기록이 있으나 독립 학습자/리뷰어 관찰은 아직 비어 있다는 한계가 스스로 드러나 있다.\njudge-2 (2): 검사 코드(solve/solve.py, patched/test.py)는 존재하고 구체적인 대조 시나리오를 담고 있다. AUTHORING.md는 2026-10-14에 '컴파일된 files/vault를 ... 직접 실행해 77바이트 이하/78바이트 경계를 확인했고, tools/verify.py vault-gate로 ... flag가 회수되고 패치 서버에서는 거부됨을 확인했다'고 날짜를 포함해 서술한다. 그러나 이는 저자의 서술적 보고이며, 이 스냅샷에는 그 실행을 뒷받침하는 로그·출력 파일(quality/text-reviews/vault-gate/ 등)이 없어 이번 심사에서 독립적으로 재확인할 수 있는 기록 증거는 없다. AUTHORING.md 자신도 '학습 리뷰: 미완료(독립 리뷰어 관찰 필요)', '리뷰 관찰: 미완료'라고 밝혀 실행 재현 기록이 부분적임을 인정한다.\njudge-3 (3): 작성 기록에 2026-10-14 날짜로 실제 컨테이너에서 vault 실행, 경계값 확인, tools/verify.py vault-gate 통과, patched/test.py가 평소 이름·경계값·이전 overflow·200바이트를 모두 확인했다는 실행 기록이 날짜와 범위를 구분해 인용되어 있다. 다만 '학습 리뷰: 미완료(독립 리뷰어 관찰 필요)'로 명시되어 있어 독립 실행 재현(예: 다른 리뷰어의 재검증)은 아직 없다.",
+      "evidence": [
+        {
+          "path": "challenges/vault-gate/AUTHORING.md",
+          "quote": "기술 검증: 2026-10-14, `objdump`로 확인한 오프셋(name=rbp-0x50, is_staff=rbp-0x4, 차이 76)만으로는 경계를 다 설명하지 못해 실제 접속 시험으로 보완했다.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/vault-gate/AUTHORING.md",
+          "quote": "실행 범위: 실제 대상. 컴파일된 `files/vault`를 `python:3.13.15-slim-trixie` 기반 컨테이너에서 직접 실행해 77바이트 이하/78바이트 경계를 확인했고, `tools/verify.py vault-gate`로 취약한 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다.",
+          "kind": "recorded-execution"
+        }
+      ],
+      "improvement": "독립 리뷰어/학습자 관찰을 quality/observations/vault-gate.json에 기록해 학습 리뷰 항목을 완료 상태로 보완한다.\n실제 tools/verify.py vault-gate 실행 로그(출력 전문)를 별도 파일로 보존해 저자의 서술적 보고와 독립적으로 대조할 수 있는 기록 증거를 남긴다.\n독립 리뷰어가 실제로 patched/test.py와 solve.py를 재실행한 날짜·결과 기록을 추가하면 4점으로 올릴 수 있다."
     }
-  }
+  },
+  "source_sha256": "207988d8818a67caf490dc41ad164ecd2a58a0ba2196454e2e4bf6ee9e634787"
 }
