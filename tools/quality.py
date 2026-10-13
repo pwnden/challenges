@@ -33,6 +33,7 @@ def load_rubric(root):
 
 def source_digest(root, slug, evidence_paths=()):
     """Bind the review to the exercise, shared knowledge and grading definition."""
+    root = root.resolve()
     paths = [root / 'contract.toml', root / 'quality/rubric.json']
     metadata = tomllib.loads((root / 'challenges' / slug / 'challenge.toml').read_text())
     if 'compose' in metadata and (root / 'web').exists():

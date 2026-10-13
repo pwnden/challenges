@@ -60,7 +60,7 @@ def image(value, name):
 
 def inside(root, path):
     resolved = path.resolve()
-    if not resolved.is_relative_to(root):
+    if not resolved.is_relative_to(root.resolve()):
         raise InvalidChallenge(f"{path} is outside the challenges repository")
     return resolved
 

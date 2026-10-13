@@ -82,7 +82,7 @@ class PolicyTests(unittest.TestCase):
             public.mkdir()
             outside = Path(name) / 'private'
             outside.mkdir()
-            self.assertEqual(locate(public, './file.txt'), public / 'file.txt')
+            self.assertEqual(locate(public, './file.txt'), (public / 'file.txt').resolve())
             for request in ['../private/key.txt', '../public-other/key.txt', str(outside / 'key.txt')]:
                 with self.subTest(request=request), self.assertRaises(PermissionError):
                     locate(public, request)

@@ -22,6 +22,7 @@ SKIP = {'__pycache__', 'node_modules', 'dist', '.git'}
 def selected_files(root, slug):
     if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', slug):
         raise InvalidChallenge('invalid slug')
+    root = root.resolve()
     repository_path(root, root, f'challenges/{slug}/challenge.toml', 'manifest', regular=True)
     paths = [root / 'contract.toml', root / 'quality/rubric.json']
     for relative in [f'challenges/{slug}', 'knowledge', 'web', 'tools', 'docs']:
@@ -37,6 +38,7 @@ def selected_files(root, slug):
 
 
 def inputs_digest(root, paths):
+    root = root.resolve()
     digest = hashlib.sha256()
     for path in paths:
         value = path.read_bytes()
