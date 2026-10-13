@@ -237,3 +237,15 @@ id = "web-addresses"
 title = "주소의 경로와 입력값"
 requires = []
 related = []
+
+[[concepts]]
+id = "connection-state"
+title = "세션이 기억해야 하는 연결 상태"
+requires = ["tcp-services"]
+related = []
+
+[[concepts]]
+id = "memory-layout"
+title = "지역 변수의 메모리 배치"
+requires = ["program-reading", "terminal-commands"]
+related = []

@@ -1,0 +1,1 @@
+READ_REQUIRES_AUTH = True

@@ -1,0 +1,51 @@
+{
+  "slug": "backup-relay",
+  "rubric_version": 2,
+  "reviewed_at": "2026-10-14",
+  "reviewer": "author (technical and text review; independent learning review pending)",
+  "source_sha256": "ad0811e1b410cca12625467741a3dba5faaf146a5d9f3fc73bb3b133181a2878",
+  "criteria": {
+    "goal": {
+      "level": null,
+      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
+      "evidence": [],
+      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+    },
+    "starting_context": {
+      "level": null,
+      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
+      "evidence": [],
+      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+    },
+    "reasoning": {
+      "level": null,
+      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
+      "evidence": [],
+      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+    },
+    "controls": {
+      "level": null,
+      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
+      "evidence": [],
+      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+    },
+    "hints": {
+      "level": null,
+      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
+      "evidence": [],
+      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+    },
+    "explanation": {
+      "level": null,
+      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
+      "evidence": [],
+      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+    },
+    "execution": {
+      "level": null,
+      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
+      "evidence": [],
+      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+    }
+  }
+}

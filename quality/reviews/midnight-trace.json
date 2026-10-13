@@ -161,5 +161,5 @@
       "improvement": "재현성을 높이려면 이 문제의 자동 해답 및 대조 검사 실행 로그를 날짜·명령·결과와 함께 보존하고 이번 실행 여부와 분리해 연결한다."
     }
   },
-  "source_sha256": "9f1c1e5d41ca4bf2bc9d4ff2a1571d29f5f3572bda958f7f5d54916d20665b9d"
+  "source_sha256": "21aded980f8a5877d4eae68fe1e9e6f154cb0c3bf9e4408a8621f27bc4b4699a"
 }
