@@ -1,4 +1,4 @@
-## 조사 순서
+## 조사 과정
 
 1. `od -An -tx1 -N8 files/banner.png`로 앞부분을 확인한다.
 2. 시작은 `1f 8b 08`이다. PNG의 식별 바이트와 다르고 gzip에 해당한다.
@@ -7,7 +7,7 @@
 5. `tar -xOzf files/banner.png recovery/key.txt`로 복구 키를 화면에 출력한다.
 6. `pwnden{bytes_tell_the_story}`를 제출한다.
 
-## 확인된 원리
+## 드러난 보안 원리
 
 이름이 banner.png여도 내부 바이트는 gzip으로 압축된 tar다.
 식별 바이트로 형식을 추정하고, 해당 형식의 도구가 구조를 읽는 것으로 확인했다.

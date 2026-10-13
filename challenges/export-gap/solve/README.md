@@ -1,4 +1,4 @@
-## 같은 문서의 두 작업 비교
+## 조사 과정
 
 브리핑의 명령으로 guest 계정의 쿠키를 저장한다. 자기 문서 7은 조회와
 내보내기가 모두 성공한다. 목록에는 staff의 문서 42도 있지만 제목과 소유자만
@@ -19,7 +19,7 @@ curl -sS -b cookies.txt -H 'Content-Type: application/json' \
   -d '{"note_id":42,"format":"full"}' http://app:8000/api/exports | jq -r '.export.body'
 ```
 
-## 원인과 수정
+## 드러난 보안 원리
 
 내보내기는 로그인 여부만 확인하고, 서버 문서의 소유자와 로그인한 사용자를
 비교하지 않았다. JSON의 문서 ID를 바꿔도 사용자 권한이 늘어나면 안 된다.

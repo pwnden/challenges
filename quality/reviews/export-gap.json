@@ -109,5 +109,5 @@
       "improvement": "별도 검토자가 지정 이미지에서 해답·패치·정상 기능과 정리 동작을 재실행하고 날짜와 범위를 기록한다.\n배포 이미지로 patched/test.sh를 실행한 날짜와 결과를 추가한다."
     }
   },
-  "source_sha256": "edfc538e5d022b7c36739ba697246df38ade3fa6ee063a628320f4a1f92a58b0"
+  "source_sha256": "fa9b4fbca127b264b56ccad72ce8dd5ec7e79fa00cc162b2548b6d97dcec1b65"
 }
