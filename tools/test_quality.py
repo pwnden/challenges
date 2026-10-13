@@ -104,6 +104,15 @@ class QualityTests(unittest.TestCase):
         with self.assertRaisesRegex(InvalidChallenge, 'stale'):
             self.check()
 
+    def test_finder_metadata_does_not_change_a_review_digest(self):
+        (self.directory / 'challenge.toml').write_text('title = "Sample"\ncompose = "compose.yaml"\n')
+        (self.root / 'web').mkdir()
+        (self.root / 'web/server.py').write_text('implementation\n')
+        self.refresh()
+        for folder in (self.directory, self.root / 'web', self.root / 'knowledge'):
+            (folder / '.DS_Store').write_bytes(b'finder state')
+        self.check()
+
     def test_missing_and_orphan_reviews_fail(self):
         path = self.root / 'quality/reviews/sample.json'
         original = path.read_bytes()

@@ -38,13 +38,14 @@ def source_digest(root, slug, evidence_paths=()):
     if 'compose' in metadata and (root / 'web').exists():
         paths.extend(path for path in (root / 'web').rglob('*')
                      if path.is_file() and not {'node_modules', 'dist', '__pycache__'} & set(path.parts)
-                     and path.suffix not in {'.pyc', '.pyo'})
+                     and path.suffix not in {'.pyc', '.pyo'} and path.name != '.DS_Store')
     paths.extend(repository_path(root.resolve(), root, value, 'evidence.path', regular=True)
                  for value in evidence_paths)
     for directory in [root / 'challenges' / slug, root / 'knowledge']:
         paths.extend(path for path in directory.rglob('*')
                      if path.is_file() and '__pycache__' not in path.parts
-                     and '.git' not in path.parts and path.suffix not in {'.pyc', '.pyo'})
+                     and '.git' not in path.parts and path.suffix not in {'.pyc', '.pyo'}
+                     and path.name != '.DS_Store')
     digest = hashlib.sha256()
     for path in sorted(set(paths)):
         relative = path.relative_to(root).as_posix()
