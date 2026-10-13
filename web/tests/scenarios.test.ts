@@ -8,6 +8,7 @@ import PaperSession from '../../challenges/paper-session/vulnerable/web/App.vue'
 import PathParcel from '../../challenges/path-parcel/vulnerable/web/App.vue';
 import ForgottenShelf from '../../challenges/forgotten-shelf/vulnerable/web/App.vue';
 import RefundLoop from '../../challenges/refund-loop/vulnerable/web/App.vue';
+import TicketBridge from '../../challenges/ticket-bridge/vulnerable/web/App.vue';
 
 const page = vi.hoisted(() => ({ data: {} as unknown }));
 vi.mock('../src/page', async () => {
@@ -37,6 +38,21 @@ it('shows shop controls and renders receipts only from completed backend orders'
   expect(cancelled).toContain('환불액');
   expect(cancelled).toContain('500원');
   expect(cancelled).not.toContain('주문 #1 취소');
+});
+it('shows support controls and renders the staff confirmation only from the backend response', async () => {
+  globals();
+  page.data = { user: 'member', role: 'member', tickets: [{ id: 310, title: '전시 안내 수정' }] };
+  const html = await renderToString(createSSRApp(TicketBridge));
+  expect(html).toContain('일반 회원');
+  expect(html).toContain('#310 · 전시 안내 수정');
+  expect(html).toContain('운영 초대');
+  expect(html).toContain('운영 화면 열기');
+  expect(html).not.toContain('pwnden{');
+  expect(html).not.toContain('초대 코드 <code');
+  page.data = { user: 'member', role: 'staff', tickets: [] };
+  const promoted = await renderToString(createSSRApp(TicketBridge));
+  expect(promoted).toContain('운영 담당자');
+  expect(promoted).not.toContain('pwnden{');
 });
 it('shows only backend-authorized notes and escapes note bodies', async () => {
   globals('/notes/1'); page.data = { title: 'Welcome', body: '<script>alert(1)</script>' };
