@@ -35,8 +35,8 @@ const login = () => run(async () => {
           <h2 id="login-title">로그인</h2>
           <p>로그인하면 내 메모를 읽을 수 있습니다.</p>
           <FormRoot class="login" :on-submit="login">
-            <Field v-model="username" label="아이디" name="username" autocomplete="username" required :disabled="busy" />
-            <Field v-model="password" label="비밀번호" name="password" type="password" autocomplete="current-password" required :disabled="busy" />
+            <Field v-model="username" label="아이디" name="username" autocomplete="username" required />
+            <Field v-model="password" label="비밀번호" name="password" type="password" autocomplete="current-password" required />
             <SubmitButton variant="primary" :disabled="busy">로그인</SubmitButton>
           </FormRoot>
         </section>

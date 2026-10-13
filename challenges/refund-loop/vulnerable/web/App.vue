@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { usePage } from '@target/page';
 import { FormRoot } from '@target/sectile';
+import Button from '@target/Button.vue';
 import Field from '@target/Field.vue';
 import SubmitButton from '@target/SubmitButton.vue';
 import TargetPage from '@target/TargetPage.vue';
@@ -31,8 +32,8 @@ const refresh = () => run(async () => {
     <template #nav><a href="/" :aria-current="onOrders ? undefined : 'page'">상품</a><a href="/orders" :aria-current="onOrders ? 'page' : undefined">주문 기록</a></template>
     <template v-if="data" #actions>
       <p class="balance-box"><span>구매 계정 잔액</span><strong class="balance">{{ money(data.balance) }}</strong></p>
-      <button class="small" :disabled="busy" @click="refresh">현재 상태 확인</button>
-      <button class="small" :disabled="busy" @click="action('/api/reset', {})">처음부터 다시</button>
+      <Button small :disabled="busy" @click="refresh">현재 상태 확인</Button>
+      <Button small :disabled="busy" @click="action('/api/reset', {})">처음부터 다시</Button>
     </template>
     <Toaster v-model:toasts="toasts"><template #extra="{ item }"><a v-if="item.kind === 'success' && ordered && !onOrders" href="/orders">주문 기록 보기</a></template></Toaster>
     <div v-if="data" class="content">
@@ -52,7 +53,7 @@ const refresh = () => run(async () => {
                 <div class="head"><h3>{{ product.name }}</h3><span v-if="product.id === data.coupon.product" class="label">쿠폰 대상</span></div>
                 <p class="price">{{ money(product.price) }}</p>
                 <p class="desc">{{ product.description }}</p>
-                <Field :id="`coupon-${product.id}`" name="coupon" label="쿠폰 (선택)" maxlength="32" autocomplete="off" :disabled="busy" />
+                <Field :id="`coupon-${product.id}`" name="coupon" label="쿠폰 (선택)" maxlength="32" autocomplete="off" />
                 <SubmitButton variant="primary" :disabled="busy">{{ product.name }} 구매</SubmitButton>
               </FormRoot>
             </div>
@@ -72,7 +73,7 @@ const refresh = () => run(async () => {
                     <td class="num">{{ money(order.price) }}</td>
                     <td class="num">{{ money(order.paid) }}</td>
                     <td class="num">{{ order.status === 'cancelled' ? money(order.refunded) : '–' }}</td>
-                    <td><button v-if="order.status === 'paid'" class="small" :disabled="busy" @click="action('/api/cancel', { order_id: order.id })">주문 #{{ order.id }} 취소</button></td>
+                    <td><Button v-if="order.status === 'paid'" small :disabled="busy" @click="action('/api/cancel', { order_id: order.id })">주문 #{{ order.id }} 취소</Button></td>
                   </tr>
                 </tbody>
               </table>
