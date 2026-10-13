@@ -1,6 +1,6 @@
 ---
 name: pwnden challenge targets
-description: Shared presentation for the eight Vue challenge target sites.
+description: Shared presentation for the nine Vue challenge target sites.
 colors:
   background: "#101722"
   foreground: "#dae4f2"
@@ -38,7 +38,7 @@ spacing:
 
 ## Overview
 
-The eight target sites share a dark blue canvas, readable Korean text and simple document sections. Their site titles and content identify the individual challenge. [style.css](src/style.css) and [TargetPage.vue](src/TargetPage.vue) own the shared presentation.
+The nine target sites share a dark blue canvas, readable Korean text and simple document sections. Their site titles and content identify the individual challenge. [style.css](src/style.css) and [TargetPage.vue](src/TargetPage.vue) own the shared presentation.
 
 ## Colors
 
@@ -67,5 +67,7 @@ Forms use visible labels and native inputs. Links navigate through ordinary anch
 The workshop shop groups balance, product offers and order history in separate sections. Product cards wrap into one column when space is limited. Each order shows its original price, actual payment, refund and status together. Buying and cancelling update server-supplied state and share a reserved feedback line. A receipt appears beside its completed order. Refresh recovers current state after an uncertain request; reset starts a new attempt for the current account.
 
 The support desk groups the current account, its own inquiries, staff invitation and staff page in separate sections. An inquiry or the staff confirmation opens in a detail panel below its form; the panel clears when the next request starts. All requests share a reserved feedback line and disable the controls while pending. Reset restores the member account and clears the forms.
+
+The star run groups the track rules, the current run and the record board in separate sections. The current run shows the stars picked so far with a progress bar and a button that stays disabled until the next star is available. The record code is an editable text box beside its submit button. The board is a semantic table and highlights the player's row; the trophy appears in a detail panel only when the server returns it. Feedback shares one reserved line and controls are disabled while a request is pending.
 
 Vue text interpolation displays server content, queries, policy JSON, filenames and document bodies as escaped text. Search results use a semantic table with column headings. Lists of notes, files and revisions use semantic lists and links. All interactive elements receive the shared visible keyboard focus outline. Fonts and built assets are served locally.

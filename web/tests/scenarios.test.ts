@@ -9,6 +9,7 @@ import PathParcel from '../../challenges/path-parcel/vulnerable/web/App.vue';
 import ForgottenShelf from '../../challenges/forgotten-shelf/vulnerable/web/App.vue';
 import RefundLoop from '../../challenges/refund-loop/vulnerable/web/App.vue';
 import TicketBridge from '../../challenges/ticket-bridge/vulnerable/web/App.vue';
+import LapRecord from '../../challenges/lap-record/vulnerable/web/App.vue';
 
 const page = vi.hoisted(() => ({ data: {} as unknown }));
 vi.mock('../src/page', async () => {
@@ -53,6 +54,22 @@ it('shows support controls and renders the staff confirmation only from the back
   const promoted = await renderToString(createSSRApp(TicketBridge));
   expect(promoted).toContain('운영 담당자');
   expect(promoted).not.toContain('pwnden{');
+});
+it('shows the star run rules and the board, and renders the trophy only from backend state', async () => {
+  globals();
+  const track = { rules: { stars: 6, segment_m: 20, max_speed: 10 }, leaderboard: [{ name: '바람개비', time_ms: 12640, mine: false }], best_ms: null as number | null };
+  page.data = track;
+  const initial = await renderToString(createSSRApp(LapRecord));
+  expect(initial).toContain('별이 6개');
+  expect(initial).toContain('12.64초');
+  expect(initial).toContain('달리기 시작');
+  expect(initial).not.toContain('pwnden{');
+  expect(initial).not.toContain('class="detail"');
+  page.data = { ...track, best_ms: 6000, leaderboard: [{ name: '나', time_ms: 6000, mine: true }, ...track.leaderboard], trophy: 'pwnden{trophy}' };
+  const earned = await renderToString(createSSRApp(LapRecord));
+  expect(earned).toContain('6.00초');
+  expect(earned).toContain('class="detail"');
+  expect(earned).toContain('pwnden{trophy}');
 });
 it('shows only backend-authorized notes and escapes note bodies', async () => {
   globals('/notes/1'); page.data = { title: 'Welcome', body: '<script>alert(1)</script>' };
