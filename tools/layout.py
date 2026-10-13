@@ -18,10 +18,7 @@ POLICY_NAMES = {'policy.py', 'policy.json'}
 
 # Known gaps in older problems. Each entry names the rule, the reason and what ends it.
 # A listed gap that no longer exists is reported, so the list can only shrink.
-EXCEPTIONS = {
-    ('note-vault', 'readme-message'): '초기 문제로 의뢰인 메시지가 없다. 인물 설정을 추가할 때 제거한다.',
-    ('rotor-lock', 'readme-message'): '초기 문제로 의뢰인 메시지가 없다. 인물 설정을 추가할 때 제거한다.',
-}
+EXCEPTIONS = {}
 
 
 def headings(path, level):
@@ -59,11 +56,8 @@ def check_challenge(root, directory, reviews=True):
     if readme.is_file():
         blocks = re.findall(r'^::(\w+)', readme.read_text(encoding='utf-8'), re.M)
         found = [name for name in blocks if name in README_BLOCKS]
-        missing = [name for name in README_BLOCKS if name not in found]
-        if missing == ['message'] and found == README_BLOCKS[1:]:
-            add('readme-message', 'README.md has no ::message block')
-        elif missing or found != README_BLOCKS:
-            add('readme-blocks', f'README.md blocks {found} must be {README_BLOCKS} in order')
+        if found not in (README_BLOCKS, README_BLOCKS[1:]):
+            add('readme-blocks', f'README.md blocks {found} must be {README_BLOCKS} in order; message is optional')
 
     authoring = directory / 'AUTHORING.md'
     if authoring.is_file():

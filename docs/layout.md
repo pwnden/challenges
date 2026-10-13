@@ -10,7 +10,7 @@ file, and `tools/create.py` output passes the check once the problem has its tex
 
 | Path | Rule |
 | --- | --- |
-| `README.md` | Player brief with the blocks `message`, `objective`, `resources`, `submission` in that order. `knowledge` may appear between them. |
+| `README.md` | Player brief with the blocks `objective`, `resources`, `submission` in that order, optionally led by a requester `message`. `knowledge` may appear between them. |
 | `challenge.toml`, `AUTHORING.md`, `solve/README.md` | Required. |
 | `hints/<n>.md` | As many as the manifest declares. Plain text without headings; the hint list numbers them. |
 | `solve/solve.py` or `solve/solve.sh`, `patched/test.py` or `patched/test.sh` | The runner commands declared in the manifest. |
@@ -47,4 +47,4 @@ protection discussion goes in a level-3 subsection of 드러난 보안 원리.
 
 `layout.EXCEPTIONS` lists each gap in an older problem with its reason. A listed gap that is
 fixed must be removed, so the list only shrinks. Do not add an entry for a new problem.
-Today the list holds the two early problems without a requester message block.
+The list is empty today.

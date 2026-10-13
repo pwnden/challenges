@@ -68,13 +68,15 @@ class LayoutTests(unittest.TestCase):
         (destination / 'hints/1.md').write_text('## 제목\n\n내용\n', encoding='utf-8')
         self.assertEqual(self.rules(destination), {'hints'})
 
-    def test_readme_blocks_are_enforced(self):
+    def test_readme_blocks_are_enforced_and_message_is_optional(self):
         destination = self.make('readme-sample', kind='file', category='rev')
         path = destination / 'README.md'
         text = path.read_text(encoding='utf-8')
         path.write_text(text.replace('::message', '::note', 1), encoding='utf-8')
-        self.assertEqual(self.rules(destination), {'readme-message'})
+        self.assertEqual(self.rules(destination), set())
         path.write_text(text.replace('::submission', '::answer', 1), encoding='utf-8')
+        self.assertEqual(self.rules(destination), {'readme-blocks'})
+        path.write_text(text.replace('::objective', '::resources', 1), encoding='utf-8')
         self.assertEqual(self.rules(destination), {'readme-blocks'})
 
     def test_service_files_and_policy_names_are_enforced(self):
@@ -97,15 +99,15 @@ class LayoutTests(unittest.TestCase):
         self.assertEqual(self.rules(destination), {'text-review'})
 
     def test_listed_exceptions_hide_one_gap_and_must_not_go_stale(self):
-        destination = self.make('exception-sample', kind='file', category='rev')
-        path = destination / 'README.md'
-        path.write_text(path.read_text(encoding='utf-8').replace('::message', '::note', 1), encoding='utf-8')
-        key = ('exception-sample', 'readme-message')
+        destination = self.make('exception-sample', kind='file', category='rev', hints=1)
+        hint = destination / 'hints/1.md'
+        hint.write_text('## 제목\n\n내용\n', encoding='utf-8')
+        key = ('exception-sample', 'hints')
         with patch.dict(layout.EXCEPTIONS, {key: 'test'}, clear=True):
             self.assertEqual(layout.check_catalog(self.root), [])
         with patch.dict(layout.EXCEPTIONS, {}, clear=True):
             self.assertEqual(len(layout.check_catalog(self.root)), 1)
-        path.write_text(path.read_text(encoding='utf-8').replace('::note', '::message', 1), encoding='utf-8')
+        hint.write_text('내용\n', encoding='utf-8')
         with patch.dict(layout.EXCEPTIONS, {key: 'test'}, clear=True):
             self.assertIn('no longer needed', layout.check_catalog(self.root)[0])
 
