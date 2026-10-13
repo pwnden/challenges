@@ -2,4 +2,4 @@ services:
   app:
     build:
       args:
-        POLICY: patched/access_policy.py
+        POLICY: patched/policy.py

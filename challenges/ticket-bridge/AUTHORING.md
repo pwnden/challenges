@@ -87,7 +87,7 @@ manifest의 difficulty를 바꾸면 이 기록도 함께 갱신하세요.
 
 ## 검증과 리뷰
 
-- 실행 범위: 실제 대상. 서비스 하나를 Docker로 실행하고 플레이어 도구는 웹이다. 수정 서버는 `compose.patched.yaml`로 `access_policy.py`만 바꿔 실행한다.
+- 실행 범위: 실제 대상. 서비스 하나를 Docker로 실행하고 플레이어 도구는 웹이다. 수정 서버는 `compose.patched.yaml`로 `policy.py`만 바꿔 실행한다.
 - 기술 검증: 2026-10-13, 카탈로그 형식 검사 22개, 작성자 실행기 `verify.py ticket-bridge`(풀이·수정 서버 대조·정리), Vue 타입 검사와 렌더링 테스트 14개를 통과했다. 같은 날 브라우저에서 풀이 흐름 전체와 모바일 폭의 줄바꿈을 확인했다. 수정 대조는 수신 계정으로 접속하는 경로가 없어 정상 수신자의 등록을 직접 확인하지 않는다.
 - 학습 리뷰: 독립 리뷰어의 풀이 관찰은 아직 없다. `quality/reviews/ticket-bridge.json`의 일곱 항목이 모두 미평가이다.
 - 리뷰 관찰: 문장 검토에서 브리핑의 “잘못된 알림”이 확인할 대상을 단정한 표현이라 “받은 알림”으로 고쳤다. 기록은 `quality/text-reviews/ticket-bridge/2026-10-13-review.md`에 있다.

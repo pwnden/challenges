@@ -7,7 +7,7 @@ import secrets
 from threading import RLock
 from urllib.parse import urlsplit
 
-from refund_policy import refund_amount
+from policy import refund_amount
 from web.server import TargetHandler
 
 PRODUCTS = [

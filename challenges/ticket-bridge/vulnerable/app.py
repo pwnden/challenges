@@ -7,7 +7,7 @@ import secrets
 from threading import RLock
 from urllib.parse import parse_qs, urlsplit
 
-from access_policy import invitation_allowed, ticket_allowed
+from policy import invitation_allowed, ticket_allowed
 from web.server import TargetHandler
 
 SESSIONS = {}
