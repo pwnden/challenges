@@ -2,50 +2,212 @@
   "slug": "greeting-echo",
   "rubric_version": 2,
   "reviewed_at": "2026-10-14",
-  "reviewer": "author (technical and text review; independent learning review pending)",
-  "source_sha256": "e1bab4ccb3cbe7de24540e36b0c6ef498944f318209e66c9454500a594a696eb",
+  "reviewer": "3-judge panel (judge-1 learner-advocate, judge-2 evidence-examiner, judge-3 learning-designer; claude-sonnet-5-5, low effort, substituted for the skill's configured gpt-6-luna with explicit user approval); audit record quality/panels/greeting-echo/2026-10-14-panel.json",
   "criteria": {
     "goal": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): AUTHORING.md의 보안 학습 목표(보호값 우회에 정보 유출 필요 + 복귀 주소를 기존 함수로 돌림)와 README의 의뢰·objective(ECHO/GREET를 함께 써 관리자 전용 출력의 flag를 읽음), solve/README.md의 완료 증거(관리자 전용: pwnden{...})가 서로 일치한다. 관리자 전용 출력이라는 관찰 가능한 동작으로 목표 달성을 확인할 수 있다.\njudge-2 (3): 의뢰(관리자 전용 출력을 ECHO+GREET로 끌어내기), AUTHORING의 보안 학습 목표(정보 유출로 보호값 우회 후 기존 함수로 제어 흐름 변경), 완료 증거(관리자 전용: pwnden{...})가 서로 일치하며, solve/solve.py가 실제로 이 경로로만 flag를 얻는 것을 보여준다. 다만 '컴파일할 때 넣은 보호값'이라는 표현은 본문에서 스택 카나리라는 구체적 메커니즘 이름을 드러내지 않아(의도적 설계) 목표를 관찰할 수 있는 수준은 기본 기준에 부합하되 추가 모호 사례까지 다루는 4수준은 아니다.\njudge-3 (4): README의 의뢰(ECHO로 카나리를 새어나가게 해 GREET 보호를 우회하고 관리자 전용 출력을 끌어낸다)와 AUTHORING.md의 보안 학습 목표(정보 유출에 의한 보호값 우회 + 기존 함수로의 복귀주소 제어)가 일치하며, submission 블록의 flag 제출로 그 목표 달성을 관찰 가능한 방식으로 확인한다.",
+      "evidence": [
+        {
+          "path": "challenges/greeting-echo/README.md",
+          "quote": "ECHO와 GREET 기능을 함께 사용해 관리자 전용 출력을 끌어내고, 그 안의 flag를 읽자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "스택 보호값은 변조 여부만 확인하므로, 다른 경로로 그 값이 새어나가면 공격자가 정확히 재현해 검사를 통과시킬 수 있고, 통과한 뒤에는 저장된 복귀 위치를 이미 있는 함수의 주소로 덮어써 새 코드 없이 실행을 돌릴 수 있다는 것을 설명할 수 있다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "스택 보호값은 변조 여부만 확인하므로, 다른 경로로 그 값이 새어나가면 공격자가 정확히 재현해 검사를 통과시킬 수 있고, 통과한 뒤에는 저장된 복귀 위치를 이미 있는 함수의 주소로 덮어써 새 코드 없이 실행을 돌릴 수 있다는 것을 설명할 수 있다",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "starting_context": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): README가 프로그램 파일(files/kiosk), 호스트/포트(app:9200), 프로토콜(ECHO 요청 줄 뒤 이름 입력)을 제공하고 player.cli(ncat, objdump, python3)가 분석·접속 도구를 선언한다. 다만 ncat 접속 명령의 구체적 사용법이 본문이나 knowledge/terminal-commands.md에 없어, 터미널 기초만으로는 도구 사용법 자체를 처음부터 추론해야 하는 작은 부담이 남는다.\njudge-2 (3): README의 resources 블록이 호스트/포트, 배포 파일 경로, ECHO·GREET 2단계 프로토콜을 명시해 선언된 선수 지식(memory-layout, terminal-commands)만으로 조사를 시작할 범위가 성립한다. 도구 선택(objdump vs readelf, 반복 비교 방법)과 핵심 비교 기준(실행마다 달라지는 구간 찾기)은 본문에 노출되지 않고 플레이어 판단으로 남아 있다.\njudge-3 (3): 선수 능력(memory-layout: objdump로 스택 오프셋/오프셋 차이 계산, terminal-commands: printf/파이프 사용)으로 시작 가능한 자료(files/kiosk, host:port, ECHO/GREET 프로토콜 설명)가 README resources 블록에 명시되어 있다. 도구 선택(objdump vs readelf)과 핵심 비교(ECHO 한계 시험, 반복 비교)는 풀이자 판단에 남겨져 있으나, ECHO 요청 형식('숫자 한 줄')과 응답 해석 방법이 다소 추상적으로만 서술되어 완전한 복원 절차 판단까지는 본문만으로 약간 모호하다.",
+      "evidence": [
+        {
+          "path": "challenges/greeting-echo/README.md",
+          "quote": "대상 호스트: 문제 네트워크 안의 `app`, 포트 9200.",
+          "kind": "source"
+        },
+        {
+          "path": "knowledge/terminal-commands.md",
+          "quote": "`printf '%s' 'hello'`는 줄바꿈 없이 `hello`를 출력한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/challenge.toml",
+          "quote": "requires = [\"memory-layout\", \"terminal-commands\"]",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/README.md",
+          "quote": "접속 후 ECHO 요청 줄(숫자 한 줄)을 보내면 로봇이 그만큼의 내부",
+          "kind": "source"
+        }
+      ],
+      "improvement": "ncat으로 호스트:포트에 접속하는 기본 명령 예시를 knowledge 문서나 본문에 추가하면 첫 접속 단계의 부담이 줄어든다.\nECHO 응답 안의 프롬프트 문구나 구분 방식(예: 응답이 어디서 끝나는지)을 본문에 한 문장 더 명시하면 시작 단계에서의 불확실성이 줄어든다."
     },
     "reasoning": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): 난도 3 문제로서 경계값 시험(ECHO 한계 확인) -> 반복 비교(실행마다 달라지는 8바이트 특정) -> 오프셋 계산(objdump) -> 두 단계 결합이라는 연결된 추론을 요구하며, 이는 명령 수가 아니라 실제 비교·판단에 근거한다. hints/2.md가 \"같은 요청을 반복해도 매번 같은 구간과 달라지는 구간\"을 비교하도록 안내해 그럴듯한 오답(고정된 다른 바이트를 보호값으로 착각)과 구분하게 한다.\njudge-2 (3): AUTHORING의 의도된 풀이는 경계값 시험(ECHO 한계 확인)→반복 비교(실행마다 달라지는 8바이트 특정)→오프셋 계산(objdump로 세 변수 위치 확인)→두 단계 결합(공격 조합)의 네 단계 연결된 판단을 요구하며, 이는 '단서 연결과 그럴듯한 오답 구분'에 해당하는 중급(난도 3) 수준과 일치한다. 그럴듯한 오답(예: ECHO가 실제로 64바이트에서 거부된다고 믿는 것, 매번 같은 반복 구간을 보호값으로 오인하는 것)을 구분해야 하는 지점이 명시되어 있다.\njudge-3 (3): 난도 3에 맞게 단서를 연결하는 다단계 판단이 필요하다: (1) ECHO의 표시 범위(0-64)와 실제 동작을 비교해 결함을 확인(힌트1), (2) 반복 요청으로 고정 구간과 '실행마다 달라지는' 구간을 구별(힌트2: 그럴듯한 오답인 '초기화 안 된 반복 패턴 전체'와 실제 카나리 8바이트를 구분해야 함), (3) objdump로 ECHO 버퍼/카나리/이름 버퍼의 스택 오프셋 차이를 직접 계산(힌트3이 objdump 결과는 알려주되 오프셋 차이 계산과 grant_access 선택은 풀이자 몫). 단일 비교가 아니라 결과를 연결하는 다단계 추론이라 난도에 부합한다.",
+      "evidence": [
+        {
+          "path": "challenges/greeting-echo/hints/2.md",
+          "quote": "같은 요청을 반복해도 매번 똑같은 구간과 실행할",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "발견 난도: 경계값 시험(ECHO 한계 확인) → 반복 비교(실행마다 달라지는 구간 찾기) → 오프셋 계산(두 버퍼와 보호값의 관계) → 두 단계를 하나의 공격으로 결합",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "경계값 시험(ECHO 한계 확인) → 반복 비교(실행마다 달라지는 구간 찾기) → 오프셋 계산(두 버퍼와 보호값의 관계) → 두 단계를 하나의 공격으로 결합, 총 네 단계의 연결된 판단이 필요해",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/hints/2.md",
+          "quote": "때마다 값이 달라지는 구간이 섞여 있다. 실행마다 달라지는 8바이트가 어디서",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/hints/3.md",
+          "quote": "평소에 불리지 않는 함수도 하나 있다. 복귀 위치를 그 함수의 실제 주소로",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "controls": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): patched/test.py가 정상 사용(10바이트+이름), 경계값(64바이트), 과거 통하던 120바이트 요청 거부, 음수 요청 거부를 모두 점검해 공격 차단과 정상 기능 유지를 함께 확인한다. 거부 시 'ERR echo_count_out_of_range'로 일관된 오류를 반환해 정상/거부 구분이 명확하다.\njudge-2 (3): patched/test.py는 정상 사용(10바이트 ECHO+이름), 경계값(64바이트), 과거 통하던 초과 요청(120바이트, 거부 기대), 음수 요청(거부 기대) 네 경우를 모두 대조해 '정상 기능 유지'와 '공격 차단'을 함께 확인하는 대조군 구조를 갖춘다. 패치는 kiosk 바이너리 자체가 아니라 앞단 wrapper(app.py의 ECHO_MAX)에서 길이를 제한하는 방식으로, README의 declared 수정 범위(ECHO 계층에서 64바이트 실제 제한)와 일치한다. 다만 65바이트처럼 경계값+1에 대한 명시적 대조는 없어 경계 바로 바깥 사례까지 다루는 4수준에는 못 미친다.\njudge-3 (4): 조사 과정에 정상(짧은 ECHO)·경계(64바이트)·초과(120바이트, 과거 통하던 공격)·오류(음수) 네 가지 대조가 patched/test.py에 구현되어 결론을 지지한다. 패치는 공격(구 120바이트 요청)을 ERR로 거부하면서 정상 사용(10바이트 ECHO + guest)과 경계값(64바이트)은 그대로 통과시켜, 공격 차단과 정상 기능 유지를 함께 검증한다.",
+      "evidence": [
+        {
+          "path": "challenges/greeting-echo/patched/test.py",
+          "quote": "check(overflow.strip() == b'ERR echo_count_out_of_range', 'the former 120-byte echo request was not rejected')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/patched/test.py",
+          "quote": "check(negative.strip() == b'ERR echo_count_out_of_range', 'a negative echo count was not rejected')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/patched/test.py",
+          "quote": "overflow = ask(b'120\\n')\n    check(overflow.strip() == b'ERR echo_count_out_of_range', 'the former 120-byte echo request was not rejected')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/patched/test.py",
+          "quote": "normal = ask(b'10\\n', b'guest\\n')\n    check(normal.startswith(PROMPT1), 'the normal echo prompt changed')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/patched/policy.py",
+          "quote": "ECHO_MAX = 64  # matches the kiosk's own printed bound",
+          "kind": "source"
+        }
+      ],
+      "improvement": "65바이트(경계값+1)처럼 거부 경계의 바로 바깥 지점을 별도로 확인하는 대조를 추가하면 패치 경계의 정확성을 더 분명히 보일 수 있다."
     },
     "hints": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): 본문(README)에는 정확한 오프셋·함수 이름·공격 결합 절차가 노출되지 않는다. 힌트 1은 ECHO 한계 시험만, 힌트 2는 반복 비교로 보호값 구간 특정만, 힌트 3은 objdump/nm 사용과 대상 함수 존재까지만 알려주고 정확한 페이로드 조합은 해설(solve/README.md)에만 있어 힌트와 정답이 단계적으로 분리되어 있다.\njudge-2 (3): hints/1.md는 ECHO의 실제 한계를 시험해보라는 한 판단만 제공하고, hints/2.md는 반복 구간 비교로 보호값 위치를 찾는 방향만, hints/3.md는 objdump/nm 명령과 확인할 대상(이름 위치, 보호값 위치, grant_access)만 알려주며 payload 조합 순서나 정확한 수치는 해설(solve/README.md)에만 있다. 기본 본문(README.md)에는 두 기능을 연결해야 한다는 것도, 정확한 오프라인도 노출되지 않는다.\njudge-3 (3): 본문(README.md)에는 도구명(objdump 등)이나 정확한 오프셋, grant_access 같은 함수명이 노출되지 않는다. 힌트 1~3은 각각 새로운 막힘 하나씩만 해결한다: 힌트1은 ECHO의 실제 한계를 의심하게 하고, 힌트2는 반복 비교로 카나리 구간을 좁히게 하며, 힌트3에서 처음으로 objdump 명령과 nm, grant_access라는 구체적 대상이 노출된다. 다만 힌트3은 '이름을 저장하는 위치, 8바이트 위치, 복귀 위치의 오프셋'을 알 수 있다고 말하면서도 정확한 오프셋 수치 자체는 주지 않아 선을 지키지만, 거의 마지막 조합 단계 직전까지의 정보를 한 번에 주는 편이라 세 번째 힌트의 구체성이 크다. 완성된 전체 바이트 조합 순서(채움 72바이트+카나리+임의 8바이트+주소)는 해설(solve/README.md)에만 있다.",
+      "evidence": [
+        {
+          "path": "challenges/greeting-echo/hints/3.md",
+          "quote": "평소에 불리지 않는 함수도 하나 있다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/solve/README.md",
+          "quote": "`grant_access`의 실제 주소(리틀 엔디안 8바이트)를 이어 붙여 보내면 보호값",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/hints/1.md",
+          "quote": "그 범위를 넘는 값을 요청하면 거부되는지, 아니면 그보다 더 많은 바이트를\n돌려주는지 비교해보면 된다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/hints/3.md",
+          "quote": "복귀 위치를 그 함수의 실제 주소로\n덮어쓰면 된다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/hints/3.md",
+          "quote": "복귀 위치의 오프셋을 알 수 있다. `nm files/kiosk`로 보면 GREET 경로에서는",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/solve/README.md",
+          "quote": "받은 8바이트 보호값, 임의의 8바이트(저장된 이전 스택 포인터 자리), 그리고",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "explanation": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): solve/README.md가 행동(ECHO 초과 요청)→관찰(104바이트부터 8바이트 변동, 마지막 바이트 0x00)→결론(보호값 유출)→원인(화면 표시와 실제 코드의 불일치)→보호 방법(ECHO 길이 실제 제한)을 순서대로 연결하며, 패치 후에도 GREET 코드 자체는 남아있지만 보호값을 알 수 없어 우회 불가하다는 한계도 설명한다.\njudge-2 (3): solve/README.md는 관찰(ECHO가 120바이트까지 반환, 104번째 바이트부터 8바이트가 매번 다름)→오프셋 계산(objdump 결과로 echo/canary/name 버퍼 거리)→공격 조합→결과(관리자 전용 출력)의 행동-관찰-결론 흐름을 연결하고, '드러난 보안 원리' 절에서 보호값이 변조 여부만 검사한다는 한계와 패치 방향(ECHO_MAX=64)까지 설명한다. 다만 실습에서 확인한 범위(이 특정 바이너리의 오프셋·grant_access 패턴)를 넘어서는 일반적 결론의 한계는 명시적으로 서술되지 않는다.\njudge-3 (4): 해설(solve/README.md)이 행동(ECHO 한계 시험→반복 비교→objdump 오프셋 계산→조합 전송)과 관찰(104바이트째부터 8바이트가 매번 다름, 마지막 바이트가 항상 0x00), 결론(카나리 우회 후 기존 함수로 복귀주소 제어), 원인('덮어쓰기가 있었는가'만 확인하는 카나리의 한계), 보호 방법(ECHO 길이를 실제로 64바이트로 제한)을 모두 연결한다. '드러난 보안 원리' 절에서 일반 원리(정보 유출이 있으면 카나리가 더 이상 보호하지 못함)로 결론을 일반화하여 비슷한 문제에도 적용 가능하게 설명한다.",
+      "evidence": [
+        {
+          "path": "challenges/greeting-echo/solve/README.md",
+          "quote": "남아 있지만, 보호값을 미리 읽을 방법이 없으면 그 값을 맞혀 변조를 통과할",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/solve/README.md",
+          "quote": "컴파일러가 넣는 보호값은 \"덮어쓰기가 있었는가\"만 확인하므로, 공격자가 그\n정확한 값을 먼저 알아내 그대로 되돌려주면 검사를 통과한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/solve/README.md",
+          "quote": "컴파일러가 넣는 보호값은 \"덮어쓰기가 있었는가\"만 확인하므로, 공격자가 그",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/greeting-echo/solve/README.md",
+          "quote": "수정한 서비스는 ECHO 요청을 받는 계층에서 길이를 화면에 적힌 값과 같은",
+          "kind": "source"
+        }
+      ],
+      "improvement": "실습에서 관찰한 구체적 오프셋·함수 주소는 이 바이너리에 특정된 값이며 다른 컴파일 환경에서는 오프셋이 달라질 수 있다는 한계를 해설에 한 문장 추가하면 좋다."
     },
     "execution": {
-      "level": null,
-      "reason": "신규 문제의 구현·문장·자동 실행을 확인했다. 독립적인 학습 설계 평가는 아직 수행하지 않았다.",
-      "evidence": [],
-      "improvement": "브리핑·대상·힌트·해설과 기술 검증 기록을 대조해 이 항목을 독립 평가하고 원문 근거를 기록한다."
+      "level": 3,
+      "reason": "judge-1 (3): AUTHORING.md에 날짜(2026-10-14)와 범위가 구분된 실행 기록이 있다: 9회 반복 실행으로 보호값 하위바이트가 항상 0x00임과 공격 성공을 확인했고, 실제 TCP 서비스(docker compose)에서도 성공을 확인했으며 tools/verify.py greeting-echo로 취약 서버에서 flag 회수, 패치 서버에서 거부를 확인했다. 다만 '학습 리뷰: 미완료(독립 리뷰어 관찰 필요)'로 명시되어 실제 입문자 관찰 기록은 없다는 한계가 스스로 적혀 있다.\njudge-2 (3): AUTHORING.md가 날짜(2026-10-14)와 범위를 밝힌 기술 검증 기록을 제공한다: objdump/nm으로 확인한 오프셋과 grant_access 주소가 실제 공격 성공과 일치함을 확인했고, tools/verify.py greeting-echo로 취약 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다고 기록되어 있다. 이 기록은 '테스트 코드 존재'가 아니라 날짜가 붙은 실행 결과 서술이므로 recorded-execution 근거로 인정된다. 다만 이번 검토에서는 그 실행을 재현하지 않았고(오프라인 분석만 수행하라는 지침에 따름), 과거 기록을 그대로 인용하는 것이지 이번 심사의 재실행이 아니라는 점을 구분해 기록한다.\njudge-3 (3): AUTHORING.md의 검증 기록에 날짜(2026-10-14)와 범위(취약 서버에서 solve가 flag 회수, 패치 서버에서는 거부, tools/verify.py greeting-echo 통과, objdump/nm 오프셋과 grant_access 주소 확인, 9회 반복 실행으로 카나리 하위바이트가 항상 0x00임을 확인)가 구체적으로 기록되어 있다. 다만 지침이 요구하는 '학습 리뷰'는 '미완료(독립 리뷰어 관찰 필요)'로 명시되어 있어 실행 재현 전체가 완결되지는 않았고, 이 리뷰 자체는 실제 바이너리 실행이나 TCP 접속을 수행하지 않고 저장된 기록을 근거로 평가한 것이다.",
+      "evidence": [
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "2026-10-14, `objdump`로 확인한 오프셋(ECHO 버퍼=rbp-0x70, 보호값=rbp-0x8, 이름 버퍼=rbp-0x50, 차이 104/72)과 `nm`으로 확인한 `grant_access` 주소(0x4011b6)가 실제 공격 성공과 일치함을 확인했다.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "기술 검증: 2026-10-14, `objdump`로 확인한 오프셋(ECHO 버퍼=rbp-0x70, 보호값=rbp-0x8, 이름 버퍼=rbp-0x50, 차이 104/72)과 `nm`으로 확인한 `grant_access` 주소(0x4011b6)가 실제 공격 성공과 일치함을 확인했다.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "실행 범위: 실제 대상. 컴파일된 `files/kiosk`를 `python:3.13.15-slim-trixie` 기반 컨테이너에서 9회 반복 실행해 보호값 하위 바이트가 항상 0x00임과 공격이 매번 성공함을 확인했고, 실제 TCP 서비스(`docker compose`)에 대해서도 같은 공격이 성공함을 확인했다.",
+          "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/greeting-echo/AUTHORING.md",
+          "quote": "실제 TCP 서비스(`docker compose`)에 대해서도 같은 공격이 성공함을 확인했다. `tools/verify.py greeting-echo`로 취약한 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다.",
+          "kind": "recorded-execution"
+        }
+      ],
+      "improvement": "독립 학습 리뷰(실제 플레이어 관찰)를 완료해 배포 전 보완이 필요하다.\n학습 리뷰(독립 관찰)가 AUTHORING.md에 '미완료'로 남아 있으므로, 독립 리뷰어의 실제 관찰 기록이 추가되면 실행 재현 근거가 더 완전해진다.\n독립 학습 리뷰(실제 입문자 관찰)를 완료해 AUTHORING.md에 기록하면 배포 전 요구 증거가 채워진다."
     }
-  }
+  },
+  "source_sha256": "57d875006fd1d14c8bb75960070d3ffc301e216468a2011415415430c98e6799"
 }
