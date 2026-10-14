@@ -194,5 +194,5 @@
       "improvement": "독립 심사 과정에서 실제로 solve.py와 patched/test.sh를 재실행해 날짜가 있는 새 실행 기록을 남기면 execution 항목의 근거가 더 직접적이 된다.\n독립 심사 범위에서 직접 tools/verify.py backup-relay를 재실행한 기록이 추가되면 실행 재현 근거가 보강된다."
     }
   },
-  "source_sha256": "00bbbf2c1cceaa43e99179944a619335fc322d8b123951cc2df544c8fbdd7884"
+  "source_sha256": "3ab42cd32b51d18b96b16b3cf4eba3f6a5072595232e57dc6978e12fd909b1a6"
 }

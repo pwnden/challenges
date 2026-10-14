@@ -87,7 +87,7 @@ manifest의 difficulty를 바꾸면 이 기록도 함께 갱신하세요.
 ## 검증과 리뷰
 
 - 실행 범위: 실제 대상. 컴파일된 `files/kiosk`를 `python:3.13.15-slim-trixie` 기반 컨테이너에서 9회 반복 실행해 보호값 하위 바이트가 항상 0x00임과 공격이 매번 성공함을 확인했고, 실제 TCP 서비스(`docker compose`)에 대해서도 같은 공격이 성공함을 확인했다. `tools/verify.py greeting-echo`로 취약한 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다.
-- 기술 검증: 2026-10-14, `objdump`로 확인한 오프셋(ECHO 버퍼=rbp-0x70, 보호값=rbp-0x8, 이름 버퍼=rbp-0x50, 차이 104/72)과 `nm`으로 확인한 `grant_access` 주소(0x4011b6)가 실제 공격 성공과 일치함을 확인했다. 컴파일에 쓰는 Debian 패키지 스냅샷을 `vault-gate`와 같은 방식으로 고정해 오프셋이 빌드마다 바뀌지 않음을 확인했다. `tools/verify.py greeting-echo` 통과. `patched/test.py`가 평소 사용·경계값(64바이트)·이전 120바이트 요청·음수 요청을 모두 확인한다.
+- 기술 검증: 2026-10-14, `objdump`로 확인한 오프셋(ECHO 버퍼=rbp-0x70, 보호값=rbp-0x8, 이름 버퍼=rbp-0x50, 차이 104/72)과 `nm`으로 확인한 `grant_access` 주소(0x4011b6)가 실제 공격 성공과 일치함을 확인했다. 컴파일에 쓰는 Debian 패키지 스냅샷을 `vault-gate`와 같은 방식으로 고정해 오프셋이 빌드마다 바뀌지 않음을 확인했다. `tools/verify.py greeting-echo` 통과. `patched/test.py`가 평소 사용·경계값(64바이트)·이전 120바이트 요청·음수 요청을 모두 확인한다. 이후 `night-console`을 만들며, 연결을 받는 Python 계층이 첫 줄을 버퍼링된 스트림으로 읽은 뒤 이어지는 입력을 raw 소켓으로 읽으면 클라이언트가 두 메시지를 한 번에 보낼 때 뒤쪽 바이트가 버려지는 결함을 발견해 이 문제의 `vulnerable/app.py`도 모든 읽기를 같은 버퍼링된 스트림으로 통일했다(이 결함은 응답을 기다린 뒤 보내는 클라이언트에서는 드러나지 않았다). 수정 뒤 `tools/verify.py greeting-echo`를 다시 통과시켰다.
 - 학습 리뷰: 미완료(독립 리뷰어 관찰 필요).
 - 리뷰 관찰: 미완료.
 - 맥락 확인: 처음 읽는 사람이 문간지기·안내 로봇·ECHO/GREET 기능·조사할 일을 첫 메시지만으로 식별할 수 있는지 `quality/text-reviews/greeting-echo/`에서 확인한다.

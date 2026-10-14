@@ -255,3 +255,9 @@ id = "return-address-control"
 title = "저장된 복귀 주소와 보호값"
 requires = ["memory-layout"]
 related = []
+
+[[concepts]]
+id = "argument-call-chains"
+title = "인자를 설정한 뒤 이어 부르는 함수 호출"
+requires = ["return-address-control"]
+related = []

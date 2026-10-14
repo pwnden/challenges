@@ -54,9 +54,13 @@ def handle(conn):
         proc.stdin.flush()
         echo_phase = read_exact(proc.stdout, len(PROMPT1) + count + 1 + len(PROMPT2))
         conn.sendall(echo_phase)
+        # Every later read uses `rfile` too: it already buffers from the same
+        # socket, and a client that pipelines its writes (sends the name
+        # before reading the echo reply) can leave bytes sitting in that
+        # buffer where a raw `conn.recv()` here would never see them.
         while True:
             try:
-                chunk = conn.recv(4096)
+                chunk = rfile.read(4096)
             except OSError:
                 chunk = b''
             if not chunk:

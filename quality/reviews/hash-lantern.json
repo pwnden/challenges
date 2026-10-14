@@ -86,5 +86,5 @@
       "improvement": "최초 구현 작업 트리 기준이라는 범위에 더해 실제 실행 로그나 결과 요약을 날짜별로 남겨 재현 정보를 보존한다."
     }
   },
-  "source_sha256": "0cb4ad8379f573e678bfcc59d419cd52e90c70fa06b52fa353ec14a4101589e4"
+  "source_sha256": "f5922f58c585044a87c18bffbe84a66ae295ebec53396928da17c12b36cb3e44"
 }
