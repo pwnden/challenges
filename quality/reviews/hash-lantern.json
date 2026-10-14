@@ -1,90 +1,163 @@
 {
   "slug": "hash-lantern",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-04",
-  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
+  "reviewed_at": "2026-10-14",
+  "reviewer": "3-judge panel (judge-1 learner-advocate, judge-2 evidence-examiner, judge-3 learning-designer; claude-sonnet-5-5, low effort, substituted for the skill's configured gpt-6-luna with explicit user approval); audit record quality/panels/hash-lantern/2026-10-14-panel.json",
   "criteria": {
     "goal": {
-      "level": 2,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 본문의 목표는 계정 해시와 일치하는 후보 비밀번호를 찾는 것이며 정답 자체가 그 전체 비밀번호다. 실제 자료와 해답은 유일한 일치를 입증한다. 다만 teaches의 candidate-cost가 뜻하는 후보 대입 비용을 정량 비교하는 실험은 없어 기존 수준 2와 보완 행동을 유지한다.",
+      "level": 3,
+      "reason": "judge-1 (3): 의뢰(비밀번호 기억 안 남) → 보안 원리(해시만 저장해 후보 대입으로 확인 가능) → 완료 증거(해시 일치 후보 제출)가 README와 solve.py에서 일관되게 연결된다. solve.py가 여섯 후보 중 정확히 하나만 일치함을 assert해 목표가 관찰 가능한 단일 결과로 귀결됨을 보증한다.\njudge-2 (3): README의 의뢰(비밀번호를 기억 못 해 후보 중 일치하는 것을 찾아달라)와 account.txt의 password_hash, challenge.toml의 flag.sha256이 모두 동일한 값으로 일치하며, 실제로 candidates.txt의 여섯 후보 중 'pwnden{rainboat27}' 하나만 이 해시를 만든다는 것을 직접 sha256sum으로 재현 확인했다. 완료 증거(해시 일치)와 관찰 가능한 보안 원리(사전 대입으로 약한 저장을 확인)가 일치한다.\njudge-3 (3): 의뢰(백업 장치 비밀번호 확인)와 보안 원리(salt 없는 빠른 해시는 짧은 후보 목록으로 사전 대입이 가능함)와 완료 증거(해시가 일치하는 pwnden{...} 제출)가 일관되게 연결된다. objective 문장 '기록의 해시와 일치하는 비밀번호를 찾아 제출하자'로 관찰 가능한 목표가 명시되고, solve.py의 매칭 로직이 같은 기준으로 완료를 판정한다.",
       "evidence": [
+        {
+          "path": "challenges/hash-lantern/README.md",
+          "quote": "장치는 계정 정보에 비밀번호 자체를 저장하지 않고 **해시**라는 계산 결과를 저장한다.\n여섯 후보 중 어느 것이 이 계정의 비밀번호인지 확인해 보자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/solve/solve.py",
+          "quote": "if len(matches) != 1:\n        raise ValueError('evidence must identify exactly one password candidate')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/files/account.txt",
+          "quote": "password_hash=f28d96cb3d35fadc6386dd3d43f448773d7759faafcbd215853f7f0a54c053b1",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/challenge.toml",
+          "quote": "sha256 = \"f28d96cb3d35fadc6386dd3d43f448773d7759faafcbd215853f7f0a54c053b1\"",
+          "kind": "source"
+        },
         {
           "path": "challenges/hash-lantern/README.md",
           "quote": "기록의 해시와 일치하는 비밀번호를 찾아 제출하자.",
           "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "starting_context": {
+      "level": 3,
+      "reason": "judge-1 (3): 조사 범위(계정 정보, 후보 6개)와 접근 정보(files/, terminal, sha256sum)가 challenge.toml·README의 ::resources에 명시된다. account.txt의 algorithm/encoding/salt 필드는 본문 자체에는 설명이 없지만 선언된 선수지식 hashing.md가 SHA-256 결과 형식을 설명해 플레이어가 account.txt 필드와 연결할 수 있다. 다만 salt=none, encoding=UTF-8의 의미는 선수지식에 직접 언급되지 않아 해설을 봐야 완전히 이해되는 지점이 남는다.\njudge-2 (3): account.txt가 algorithm/encoding/salt 같은 비교에 필요한 모든 사실을 제공하고, candidates.txt가 후보 전체를 제공한다. challenge.toml의 player.cli=[\"sha256sum\"]으로 도구는 주어지지만 printf와 echo 중 무엇을 쓸지, 줄바꿈 처리 같은 비교 기준은 풀이자가 판단해야 한다(해설에서만 명시). 선수지식(terminal-commands, hashing)으로 시작 가능 범위가 선언과 일치한다.\njudge-3 (3): resources 절이 account.txt·candidates.txt 두 파일을 명시하고, account.txt 자체에 algorithm/encoding/salt/password_hash 필드가 모두 드러나 있어 풀이자가 '평문을 UTF-8로, salt 없이, SHA-256 한 번 해싱해 비교'한다는 절차를 스스로 설계해야 한다. 본문은 sha256sum 같은 구체적 명령을 제공하지 않고 cli 선언(challenge.toml)만으로 도구 존재를 알려, 도구 선택과 비교 기준 설정은 풀이자 몫으로 남는다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/challenge.toml",
+          "quote": "tools = [\"files\", \"terminal\"]\ncli = [\"sha256sum\"]",
+          "kind": "source"
         },
         {
-          "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "후보 대입 비용의\n정량 비교나 실제 초보자 관찰은 이번 변경에서 수행하지 않았다.",
+          "path": "knowledge/hashing.md",
+          "quote": "SHA-256의 결과는 보통\n숫자와 `a`부터 `f`까지의 글자 64개로 표시한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/files/account.txt",
+          "quote": "algorithm=SHA-256\nencoding=UTF-8\nsalt=none",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/challenge.toml",
+          "quote": "cli = [\"sha256sum\"]",
           "kind": "source"
         }
       ],
-      "improvement": "작성 목표와 teaches의 범위를 여섯 후보의 일치 비교로 입증 가능한 범위에 맞추거나, 입문 부담 안에서 후보 확인 비용을 실제로 비교하는 행동과 근거를 추가한다."
-    },
-    "starting_context": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다. 학습 순서 정리 후 선수 개념의 관계와 문제별 requires가 실제 풀이에 필요한 능력의 범위를 다루는지도 함께 확인한다."
+      "improvement": "account.txt의 salt=none, encoding=UTF-8 필드 의미를 선수지식이나 본문에서 한 문장으로 짚어주면 해석 부담이 줄어든다."
     },
     "reasoning": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
+      "level": 3,
+      "reason": "judge-1 (3): 입문 난도 선언에 맞게 하나의 원리(빠른 해시 재사용 비교)를 준비된 명령으로 관찰한다. 여섯 후보 모두 같은 pwnden{...} 형식이라 형식만으로 정답을 고를 수 없고, 실제 해시 비교로만 구분되므로 '그럴듯한 오답' 구분이 성립한다.\njudge-2 (3): 입문(difficulty=1) 난도에서 단일 원리(해시는 후보 대입으로만 비교 가능)를 여섯 후보에 대해 직접 비교해 관찰하는 구조다. 코드 작성이나 반복 추론은 요구하지 않으나, 여섯 후보 모두 동일한 pwnden{...} 형식이라 형식만으로는 구분할 수 없고 실제 해시 계산이 필요하다는 점(AUTHORING.md)이 확인됐다. 입문 수준에서 요구하는 '한 원리의 관찰'에 부합한다.\njudge-3 (2): 입문(난도1) 문제로서 '해시는 비교로만 확인 가능하다'는 한 원리를 관찰하는 수준은 충족한다. 그러나 후보 6개가 모두 동일한 pwnden{word+digit} 형식이라 그럴듯한 오답을 '형식'으로 구분할 여지가 없고, AUTHORING.md도 '형식만으로 정답을 고를 수 없다'고 밝혀 판별은 순수히 해시 계산 1회 비교로 귀결된다. 이는 입문 수준에는 적절하나, 오답 후보들이 서로 다른 함정(예: 대소문자, 공백, 다른 인코딩)을 담아 단서 연결을 요구하지는 않아 '단서를 연결해야 하는 지점'이 비교 자체 외에는 약하다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "여섯 후보 모두 같은 제출 형식을 사용하므로 형식만으로 정답을 고를 수 없다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": "후보 중 일부에 인코딩/공백/대소문자 차이 같은 그럴듯한 함정을 넣어 단순 1:1 비교를 넘어서는 판단 지점을 추가하면 초급 전환 시 유용하다."
     },
     "controls": {
       "level": 3,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 회귀 검사는 여섯 후보의 유일 일치, 그대로 제출한 값의 정답 해시, 내부 단어만 해시한 오답을 검사한다. 해답도 일치 개수가 하나가 아니면 실패한다. 본문에서 양성·음성 결과를 직접 기록하는 비교 표는 제공하지 않아 기존 수준과 보완 행동을 유지한다.",
+      "reason": "judge-1 (3): solve.py가 여섯 후보 전부를 계산해 정확히 하나만 저장된 password_hash와 일치함을 검증한다. 이는 정답과 다섯 개의 오답(변조되지 않은 실제 비교 대상)을 구분하는 대조로 기능한다. 서비스 패치나 네트워크 대조군은 이 'file' 유형 문제에 해당하지 않는다.\njudge-2 (3): 오답 대조군(5개의 틀린 후보)이 실제로 다른 SHA-256 해시를 낸다는 것을 build.py(hashlib.sha256(b'pwnden{rainboat27}'))와 solve.py의 assert(len(matches)!=1 시 ValueError)로 코드 차원에서 보장하고, 직접 sha256sum을 돌려 다섯 후보가 모두 불일치함을 재현 확인했다. 이는 형식적 플레이스홀더 대조군이 아니라 실제 암호학적으로 구분되는 오답이다. 다만 변조·거부 같은 추가 대조군(예: salt 있는 경우와 비교)은 이 문제 범위에 포함되지 않는다.\njudge-3 (2): 정답 대조(6개 후보 중 정확히 1개 일치)는 solve.py의 assert len(matches)==1 로 보장되고, AUTHORING.md가 '내부 단어만 해시하면 일치하지 않는다'는 오답 대조를 언급한다. 그러나 이는 서비스형 문제가 아닌 file 문제라 정상/거부/변조 응답 같은 대조군 개념 자체가 약하게 적용되며, 본문·해설에 '일치하지 않는 5개 후보가 왜/어떻게 다른지'에 대한 설명은 없고 단지 해시 불일치만 암묵적으로 전제된다.",
       "evidence": [
         {
           "path": "challenges/hash-lantern/solve/solve.py",
-          "quote": "if len(matches) != 1:",
+          "quote": "if result.stdout.decode().split()[0] == account['password_hash']:\n            matches.append(candidate)",
           "kind": "source"
         },
         {
-          "path": "challenges/hash-lantern/AUTHORING.md",
-          "quote": "전체 문자열의 SHA-256이\n계정 기록과 일치하는 후보는 하나이며, 내부 단어만 해시하면 일치하지 않는다.",
+          "path": "challenges/hash-lantern/solve/solve.py",
+          "quote": "if len(matches) != 1:\n        raise ValueError('evidence must identify exactly one password candidate')",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/authoring/build.py",
+          "quote": "digest = hashlib.sha256(b'pwnden{rainboat27}').hexdigest()",
           "kind": "source"
         }
       ],
-      "improvement": "학습자는 후보별 일치 여부를 기록할 수 있는 작은 표를 제공해 오답 계산과 최종 유일 일치를 명확히 대조하게 한다.\n본문의 학습 절차에 불일치 후보 하나의 출력이 저장 hash와 다르다는 짧은 비교 예를 추가하면 양성·음성 대조가 직접 보인다.\n선택 사항으로 후보 하나의 철자를 바꾼 계산이 저장 해시와 일치하지 않는 짧은 비교를 추가해, 일치 판단의 대조 사례를 보여 줄 수 있다.\nAdd a small check showing that a nonmatching candidate stays nonmatching, or alter the stored digest and show that no candidate is accepted; retain the intended real-digest comparison as the completion evidence.\n후보가 아닌 임의 문자열 또는 줄바꿈 포함 입력의 해시가 저장값과 일치하지 않는 짧은 대조 예를 제공해 입력 경계와 비교 기준을 명확히 하자."
+      "improvement": "해설 또는 작성 기록에 나머지 5개 후보의 해시가 명확히 다르다는 점을 수치로 보여주는 회귀 검사 근거를 추가하면 대조군 근거가 더 분명해진다."
     },
     "hints": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
+      "level": 3,
+      "reason": "judge-1 (3): 힌트는 0개이며 기본 본문(README.md)에는 printf|sha256sum 같은 완성된 명령이나 핵심 판별 조건이 노출되지 않는다. 완전한 절차(명령, 결과 비교, 정답)는 solve/README.md(해설)에만 있어 본문과 정답이 분리된다.\njudge-2 (3): 힌트는 0개이며 기본 본문(README.md)에는 printf/echo 같은 완성된 명령이나 결정적 판별 조건이 노출되지 않는다. 완성된 절차(printf '%s' '후보' | sha256sum, 줄바꿈 주의)는 solve/README.md(해설)에만 있다. 입문 문제로서 본문만으로 시작 가능한 조작(파일 열람, 해시 비교 시도)은 충분하다.\njudge-3 (3): hints=[] (힌트 없음)이며, 기본 본문은 account.txt의 필드를 통해 알고리즘·인코딩·salt 정보는 노출하지만 실제 명령(sha256sum 호출 방식)이나 '여섯 후보 모두 비교해야 한다'는 절차의 구체적 수행 방법은 노출하지 않는다. 완성된 풀이 명령은 solve/README.md(해설)에만 있고, AUTHORING.md는 이를 '작성자 자료이며 웹의 기본 본문·파일 도구는 선언한 플레이어 자료만 노출한다'고 명시해 분리를 확인했다.",
+      "evidence": [
+        {
+          "path": "challenges/hash-lantern/README.md",
+          "quote": "해시가 일치하는 후보 비밀번호를 그대로 제출하자. 후보에 적힌 `pwnden{...}` 전체가 비밀번호다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/solve/README.md",
+          "quote": "후보마다 `printf '%s' '후보' | sha256sum`을 실행한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/challenge.toml",
+          "quote": "hints = []",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "explanation": {
       "level": 3,
-      "reason": "2026-10-04 Codex 부모 변경 검토: 해설은 후보별 계산·일치 관찰·전체 비밀번호 제출과 사전 대입 원리를 연결한다. 줄바꿈, 느린 전용 비밀번호 저장 방식, 사용자별 salt와 시도 제한을 설명한다. 주어진 후보 밖의 비밀번호나 실제 로그인 인증까지 확인한 실험은 아니므로 기존 한계 보완을 유지한다.",
+      "reason": "judge-1 (3): 해설이 행동(printf|sha256sum 반복)→관찰(해시 일치)→결론(정답 후보)→원인(사전 대입 공격, 빠른 해시 재사용)→보호 방법(전용 해시 함수, salt, 시도 제한)을 모두 연결한다. 다만 해설 본문 자체에는 이번 실습이 증명하지 못하는 한계(예: 실제 비밀번호 복잡도나 후보 대입 비용의 정량 비교)를 직접 언급하지 않고, 그 한계는 AUTHORING.md에만 적혀 있다.\njudge-2 (3): solve/README.md가 행동(후보별 계산)→관찰(일치하는 해시 발견)→결론(비밀번호 확인)→원인(사전 대입 공격, 빠른 해시 1회 적용)→보호 방법(전용 비밀번호 해시, salt, 추측 어려운 비밀번호, 로그인 시도 제한)을 연결한다. AUTHORING.md도 결론의 한계를 명시한다('일반 해시의 역함수나 모든 비밀번호의 빠른 복원을 주장하지 않는다').\njudge-3 (3): 해설이 행동(후보별 계산)→관찰(일치 여부)→결론(pwnden{rainboat27})→원인(빠른 해시 1회 적용)→보호 방법(전용 해시 함수, salt, 시도 제한)을 모두 연결한다. '사전 대입 공격' 용어도 도입하며, 한계도 일부 암시되지만 명시적 한계 진술은 AUTHORING.md 쪽에 있고 solve/README.md 자체에는 '이 실습이 후보 대입 비용의 정량 비교를 다루지 않는다'는 명시적 한계 문장은 없다.",
       "evidence": [
         {
           "path": "challenges/hash-lantern/solve/README.md",
-          "quote": "일치하는 비밀번호는 `pwnden{rainboat27}`이다. 이 값을 그대로 제출한다.",
+          "quote": "이렇게 후보를 하나씩 시험하는 방법을 **사전 대입 공격**이라고 한다.\nSHA-256처럼 빠른 계산을 한 번만 적용하면 많은 후보도 빠르게 비교할 수 있다.",
           "kind": "source"
         },
         {
           "path": "challenges/hash-lantern/solve/README.md",
           "quote": "이렇게 후보를 하나씩 시험하는 방법을 **사전 대입 공격**이라고 한다.",
           "kind": "source"
+        },
+        {
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "일반 해시의 역함수나 모든 비밀번호의 빠른 복원을 주장하지 않는다.",
+          "kind": "source"
         }
       ],
-      "improvement": "State explicitly that the result identifies a match within the supplied candidate list and record parameters; it does not authenticate the requester or show that an unknown candidate outside the list could not match."
+      "improvement": "해설 끝에 '이번 실습은 짧은 후보 목록에 대한 제한된 비교이며 실제 추측 난이도의 일반적 증명이 아니다' 같은 한계 문장을 explanation 자체에 추가하면 T5/T6 근거 범위가 더 분명해진다.\nsolve/README.md 자체에 '실제 비밀번호 추측 난도는 후보 수·분포에 따라 달라지며 이 실습은 작은 고정 목록만 다룬다'는 한계 문장을 추가하면 자족성이 높아진다."
     },
     "execution": {
       "level": 3,
-      "reason": "2026-10-04 실제 선언 이미지에서 두 문제의 해답·정리 검증을 다시 실행해 통과했다. 새 자료의 후보 또는 서명 대조도 통과했다. 과거 PTY·브라우저 기록은 이전 판본의 근거이며 이번 판본의 실제 사용자 풀이로 간주하지 않는다. 출력 요약은 AUTHORING.md에 남겼고 독립 사용성 관찰은 수행하지 않아 수준 3을 유지한다.",
+      "reason": "judge-1 (3): AUTHORING.md의 '검증과 리뷰' 절이 날짜별 실행 기록을 구분해서 인용한다. 2026-10-04 기록은 유닛테스트 7건과 tools/verify.py의 해답·정리 검사 통과를 명시하며, 이전 판본 기록(2026-10-02)도 고정 이미지에서의 재현을 별도로 적는다.\njudge-2 (3): AUTHORING.md에 날짜가 명시된 실행 기록이 있다: 2026-10-04에 `tools/verify.py hash-lantern signed-delivery`로 선언된 이미지에서 해답과 정리 검사가 통과했고, 2026-10-02에 실제 이미지의 sha256sum을 호출한 검증 풀이 기록이 있다. 기록은 수행 범위를 명시적으로 한정한다('후보 대입 비용의 정량 비교나 실제 초보자 관찰은 이번 변경에서 수행하지 않았다').\njudge-3 (3): AUTHORING.md의 2026-10-04 검증 기록이 python3 -B -m unittest discover -s tools -p test_second_experiments.py 7개 검사 통과와 tools/verify.py hash-lantern signed-delivery의 실제 선언 이미지 해답·정리 검사 통과를 날짜와 범위를 구분해 인용한다. 다만 독립 학습자 리뷰와 정량적 후보 비용 비교는 이번 변경에서 수행하지 않았다고 스스로 명시해, 실행 재현의 범위가 자동 해답 성공에 한정됨을 알 수 있다.",
       "evidence": [
+        {
+          "path": "challenges/hash-lantern/AUTHORING.md",
+          "quote": "`python3 -B -m unittest discover -s tools -p test_second_experiments.py`의 7개 검사가 통과했다.\n`python3 -B tools/verify.py hash-lantern signed-delivery`에서 실제 선언 이미지의\n해답과 정리 검사가 통과했다.",
+          "kind": "recorded-execution"
+        },
         {
           "path": "challenges/hash-lantern/AUTHORING.md",
           "quote": "`python3 -B tools/verify.py hash-lantern signed-delivery`에서 실제 선언 이미지의\n해답과 정리 검사가 통과했다.",
           "kind": "recorded-execution"
         }
       ],
-      "improvement": "최초 구현 작업 트리 기준이라는 범위에 더해 실제 실행 로그나 결과 요약을 날짜별로 남겨 재현 정보를 보존한다."
+      "improvement": ""
     }
   },
-  "source_sha256": "f5922f58c585044a87c18bffbe84a66ae295ebec53396928da17c12b36cb3e44"
+  "source_sha256": "c2bc9c8770cd03545fc8f625e43863fe062e3dac9c0952ce30aed1afa31c161c"
 }
