@@ -23,7 +23,7 @@ mode = "sha256"
 sha256 = "cd0cde69f33dad1a9cedb694f5dc707f7ccb6d0c62b24fe04e86e4c1c58a8d77"
 
 [solve]
-image = "pwnden-cli:basic-20261003"
+image = "pwnden-cli:basic-20261014"
 command = ["bash", "solve/solve.sh"]
 writable = true
 timeout_seconds = 30

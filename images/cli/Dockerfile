@@ -4,9 +4,14 @@ ENV DEBIAN_FRONTEND=noninteractive PIP_DISABLE_PIP_VERSION_CHECK=1
 # Timestamped, signed Debian repositories keep dependency resolution stable.
 RUN sed -i 's|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/20261002T000000Z|;s|http://deb.debian.org/debian|https://snapshot.debian.org/archive/debian/20261002T000000Z|' /etc/apt/sources.list.d/debian.sources \
     && printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot \
+    # The base image's docker dpkg config drops man/info pages on install to
+    # save space, but a terminal with real tools and no `man`/`--help` beyond a
+    # usage line leaves players stuck mid-problem. Keep pages for what we install.
+    && sed -i '/path-exclude \/usr\/share\/man\/\*/d;/path-exclude \/usr\/share\/info\/\*/d' /etc/dpkg/dpkg.cfg.d/docker \
     && apt-get update && apt-get install -y --no-install-recommends \
        bash-completion less file binutils xxd unzip zip 7zip ripgrep jq curl openssl git \
        nmap ncat sqlite3 libimage-exiftool-perl ffuf socat bind9-dnsutils openssh-client \
+       man-db \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --uid 10001 --create-home --home-dir /home/pwnden --shell /bin/bash pwnden \
     && dpkg-query -W > /opt/package-versions.txt

@@ -12,8 +12,8 @@
 
 | 이미지 | 구성 |
 | --- | --- |
-| `pwnden-cli:basic-20261003` | 기본 파일 명령, Bash, rg, Binutils, xxd, 압축 도구, curl, jq, OpenSSL, Git, Nmap, Ncat, SQLite, ExifTool, ffuf, socat, DNS·SSH 클라이언트 |
-| `pwnden-cli:pcap-20261003` | basic + `tshark`와 필요한 OS 의존성. 제공된 PCAP 읽기·TCP 재조립·HTTP 객체 내보내기 |
+| `pwnden-cli:basic-20261014` | 기본 파일 명령, Bash, rg, Binutils, xxd, 압축 도구, curl, jq, OpenSSL, Git, Nmap, Ncat, SQLite, ExifTool, ffuf, socat, DNS·SSH 클라이언트 |
+| `pwnden-cli:pcap-20261014` | basic + `tshark`와 필요한 OS 의존성. 제공된 PCAP 읽기·TCP 재조립·HTTP 객체 내보내기 |
 
 두 이미지는 기본 레이어를 공유한다. 서비스 컨테이너는 문제에 필요한 별도 이미지를
 사용한다. 취약점 DB·메모리 분석·디버거·컴파일러는 해당 분석을 수행하는 문제의
@@ -32,8 +32,8 @@ pcap이므로 target을 생략하면 pcap을 빌드한다. 선택한 이미지�
 
 | 이미지 | 압축 콘텐츠 | Docker 표시 디스크 사용량 |
 | --- | --- | --- |
-| basic | 116MB | 483MB |
-| pcap | 157MB | 683MB |
+| basic | 121MB | 352MB |
+| pcap | 162MB | 510MB |
 
 containerd는 압축본과 압축 해제본을 함께 보관한다.
 [Docker 저장소 문서](https://docs.docker.com/engine/storage/containerd/)에서 설명하는
@@ -45,7 +45,7 @@ containerd는 압축본과 압축 해제본을 함께 보관한다.
 
 ```toml
 [solve]
-image = "pwnden-cli:basic-20261003"
+image = "pwnden-cli:basic-20261014"
 command = ["sh", "solve.sh"]
 writable = true
 timeout_seconds = 30
@@ -74,7 +74,7 @@ PCAP은 `tshark -r`로 제공된 파일을 읽는다. 라이브 캡처용 권한
 
 | 이미지 | 구성 | 압축 콘텐츠 | Docker 표시 디스크 사용량 |
 | --- | --- | --- | --- |
-| `pwnden-cli:lab-20261003` | basic + 파일 포렌식, DB·SMB·LDAP 클라이언트, sqlmap, Hydra·Ncrack, 기본 John, CPU Hashcat/PoCL, GDB·LLDB·strace, AFL++, GCC, Python 분석 도구 | 712MB | 2.99GB |
+| `pwnden-cli:lab-20261014` | basic + 파일 포렌식, DB·SMB·LDAP 클라이언트, sqlmap, Hydra·Ncrack, 기본 John, CPU Hashcat/PoCL, GDB·LLDB·strace, AFL++, GCC, Python 분석 도구 | 704MB | 2.21GB |
 | `pwnden-cli:extended-20261003` | 웹·TLS·JWT, John Jumbo, 정적 분석·디버깅·퍼징, APK, 공급망 분석, Foundry, Frida와 오프라인 DB·규칙·템플릿. 명령 174개 | 3.34GB | 16.0GB |
 | `pwnden-cli:specialized-20261003` | extended + Ghidra headless, Metasploit, linPEAS. 명령 178개 | 4.72GB | 20.4GB |
 | `pwnden-cli:all-20261003` | specialized + raw 스캔·무선·공개 자산 수집·ADB 실행 파일. 명령 191개 | 4.79GB | 20.7GB |

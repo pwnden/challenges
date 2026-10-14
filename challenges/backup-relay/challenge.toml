@@ -28,7 +28,7 @@ port = 9000
 protocol = "tcp"
 
 [solve]
-image = "pwnden-cli:basic-20261003"
+image = "pwnden-cli:basic-20261014"
 command = ["python3", "solve/solve.py"]
 timeout_seconds = 30
 

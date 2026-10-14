@@ -23,7 +23,7 @@ mode = "sha256"
 sha256 = "70ecf450e78633eda7154bbde8f99d47649ebf11d527acfceb1035f96daacf1d"
 
 [solve]
-image = "pwnden-cli:pcap-20261003"
+image = "pwnden-cli:pcap-20261014"
 command = ["bash", "solve/solve.sh"]
 writable = true
 timeout_seconds = 30
