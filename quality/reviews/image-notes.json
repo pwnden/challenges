@@ -191,5 +191,5 @@
       "improvement": "새 실행 기록을 추가해 현재 배포 도구 이미지에서 해답, 정답·오답 제출, 메타데이터 대조, 원본 보존이 재현되는지 확인한다."
     }
   },
-  "source_sha256": "9a40d5b0eff4be15edfd33e9d03a3fb9ba2607b8fdde9d0583d8ed00b1b4cd2a"
+  "source_sha256": "704d3f557e91fcb4b209784e63938c80ecefccc3a54aeaa382ff7a5526642ced"
 }

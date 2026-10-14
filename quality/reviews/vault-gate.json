@@ -179,5 +179,5 @@
       "improvement": "독립 리뷰어/학습자 관찰을 quality/observations/vault-gate.json에 기록해 학습 리뷰 항목을 완료 상태로 보완한다.\n실제 tools/verify.py vault-gate 실행 로그(출력 전문)를 별도 파일로 보존해 저자의 서술적 보고와 독립적으로 대조할 수 있는 기록 증거를 남긴다.\n독립 리뷰어가 실제로 patched/test.py와 solve.py를 재실행한 날짜·결과 기록을 추가하면 4점으로 올릴 수 있다."
     }
   },
-  "source_sha256": "cba2e3830ca6e864bd50c656c34125d488508a788b58ed29a9b2183add9b5c53"
+  "source_sha256": "76d7502b39e3734a257a95dfe15914ea27480f4a928220b4ef9a72f895f06d7b"
 }
