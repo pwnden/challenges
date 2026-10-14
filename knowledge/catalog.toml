@@ -249,3 +249,9 @@ id = "memory-layout"
 title = "지역 변수의 메모리 배치"
 requires = ["program-reading", "terminal-commands"]
 related = []
+
+[[concepts]]
+id = "return-address-control"
+title = "저장된 복귀 주소와 보호값"
+requires = ["memory-layout"]
+related = []

@@ -1,0 +1,5 @@
+services:
+  app:
+    build:
+      args:
+        POLICY: patched/policy.py

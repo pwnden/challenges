@@ -3,8 +3,8 @@
 문제의 첫 행동에 필요한 배경을 설명하는 공통 문서다. 각 문서는 하나의
 좁은 능력을 다루며, 실제 정답·공격 입력은 문제의 힌트와 해설에서 설명한다.
 
-문제 25개의 [전체 학습 순서](../docs/learning-order.md)와 함께 사용한다.
-아래 표는 개념 42개를 선수 개념이 먼저 나오도록 배열했다. 표 전체를 차례로
+문제 26개의 [전체 학습 순서](../docs/learning-order.md)와 함께 사용한다.
+아래 표는 개념 43개를 선수 개념이 먼저 나오도록 배열했다. 표 전체를 차례로
 읽을 필요는 없고, 선택한 문제에서 필요한 개념과 그 선수 개념만 읽으면 된다.
 
 | 개념 ID | 읽을 내용 | 먼저 읽을 개념 |
@@ -48,6 +48,7 @@
 | `program-reading` | [작은 입력 검사 코드 읽기](program-reading.md) | 없음 |
 | `input-checks` | [입력 검사와 조건의 근거](input-checks.md) | [작은 입력 검사 코드 읽기](program-reading.md) |
 | `memory-layout` | [지역 변수의 메모리 배치](memory-layout.md) | [작은 입력 검사 코드 읽기](program-reading.md), [준비된 터미널 명령 사용하기](terminal-commands.md) |
+| `return-address-control` | [저장된 복귀 주소와 보호값](return-address-control.md) | [지역 변수의 메모리 배치](memory-layout.md) |
 | `order-accounting` | [구매와 환불 금액의 일관성](order-accounting.md) | [Web 요청과 응답 읽기](http-messages.md) |
 | `invitation-boundaries` | [초대 코드와 초대받은 계정](invitation-boundaries.md) | [자료의 소유권과 읽기 권한](object-ownership.md) |
 | `client-reported-values` | [클라이언트가 보고한 값과 서버의 검증](client-reported-values.md) | [Web 요청과 응답 읽기](http-messages.md) |
