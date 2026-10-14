@@ -41,11 +41,6 @@
       "reason": "judge-1 (2): README는 호스트/포트, 배포 파일, 명령·메모 2단계 프로토콜을 제공한다. 그러나 challenge.toml의 [learning].requires는 return-address-control과 terminal-commands만 지정하고, 실제로 TCP 서비스에 접속해 STATUS 한 줄과 뒤이은 바이너리(8바이트×3 주소 포함) 메모를 전송하는 방법을 설명하는 knowledge/tcp-services.md는 선수 지식으로 선언되지 않았다. terminal-commands.md는 printf/파이프/files 경로 규칙만 다루고 네트워크 접속 방법은 전혀 언급하지 않아, 플레이어가 소켓·ncat 사용법을 어디서 확인해야 하는지 본문·선수 지식 어느 쪽에도 명시되어 있지 않다. cli 목록에 ncat이 있지만 그 사용법 문서가 요구 목록에서 빠진 것은 시작 정보의 구체적 누락이다.\njudge-2 (3): README ::resources가 호스트(app:9300), 배포 파일(files/console), 프로토콜(명령 한 줄 → 메모 한 번)을 모두 제공한다. 선수 능력(return-address-control, terminal-commands)에 해당하는 개념 자료가 저장소에 실제로 존재하며 내용도 복귀 주소 덮어쓰기 원리를 설명한다. objdump/nm 같은 구체 도구명은 본문에 없고 player.cli에만 선언되어, 도구 선택은 풀이자 판단에 맡겨진다.\njudge-3 (3): 본문은 호스트·포트, 실행 파일, 두 단계 프로토콜(명령 한 줄 뒤 메모 한 번)만 제공하고, 복귀 주소·레지스터·함수 이름 같은 용어는 공개하지 않는다. 선수지식(return-address-control, terminal-commands)만으로 시작은 가능하지만 메모 경계값, 함수 인자 여부, 가젯 존재는 전적으로 플레이어의 도구 선택과 분석에 맡겨져 있어 판단 여지가 충분하다.",
       "evidence": [
         {
-          "path": "challenges/night-console/challenge.toml",
-          "quote": "requires = [\"return-address-control\", \"terminal-commands\"]",
-          "kind": "source"
-        },
-        {
           "path": "knowledge/terminal-commands.md",
           "quote": "`files/`로 시작하는\n경로는 이 문제의 배포 파일을 가리킨다.",
           "kind": "source"
@@ -224,5 +219,5 @@
       "improvement": "독립 심사 시점에서의 재실행 기록은 없으므로, 필요하다면 별도로 tools/verify.py 재실행 결과를 기록한다.\n독립 리뷰어(또는 이번 심사와 별도인 실제 실행)로 verify.py night-console 재실행 로그를 quality/observations/night-console.json 또는 quality/text-reviews/night-console/에 남겨 작성자 서술과 별도의 재현 근거를 확보할 것.\nverify.py와 patched/test.py의 실제 실행 로그(명령·출력)를 별도 파일로 남겨 서술과 독립적으로 검증 가능하게 하면 좋겠다."
     }
   },
-  "source_sha256": "db0d84c4bd3db5fc601ffb520f194699da5829d3d469c21531e82cdcad1d4a5c"
+  "source_sha256": "a588d042744032598cbec53b09e28ea0e521917e9c613fcad0983bd47e7d3b7e"
 }

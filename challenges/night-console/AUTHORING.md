@@ -40,6 +40,7 @@
 | 필요한 능력 | 역할: 선수 지식 / 학습 목표 / 배경 | 필요한 풀이 단계 | 제공 위치: 개념 자료 / 본문 / 힌트 / 해설 |
 | --- | --- | --- | --- |
 | 저장된 복귀 주소를 덮어써 기존 함수로 실행을 돌린다 | 선수 지식 | 전체 | 개념 자료(`return-address-control`) |
+| `ncat`으로 TCP 서비스에 접속해 명령 한 줄과 긴 바이너리 payload를 순서대로 보낸다 | 선수 지식 | 전체 | 개념 자료(`tcp-services`) |
 | 명령 칸의 실제 한계를 화면 표시와 비교해 시험한다 | 학습 목표 | 1단계 | 본문 + 힌트 1 |
 | `objdump`로 메모 버퍼와 복귀 위치의 오프셋을, `nm`으로 인자가 필요한 함수를 찾는다 | 학습 목표 | 2단계 | 힌트 2 |
 | 레지스터 설정 조각 → 인자 → 대상 함수 순서로 호출 연쇄를 구성한다 | 학습 목표 | 3단계 | 힌트 3 + 해설 |
@@ -59,7 +60,7 @@
 
 ## 개념 관계
 
-- 문제의 선수 개념: `return-address-control`(`greeting-echo`가 가르침), `terminal-commands`.
+- 문제의 선수 개념: `return-address-control`(`greeting-echo`가 가르침), `tcp-services`, `terminal-commands`.
 - 문제의 학습 개념: `argument-call-chains`(`knowledge/argument-call-chains.md`) — 인자를 설정한 뒤 이어 부르는 함수 호출.
 - 개념 간 선수 관계: `argument-call-chains`는 `return-address-control`을 선수로 한다. 순환 없음.
 - 관련 읽기: `greeting-echo`(같은 pwn 계열의 이전 단계, 인자 없는 복귀 주소 변조만 다룬다).
@@ -89,7 +90,7 @@ manifest의 difficulty를 바꾸면 이 기록도 함께 갱신하세요.
 - 실행 범위: 실제 대상. 컴파일된 `files/console`을 직접 실행해 명령 칸이 "SHOW-ADMIN-LOG"를 담지 못함과 메모 경계(64바이트)를 확인했고, 실제 TCP 서비스(`docker compose`)에 대해서도 같은 호출 연쇄가 매번 성공함을 확인했다. `tools/verify.py night-console`로 취약한 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다.
 - 기술 검증: 2026-10-14, `objdump`·`nm`으로 확인한 오프셋(메모 버퍼=rbp-0x60, 복귀 위치까지 104)과 세 주소(`pop_rdi_ret`=0x401248, 문자열=0x40201e, `run_command`=0x401196)가 실제 공격 성공과 일치함을 확인했다. 컴파일에 쓰는 Debian 패키지 스냅샷을 `vault-gate`·`greeting-echo`와 같은 방식으로 고정해 주소가 빌드마다 바뀌지 않음을 확인했다. 연결을 받는 Python 계층이 첫 줄을 버퍼링된 스트림으로 읽은 뒤 이어지는 메모를 raw 소켓으로 읽으면, 클라이언트가 두 메시지를 한 번에 보낼 때 뒤쪽 바이트가 버려지는 결함을 발견해 모든 읽기를 같은 버퍼링된 스트림으로 통일했다(이 결함은 응답을 기다린 뒤 보내는 클라이언트에서는 드러나지 않았다). `tools/verify.py night-console` 통과. `patched/test.py`가 평소 사용·미지원 명령·경계값(64바이트)·이전 ROP 연쇄 메모를 모두 확인한다.
 - 학습 리뷰: 2026-10-14, 3인 패널(초급 학습자 관점·증거 검토자·교육 설계자, claude-sonnet-5-5 low effort; 사용자 승인에 따라 스킬이 정한 gpt-6-luna의 대체). 기준표 가중 합산 75.0/100. `needs_adjudication` 없음, 5인 확대 조건 미충족. 감사 기록: `quality/panels/night-console/2026-10-14-panel.json`.
-- 리뷰 관찰: 초급 학습자 관점 심사자가 starting_context를 2점으로 낮게 줬다 — `challenge.toml`의 선수 개념에 `tcp-services`가 없어, TCP 소켓으로 긴 바이너리 payload를 보내는 접속 방법 자체가 선언된 선수 지식만으로는 설명되지 않는다는 지적이다(terminal-commands.md는 파일 경로·파이프만 다룬다). controls는 가장 높게 평가됐다(4점, 평소·미지원 명령·경계값·이전 ROP 연쇄 메모를 모두 대조). 해설이 "디스어셈블리 오프셋만으론 부족하다"는 한계까지 설명한 점도 공통으로 긍정 평가됐다(explanation 3~4). 개선 제안: `requires`에 `tcp-services`를 추가하거나 본문/힌트1에 최소 접속 안내 추가, 카나리·PIE 미적용 등 이 문제의 보호기법 범위를 해설에 명시.
+- 리뷰 관찰: 초급 학습자 관점 심사자가 starting_context를 2점으로 낮게 줬다 — `challenge.toml`의 선수 개념에 `tcp-services`가 없어, TCP 소켓으로 긴 바이너리 payload를 보내는 접속 방법 자체가 선언된 선수 지식만으로는 설명되지 않는다는 지적이다(terminal-commands.md는 파일 경로·파이프만 다룬다). controls는 가장 높게 평가됐다(4점, 평소·미지원 명령·경계값·이전 ROP 연쇄 메모를 모두 대조). 해설이 "디스어셈블리 오프셋만으론 부족하다"는 한계까지 설명한 점도 공통으로 긍정 평가됐다(explanation 3~4). 개선 제안: `requires`에 `tcp-services`를 추가하거나 본문/힌트1에 최소 접속 안내 추가, 카나리·PIE 미적용 등 이 문제의 보호기법 범위를 해설에 명시. 2026-10-14, `requires`에 `tcp-services`를 추가해 이 지적을 반영했다(`knowledge/tcp-services.md`가 `ncat` 사용법을 이미 다루므로 본문·힌트는 바꾸지 않았다).
 - 맥락 확인: 처음 읽는 사람이 야간당직·진단 콘솔·제보·조사할 일을 첫 메시지만으로 식별할 수 있는지 `quality/text-reviews/night-console/`에서 확인한다.
 - 용어 확인: 본문·힌트·해설이 모두 같은 명령 이름(STATUS)과 같은 응답 문구("관리자 기록", "메모가 저장되었습니다")를 쓴다.
-- 배포 준비 상태: 기술 검증과 모델 패널의 학습 리뷰 모두 통과. 패널이 지적한 `tcp-services` 선수 개념 누락은 배포 전 보완을 권고하는 개선 사항으로 남아 있으나, 배포를 막는 결함(needs_adjudication)은 없다. 모델 패널은 실제 입문자 관찰을 대신하지 않으므로, 가능하면 실제 학습자 관찰을 별도로 확보한다.
+- 배포 준비 상태: 기술 검증과 모델 패널의 학습 리뷰 모두 통과. 패널이 지적한 `tcp-services` 선수 개념 누락은 반영해 해소했다(남은 배포 결함 없음). 모델 패널은 실제 입문자 관찰을 대신하지 않으므로, 가능하면 실제 학습자 관찰을 별도로 확보한다.
