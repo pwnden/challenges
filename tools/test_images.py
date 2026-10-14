@@ -28,14 +28,14 @@ class ImageTests(unittest.TestCase):
     def test_build_arguments_follow_the_recipe(self):
         with patch.dict(os.environ, {}, clear=False):
             os.environ.pop('PWNDEN_IMAGE_PLATFORM', None)
-            basic = images.build_args('pwnden-cli:basic-20261003')
+            basic = images.build_args('pwnden-cli:basic-20261014')
             extended = images.build_args('pwnden-cli:extended-20261003')
         self.assertEqual(basic[:6], ['build', '--progress=quiet', '--platform', 'linux/amd64', '--target', 'basic'])
-        self.assertIn('pwnden-cli:basic-20261003', basic)
+        self.assertIn('pwnden-cli:basic-20261014', basic)
         self.assertEqual(basic[-1], str(REPOSITORY / 'images/cli'))
         self.assertIn(str(REPOSITORY / 'images/cli/Dockerfile.toolbox'), extended)
         with patch.dict(os.environ, {'PWNDEN_IMAGE_PLATFORM': 'linux/arm64'}):
-            self.assertIn('linux/arm64', images.build_args('pwnden-cli:basic-20261003'))
+            self.assertIn('linux/arm64', images.build_args('pwnden-cli:basic-20261014'))
         self.assertIsNone(images.build_args('python:3.13-slim'))
 
     def docker(self, present):
@@ -54,7 +54,7 @@ class ImageTests(unittest.TestCase):
 
     def test_missing_known_tag_is_built_not_pulled(self):
         docker = self.docker(present=False)
-        docker.prepare_image('pwnden-cli:basic-20261003')
+        docker.prepare_image('pwnden-cli:basic-20261014')
         verbs = [call[0] for call in docker.calls]
         self.assertIn('build', verbs)
         self.assertNotIn('pull', verbs)
@@ -68,7 +68,7 @@ class ImageTests(unittest.TestCase):
 
     def test_present_image_is_left_alone(self):
         docker = self.docker(present=True)
-        docker.prepare_image('pwnden-cli:basic-20261003')
+        docker.prepare_image('pwnden-cli:basic-20261014')
         verbs = [call[0] for call in docker.calls]
         self.assertNotIn('build', verbs)
         self.assertNotIn('pull', verbs)

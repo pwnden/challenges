@@ -3,8 +3,8 @@
 문제의 첫 행동에 필요한 배경을 설명하는 공통 문서다. 각 문서는 하나의
 좁은 능력을 다루며, 실제 정답·공격 입력은 문제의 힌트와 해설에서 설명한다.
 
-문제 28개의 [전체 학습 순서](../docs/learning-order.md)와 함께 사용한다.
-아래 표는 개념 45개를 선수 개념이 먼저 나오도록 배열했다. 표 전체를 차례로
+문제 30개의 [전체 학습 순서](../docs/learning-order.md)와 함께 사용한다.
+아래 표는 개념 47개를 선수 개념이 먼저 나오도록 배열했다. 표 전체를 차례로
 읽을 필요는 없고, 선택한 문제에서 필요한 개념과 그 선수 개념만 읽으면 된다.
 
 | 개념 ID | 읽을 내용 | 먼저 읽을 개념 |
@@ -34,12 +34,14 @@
 | `tcp-services` | [포트와 TCP 연결](tcp-services.md) | [준비된 터미널 명령 사용하기](terminal-commands.md) |
 | `network-trust` | [연결 가능성과 자료 읽기 권한](network-trust.md) | [포트와 TCP 연결](tcp-services.md) |
 | `connection-state` | [세션이 기억해야 하는 연결 상태](connection-state.md) | [포트와 TCP 연결](tcp-services.md) |
+| `knock-sequence-trust` | [여러 연결에 걸친 순서 확인](knock-sequence-trust.md) | [포트와 TCP 연결](tcp-services.md), [세션이 기억해야 하는 연결 상태](connection-state.md) |
 | `packet-streams` | [패킷에서 전송 자료 읽기](packet-streams.md) | [포트와 TCP 연결](tcp-services.md), [Web 요청과 응답 읽기](http-messages.md) |
 | `transfer-evidence` | [자료 전달을 입증하는 기록](transfer-evidence.md) | 없음 |
 | `dns-records` | [DNS 질의 기록 읽기](dns-records.md) | 없음 |
 | `base32` | [Base32로 적힌 데이터](base32.md) | 없음 |
 | `data-in-names` | [조회 이름에 담기는 정보](data-in-names.md) | 없음 |
 | `encoding-secrecy` | [표현 변환과 정보 보호](encoding-secrecy.md) | 없음 |
+| `stream-key-reuse` | [재사용된 키와 두 암호문의 관계](stream-key-reuse.md) | [표현 변환과 정보 보호](encoding-secrecy.md) |
 | `detached-signatures` | [문서와 분리된 서명 확인하기](detached-signatures.md) | [해시와 비밀번호 후보](hashing.md) |
 | `document-authenticity` | [문서 내용과 서명의 확인](document-authenticity.md) | [문서와 분리된 서명 확인하기](detached-signatures.md) |
 | `path-boundaries` | [폴더 경계와 실제 파일 읽기](path-boundaries.md) | [폴더와 상대 경로](file-paths.md) |
@@ -70,7 +72,7 @@
 함께 생성된다. `--requires`와 `--teaches`는 관계 선언만 추가한다.
 원문과 생성 결과의 일치는 validator와 verifier가 검사한다.
 
-계약 v7의 [catalog.toml](catalog.toml)이 40개 개념의 ID, 제목, 선수 개념과 관련
+계약 v7의 [catalog.toml](catalog.toml)이 47개 개념의 ID, 제목, 선수 개념과 관련
 개념을 관리한다. 위 표는 시작 지식 문서이며, 같은 폴더의 학습 목표 문서도
 등록부에 포함되며 위 표에서 모두 확인할 수 있다. 각 문서의 경로는 `knowledge/<id>.md`다. 문제는
 `[learning].requires`와 `teaches`로 개념을 참조한다. 플랫폼에서 선수 문서를
