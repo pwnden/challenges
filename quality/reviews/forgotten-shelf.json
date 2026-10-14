@@ -1,16 +1,16 @@
 {
   "slug": "forgotten-shelf",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-04",
-  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
+  "reviewed_at": "2026-10-14",
+  "reviewer": "3-judge panel (judge-1 learner-advocate, judge-2 evidence-examiner, judge-3 learning-designer; claude-sonnet-5-5, low effort, substituted for the skill's configured gpt-6-luna with explicit user approval); audit record quality/panels/forgotten-shelf/2026-10-14-panel.json",
   "criteria": {
     "goal": {
-      "level": 4,
-      "reason": "forgotten-shelf-learner (4): 의뢰에서 공개 백업을 찾아 복구 키를 제출하도록 하고, 해설은 공개 목록과 서버 접근 통제의 차이를 명시한다. 실제 대상은 정해진 공개 경로에서 백업 내용과 현재 키를 반환하므로 완료 증거와 학습 원리가 맞는다.\nforgotten-shelf-evidence (4): 의뢰의 핵심인 목록에서 빠진 백업의 실제 공개 여부를 확인하고, 그 안의 복구 키를 제출하도록 완료 증거가 목표와 맞물린다. 구현도 백업 경로에서 플래그를 담은 본문을 반환한다.\nforgotten-shelf-designer (3): 의뢰의 보안 상황, 관찰 가능한 접근 결과, 제출 증거가 이어진다. 목표는 공개 웹에서 백업을 찾아 복구 키를 제출하는 행동으로 구체적이다. 백업 경로에서 비밀값이 반환되는 구현이 이를 뒷받침한다. 링크 제거와 접근 통제의 차이는 해설에서 분명해지지만 객관식 목표 문장에는 설명 행동이 들어 있지 않아 원리 이해 자체를 완료 증거로 채점하지는 않는다.",
+      "level": 3,
+      "reason": "judge-1 (3): 의뢰(백업이 여전히 읽힌다는 제보)와 해설의 보안 원리(링크 제거와 서버 접근 통제의 차이), 완료 증거(복구 키 제출)가 일치한다. vulnerable/app.py의 expose_backup()이 항상 True를 반환해 BACKUP_PATH가 접근 확인 없이 열리는 동작이 의뢰의 제보와 그대로 대응된다.\njudge-2 (3): 의뢰(잔비의 백업 노출 제보)와 목표(README의 목표)와 완료 증거(복구 키 제출)가 일치하며, 실제 구현에서도 /robots.txt의 Disallow 경로와 파일명을 조합하면 recovery_key가 포함된 응답을 관찰할 수 있어 목표가 실제 동작으로 관찰 가능하다. 다만 '링크 제거와 서버 접근 통제의 차이'라는 보안 원리까지 README 본문에서 명시적으로 결론짓지는 않고 해설(solve/README.md)에서 다뤄, 본문 단계에서는 원리 설명이 다소 암시적이다.\njudge-3 (4): 브리핑의 의뢰(링크를 뺐는데도 백업이 읽힌다), 해설의 보안 원리(링크 제거는 서버 접근 통제가 아니다), 완료 증거(recovery_key 제출)가 모두 같은 하나의 사실을 가리키며, 실제로 /archive/site-backup.txt 요청 성공이라는 관찰 가능한 동작으로 확인된다.",
       "evidence": [
         {
-          "path": "challenges/forgotten-shelf/README.md",
-          "quote": "공개 웹사이트에서 백업을 찾아 읽고, 그 안의 복구 키를 제출하자.",
+          "path": "challenges/forgotten-shelf/vulnerable/policy.py",
+          "quote": "def expose_backup():\n    return True",
           "kind": "source"
         },
         {
@@ -19,142 +19,160 @@
           "kind": "source"
         },
         {
+          "path": "challenges/forgotten-shelf/README.md",
+          "quote": "공개 웹사이트에서 백업을 찾아 읽고, 그 안의 복구 키를 제출하자.",
+          "kind": "source"
+        },
+        {
           "path": "challenges/forgotten-shelf/vulnerable/app.py",
           "quote": "BACKUP = \"Archive export\\ncollection=small-web\\nrecovery_key=\" + os.environ[\"FLAG\"] + \"\\n\"",
           "kind": "source"
         },
         {
-          "path": "challenges/forgotten-shelf/vulnerable/app.py",
-          "quote": "elif path == BACKUP_PATH:\n            self.reply(200, BACKUP) if expose_backup() else self.reply(404, \"자료를 찾을 수 없습니다.\")",
+          "path": "challenges/forgotten-shelf/README.md",
+          "quote": "그런데 누군가 여전히 백업 파일을 읽을 수 있다고 알려 왔다",
           "kind": "source"
         }
       ],
-      "improvement": "완료 증거로 보안 원리 설명도 평가하려는 의도라면 objective에 링크 제거와 서버 접근 통제 차이를 한 문장으로 설명하라는 요구를 넣는다."
+      "improvement": ""
     },
     "starting_context": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다. 학습 순서 정리 후 선수 개념의 관계와 문제별 requires가 실제 풀이에 필요한 능력의 범위를 다루는지도 함께 확인한다."
-    },
-    "reasoning": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
-    },
-    "controls": {
-      "level": 4,
-      "reason": "forgotten-shelf-learner (4): 학습 목표는 읽기 노출을 입증하는 것이므로 취약 대상에서 응답으로 현재 키를 읽는 직접 증거가 있다. 패치 검사는 공개 페이지 정상 응답과 백업 경로·쿼리 변형·디렉터리 요청·없는 경로의 거부를 대조한다. robots 공개 안내에서 노출 경로를 제거하는 것도 검사한다.\nforgotten-shelf-evidence (4): 취약 구현은 robots 경로의 백업을 실제 제공하고, 패치 검사는 정상 공개 페이지·상태 경로의 지속과 robots 안내 변경, 여러 백업 URL 변형의 거부를 함께 확인한다. 이는 단순 200 응답이나 링크 부재와 민감 내용 노출을 구분한다.\nforgotten-shelf-designer (4): 취약 구현은 robots 안내에서 공개 백업 경로를 노출하고 해당 경로 요청에 백업 내용을 반환한다. 패치 검사는 키가 공개 페이지와 정상 상태 응답에 나타나지 않는지, robots에서 경로가 빠졌는지, 직접 경로·쿼리 변형·디렉터리·없는 경로가 모두 404인지 확인하면서 공개 보관소 페이지와 healthz 정상 기능도 유지한다. 자동 대조군이 오답 경로나 단순 목록 제거를 실제 보호와 혼동하지 않게 한다.",
+      "level": 3,
+      "reason": "judge-1 (3): README.md는 백업 파일명(site-backup.txt)과 웹 도구 접속이라는 자료·접근 정보를 제공한다. 실제 경로는 README에 적혀 있지 않지만 사이트의 /about 페이지(App.vue)가 내보내기 파일명과 /robots.txt 링크를 바로 노출해, 목록을 둘러보는 선언된 범위 안에서 다음 관찰로 이어질 수 있다. 도구 선택(브라우저 주소창)과 비교 기준(Disallow 경로+파일명)은 플레이어가 직접 연결해야 한다.\njudge-2 (3): 선수 능력(web-addresses, file-paths)과 README의 자료(백업 파일 이름 site-backup.txt, 웹 도구 접근)만으로 탐색을 시작할 수 있다. 사이트 자체의 /about 페이지가 백업 파일명과 robots.txt 링크를 직접 노출하므로, README가 '사이트에 남아 있는 안내를 살펴보고'라고만 안내해도 시작 지점이 명확하다. 핵심 판별 조건(robots.txt의 Disallow 해석)은 본문에 없고 플레이어가 선수 지식으로 연결해야 하므로 과도한 사전 제공은 아니다.\njudge-3 (3): README는 사이트 접속 수단과 백업 파일명(site-backup.txt)만 명시적으로 제공하고, 경로 발견은 '사이트에 남아 있는 안내를 살펴보고'라는 문장으로만 암시한다. 실제로는 /about 페이지가 export 파일명과 crawler 경로(/robots.txt)를 모두 보여주므로 탐색으로 도달 가능하지만, README 문장만으로는 /about을 봐야 한다는 점이 명시되지 않아 1단계에서 판단 지점이 다소 넓게 열려 있었다. 선수 개념(file-paths, web-addresses)은 경로 문법만 다루고 robots.txt라는 구체적 대상은 가르치지 않는다.",
       "evidence": [
         {
+          "path": "challenges/forgotten-shelf/vulnerable/web/App.vue",
+          "quote": "이전 작업의 내보내기 파일명은 <code>{{ data?.export }}</code>입니다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/README.md",
+          "quote": "이전 작업에서 만든 백업 파일의 이름은 `site-backup.txt`다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/README.md",
+          "quote": "사이트에 남아 있는 안내를 살펴보고, 백업에 실제로 접근할 수 있는지 조사해 보자.",
+          "kind": "source"
+        },
+        {
           "path": "challenges/forgotten-shelf/vulnerable/app.py",
-          "quote": "self.reply(200, BACKUP) if expose_backup() else self.reply(404, \"자료를 찾을 수 없습니다.\")",
+          "quote": "{'export': 'site-backup.txt', 'crawler': '/robots.txt'}",
           "kind": "source"
-        },
-        {
-          "path": "challenges/forgotten-shelf/patched/test.py",
-          "quote": "for path in (\"/\", \"/about\", \"/healthz\", \"/robots.txt\"):\n        status, body = get(path)\n        assert status == 200 and \"pwnden{\" not in body, path",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/forgotten-shelf/patched/test.py",
-          "quote": "(\"/archive/site-backup.txt\", \"/archive/site-backup.txt?download=1\",\n                 \"/archive/\", \"/missing\")",
-          "kind": "source"
-        },
+        }
+      ],
+      "improvement": "/about 같은 안내 페이지를 먼저 확인하라는 점을 본문에 한 문장으로 더 명시하면 1단계 탐색 범위가 명확해진다."
+    },
+    "reasoning": {
+      "level": 3,
+      "reason": "judge-1 (3): 입문 난도에 맞게 한 원리(수집 안내 경로+파일명 결합)의 관찰로 충분하다. robots.txt의 Disallow 값과 전달받은 파일명을 연결하는 단일 단서 결합이 요구되며, 코딩이나 복잡한 비교는 없다.\njudge-2 (3): 난도 1(입문)에 맞게 단일 원리(robots.txt의 Disallow 경로 + 파일명 결합)를 한 번의 경로 조합으로 관찰하는 구조이며, AUTHORING.md도 코딩·계정 조작이 없는 입문 부담으로 명시한다. solve.py는 robots.txt를 정규식으로 파싱해 디렉터리를 추출하고 거기에 파일명을 붙이는 조건부 로직을 쓰므로 단순 고정 URL 접속보다는 한 단계 연결이 필요하다. 그럴듯한 오답(예: 루트 목록에 있는 다른 항목)과의 구분까지는 강하게 요구하지 않으므로 4까지는 주지 않는다.\njudge-3 (3): 입문 난도에 맞게 단일 원리(검색 수집 안내 파일의 Disallow 경로 + 알고 있는 파일명을 결합하면 비공개 경로에 도달한다)를 관찰하는 구조다. 비교·오답 구분이 필요한 복수 후보는 없고, 경로 하나를 조합해 응답을 확인하는 한 단계의 추론만 요구한다.",
+      "evidence": [
         {
           "path": "challenges/forgotten-shelf/vulnerable/app.py",
           "quote": "self.reply(200, \"User-agent: *\\nDisallow: /archive/\\n\" if expose_backup() else \"User-agent: *\\nDisallow:\\n\")",
           "kind": "source"
         },
         {
+          "path": "challenges/forgotten-shelf/AUTHORING.md",
+          "quote": "한 번의 경로 조합으로 공개 노출을 관찰하며 코딩이나 계정 조작이 없다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/solve/solve.py",
+          "quote": "directory = re.search(r\"^Disallow:\\s*(/\\S+)\", robots, re.MULTILINE)",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/AUTHORING.md",
+          "quote": "한 번의 경로 조합으로 공개 노출을 관찰하며 코딩이나 계정 조작이 없다",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
+    },
+    "controls": {
+      "level": 3,
+      "reason": "judge-1 (3): patched/test.py는 패치된 대상에서 robots.txt에 /archive/가 없고, 백업 경로들이 404를 반환하며 공개 페이지(/,/about,/healthz)는 계속 200을 반환하는 대조를 검증한다. 정상 기능 유지와 공격 차단을 함께 확인한다.\njudge-2 (3): solve.py는 (1) 루트에 flag가 없음, (2) /about에 파일명이 있음, (3) robots.txt에서 Disallow 경로를 뽑아 백업을 요청, (4) 404(거부) 시 '백업 없음'으로 명확히 분기, (5) 백업 본문에서 recovery_key= 뒤의 pwnden{...} 형식을 정규식으로 추출하는 방식으로, 단순 200/열린 포트가 아니라 실제 민감 자료(복구 키) 전달까지 확인한다. patched/test.py는 공개 페이지가 200 그대로 유지되는지(정상 기능 보존)와 robots.txt에 /archive/가 더는 없는지, 백업 경로·쿼리 변형(?download=1)·디렉터리·존재하지 않는 경로가 모두 404이며 flag가 없는지를 함께 검사해 패치가 공격을 막는 동시에 정상 기능을 유지함을 보여준다. 다만 이 문제는 파일 배포형이 아니라 서비스형이라 '변조/제거/누락 파일' 대조군은 해당되지 않으며(artifact_controls 적용 대상 아님), 인증된 자신의 자료 대 타인 자료 구분과 같은 대조는 구조상 없다.\njudge-3 (3): patched/test.py는 정상 경로(/, /about, /healthz, /robots.txt)가 200으로 유지되고 플래그를 노출하지 않음을 확인하고, 동시에 백업 관련 경로(/archive/site-backup.txt, 쿼리 변형, 디렉터리, 없는 경로)가 모두 404로 막힘을 확인해 공격 차단과 정상 기능 유지를 함께 대조한다. solve.py도 루트에 플래그가 없음과 about에 파일명이 있음을 사전 검증한다.",
+      "evidence": [
+        {
           "path": "challenges/forgotten-shelf/patched/test.py",
-          "quote": "for path in (\"/\", \"/about\", \"/healthz\", \"/robots.txt\"):",
+          "quote": "assert \"/archive/\" not in get(\"/robots.txt\")[1]",
           "kind": "source"
         },
         {
           "path": "challenges/forgotten-shelf/patched/test.py",
-          "quote": "for path in (\"/archive/site-backup.txt\", \"/archive/site-backup.txt?download=1\",",
+          "quote": "status, body = get(path)\n        assert status == 404 and \"pwnden{\" not in body, path",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/solve/solve.py",
+          "quote": "if error.code == 404:",
           "kind": "source"
         },
         {
           "path": "challenges/forgotten-shelf/patched/test.py",
-          "quote": "for path in (\"/archive/site-backup.txt\", \"/archive/site-backup.txt?download=1\",\n                 \"/archive/\", \"/missing\"):\n        status, body = get(path)\n        assert status == 404 and \"pwnden{\" not in body, path",
+          "quote": "assert status == 404 and \"pwnden{\" not in body, path",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/solve/solve.py",
+          "quote": "assert \"pwnden{\" not in read(\"/\")",
           "kind": "source"
         }
       ],
       "improvement": ""
     },
     "hints": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
-    },
-    "explanation": {
-      "level": 4,
-      "reason": "forgotten-shelf-learner (4): 해설이 경로 조합, 응답의 키 위치, 공개 목록과 권한 확인의 차이, 수정 방향과 정상 페이지 유지 범위를 연결한다. 민감 자료는 공개 웹 폴더 밖에 두고 필요한 접근 권한을 적용하라고 일반화한다.\nforgotten-shelf-evidence (4): 해설은 안내 경로와 파일명을 조합한 관찰, 키 제출 방법, 목록 링크 제거와 서버 접근 통제의 차이, 백업을 웹 공개 경로 밖에 두는 보호 방법을 설명한다. 결론도 이 대상이 접근 확인 없이 반환했다는 실습 범위에 맞춘다.\nforgotten-shelf-designer (4): 해설이 조사 동작, 응답에서 발견할 경로, 파일명 결합, 키가 있는 필드를 순서대로 설명한다. 이어 공개 목록에서 링크만 없애도 서버 동작이 남을 수 있는 원인을 밝히고, 접근 확인 없는 반환이라는 구현 결함 및 공개 웹 폴더 외 보관·권한 적용을 제시한다. 현재 실행 값 사용도 명시한다.",
+      "level": 3,
+      "reason": "judge-1 (3): hints/1.md는 robots.txt를 열어보라는 단일 판단만 제공하고, 최종 경로 조합이나 백업 파일 내용은 밝히지 않는다. 기본 본문(README)에도 완성된 풀이 순서는 없다.\njudge-2 (3): hints/1.md는 '운영 안내에는 검색 서비스가 페이지를 수집할 때 참고하는 파일이 있다'와 '/robots.txt를 열어보라'는 방향만 제시하고, Disallow 경로를 실제 파일명과 결합하는 마지막 단계나 정답 형식은 보여주지 않는다. 본문(README)과 사이트 UI(/about)는 파일명과 robots.txt의 존재만 알려줄 뿐 완성된 풀이 순서나 핵심 판별식을 노출하지 않으므로 힌트와 정답이 분리되어 있다.\njudge-3 (3): 힌트 1개만 있으며, '검색 서비스가 참고하는 파일'과 /robots.txt를 열어보라는 지시만 주고 어떤 경로가 적혀 있는지, 그것을 파일명과 결합하라는 지시는 주지 않는다. 완전한 절차(로봇 안내 경로+파일명 결합, recovery_key= 뒤 값 읽기)는 solve/README.md에만 있다.",
       "evidence": [
         {
-          "path": "challenges/forgotten-shelf/solve/README.md",
-          "quote": "자료의 `recovery_key=` 다음에 현재 복구 키가 표시된다.",
+          "path": "challenges/forgotten-shelf/hints/1.md",
+          "quote": "웹 도구의 주소창에서 `/robots.txt`를 열어 보자. 어떤 폴더 경로가 기록돼 있을까?",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/hints/1.md",
+          "quote": "웹 도구의 주소창에서 `/robots.txt`를 열어 보자.",
           "kind": "source"
         },
         {
           "path": "challenges/forgotten-shelf/solve/README.md",
-          "quote": "비밀이 포함된 백업은 공개 웹\n폴더 밖에 보관하고 필요한 접근 권한을 적용해야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/forgotten-shelf/solve/README.md",
-          "quote": "`robots.txt`는 수집 규칙을 공개하는 파일이다. 경로에 대한 접근 권한은 서버가 따로 확인해야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/forgotten-shelf/solve/README.md",
-          "quote": "비밀이 포함된 백업은 공개 웹",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/forgotten-shelf/solve/README.md",
-          "quote": "필요한 접근 권한을 적용해야 한다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/forgotten-shelf/solve/README.md",
-          "quote": "복구 키는 실행할 때마다 새로 만들어지므로\n현재 실행 중인 사이트에서 읽은 값을 사용한다.",
+          "quote": "파일 이름을 붙여 `/archive/site-backup.txt`로 이동한다.",
           "kind": "source"
         }
       ],
       "improvement": ""
     },
+    "explanation": {
+      "level": 3,
+      "reason": "judge-1 (3): solve/README.md가 행동(robots.txt 확인→경로 결합)→관찰(Disallow: /archive/)→결론(복구 키 노출)→원인(접근 확인 없는 백업 경로)→보호 방법(백업을 공개 경로 밖에 두고 접근 권한 적용)을 순서대로 연결한다.\njudge-2 (3): solve/README.md는 행동(robots.txt 확인 후 파일명 결합)→관찰(recovery_key 확인)→원인(백업 경로에서 접근 확인 없이 자료 반환)→보호 방법(비밀 포함 백업을 공개 웹 폴더 밖에 보관)까지 짧지만 모두 연결한다. '공개 목록에서 링크를 없애도 해당 경로를 처리하는 서버 동작은 남을 수 있다'는 문장으로 결론의 핵심을 명확히 하지만, 이 실습 증거로 결론 지을 수 있는 범위(예: 이 사례가 일반적인 모든 접근 통제 실패를 대표하지는 않는다는 한계)에 대한 명시적 언급은 없어 4는 주지 않는다.\njudge-3 (3): 해설이 행동(경로 조합)→관찰(복구 키 노출)→결론(링크 제거≠접근 통제)→원인(백업 경로에서 접근 확인 없이 반환)→수정(비공개 경로로 이동, 접근 권한 적용)을 순서대로 연결해 유사 문제에 적용 가능한 일반 원리로 서술한다.",
+      "evidence": [
+        {
+          "path": "challenges/forgotten-shelf/solve/README.md",
+          "quote": "이 대상은 백업 경로에서 접근 확인 없이 자료를 반환했다. 수정된 대상은 백업을 공개 경로에서\n제외하고, 운영 안내와 공개 보관소는 계속 제공한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/forgotten-shelf/solve/README.md",
+          "quote": "공개 목록에서 링크를 없애도 해당 경로를 처리하는 서버 동작은 남을 수 있다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": "실습 관찰이 입증하는 범위(이 서버의 접근 통제 부재)와 일반화할 수 없는 부분을 한 문장 추가해 한계를 더 명시하면 4에 가까워진다."
+    },
     "execution": {
       "level": 3,
-      "reason": "forgotten-shelf-learner (3): 작성 기록은 2026-10-02의 로컬 HTTP 대상 검증으로 실제 응답 형식, 취약/패치 풀이와 정리, 회귀 검사 및 격리 검사 범위를 보고한다. 이는 과거 기록이며 이번 심사에서 재실행한 결과는 아니다.\nforgotten-shelf-evidence (3): 작성 기록은 2026-10-02 검증에서 실제 로컬 HTTP 대상, Python 3.13.15 해답 이미지, 선언 패치 및 정리, 문제군 회귀 검사와 격리 확인을 보고한다. 날짜·범위가 명시된 기록이지만 이 문제 전용의 명령별 출력이나 결과물이 인용되지는 않아 부분 수준으로 판정한다. 이번 심사에서 새로 실행한 것은 아니다.\nforgotten-shelf-designer (3): 작성 기록은 2026-10-02 검증이 이 파일을 포함한 최초 제출 버전을 대상으로 했다고 구분하고, 실제 로컬 HTTP 대상에서 전체 6개 문제의 풀이·선언된 패치·정리 검사와 회귀 검사를 통과했다고 보고한다. 문제 포함 및 범위는 확인되지만 이 문제 단독 실행 로그와 개별 응답 결과는 기록하지 않아 최상 수준의 상세 재현성 근거까지는 아니다. 이는 현재 심사에서 새로 실행한 결과가 아니다.",
+      "reason": "judge-1 (3): AUTHORING.md에 날짜가 있는 기술 검증 기록이 있다: 2026-10-02에 호스트/이미지/Docker/Compose 버전을 명시하고 전체 6개 문제 풀이·패치·정리 검사와 47개 회귀 검사를 통과했다고 기록한다. 이번 심사에서 직접 재실행한 기록은 아니며 과거 인용으로만 사용한다.\njudge-2 (3): AUTHORING.md에 날짜(2026-10-02)와 환경(호스트 Python 3.14.7, 풀이 이미지 Python 3.13.15, Docker 29.4.1, Compose 5.1.3), 범위(형식 검사, 전체 6개 문제 풀이·선언된 패치·정리 검사, 47개 회귀 검사)가 기록된 과거 실행 보고가 있다. 이는 이번 심사에서 직접 실행한 결과가 아니라 과거 기록 인용이며, 같은 문서가 '독립 학습 리뷰는 아직 수행하지 않았다'고 스스로 그 한계를 표시한다. 기록된 실행의 날짜·범위가 명확하므로 미검증(0/null)은 아니나, 이번 심사가 재실행을 확인한 것은 아니므로 과거 기록으로서의 근거로만 인정한다.\njudge-3 (3): AUTHORING.md에 날짜(2026-10-02)와 범위(호스트/풀이 이미지 Python 버전, Docker/Compose 버전, 전체 6개 문제 풀이·패치·정리 검사, 47개 회귀 검사)가 기록돼 있어 재현 실행 근거로 인정할 수 있다. 다만 같은 문서가 독립 학습 리뷰는 아직 수행하지 않았다고 명시해, 실행 기록은 기술 검증 범위로 한정됨을 스스로 구분한다.",
       "evidence": [
         {
           "path": "challenges/forgotten-shelf/AUTHORING.md",
           "quote": "기술 검증: 2026-10-02, 이 파일을 포함한 최초 콘텐츠 제출 버전. 호스트 Python 3.14.7, 풀이 이미지 Python 3.13.15, Docker 29.4.1, Compose 5.1.3에서 형식 검사, 전체 6개 문제 풀이·선언된 패치·정리 검사와 47개 회귀 검사를 통과했다.",
           "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/forgotten-shelf/AUTHORING.md",
-          "quote": "격리 검증: 도달 가능한 대조군을 확인한 뒤 외부 IPv4·IPv6·DNS, 호스트와 별도 문제 네트워크 접근 차단, 같은 문제 내부 HTTP 성공 및 대조군 정리를 확인했다.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/forgotten-shelf/AUTHORING.md",
-          "quote": "- 기술 검증: 2026-10-02, 이 파일을 포함한 최초 콘텐츠 제출 버전. 호스트 Python 3.14.7, 풀이 이미지 Python 3.13.15, Docker 29.4.1, Compose 5.1.3에서 형식 검사, 전체 6개 문제 풀이·선언된 패치·정리 검사와 47개 회귀 검사를 통과했다.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/forgotten-shelf/AUTHORING.md",
-          "quote": "- 격리 검증: 도달 가능한 대조군을 확인한 뒤 외부 IPv4·IPv6·DNS, 호스트와 별도 문제 네트워크 접근 차단, 같은 문제 내부 HTTP 성공 및 대조군 정리를 확인했다.",
-          "kind": "recorded-execution"
         }
       ],
-      "improvement": "문제별 해답·패치·정리 결과를 해당 날짜와 실행 범위를 유지한 채 따로 남기면 재현 근거를 더 직접 확인할 수 있다.\n이 문제의 이미지/실행별로 취약 해답, 패치 공격 거부, 정상 경로, 정리의 결과를 날짜와 함께 별도 기록한다."
+      "improvement": ""
     }
   },
-  "source_sha256": "d0c4424f56b94187b164e6d5c3aa2f0524ee1e8a86b06b5e24844515aa7efc47"
+  "source_sha256": "d6ce3e0c3604e11725a6b5d75ebc258d84344b303bf8748381894b688e0eaf2f"
 }
