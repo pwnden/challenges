@@ -267,3 +267,9 @@ id = "library-base-recovery"
 title = "유출된 주소로 계산하는 라이브러리의 실제 위치"
 requires = ["argument-call-chains"]
 related = []
+
+[[concepts]]
+id = "knock-sequence-trust"
+title = "여러 연결에 걸친 순서 확인"
+requires = ["tcp-services", "connection-state"]
+related = []

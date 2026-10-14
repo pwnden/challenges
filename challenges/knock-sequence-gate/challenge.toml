@@ -1,0 +1,37 @@
+schema = 7
+slug = "knock-sequence-gate"
+title = "노크 순서로 여는 유지보수 게이트"
+category = "misc"
+difficulty = 3
+compose = "compose.yaml"
+
+[player]
+tools = ["terminal"]
+cli = ["nmap", "ncat"]
+
+[learning]
+requires = ["terminal-commands", "tcp-services", "connection-state"]
+teaches = ["knock-sequence-trust"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "generated"
+
+[[endpoints]]
+name = "gate"
+service = "app"
+port = 7000
+protocol = "tcp"
+
+[solve]
+image = "pwnden-cli:basic-20261014"
+command = ["python3", "solve/solve.py"]
+timeout_seconds = 30
+
+[patched]
+compose = "compose.patched.yaml"
+check = ["bash", "patched/test.sh"]
