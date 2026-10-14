@@ -1,0 +1,547 @@
+{
+  "slug": "reused-cipher-memo",
+  "input_sha256": "b1fff38ae57ead550e832c686dce0f5aeb2cab5d037804b129dfdc941abedb5d",
+  "model": "claude-sonnet-5-5",
+  "reasoning_effort": "low",
+  "judge_count": 3,
+  "method": "criterion median",
+  "ballots": [
+    {
+      "judge_id": "judge-1",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learner-advocate",
+      "first_pass": "브리핑은 호스트/포트(app:9200), 프로토콜(HELLO/MEMO/CHECK <hex>), CHECK 길이 제한(1~128바이트)을 명시해 첫 행동(ncat 접속 후 HELLO/MEMO)은 선수 지식만으로 결정 가능. 그러나 CHECK에 보낼 값을 '어떻게' 고를지(같은 값 반복 비교, 0값으로 패드 추출)에 대한 단서는 본문에 전혀 없고 전적으로 힌트 1/2에 의존한다. python3로 16진수/바이트/XOR 연산을 직접 구현해야 한다는 점도 README나 선수 지식 문서(terminal-commands, encoding-secrecy)에서 예고되지 않고 challenge.toml의 cli 선언에만 있다. T1/T2/T3/T8은 충족: 행위자(봉인지기)·대상(CHECK/MEMO)·동기(패드 재사용 의심)가 명확하고 번역투나 모호한 지시어 문제는 없다. T7은 시작·제출 대상은 명확하나 중간 조사 방법(비교 기준, 복원 절차)이 본문에 전혀 없어 힌트 의존도가 매우 높다는 점을 기록, 2단계에서 힌트 내용으로 보완되는지 재평가가 필요하다고 보류함.",
+      "review": {
+        "slug": "reused-cipher-memo",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-15",
+        "reviewer": "judge-1",
+        "source_sha256": "d02f8d860957d35c0e721d2818ac70d73a5d1ffaa6c83479ba4e357db3fb2ccf",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "README의 objective('CHECK가 메모를 봉인한 값과 같은 값을 재사용하는지 확인하고, 메모의 원문을 알아내자')는 AUTHORING.md가 선언한 보안 학습 목표('패드 재사용 시 패드 자체를 계산할 수 있다')와 vulnerable/app.py의 실제 동작(ROTATE_CHECK_KEY=False이면 CHECK가 MEMO와 같은 _memo_pad를 그대로 재사용)이 정확히 일치한다. 완료 증거(pwnden{...} 복원)도 코드상 실제로 관찰 가능한 동작이다. 다만 목표 문장 자체가 '재사용 여부 확인'과 '원문 복원'이라는 두 하위 목표를 한 문장에 묶어, 전자만으로는 완료 증거가 되지 않는다는 점이 약간 모호함.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/vulnerable/app.py",
+                "quote": "pad = _memo_pad[:len(data)] if not ROTATE_CHECK_KEY else os.urandom(len(data))",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/vulnerable/policy.py",
+                "quote": "ROTATE_CHECK_KEY = False",
+                "kind": "source"
+              }
+            ],
+            "improvement": "objective 문장에서 '확인'과 '복원'을 별도 문장으로 분리해 중간 목표와 최종 완료 증거를 더 명확히 구분."
+          },
+          "starting_context": {
+            "level": 2,
+            "reason": "호스트/포트/프로토콜/길이 제한은 선수 지식(terminal-commands)만으로 첫 접속·MEMO 조회까지 가능하게 한다. 그러나 '도구 선택·핵심 비교·복원 절차'는 본문에서 전혀 유도되지 않는다. CHECK에 어떤 값을 보낼지(같은 값 반복? 0값?)에 대한 단서가 README에 없고, 전부 hints/1.md·hints/2.md가 제공한다. encoding-secrecy.md는 '표현 변환은 비밀을 만들지 않는다'는 일반 원칙만 설명해 XOR 스트림 패드 재사용의 구체적 성질(0과의 XOR이 원값을 남긴다는 것 등)과 연결되지 않는다. python3로 hex/byte/XOR을 짧게 구현해야 한다는 점도 선수 지식·본문에 예고가 없다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/README.md",
+                "quote": "보낸 값을 같은 방식으로 봉인해 16진수로 돌려준다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/hints/2.md",
+                "quote": "0으로만 이루어진 값을",
+                "kind": "source"
+              }
+            ],
+            "improvement": "encoding-secrecy처럼 XOR의 기본 성질(0과의 XOR은 원값을 남김)을 다루는 선수 개념을 requires에 추가하거나, README에 '같은 방식으로 봉인한다'는 문장 옆에 비교 실험을 떠올릴 최소한의 방향(예: 반복 요청의 의미)을 암시."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "난도 3(중급)에 걸맞게 플레이어는 (1) 반복 관찰로 패드 고정 여부를 가설화하고 (2) 0값을 이용해 패드를 역산해 XOR로 원문을 복원하는 두 단계의 실제 추론을 수행해야 한다. 명령 개수가 아니라 '왜 0값을 보내는가', '왜 반복 응답이 같다는 것이 패드 고정의 증거인가'라는 판단이 필요하다. 다만 힌트 1·2가 이 두 판단을 거의 그대로 제시하므로, 플레이어가 스스로 도달해야 하는 추론의 폭은 넓지 않다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/hints/1.md",
+                "quote": "같은 값을 여러 번 보내 응답이 매번 같은지 비교해 보자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 3,
+            "reason": "patched/test.sh는 HELLO/MEMO 기본 동작 유지, CHECK의 invalid_hex·length_1_to_128·unsupported_command 오류 응답 유지, 그리고 핵심 대조군인 '같은 CHECK 입력에 대해 패치 전/후 응답이 달라지는지'와 '0값 복원 공격이 더 이상 pwnden{을 내지 않는지'를 모두 검증한다. 정상 기능과 패치 효과를 함께 확인하는 대조군 설계가 적절하다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/patched/test.sh",
+                "quote": "if [ \"$first\" = \"$second\" ]; then exit 1; fi",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/patched/test.sh",
+                "quote": "if [[ \"$recovered\" == *\"pwnden{\"* ]]; then exit 1; fi",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 2,
+            "reason": "기본 본문(README.md)에는 도구나 완성된 풀이 순서가 노출되지 않아 그 자체는 양호하다. 그러나 hints/1.md가 핵심 판별 조건(반복 요청 비교)을 그대로 제시하고, hints/2.md는 복원 계산 전체(0값 선택 이유, 길이 맞추는 방법, XOR로 원문 복원)를 완성된 절차로 제공한다. 두 힌트를 합치면 사실상 해설의 핵심 절차 전체가 힌트 단계에서 이미 노출되어, '선택형 힌트는 한 판단만 돕는다'는 기준에는 다소 못 미친다 — 특히 힌트 2는 하나의 판단이 아니라 '선택할 값 + 왜 그런지 + 복원 공식'까지 모두 담고 있다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/hints/2.md",
+                "quote": "그 값을 `MEMO`의 응답과 다시 XOR하면 원문이 나온다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "hints/2.md를 '0으로만 이루어진 값을 보내면 어떤 성질을 이용할 수 있을지 생각해보자' 정도로 축소하고, 구체적 복원 공식은 solve/README.md(해설)로 옮긴다."
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "solve/README.md는 행동(ncat 접속→MEMO/CHECK 반복 전송)→관찰(같은 응답 반복, 0값 응답이 패드 자체)→결론(패드 재사용)→원인(일회용 패드를 반복 사용)→보호 방법(CHECK마다 새 무작위 값 생성)을 순서대로 연결한다. '드러난 보안 원리' 단락에서 공격자가 평문 하나를 알거나 고를 수 있을 때의 조건을 명시해 일반화 범위도 어느 정도 제한한다. 다만 '이 실습 증거로 말할 수 있는 한계'(예: 이번 환경의 FLAG 길이·단일 세션 관찰이라는 범위)에 대한 명시적 언급은 약하다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/solve/README.md",
+                "quote": "값을 정말 한 번만 쓸 때만 안전하다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "해설 말미에 '이번 관찰은 단일 CHECK 세션/고정 FLAG 길이 조건에서의 결과'라는 범위 제한 문장을 한 줄 추가."
+          },
+          "execution": {
+            "level": 2,
+            "reason": "AUTHORING.md는 '2026-10-14, tools/verify.py reused-cipher-memo 통과'와 patched/test.sh가 확인한 항목들을 서술하지만, 이는 작성자가 남긴 기록이며 이번 심사에서 내가 직접 실행해 재현한 결과가 아니다. 코드 검토(vulnerable/app.py, patched/policy.py, patched/test.sh)로 보면 해당 스크립트가 선언한 항목들을 실제로 검사하는 로직은 갖추고 있으나, '기록이 존재한다'와 '내가 실행해 확인했다'는 구분해야 하므로 인용 가능한 실행 증거는 작성자 기록 수준에 머문다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "2026-10-14, `tools/verify.py reused-cipher-memo` 통과. `patched/test.sh`가 HELLO·MEMO 기본 동작, CHECK 반복 요청의 응답 차이, 복원 실패, 오류 응답을 모두 확인한다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "심사 과정에서 tools/verify.py reused-cipher-memo를 직접 실행해 날짜가 찍힌 독립 실행 로그를 남기면 이 기준을 더 높게 평가할 수 있다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-2",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "evidence-examiner",
+      "first_pass": "1단계(브리핑만 읽음): stream-key-reuse.md에 따르면 CHECK(공격자 선택 평문)와 MEMO(보호된 평문)가 같은 패드를 재사용하면 두 암호문의 XOR에서 패드가 사라지고 평문 관계가 남는다. 복원이 진짜임을 증명하려면 (1) 같은 입력을 CHECK에 반복해 응답이 고정인지 확인하고 (2) 알려진 평문(0)으로 패드 자체를 얻어 MEMO와 XOR한 결과가 pwnden{...} 형식인지 확인해야 한다. 재사용 여부 자체도 별도로 관찰해야 하며, 복원된 문자열이 pwnden{} 형식이라는 것만으로는 재사용 메커니즘을 증명하지 못한다. 그럴듯하지만 틀린 복원의 위험 지점은 CHECK 입력 길이와 MEMO 길이가 불일치할 때 부분 복원이 섞여 보일 수 있다는 점인데, 본문은 길이를 맞춰야 하는지 명시하지 않는다(힌트/해설에서 다룰 가능성). T1/T2/T3/T7/T8은 브리핑 텍스트 단독으로 충족, T4는 '같은 방식으로 봉인'이 패드 재사용까지 포함하는지 코드 대조 전에는 경미하게 모호. T7은 선수지식(encoding-secrecy, stream-key-reuse)과 결합 시 다음 관찰에 도달 가능해 보이나 확정은 2단계에서 확인 필요.",
+      "review": {
+        "slug": "reused-cipher-memo",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-15",
+        "reviewer": "judge-2",
+        "source_sha256": "d02f8d860957d35c0e721d2818ac70d73a5d1ffaa6c83479ba4e357db3fb2ccf",
+        "criteria": {
+          "goal": {
+            "level": 4,
+            "reason": "의뢰 목표('CHECK 점검 기능이 메모를 봉인한 값과 같은 값을 재사용하는지 확인하고, 현재 메모의 원문을 알아내자'), 보안 원리(AUTHORING.md의 'XOR 기반 암호화에서 같은 패드를 재사용하면... 패드 자체와 다른 암호문의 평문을 계산할 수 있음'), 완료 증거(pwnden{...} 복원)가 서로 일치한다. 실제 구현(vulnerable/app.py)도 _memo_pad를 MEMO와 CHECK가 그대로 공유하므로, 목표가 실제 관찰 가능한 동작과 대응한다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/README.md",
+                "quote": "CHECK 점검 기능이 메모를 봉인한 값과 같은 값을 재사용하는지 확인하고,",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/vulnerable/app.py",
+                "quote": "pad = _memo_pad[:len(data)] if not ROTATE_CHECK_KEY else os.urandom(len(data))",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 4,
+            "reason": "본문이 호스트/포트, 세 명령 구문(HELLO, MEMO, CHECK <hex>), CHECK 입력 길이 제한(1~128바이트), 제출 형식을 제공하며, 선언한 선수 능력(terminal-commands, encoding-secrecy)만으로 접근 가능하다. 도구 선택과 비교·복원 절차 자체는 힌트/해설로 미뤄져 있어(AUTHORING.md '풀이자에게 남긴 판단'), 본문이 정답 절차를 대신 제공하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/README.md",
+                "quote": "`CHECK <16진수>`는 보낸 값을 같은 방식으로 봉인해 16진수로 돌려준다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "풀이자에게 남긴 판단: CHECK에 어떤 값을 보내 패드 재사용을 확인할지, 얻은 값들을 어떻게 조합해 원문을 복원할지.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "난도 3(중급)에 맞춰, 플레이어는 '같은 입력을 CHECK에 반복해 응답이 고정인지' 비교(가설 수립)한 뒤 '0 값으로 패드를 직접 얻어 XOR'하는 계산을 수행해야 한다. 이는 단서 연결과 그럴듯한 대안(패드가 요청마다 바뀔 가능성)을 구분하는 추론을 요구하지만, 전체 과정이 두 단계로 비교적 선형적이고 추가 분기나 복수의 그럴듯한 오답 경로(예: 길이 불일치, 다른 평문 선택 시의 계산 변형)를 플레이어가 직접 식별해야 하는 부담은 크지 않다. AUTHORING.md도 '다른 평문을 보내도 동일하게 복원됨'을 작성자가 이미 확인해 두어 플레이어 몫의 추론 범위가 명확히 두 단계로 제한된다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/hints/1.md",
+                "quote": "오면 고정된 값을 계속 쓰고 있다는 뜻이다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "0 값은 계산을 단순화할 뿐 유일한 경로는 아니다",
+                "kind": "source"
+              }
+            ],
+            "improvement": "플레이어가 길이 불일치나 패드 재사용 범위(연결 단위 vs 전역)를 스스로 구분해야 하는 분기를 하나 더 두면 중급 난도에 맞는 추론 부담이 늘어날 수 있다."
+          },
+          "controls": {
+            "level": 4,
+            "reason": "patched/test.sh는 HELLO 기본 응답, MEMO 정상 동작(양성 대조), CHECK에 같은 입력을 두 번 보내 응답이 달라짐(패치 후 패드 회전 확인), 취취약 복원 공식(zero-pad XOR)이 더 이상 pwnden{}을 내지 않음(공격 차단 확인), 그리고 invalid_hex/길이 제한/미지원 명령의 오류 응답(기존 정상 기능 유지)까지 모두 검사한다. '두 응답이 다르다'는 것만 확인하고 그 응답이 여전히 유효한 16진수 OK 형식인지 확인하지 않는 위험을 지적했으나, 코드상 `grep -o '^OK [0-9a-f]*'`로 추출하고 `test -n`으로 비어있지 않음을 확인하므로 이 위험은 실제로 방지되어 있다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/patched/test.sh",
+                "quote": "if [ \"$first\" = \"$second\" ]; then exit 1; fi",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/patched/test.sh",
+                "quote": "if [[ \"$recovered\" == *\"pwnden{\"* ]]; then exit 1; fi",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/patched/test.sh",
+                "quote": "probe $'HELLO\\n'\ngrep -qx 'MEMO-VAULT/1' \"$work/tcp\"",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 4,
+            "reason": "본문(README.md)은 패드가 고정인지 매번 새로 생성되는지 밝히지 않으며, 핵심 판별 조건(0 값으로 패드를 얻는 계산)도 노출하지 않는다. 힌트 1은 '반복 비교'라는 한 가지 판단만 돕고, 힌트 2에서야 구체적인 0-패딩 계산을 제공하며, 완성된 전체 절차는 solve/README.md(해설)에만 있다. AUTHORING.md의 '본문 노출 점검'도 이 분리를 명시적으로 검토했다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "공개 위치: 세 명령의 구문과 CHECK의 길이 제한은 본문에서 공개. 패드가 고정이라는 사실과 복원 방법은 힌트·해설에서만 명시한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/hints/2.md",
+                "quote": "0과 XOR한 값은 그대로 남으므로, 그 응답이 곧 봉인에 쓰인 값 자체가 된다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "solve/README.md는 행동(반복 CHECK 호출, 0-패딩 CHECK 호출)→관찰(동일 응답, XOR 결과)→결론(패드 고정, 원문 복원)→원인(일회용 패드 재사용)→보호 방법(패치 서버의 새 무작위 값 생성과 test.sh의 검증 내용)을 순서대로 연결한다. '두 값이 같은 패드에서 나왔다는 사실은... 관찰로 뒷받침된다'처럼 결론의 근거를 관찰로 한정해 과잉 일반화를 피한다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/solve/README.md",
+                "quote": "같은 패드에서 나왔다는 사실은 \"같은 입력을 `CHECK`에 반복해도 항상 같은",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/solve/README.md",
+                "quote": "패치한 서버는 `CHECK`를 처리할 때마다 메모의 패드와 무관한 새 무작위",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 1,
+            "reason": "AUTHORING.md는 '기술 검증: 2026-10-14, tools/verify.py reused-cipher-memo 통과'라고 날짜를 특정해 주장하지만, 이 주장을 뒷받침하는 실제 실행 기록(로그 파일, 출력 저장본)은 스냅숏 어디에도 없다('날짜는 검증 로그 참고'라고 적었을 뿐 해당 로그 파일을 찾을 수 없음). text-review.md의 T5 기준에 따르면 '테스트 코드 존재'나 자기 서술만으로 실행 성공을 단정할 수 없다. 코드(vulnerable/app.py, patched/policy.py, patched/test.sh)는 정적으로 읽어 로직이 합당함을 확인했지만, 이는 '구현 동작'에 대한 근거일 뿐 '실제 이 이미지로 자동 해답이 flag를 회수했다'는 실행 증거가 아니다. 또한 '학습 리뷰: 아직 수행하지 않음'이라고 스스로 명시해, 전체 배포 준비가 완료되지 않았음을 투명하게 인정한다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "패치 서버에서는 복원이 실패함을 확인했다(날짜는 검증 로그 참고).",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "학습 리뷰: 아직 수행하지 않음. 배포 전 `challenge-reviewer` 스킬로 독립 학습 리뷰를 진행해야 한다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "verify.py 실행 로그(명령, 타임스탬프, stdout/stderr)를 quality/ 또는 별도 기록 파일로 보존해 AUTHORING.md의 날짜 주장을 독립적으로 재현·대조할 수 있게 한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-3",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learning-designer",
+      "first_pass": "1단계 선독 요약: 브리핑은 봉인지기(관리자)-플레이어(조사자) 관계, 대상(TCP 9200 app, HELLO/MEMO/CHECK 명령), CHECK 길이 제한(1~128바이트), 조사 목표(CHECK의 패드 재사용 여부 확인 + 메모 원문 복원), 제출 대상(pwnden{...})을 명시한다. 플레이어에게는 비교 전략(CHECK를 어떻게 반복 호출해 재사용을 확인할지), 복원 절차(MEMO/CHECK 응답을 조합하는 방법), 도구 선택이 남겨진다. 선수 지식 encoding-secrecy는 '표현 변환은 보호가 아니다'는 배경만 주고 XOR 패드 재사용 공격 자체는 가르치지 않아, 선언한 중급(3) 난도와 남겨진 통찰 요구 사이의 간극이 방향상 맞다. text-review T1/T2/T3/T7/T8을 브리핑 텍스트에 적용한 결과 모두 충족: T1(행위자·대상 명확), T2(조사 질문 명확, '확인된다면'으로 재사용을 기정사실화하지 않음), T3(지시어·조건 관계 분명), T7(resources·submission 블록에 시작 정보와 제출 대상이 모두 있고 핵심 발견은 노출되지 않음), T8(번역투나 겹친 피동으로 의미가 흐려지는 구간 없음, 경미한 피동 표현 정도). 다만 힌트 2개가 실제로 간극을 어떻게 메우는지는 2단계 확인이 필요하다고 기록했으며, 실제로 hints/2.md는 '0 길이만큼 CHECK에 보내고 MEMO와 XOR'이라는 거의 완전한 복원 절차를 제공해 1단계에서 우려한 위험이 현실화됨을 확인했다.",
+      "review": {
+        "slug": "reused-cipher-memo",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-15",
+        "reviewer": "judge-3",
+        "source_sha256": "d02f8d860957d35c0e721d2818ac70d73a5d1ffaa6c83479ba4e357db3fb2ccf",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "의뢰(패드 재사용 의심)·보안 원리(패드 재사용으로 패드 자체 계산 가능)·완료 증거(pwnden{...} 복원)가 일치하고, 플레이어는 CHECK를 반복 호출해 응답이 고정되는지 직접 관찰하고 그 결과로 원문을 실제로 복원해야 한다. 다만 '패드가 고정이다'라는 핵심 관찰이 힌트 1에서 방향만 제시되고, 힌트 2가 관찰과 계산을 거의 한 번에 다 알려줘 '관찰'과 '정답 수령'의 경계가 흐려진다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/README.md",
+                "quote": "CHECK 점검 기능이 메모를 봉인한 값과 같은 값을 재사용하는지 확인하고,",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/vulnerable/app.py",
+                "quote": "pad = _memo_pad[:len(data)] if not ROTATE_CHECK_KEY else os.urandom(len(data))",
+                "kind": "source"
+              }
+            ],
+            "improvement": "힌트 1만으로 '고정 패드' 관찰까지 가게 하고, 힌트 2는 방법의 방향(0을 보내는 이유를 다시 생각해보라는 정도)만 제시해 실제 계산 단계를 플레이어가 조립하게 하면 관찰-복원 간 경계가 더 분명해진다."
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "선언한 선수 지식(terminal-commands, encoding-secrecy)만으로 호스트·포트·명령 구문·CHECK 길이 제한이 주어져 시작할 수 있다. 도구 선택(ncat 수동 vs. python3 스크립트), 비교 기준(같은 입력을 몇 번 보낼지), 복원 절차(0-패딩 트릭)는 본문에 없고 플레이어가 판단해야 한다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/README.md",
+                "quote": "`MEMO`는 현재 메모를 봉인한 값을 16진수 문자열로 돌려준다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "풀이자에게 남긴 판단: CHECK에 어떤 값을 보내 패드 재사용을 확인할지, 얻은 값들을 어떻게 조합해 원문을 복원할지.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 2,
+            "reason": "중급에 기대되는 '단서 연결과 그럴듯한 오답 구분'은 2단계(반복 비교로 고정 패드 가설)에서는 실제로 작동하지만, 3단계(0-패딩으로 패드 추출 후 XOR)는 힌트 2가 계산 방법을 거의 완성된 형태로 제공해 플레이어가 독립적으로 추론할 범위가 크게 줄어든다. 힌트 없이 본문만으로는 과제가 중급 수준이지만, 작성자 스스로 힌트 2개가 필요하다고 설계했고 힌트 2의 내용이 사실상 해설과 다르지 않아 실제 난도는 선언보다 낮게 체감될 수 있다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/hints/2.md",
+                "quote": "그 값을 `MEMO`의 응답과 다시 XOR하면 원문이 나온다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "힌트 2에서 'XOR에서 0과 XOR한 값은 그대로 남는다'는 원리 설명까지만 주고, 이를 CHECK·MEMO 응답에 어떻게 적용해 원문을 얻는지는 플레이어가 스스로 연결하게 하면 추론 비중이 늘어난다."
+          },
+          "controls": {
+            "level": 4,
+            "reason": "동일 입력을 CHECK에 두 번 보내 응답이 같은지 비교하는 것이 재사용 여부의 대조 근거이고, patched/test.sh는 같은 입력에 대한 두 응답이 달라짐(정상 대조), 복원 공식이 더 이상 flag를 내지 않음(공격 차단 확인), HELLO/MEMO 기본 동작과 오류 응답(ERR invalid_hex, ERR length_1_to_*, ERR unsupported_command)이 패치 전후 동일함(정상 기능 유지)을 모두 검사한다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/patched/test.sh",
+                "quote": "if [ \"$first\" = \"$second\" ]; then exit 1; fi",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/patched/test.sh",
+                "quote": "if [[ \"$recovered\" == *\"pwnden{\"* ]]; then exit 1; fi",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 1,
+            "reason": "힌트 1은 방향만 제시해 적절하다. 그러나 힌트 2는 '0을 CHECK에 보내 패드를 얻고 MEMO 응답과 XOR하면 원문이 나온다'는 사실상 완성된 복원 절차를 그대로 제공한다. 이는 solve/README.md의 해설 내용과 거의 동일한 수준이며, 본문이 숨긴 핵심 발견(패드 고정 여부·복원 공식)을 힌트 단계에서 이미 다 드러내 '선택형 힌트는 한 판단만 돕는다'는 기준을 벗어난다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/hints/2.md",
+                "quote": "`MEMO`가 돌려준 16진수 문자열의 바이트 길이만큼, 0으로만 이루어진 값을",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/reused-cipher-memo/solve/README.md",
+                "quote": "`MEMO`의 응답 길이만큼(바이트 수 기준) 0만 담은 값을 `CHECK`에 보내면,",
+                "kind": "source"
+              }
+            ],
+            "improvement": "힌트 2를 'XOR과 0의 관계를 떠올려 보라' 정도의 원리 힌트로 바꾸고, 정확히 무엇을 보내고 어떻게 조합하는지는 해설에만 남긴다."
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "해설은 관찰(반복 CHECK 응답 동일)→결론(패드 고정)→복원 계산(0-XOR 트릭)→보안 원리(패드 재사용 시 알거나 고를 수 있는 평문 하나로 패드 자체를 계산 가능)→수정 방법(CHECK마다 새 무작위 값)→수정의 한계 확인(patched/test.sh가 기본 기능 유지와 복원 실패를 모두 확인)까지 모두 연결한다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/solve/README.md",
+                "quote": "값을 정말 한 번만 쓸 때만 안전하다. 같은 패드를 다른 평문에도 다시 쓰면,",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": null,
+            "reason": "AUTHORING.md는 2026-10-14에 tools/verify.py와 patched/test.sh를 통과시켰다고 주장하지만, 스냅샷 안에 해당 실행을 보여주는 기록된 로그 파일이 없어 이 검토에서는 직접 확인할 수 없다. 코드 자체(test.sh의 검사 항목)는 읽었으나 이는 '기록된 실행'이 아니라 '검사가 존재한다'는 것만 보여준다.",
+            "evidence": [
+              {
+                "path": "challenges/reused-cipher-memo/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-14, `tools/verify.py reused-cipher-memo` 통과.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "verify.py와 patched/test.sh 실행 로그를 날짜·범위와 함께 저장소에 남겨, 검토자가 작성자의 주장과 별개로 재현 여부를 확인할 수 있게 한다."
+          }
+        }
+      }
+    }
+  ],
+  "distribution": {
+    "goal": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 4,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "starting_context": {
+      "levels": {
+        "judge-1": 2,
+        "judge-2": 4,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": true
+    },
+    "reasoning": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 2
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "controls": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 4,
+        "judge-3": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "hints": {
+      "levels": {
+        "judge-1": 2,
+        "judge-2": 4,
+        "judge-3": 1
+      },
+      "unverified_judges": 0,
+      "proposed_median": 2,
+      "needs_adjudication": true
+    },
+    "explanation": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 4,
+        "judge-3": 4
+      },
+      "unverified_judges": 0,
+      "proposed_median": 4,
+      "needs_adjudication": false
+    },
+    "execution": {
+      "levels": {
+        "judge-1": 2,
+        "judge-2": 1,
+        "judge-3": null
+      },
+      "unverified_judges": 1,
+      "proposed_median": 1.5,
+      "needs_adjudication": true
+    }
+  },
+  "needs_adjudication": [
+    "starting_context",
+    "hints",
+    "execution"
+  ],
+  "summary": {
+    "slug": "reused-cipher-memo",
+    "points": 54.6875,
+    "reviewed_weight": 62.5,
+    "pending": [
+      "starting_context",
+      "hints",
+      "execution"
+    ],
+    "improvements": [
+      {
+        "criterion": "goal",
+        "action": "objective 문장에서 '확인'과 '복원'을 별도 문장으로 분리해 중간 목표와 최종 완료 증거를 더 명확히 구분.\n힌트 1만으로 '고정 패드' 관찰까지 가게 하고, 힌트 2는 방법의 방향(0을 보내는 이유를 다시 생각해보라는 정도)만 제시해 실제 계산 단계를 플레이어가 조립하게 하면 관찰-복원 간 경계가 더 분명해진다."
+      },
+      {
+        "criterion": "starting_context",
+        "action": "Recheck disputed evidence and record parent adjudication before assigning a score.\nencoding-secrecy처럼 XOR의 기본 성질(0과의 XOR은 원값을 남김)을 다루는 선수 개념을 requires에 추가하거나, README에 '같은 방식으로 봉인한다'는 문장 옆에 비교 실험을 떠올릴 최소한의 방향(예: 반복 요청의 의미)을 암시."
+      },
+      {
+        "criterion": "reasoning",
+        "action": "플레이어가 길이 불일치나 패드 재사용 범위(연결 단위 vs 전역)를 스스로 구분해야 하는 분기를 하나 더 두면 중급 난도에 맞는 추론 부담이 늘어날 수 있다.\n힌트 2에서 'XOR에서 0과 XOR한 값은 그대로 남는다'는 원리 설명까지만 주고, 이를 CHECK·MEMO 응답에 어떻게 적용해 원문을 얻는지는 플레이어가 스스로 연결하게 하면 추론 비중이 늘어난다."
+      },
+      {
+        "criterion": "hints",
+        "action": "Recheck disputed evidence and record parent adjudication before assigning a score.\nhints/2.md를 '0으로만 이루어진 값을 보내면 어떤 성질을 이용할 수 있을지 생각해보자' 정도로 축소하고, 구체적 복원 공식은 solve/README.md(해설)로 옮긴다.\n힌트 2를 'XOR과 0의 관계를 떠올려 보라' 정도의 원리 힌트로 바꾸고, 정확히 무엇을 보내고 어떻게 조합하는지는 해설에만 남긴다."
+      },
+      {
+        "criterion": "explanation",
+        "action": "해설 말미에 '이번 관찰은 단일 CHECK 세션/고정 FLAG 길이 조건에서의 결과'라는 범위 제한 문장을 한 줄 추가."
+      },
+      {
+        "criterion": "execution",
+        "action": "Recheck disputed evidence and record parent adjudication before assigning a score.\n심사 과정에서 tools/verify.py reused-cipher-memo를 직접 실행해 날짜가 찍힌 독립 실행 로그를 남기면 이 기준을 더 높게 평가할 수 있다.\nverify.py 실행 로그(명령, 타임스탬프, stdout/stderr)를 quality/ 또는 별도 기록 파일로 보존해 AUTHORING.md의 날짜 주장을 독립적으로 재현·대조할 수 있게 한다.\nverify.py와 patched/test.sh 실행 로그를 날짜·범위와 함께 저장소에 남겨, 검토자가 작성자의 주장과 별개로 재현 여부를 확인할 수 있게 한다."
+      }
+    ]
+  },
+  "adjudications": {
+    "starting_context": {
+      "level": 3,
+      "adjudicated_by": "parent",
+      "rationale": "부모 조정(2026-10-15): judge-1(2)·judge-2(4)·judge-3(3) 분포(4-2=2단계)를 부모가 quality/rubric.json의 starting_context 체크 문구('도구 선택·핵심 비교·복원 절차는 풀이자가 판단할 수 있는가?')로 다시 읽었다. 이 기준은 절차가 '본문에 없는 것'을 결함이 아니라 의도된 설계로 본다 — judge-1의 지적(복원 절차·0값 선택이 본문에 없다)은 이 체크가 명시적으로 허용하는 상태를 감점한 것이어서 받아들이지 않는다. 반면 judge-1과 judge-3이 공통으로 짚은 '선언한 선수 지식(encoding-secrecy)이 XOR 스트림 패드 재사용의 구체적 성질과 연결되지 않는다'는 지적은 '선언한 선수 능력으로 시작할 범위·자료·접근 정보가 있는가'라는 체크의 앞부분에 해당하는 실제 간극이다. python3 스크립팅이 필요하다는 점은 challenge.toml의 [player].cli=[\"ncat\",\"python3\"]로 이미 선언되어 있어(플랫폼의 참고 자료 패널에서도 노출됨) judge-1이 우려한 만큼 예고 없는 요구는 아니다. 호스트·포트·명령 구문·길이 제한은 선언한 선수 능력만으로 충분히 시작 가능하다는 judge-2·judge-3의 관찰도 타당하다. 종합해 judge-3 수준(3)으로 확정한다."
+    },
+    "hints": {
+      "level": 2,
+      "adjudicated_by": "parent",
+      "rationale": "부모 조정(2026-10-15): judge-1(2)·judge-2(4)·judge-3(1) 분포(4-1=3단계)를 부모가 패널 심사 시점의 hints/2.md 원문(0-패딩 선택 이유·길이 계산·XOR 복원 공식까지 모두 포함한 완성된 절차)으로 직접 재확인했다. judge-1·judge-3이 지적한 대로 그 시점의 힌트 2는 solve/README.md의 '조사 과정' 절과 거의 동일한 정보량을 담고 있어 '선택형 힌트는 한 판단만 돕는다'는 기준에 못 미쳤다는 판단이 타당하다. judge-2는 본문(README.md) 자체가 깨끗하다는 점에 주목해 높게 평가했으나, 힌트까지 포함한 전체 공개 경로를 보면 judge-1·judge-3의 지적이 다수이며 실제 파일 내용과 일치한다. 이 리뷰를 계기로 hints/2.md를 '선택할 값과 계산 공식'이 아니라 'XOR 성질을 떠올려 보라'는 방향 제시로 완화했다(패널이 심사한 이후의 수정이므로 점수는 패널이 실제로 관찰한 원문 기준으로 기록하고, evidence는 더 이상 유효하지 않은 hints/2.md 인용을 제외했다). 수정 전 상태를 기준으로 judge-1 수준(2)으로 확정한다."
+    },
+    "execution": {
+      "level": 3,
+      "adjudicated_by": "parent",
+      "rationale": "부모 조정(2026-10-15): judge-1(2)·judge-2(1)·judge-3(null, 미검증) 모두 '작성자의 날짜 있는 서술만 있고 실제 실행 로그가 스냅샷에 없다'는 같은 이유로 낮게 평가하거나 미검증으로 남겼다. 부모가 같은 날 학습 리뷰 진행 중 `tools/verify.py reused-cipher-memo`를 직접 재실행해 `verified reused-cipher-memo (solution, declared patch checks, cleanup; 23.1s)` 결과를 얻었고, 이를 AUTHORING.md에 날짜·명령·출력과 함께 기록했다(패널이 읽은 스냅샷 이후에 추가된 새 근거). 작성자의 과거 자기 서술이 아니라 이번 학습 리뷰의 부모가 독립적으로 재현한 기록이므로 recorded-execution으로 인정한다. patched/test.sh의 각 분기를 개별 재현하지는 않아 완전 충족(4)에는 못 미쳐 3으로 둔다."
+    }
+  },
+  "final_summary": {
+    "slug": "reused-cipher-memo",
+    "points": 79.6875,
+    "reviewed_weight": 100.0,
+    "pending": [],
+    "improvements": [
+      {
+        "criterion": "goal",
+        "action": "objective 문장에서 '확인'과 '복원'을 별도 문장으로 분리해 중간 목표와 최종 완료 증거를 더 명확히 구분.\n힌트 1만으로 '고정 패드' 관찰까지 가게 하고, 힌트 2는 방법의 방향(0을 보내는 이유를 다시 생각해보라는 정도)만 제시해 실제 계산 단계를 플레이어가 조립하게 하면 관찰-복원 간 경계가 더 분명해진다."
+      },
+      {
+        "criterion": "starting_context",
+        "action": "encoding-secrecy 개념 문서나 README에 XOR의 기본 성질(같은 값과의 XOR은 원값을 남긴다)을 한 줄 추가하면 4점 수준으로 올릴 수 있다."
+      },
+      {
+        "criterion": "reasoning",
+        "action": "플레이어가 길이 불일치나 패드 재사용 범위(연결 단위 vs 전역)를 스스로 구분해야 하는 분기를 하나 더 두면 중급 난도에 맞는 추론 부담이 늘어날 수 있다.\n힌트 2에서 'XOR에서 0과 XOR한 값은 그대로 남는다'는 원리 설명까지만 주고, 이를 CHECK·MEMO 응답에 어떻게 적용해 원문을 얻는지는 플레이어가 스스로 연결하게 하면 추론 비중이 늘어난다."
+      },
+      {
+        "criterion": "hints",
+        "action": "(2026-10-15 조치 완료) hints/2.md를 원리 힌트로 완화했다. 완성된 복원 공식은 solve/README.md에만 남아 있다."
+      },
+      {
+        "criterion": "explanation",
+        "action": "해설 말미에 '이번 관찰은 단일 CHECK 세션/고정 FLAG 길이 조건에서의 결과'라는 범위 제한 문장을 한 줄 추가."
+      },
+      {
+        "criterion": "execution",
+        "action": "patched/test.sh의 각 단계(HELLO/MEMO 기본 동작, CHECK 반복 요청 응답 차이, 복원 실패, 오류 응답)를 개별적으로 재현한 로그까지 남기면 4점 수준으로 올릴 수 있다."
+      }
+    ]
+  }
+}

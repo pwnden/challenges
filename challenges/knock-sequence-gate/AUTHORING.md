@@ -86,7 +86,7 @@ manifest의 difficulty를 바꾸면 이 기록도 함께 갱신하세요.
 ## 검증과 리뷰
 
 - 실행 범위: 실제 대상. `tools/verify.py knock-sequence-gate`로 취약한 서버에서 solve가 flag를 회수하고, 패치 서버에서는 거부됨을 확인했다(날짜는 검증 로그 참고).
-- 기술 검증: 2026-10-14, `tools/verify.py knock-sequence-gate` 통과. `patched/test.sh`가 노크 전 거부, 그럴듯한 오름차순 추측의 거부, 실제 순서(7003 → 7001 → 7002)의 성공을 모두 확인한다.
+- 기술 검증: 2026-10-14, `tools/verify.py knock-sequence-gate` 통과. `patched/test.sh`가 노크 전 거부, 그럴듯한 오름차순 추측의 거부, 실제 순서(7003 → 7001 → 7002)의 성공을 모두 확인한다. 2026-10-15, 학습 리뷰 진행 중 부모가 같은 명령을 다시 실행해 재확인했다: `tools/verify.py knock-sequence-gate` → `verified knock-sequence-gate (solution, declared patch checks, cleanup; 36.0s)`.
 - 학습 리뷰: 아직 수행하지 않음. 배포 전 `challenge-reviewer` 스킬로 독립 학습 리뷰를 진행해야 한다.
 - 맥락 확인: 처음 읽는 사람이 빗장당번·게이트·순서를 어긴 접속 기록·조사할 일을 첫 메시지만으로 식별할 수 있는지 아직 `quality/text-reviews/knock-sequence-gate/`에서 확인하지 않았다.
 - 용어 확인: 본문·힌트·해설이 모두 같은 이름(노크 포트, 게이트, `DENIED not_unlocked`, `OK pwnden{...}`)을 쓴다.
