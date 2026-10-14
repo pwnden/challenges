@@ -273,3 +273,9 @@ id = "knock-sequence-trust"
 title = "여러 연결에 걸친 순서 확인"
 requires = ["tcp-services", "connection-state"]
 related = []
+
+[[concepts]]
+id = "stream-key-reuse"
+title = "재사용된 키와 두 암호문의 관계"
+requires = ["encoding-secrecy"]
+related = []

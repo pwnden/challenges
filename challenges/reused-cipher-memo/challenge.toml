@@ -1,0 +1,37 @@
+schema = 7
+slug = "reused-cipher-memo"
+title = "재사용된 메모 봉인"
+category = "crypto"
+difficulty = 3
+compose = "compose.yaml"
+
+[player]
+tools = ["terminal"]
+cli = ["ncat", "python3"]
+
+[learning]
+requires = ["terminal-commands", "encoding-secrecy"]
+teaches = ["stream-key-reuse"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "generated"
+
+[[endpoints]]
+name = "vault"
+service = "app"
+port = 9200
+protocol = "tcp"
+
+[solve]
+image = "pwnden-cli:basic-20261014"
+command = ["python3", "solve/solve.py"]
+timeout_seconds = 30
+
+[patched]
+compose = "compose.patched.yaml"
+check = ["bash", "patched/test.sh"]

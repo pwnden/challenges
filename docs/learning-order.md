@@ -1,6 +1,6 @@
 # 전체 문제의 학습 순서
 
-현재 문제 29개를 처음부터 둘러볼 때의 권장 순서다. 작은 자료를 읽는 문제에서
+현재 문제 30개를 처음부터 둘러볼 때의 권장 순서다. 작은 자료를 읽는 문제에서
 시작해 신원과 권한, 여러 기록의 연결, 도구를 이용한 조사로 넓혀 간다.
 이 순서는 실제 풀이 동작과 필요한 개념을 대조한 작성자 판단이며,
 학습자 관찰로 난도를 확정한 결과는 아니다.
@@ -14,34 +14,35 @@
 | 순서 | 문제 | 앞에서 익힐 내용 | 이 위치에 둔 이유 |
 | --- | --- | --- | --- |
 | 1 | [문자로 바꾼 복구 키](../challenges/wrapped-secret/README.md) | 터미널, 파일 경로, Base64 | 자료 하나로 표현 방식과 비밀 보호를 구분한다. |
-| 2 | [비밀번호 후보 찾기](../challenges/hash-lantern/README.md) | 터미널, 파일 경로, 해시 | 표현을 되돌리는 경우와 후보를 계산해 비교하는 경우를 구분한다. |
-| 3 | [확장자가 바뀐 파일](../challenges/false-label/README.md) | 터미널, 파일 경로, 식별 바이트 | 파일 이름과 실제 형식을 확인하는 근거를 구분한다. |
-| 4 | [남겨진 백업 파일](../challenges/forgotten-shelf/README.md) | 웹 주소, 파일 경로 | 화면에 보이는 자료와 서버가 보관하는 자료의 범위를 비교한다. |
-| 5 | [사용자 구분 값 바꾸기](../challenges/paper-session/README.md) | 웹 주소, HTTP, 쿠키 | 요청에 실린 신원과 서버가 확인한 신원을 구분한다. |
-| 6 | [다른 사람의 메모](../challenges/note-vault/README.md) | 서버가 확인하는 신원, 웹 주소 | 신원 확인을 바탕으로 개별 자료의 읽기 권한을 살펴본다. |
-| 7 | [자료 유출 기록](../challenges/midnight-trace/README.md) | 자료의 소유권, HTTP 응답 비교, 파일 경로 | 직접 읽어 본 권한 문제를 요청·응답 기록의 증거로 확인한다. |
-| 8 | [공개 폴더 밖의 문서](../challenges/path-parcel/README.md) | 웹 주소, 상대 경로 | 자료 접근 범위를 실제 폴더의 경계로 확장한다. |
-| 9 | [비공개 회원 검색](../challenges/query-desk/README.md) | 웹 주소, HTTP, DB의 행과 열 | 자료 조회에서 입력값과 실행 조건의 관계를 살펴본다. |
-| 10 | [공개 이미지에 남은 내부 메모](../challenges/image-notes/README.md) | 파일 형식 확인, 이미지 메타데이터, 터미널 | 형식 확인을 바탕으로 화면 밖의 파일 내용을 조사한다. |
-| 11 | [지운 설정 파일의 이전 내용](../challenges/commit-trail/README.md) | 보관 자료의 범위, Git 이력, 터미널 | 현재 파일과 과거 버전의 보관 상태를 비교한다. |
-| 12 | [삭제한 문서가 남은 백업](../challenges/retained-record/README.md) | 보관 자료의 범위, SQLite 기록, 터미널 | 같은 보관 원리를 DB의 상태와 버전에 적용한다. |
-| 13 | [서명이 맞는 납품 문서](../challenges/signed-delivery/README.md) | 해시, 분리 서명, 터미널, 파일 경로 | 내용의 일치와 발신자의 승인 근거를 구분한다. |
-| 14 | [DNS 조회에 담긴 데이터](../challenges/dns-detour/README.md) | DNS 기록, Base32, 터미널, 파일 경로 | 표현 변환을 통신 기록의 순서와 중복 판단에 적용한다. |
-| 15 | [모든 경로가 200을 반환하는 서버](../challenges/quiet-route/README.md) | HTTP 응답 비교, 터미널, 파일 경로 | 기록 분석에서 익힌 상태·내용 구분을 여러 요청의 조사에 적용한다. |
-| 16 | [개발용 점검 포트](../challenges/diagnostic-port/README.md) | TCP 연결, HTTP 응답 비교, 터미널 | 연결 가능 여부와 그 연결의 자료 읽기 권한을 구분한다. |
-| 17 | [패킷에 남은 전송 파일](../challenges/packet-delivery/README.md) | HTTP, TCP, 패킷 재조립, 파일 형식, 응답 비교 | 요청 기록을 넘어 실제 전달된 자료로 공개 범위를 확인한다. |
-| 18 | [내보내기에서 빠진 권한 검사](../challenges/export-gap/README.md) | 자료의 소유권, JSON API, 응답 비교, 파일 경로 | 개별 자료의 권한과 실제 응답을 여러 읽기 작업에서 비교한다. |
-| 19 | [팀 문서의 읽기 권한](../challenges/borrowed-badge/README.md) | 자료의 소유권, 권한 정책, 과거 버전의 보관 | 여러 읽기 작업의 보호를 정책과 과거 본문까지 넓혀 살펴본다. |
-| 20 | [잠금장치의 입력 검사](../challenges/rotor-lock/README.md) | 터미널, 파일 경로, 작은 코드 읽기 | 코드와 바이트 연산을 따라가는 별도 능력이 필요해 마지막 분기로 둔다. |
-| 21 | [천 원으로 한정 상품 사기](../challenges/refund-loop/README.md) | 웹 주소, 요청과 응답 | 웹 폼만 사용하는 독립 분기다. 구매·취소 기록의 금액을 비교하며 앞의 코드·CLI 문제를 먼저 풀 필요는 없다. |
-| 22 | [회원 계정으로 운영 화면 열기](../challenges/ticket-bridge/README.md) | 웹 주소, 요청과 응답, 자료의 소유권 | 웹 화면만 사용하는 독립 분기다. 문의 본문의 읽기 권한과 초대 등록을 이어서 권한 상승 경로를 확인한다. |
-| 23 | [물리 한계를 넘은 달리기 기록](../challenges/lap-record/README.md) | 웹 주소, 요청과 응답 | 웹 화면만 사용하는 독립 분기다. 화면이 만든 기록 코드를 바꿔 서버가 받아 주는지 확인하며 앞의 코드·CLI 문제를 먼저 풀 필요는 없다. |
-| 24 | [백업 중계기의 연결 상태](../challenges/backup-relay/README.md) | TCP 연결(포트와 TCP 연결) | 포트별 기능 분리를 다룬 개발용 점검 포트 뒤에 두고, 같은 연결 안의 상태 추적으로 범위를 넓힌다. |
-| 25 | [노크 순서로 여는 유지보수 게이트](../challenges/knock-sequence-gate/README.md) | TCP 연결, 같은 연결 안의 상태 추적 | 한 연결 안의 상태 확인 누락을 다룬 백업 중계기의 연결 상태 뒤에 두고, 여러 연결에 걸친 순서 확인으로 범위를 넓힌다. |
-| 26 | [방문자 접수대의 입력 한계](../challenges/vault-gate/README.md) | 터미널, 작은 입력 검사 코드 읽기 | 코드 읽기를 다진 잠금장치의 입력 검사 뒤에 두고, 지역 변수의 메모리 배치로 처음 들어간다. |
-| 27 | [안내 로봇의 메아리 기능](../challenges/greeting-echo/README.md) | 지역 변수의 메모리 배치 | 방문자 접수대의 입력 한계에서 다진 메모리 배치 위에, 정보 유출로 보호값을 우회하고 복귀 주소를 제어하는 단계를 더한다. |
-| 28 | [야간 진단 콘솔의 메모 기능](../challenges/night-console/README.md) | 저장된 복귀 주소와 보호값, 포트와 TCP 연결 | 안내 로봇의 메아리 기능에서 다진 복귀 주소 제어에, 인자가 필요한 함수를 레지스터 설정 조각으로 이어 부르는 단계를 더한다. |
-| 29 | [안내 단말기의 되묻는 인사말](../challenges/library-echo/README.md) | 인자를 설정한 뒤 이어 부르는 함수 호출 | 야간 진단 콘솔의 메모 기능에서 다진 호출 연쇄 구성에, 정보 유출로 주소 무작위화를 우회하고 공유 라이브러리의 다른 함수를 계산해 호출하는 단계를 더한다. |
+| 2 | [재사용된 메모 봉인](../challenges/reused-cipher-memo/README.md) | 터미널, 파일 경로, Base64 | 표현 변환과 보호의 차이를 바탕으로, 한 번만 써야 하는 값을 다시 쓰면 그 값 자체를 계산해 낼 수 있다는 결함을 살펴본다. |
+| 3 | [비밀번호 후보 찾기](../challenges/hash-lantern/README.md) | 터미널, 파일 경로, 해시 | 표현을 되돌리는 경우와 후보를 계산해 비교하는 경우를 구분한다. |
+| 4 | [확장자가 바뀐 파일](../challenges/false-label/README.md) | 터미널, 파일 경로, 식별 바이트 | 파일 이름과 실제 형식을 확인하는 근거를 구분한다. |
+| 5 | [남겨진 백업 파일](../challenges/forgotten-shelf/README.md) | 웹 주소, 파일 경로 | 화면에 보이는 자료와 서버가 보관하는 자료의 범위를 비교한다. |
+| 6 | [사용자 구분 값 바꾸기](../challenges/paper-session/README.md) | 웹 주소, HTTP, 쿠키 | 요청에 실린 신원과 서버가 확인한 신원을 구분한다. |
+| 7 | [다른 사람의 메모](../challenges/note-vault/README.md) | 서버가 확인하는 신원, 웹 주소 | 신원 확인을 바탕으로 개별 자료의 읽기 권한을 살펴본다. |
+| 8 | [자료 유출 기록](../challenges/midnight-trace/README.md) | 자료의 소유권, HTTP 응답 비교, 파일 경로 | 직접 읽어 본 권한 문제를 요청·응답 기록의 증거로 확인한다. |
+| 9 | [공개 폴더 밖의 문서](../challenges/path-parcel/README.md) | 웹 주소, 상대 경로 | 자료 접근 범위를 실제 폴더의 경계로 확장한다. |
+| 10 | [비공개 회원 검색](../challenges/query-desk/README.md) | 웹 주소, HTTP, DB의 행과 열 | 자료 조회에서 입력값과 실행 조건의 관계를 살펴본다. |
+| 11 | [공개 이미지에 남은 내부 메모](../challenges/image-notes/README.md) | 파일 형식 확인, 이미지 메타데이터, 터미널 | 형식 확인을 바탕으로 화면 밖의 파일 내용을 조사한다. |
+| 12 | [지운 설정 파일의 이전 내용](../challenges/commit-trail/README.md) | 보관 자료의 범위, Git 이력, 터미널 | 현재 파일과 과거 버전의 보관 상태를 비교한다. |
+| 13 | [삭제한 문서가 남은 백업](../challenges/retained-record/README.md) | 보관 자료의 범위, SQLite 기록, 터미널 | 같은 보관 원리를 DB의 상태와 버전에 적용한다. |
+| 14 | [서명이 맞는 납품 문서](../challenges/signed-delivery/README.md) | 해시, 분리 서명, 터미널, 파일 경로 | 내용의 일치와 발신자의 승인 근거를 구분한다. |
+| 15 | [DNS 조회에 담긴 데이터](../challenges/dns-detour/README.md) | DNS 기록, Base32, 터미널, 파일 경로 | 표현 변환을 통신 기록의 순서와 중복 판단에 적용한다. |
+| 16 | [모든 경로가 200을 반환하는 서버](../challenges/quiet-route/README.md) | HTTP 응답 비교, 터미널, 파일 경로 | 기록 분석에서 익힌 상태·내용 구분을 여러 요청의 조사에 적용한다. |
+| 17 | [개발용 점검 포트](../challenges/diagnostic-port/README.md) | TCP 연결, HTTP 응답 비교, 터미널 | 연결 가능 여부와 그 연결의 자료 읽기 권한을 구분한다. |
+| 18 | [패킷에 남은 전송 파일](../challenges/packet-delivery/README.md) | HTTP, TCP, 패킷 재조립, 파일 형식, 응답 비교 | 요청 기록을 넘어 실제 전달된 자료로 공개 범위를 확인한다. |
+| 19 | [내보내기에서 빠진 권한 검사](../challenges/export-gap/README.md) | 자료의 소유권, JSON API, 응답 비교, 파일 경로 | 개별 자료의 권한과 실제 응답을 여러 읽기 작업에서 비교한다. |
+| 20 | [팀 문서의 읽기 권한](../challenges/borrowed-badge/README.md) | 자료의 소유권, 권한 정책, 과거 버전의 보관 | 여러 읽기 작업의 보호를 정책과 과거 본문까지 넓혀 살펴본다. |
+| 21 | [잠금장치의 입력 검사](../challenges/rotor-lock/README.md) | 터미널, 파일 경로, 작은 코드 읽기 | 코드와 바이트 연산을 따라가는 별도 능력이 필요해 마지막 분기로 둔다. |
+| 22 | [천 원으로 한정 상품 사기](../challenges/refund-loop/README.md) | 웹 주소, 요청과 응답 | 웹 폼만 사용하는 독립 분기다. 구매·취소 기록의 금액을 비교하며 앞의 코드·CLI 문제를 먼저 풀 필요는 없다. |
+| 23 | [회원 계정으로 운영 화면 열기](../challenges/ticket-bridge/README.md) | 웹 주소, 요청과 응답, 자료의 소유권 | 웹 화면만 사용하는 독립 분기다. 문의 본문의 읽기 권한과 초대 등록을 이어서 권한 상승 경로를 확인한다. |
+| 24 | [물리 한계를 넘은 달리기 기록](../challenges/lap-record/README.md) | 웹 주소, 요청과 응답 | 웹 화면만 사용하는 독립 분기다. 화면이 만든 기록 코드를 바꿔 서버가 받아 주는지 확인하며 앞의 코드·CLI 문제를 먼저 풀 필요는 없다. |
+| 25 | [백업 중계기의 연결 상태](../challenges/backup-relay/README.md) | TCP 연결(포트와 TCP 연결) | 포트별 기능 분리를 다룬 개발용 점검 포트 뒤에 두고, 같은 연결 안의 상태 추적으로 범위를 넓힌다. |
+| 26 | [노크 순서로 여는 유지보수 게이트](../challenges/knock-sequence-gate/README.md) | TCP 연결, 같은 연결 안의 상태 추적 | 한 연결 안의 상태 확인 누락을 다룬 백업 중계기의 연결 상태 뒤에 두고, 여러 연결에 걸친 순서 확인으로 범위를 넓힌다. |
+| 27 | [방문자 접수대의 입력 한계](../challenges/vault-gate/README.md) | 터미널, 작은 입력 검사 코드 읽기 | 코드 읽기를 다진 잠금장치의 입력 검사 뒤에 두고, 지역 변수의 메모리 배치로 처음 들어간다. |
+| 28 | [안내 로봇의 메아리 기능](../challenges/greeting-echo/README.md) | 지역 변수의 메모리 배치 | 방문자 접수대의 입력 한계에서 다진 메모리 배치 위에, 정보 유출로 보호값을 우회하고 복귀 주소를 제어하는 단계를 더한다. |
+| 29 | [야간 진단 콘솔의 메모 기능](../challenges/night-console/README.md) | 저장된 복귀 주소와 보호값, 포트와 TCP 연결 | 안내 로봇의 메아리 기능에서 다진 복귀 주소 제어에, 인자가 필요한 함수를 레지스터 설정 조각으로 이어 부르는 단계를 더한다. |
+| 30 | [안내 단말기의 되묻는 인사말](../challenges/library-echo/README.md) | 인자를 설정한 뒤 이어 부르는 함수 호출 | 야간 진단 콘솔의 메모 기능에서 다진 호출 연쇄 구성에, 정보 유출로 주소 무작위화를 우회하고 공유 라이브러리의 다른 함수를 계산해 호출하는 단계를 더한다. |
 
 [천 원으로 한정 상품 사기](../challenges/refund-loop/README.md)는 웹 주소·요청과 응답을
 준비한 뒤 시작하는 별도 갈래다. 터미널 없이 구매·할인·취소의 결과를 비교해
@@ -100,7 +101,7 @@
 
 | 갈래 | 권장 연습 순서 | 순서의 근거 |
 | --- | --- | --- |
-| 표현과 검증 | wrapped-secret → hash-lantern → signed-delivery | 표현 변환, 후보 비교, 서명 검증의 목적을 구분한다. |
+| 표현과 검증 | wrapped-secret → reused-cipher-memo → hash-lantern → signed-delivery | 표현 변환, 키 재사용, 후보 비교, 서명 검증의 목적을 구분한다. reused-cipher-memo는 wrapped-secret의 개념만 있으면 되고 hash-lantern과는 병행 연습이다. |
 | 파일과 보관 | false-label → image-notes; forgotten-shelf → commit-trail / retained-record | 형식 확인 뒤 파일의 다른 영역을 보고, 보관 범위 뒤 버전 이력을 본다. Git과 DB 문제는 병행 연습이다. |
 | 신원과 권한 | paper-session → note-vault → export-gap / borrowed-badge | 신원 확인에서 개별 자료와 읽기 작업의 권한으로 넓힌다. 두 후속 문제는 병행 연습이다. borrowed-badge에는 보관 이력 개념도 필요하다. |
 | 입력과 경계 | path-parcel → query-desk | 파일 위치와 조회 조건에서 입력이 영향을 주는 범위를 비교한다. 필수 선행 관계는 아니다. |

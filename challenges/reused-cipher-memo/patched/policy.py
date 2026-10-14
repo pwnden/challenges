@@ -1,0 +1,1 @@
+ROTATE_CHECK_KEY = True
