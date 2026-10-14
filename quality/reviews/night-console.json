@@ -219,5 +219,5 @@
       "improvement": "독립 심사 시점에서의 재실행 기록은 없으므로, 필요하다면 별도로 tools/verify.py 재실행 결과를 기록한다.\n독립 리뷰어(또는 이번 심사와 별도인 실제 실행)로 verify.py night-console 재실행 로그를 quality/observations/night-console.json 또는 quality/text-reviews/night-console/에 남겨 작성자 서술과 별도의 재현 근거를 확보할 것.\nverify.py와 patched/test.py의 실제 실행 로그(명령·출력)를 별도 파일로 남겨 서술과 독립적으로 검증 가능하게 하면 좋겠다."
     }
   },
-  "source_sha256": "a588d042744032598cbec53b09e28ea0e521917e9c613fcad0983bd47e7d3b7e"
+  "source_sha256": "bfa342da57e2838dbc97ec0fad1827b518d972a12288cfdd4f86afb6722c20c7"
 }

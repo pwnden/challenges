@@ -179,5 +179,5 @@
       "improvement": "독립 학습자(대상 수준) 세션으로 실제 풀이를 재현한 기록을 추가한다.\n대상 수준 플레이어(또는 Browser Plugin)의 실제 player 세션 실행 기록을 추가하면 execution 증거가 완전해짐."
     }
   },
-  "source_sha256": "b3338d17cb2023140248bdcd99e5891ad30242e4e9eeb96de708a60ed9035815"
+  "source_sha256": "45d8de481f78bac00631de06c19def6073713d8ccb85d661ea7508300d1d0b38"
 }

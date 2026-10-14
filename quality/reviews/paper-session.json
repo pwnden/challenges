@@ -204,5 +204,5 @@
       "improvement": "Browser Plugin을 통한 실제 화면 조작 검증과 독립 학습자 리뷰를 수행해 날짜·범위를 기록하면 수준을 올릴 수 있다.\n독립적인 대상 수준 풀이자의 실제 리뷰 기록이 추가되면 실행 재현 근거가 더 완전해진다.\nverify.py 재실행 기록과 함께, staff 세션 긍정 경로에 대한 실행 증거를 별도로 남겨야 한다.\ncontrols 항목의 긍정 staff 대조군을 추가한 뒤, 그 케이스를 포함해 tools/verify.py를 재실행한 날짜·결과를 기록한다."
     }
   },
-  "source_sha256": "cf56c794ac8781bf29dea9b7fc642616369f369fe37c26b7a63793fc22a116e9"
+  "source_sha256": "569e4710b4fde5af9e2ffaa1ba8414476c391d71b8709237b52d230e4d677a36"
 }

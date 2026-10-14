@@ -261,3 +261,9 @@ id = "argument-call-chains"
 title = "인자를 설정한 뒤 이어 부르는 함수 호출"
 requires = ["return-address-control"]
 related = []
+
+[[concepts]]
+id = "library-base-recovery"
+title = "유출된 주소로 계산하는 라이브러리의 실제 위치"
+requires = ["argument-call-chains"]
+related = []

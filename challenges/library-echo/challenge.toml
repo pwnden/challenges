@@ -1,0 +1,38 @@
+schema = 7
+slug = "library-echo"
+title = "안내 단말기의 되묻는 인사말"
+category = "pwn"
+difficulty = 5
+files = ["files/winlibc"]
+compose = "compose.yaml"
+
+[player]
+tools = ["files", "terminal"]
+cli = ["ncat", "objdump", "nm", "python3"]
+
+[learning]
+requires = ["argument-call-chains", "terminal-commands"]
+teaches = ["library-base-recovery"]
+
+[content]
+description = "README.md"
+hints = ["hints/1.md", "hints/2.md", "hints/3.md"]
+walkthrough = "solve/README.md"
+
+[flag]
+mode = "generated"
+
+[[endpoints]]
+name = "terminal"
+service = "app"
+port = 9400
+protocol = "tcp"
+
+[solve]
+image = "pwnden-cli:basic-20261003"
+command = ["python3", "solve/solve.py"]
+timeout_seconds = 30
+
+[patched]
+compose = "compose.patched.yaml"
+check = ["python3", "patched/test.py"]
