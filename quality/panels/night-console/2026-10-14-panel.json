@@ -1,0 +1,504 @@
+{
+  "slug": "night-console",
+  "input_sha256": "1928032b07de29f156b0962e3e5bb443256b980d0853e4dc667df764680643bf",
+  "model": "claude-sonnet-5-5",
+  "reasoning_effort": "low",
+  "judge_count": 3,
+  "method": "criterion median",
+  "ballots": [
+    {
+      "judge_id": "judge-1",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learner-advocate",
+      "first_pass": "README는 야간당직(관리자)이 STATUS·메모 두 입력을 가진 콘솔에서 명령 칸보다 긴 SHOW-ADMIN-LOG 처리 경로를 메모로 간접 실행할 수 있는지 확인해 달라고 요청하며, 목표(flag 회수)·대상(app:9300, files/console)·제출 형식이 명확하다. 그러나 선수 지식으로 지정된 것은 return-address-control과 terminal-commands뿐이며, 둘 다 TCP 서비스에 실제로 접속해 STATUS 한 줄을 보내고 이어서 긴 바이너리 메모(세 개의 8바이트 주소 포함)를 보내는 구체적 방법(ncat/소켓 사용법, 특히 바이트열 전송)을 설명하지 않는다. knowledge/tcp-services.md가 ncat 사용법을 담고 있지만 challenge.toml의 requires 목록에는 없어, 플레이어가 그 문서를 찾아야 한다는 보장이 없다. 또한 SHOW-ADMIN-LOG가 인자를 받는 함수인지는 README만으로 알 수 없고, 이는 힌트/해설과 대조해야 한다.",
+      "review": {
+        "slug": "night-console",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-1",
+        "source_sha256": "e6602c3b1dc442cd1caebd974ea56bf55eff5d2739d62ae2d7bc1602d1573b30",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "README의 objective(\"메모 입력을 이용해 운영진 전용 기록(SHOW-ADMIN-LOG)을 끌어내고, 그 안의 flag를 읽자\")와 vulnerable/console.c의 run_command 분기(SHOW-ADMIN-LOG일 때만 FLAG 출력), solve/solve.py의 성공 판정(\"관리자 기록: \" 줄 파싱)이 모두 일치한다. 완료 증거가 명확히 관찰 가능한 단일 문자열로 귀결되어 기본 기준을 충족한다. 다만 README는 '명령 칸보다 길다'는 표현만 쓰고 보안 원리(메모리 쓰기 결함)를 직접 언급하지 않아, 해설과의 연결까지 포함한 완전한 설명이라고 보기는 어렵다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/README.md",
+                "quote": "메모 입력을 이용해 운영진 전용 기록(SHOW-ADMIN-LOG)을 끌어내고, 그 안의\nflag를 읽자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/vulnerable/console.c",
+                "quote": "} else if (cmd && strcmp(cmd, \"SHOW-ADMIN-LOG\") == 0) {\n        const char *flag = getenv(\"FLAG\");\n        printf(\"관리자 기록: %s\\n\", flag ? flag : \"(no flag)\");",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 2,
+            "reason": "README는 호스트/포트, 배포 파일, 명령·메모 2단계 프로토콜을 제공한다. 그러나 challenge.toml의 [learning].requires는 return-address-control과 terminal-commands만 지정하고, 실제로 TCP 서비스에 접속해 STATUS 한 줄과 뒤이은 바이너리(8바이트×3 주소 포함) 메모를 전송하는 방법을 설명하는 knowledge/tcp-services.md는 선수 지식으로 선언되지 않았다. terminal-commands.md는 printf/파이프/files 경로 규칙만 다루고 네트워크 접속 방법은 전혀 언급하지 않아, 플레이어가 소켓·ncat 사용법을 어디서 확인해야 하는지 본문·선수 지식 어느 쪽에도 명시되어 있지 않다. cli 목록에 ncat이 있지만 그 사용법 문서가 요구 목록에서 빠진 것은 시작 정보의 구체적 누락이다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/challenge.toml",
+                "quote": "requires = [\"return-address-control\", \"terminal-commands\"]",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/terminal-commands.md",
+                "quote": "`files/`로 시작하는\n경로는 이 문제의 배포 파일을 가리킨다.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/tcp-services.md",
+                "quote": "HTTP 이외의 텍스트 프로토콜에는 `ncat`을 사용할 수 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "challenge.toml의 requires에 tcp-services(또는 동등한 접속 방법 문서)를 추가하거나, README/힌트1에 접속 방법(소켓·ncat)에 대한 최소 안내를 포함한다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "힌트 단계가 1) 메모 경계값 시험, 2) objdump/nm으로 오프셋·함수 탐색, 3) 레지스터 설정 가젯을 이용한 연쇄 구성으로 이어져, 난도 4에 맞는 비교·추론(올바른 가젯/주소를 nm·objdump 출력에서 식별하고 순서를 결정)을 요구한다. AUTHORING.md의 '의도된 풀이' 표도 동일한 4단계를 서술하여 설계와 힌트가 일치한다. 다만 각 힌트가 상당히 구체적으로 다음 단계를 지시해(예: 힌트3가 조각→인자→함수 순서를 거의 그대로 알려줌) 플레이어가 스스로 비교해야 하는 범위가 제한적이다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/hints/3.md",
+                "quote": "복귀 위치 자리에 그 조각의\n주소, 그다음 자리에 전달하고 싶은 문자열의 주소(실행 파일 안에 이미 있다),\n그다음 자리에 대상 함수의 주소를 차례로 이어 붙이면 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "| 3 | `objdump -d -M intel files/console`로 `main`과 `run_command`를, `nm`으로 전체 심볼을 읽는다 | 메모 버퍼(rbp-0x60)와 복귀 위치의 오프셋(104), `pop_rdi_ret`·`run_command`의 실제 주소, \"SHOW-ADMIN-LOG\" 문자열의 실제 주소 | 힌트 2, `return-address-control` |",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 3,
+            "reason": "patched/test.py가 정상 STATUS/짧은 메모, 알 수 없는 명령, 64바이트 경계 메모(정상 처리), 이전 ROP 연쇄(명시적으로 ERR memo_too_long과 flag 미노출 확인)를 모두 대조한다. 패치는 patched/policy.py의 MEMO_MAX=64로 relay 계층에서 길이를 제한해 공격을 막으면서 정상 기능은 유지한다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/patched/test.py",
+                "quote": "rop = ask(b'STATUS\\n', payload)\n    check(rop.strip().endswith(b'ERR memo_too_long'), 'the former ROP-chain memo was not rejected')\n    check(b'pwnden{' not in rop, 'the former ROP-chain memo still leaked a flag')",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/patched/policy.py",
+                "quote": "MEMO_MAX = 64  # matches the console's own declared memo buffer",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "본문(README)은 프로그램 파일과 2단계 프로토콜만 제공하고 오버플로·복귀주소·가젯 이름을 언급하지 않는다. 힌트1은 메모 한계 시험만 권하고, 힌트2는 objdump/nm 사용과 '인자를 받는 함수' 존재를 알리지만 구체 오프셋·주소는 주지 않으며, 힌트3에서야 가젯 사용법을 구체화한다. 완전한 바이트 순서·정확한 주소값은 해설(solve/README.md)에만 있어 기본 본문과 정답이 분리되어 있다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/hints/2.md",
+                "quote": "`nm files/console`로\n보면 평소 어느 경로에서도 불리지 않는 함수가 하나 있는데, 이 함수는 문자열\n하나를 인자로 받아 그 값에 따라 다르게 동작한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "solve/README.md는 행동(길이 증가 시험)→관찰(64바이트 이후 비정상 종료)→오프셋/주소 계산→성공(관리자 기록 출력)→보안 원리(짧은 입력칸이 값 전달 자체를 막지 않음, 인자 있는 함수 호출에는 가젯 필요)→보호 방법(relay 계층에서 MEMO_MAX로 길이 제한)까지 연결한다. 다른 풀이(블랙박스로 경계만 찾는 것)와 그 한계(주소는 화이트박스 분석 필수)도 AUTHORING.md에 기록되어 결론의 범위를 구분한다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/solve/README.md",
+                "quote": "입력 칸이 짧아서 어떤 값을 타이핑으로 넣을 수 없다는 것은, 그 값을 다른\n경로로도 전달할 수 없다는 뜻이 아니다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/solve/README.md",
+                "quote": "수정한 서비스는 메모를 받는 계층에서 길이를 선언된 버퍼 크기(64바이트)로\n실제로 제한한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "AUTHORING.md의 검증과 리뷰 절에 2026-10-14 날짜로 objdump/nm 오프셋·주소 확인, 실제 TCP 서비스 대상 공격 성공, tools/verify.py night-console 통과(취약 서버 flag 회수, 패치 서버 거부)가 기록되어 있다. 또한 relay 계층의 버퍼링 결함(동시 전송 시 뒤쪽 바이트 손실)을 발견해 수정한 과정도 날짜가 있는 기록으로 남아 있어 실행 재현 근거로 인정할 수 있다. 다만 이번 심사에서 직접 재실행한 기록은 아니며 과거 날짜 인용임을 명시한다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "2026-10-14, `objdump`·`nm`으로 확인한 오프셋(메모 버퍼=rbp-0x60, 복귀 위치까지 104)과 세 주소(`pop_rdi_ret`=0x401248, 문자열=0x40201e, `run_command`=0x401196)가 실제 공격 성공과 일치함을 확인했다.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "`tools/verify.py night-console` 통과.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "독립 심사 시점에서의 재실행 기록은 없으므로, 필요하다면 별도로 tools/verify.py 재실행 결과를 기록한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-2",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "evidence-examiner",
+      "first_pass": "challenge.toml, README.md, knowledge/return-address-control.md, knowledge/terminal-commands.md만 읽고 hints/solve/AUTHORING/vulnerable은 아직 열지 않은 상태의 관찰: 의뢰인 야간당직은 콘솔 관리자이며, 보호 대상은 명령 칸(cmd[8], 7글자 한도)으로는 입력할 수 없는 SHOW-ADMIN-LOG 처리 경로다. 시작 행동은 files/console 분석 또는 app:9300 접속 후 STATUS 전송, 이어 메모 전송이다. 완료 증거는 운영진 전용 기록에 나타나는 pwnden{...} 값이며 환경마다 바뀐다고 명시되어 고정 문자열 추측을 배제한다. 다만 '메모 입력으로 간접 실행'의 정확한 메커니즘(복귀 주소 덮어쓰기 여부, 인자 전달 필요성)은 본문에 설명되지 않아 선수지식(return-address-control)과 연결해 추론해야 하는 지점으로 기록했다. learning.teaches=argument-call-chains가 암시하는 인자 전달 요구가 본문에는 드러나지 않아 1단계만으로는 판단 난도를 가늠하기 어려웠다. 오탐 가능성: flag 형태 문자열 노출만으로 '간접 실행 성공'을 판정하는지, 아니면 실제 처리 경로 호출을 구분하는 별도 대조가 있는지는 2단계 자료 확인이 필요했다.",
+      "review": {
+        "slug": "night-console",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-2",
+        "source_sha256": "e6602c3b1dc442cd1caebd974ea56bf55eff5d2739d62ae2d7bc1602d1573b30",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "README의 ::objective(메모로 SHOW-ADMIN-LOG를 끌어내 flag를 읽기)와 solve/README.md의 보안 원리(짧은 입력칸이 값 전달 자체를 막지 못함, 인자 있는 호출은 레지스터 설정 조각이 필요함), ::submission의 완료 증거(pwnden{...})가 서로 일치한다. flag는 run_command가 실제로 \"SHOW-ADMIN-LOG\" 인자로 불렸을 때만 getenv(\"FLAG\")를 출력하므로(console.c), 정답 문자열 노출이 곧 목표 동작의 실제 관찰과 같다. 환경마다 flag가 재생성되어 고정값 추측을 배제한다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/README.md",
+                "quote": "운영진 전용 기록에 나타난 `pwnden{...}` 값을 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/vulnerable/console.c",
+                "quote": "const char *flag = getenv(\"FLAG\");",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "README ::resources가 호스트(app:9300), 배포 파일(files/console), 프로토콜(명령 한 줄 → 메모 한 번)을 모두 제공한다. 선수 능력(return-address-control, terminal-commands)에 해당하는 개념 자료가 저장소에 실제로 존재하며 내용도 복귀 주소 덮어쓰기 원리를 설명한다. objdump/nm 같은 구체 도구명은 본문에 없고 player.cli에만 선언되어, 도구 선택은 풀이자 판단에 맡겨진다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/README.md",
+                "quote": "대상 호스트: 문제 네트워크 안의 `app`, 포트 9300.",
+                "kind": "source"
+              },
+              {
+                "path": "knowledge/return-address-control.md",
+                "quote": "컴파일러는 이런 변조를 막으려고 지역 변수와 복귀 주소 사이에 무작위",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "풀이는 명령칸 한계 확인 → 메모 경계값(64바이트) 시험 → 오프셋/가젯/문자열/함수 네 값을 올바른 순서로 연결하는 다단계 추론을 요구한다. AUTHORING.md는 '복귀 위치를 함수 주소로만 덮어써서는 인자를 전달할 수 없다'는 그럴듯하지만 불충분한 접근을 명시적으로 구분하고(힌트 3), 블랙박스 경계값 탐색만으로는 세 주소를 알 수 없어 화이트박스 분석이 필수라는 대안 풀이 점검도 남겨 플레이어가 혼동할 수 있는 경로를 사전에 식별했다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/hints/3.md",
+                "quote": "복귀 위치를 그 함수의 주소로만 덮어써서는 인자를 전달할 수 없다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "주소 세 개는 결국 `nm`·`objdump` 없이는 알 수 없어 화이트박스 분석이 필수다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 4,
+            "reason": "patched/test.py는 정상 사용(STATUS+짧은 메모), 오답 명령(HELLO, UNKNOWN_REPLY 확인), 경계값(선언된 64바이트 메모가 거부되지 않고 flag도 새지 않음), 그리고 과거에 통했던 ROP 연쇄 메모(ERR memo_too_long으로 거부되고 flag 미노출)까지 네 종류를 대조한다. 이는 200/문자열 존재가 아니라 실제 flag 미노출(b'pwnden{' not in ...)과 기능 보존을 구분해서 검사하므로, 패치가 공격을 막으면서 정상 기능(경계값 포함)을 유지하는지 직접 확인하는 대조군이다. vulnerable/policy.py(MEMO_MAX=None)와 patched/policy.py(MEMO_MAX=64)의 단일 설정 차이가 그 대조를 명확히 만든다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/patched/test.py",
+                "quote": "check(b'ERR' not in boundary, 'a 64-byte memo at the declared boundary was rejected')",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/patched/test.py",
+                "quote": "check(rop.strip().endswith(b'ERR memo_too_long'), 'the former ROP-chain memo was not rejected')",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "힌트는 단계적으로만 공개한다: 1번은 메모 경계 시험 행동만 권하고, 2번은 objdump/nm 도구명과 '찾아야 할 대상(오프셋, 인자 받는 함수)'만 알려주되 정확한 주소·오프셋 수치는 주지 않으며, 3번에서야 가젯(pop_rdi_ret 성격)과 연결 순서 원리를 설명한다. 정확한 8바이트 주소·오프셋 수치와 완성된 바이트 시퀀스는 solve/README.md(해설)에만 있다. 본문(README.md)에는 복귀 주소·레지스터·함수 이름 같은 용어가 전혀 노출되지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/hints/2.md",
+                "quote": "`objdump -d -M intel files/console`로 `main`을 읽으면 메모를 저장하는",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "복귀 주소, 레지스터, 함수 이름 같은 용어는 공개하지 않는다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 4,
+            "reason": "solve/README.md는 조사 과정(명령칸 한계 관찰 → 메모 경계값으로 비정상 종료 관찰 → objdump/nm으로 오프셋·주소 확인)과 의뢰 완료 확인(실제 페이로드와 성공 응답)을 행동→관찰→결론 순서로 연결하고, '드러난 보안 원리' 절에서 원인(메모리 쓰기 결함 + 기존 코드 조각 재사용)과 보호 방법(MEMO_MAX로 선언된 버퍼 크기 실제 강제)까지 설명한다. 패치가 console 자체는 바꾸지 않고 앞단 길이 검사만 추가한다는 한계도 명시해, 결론의 적용 범위를 과장하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/solve/README.md",
+                "quote": "수정한 서비스는 메모를 받는 계층에서 길이를 선언된 버퍼 크기(64바이트)로",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/solve/README.md",
+                "quote": "입력 칸이 짧아서 어떤 값을 타이핑으로 넣을 수 없다는 것은, 그 값을 다른",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "AUTHORING.md의 '검증과 리뷰' 절은 날짜(2026-10-14)가 있는 기술 검증 기록을 남긴다: objdump/nm으로 확인한 오프셋·세 주소가 실제 공격 성공과 일치함을 확인했고, tools/verify.py night-console로 취약 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다고 적었다. 이 과정에서 app.py의 스트림 버퍼링 결함(파이프라인 전송 시 바이트 손실)을 실제로 발견해 고쳤다는 구체적 디버깅 기록도 있어, 단순 코드 존재 주장이 아니라 실행 기반 발견으로 보인다. 다만 이 judge는 이번 실행을 직접 재현하지 않았고 원문 로그가 아닌 작성자 서술을 인용하는 것이며, '학습 리뷰: 미완료(독립 리뷰어 관찰 필요)'로 자체 명시되어 독립 재현·text-review 기록(quality/text-reviews/night-console/)은 스냅샷에 존재하지 않는다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "`tools/verify.py night-console`로 취약한 서버에서 solve가 flag를 회수하고 패치 서버에서는 거부됨을 확인했다.",
+                "kind": "recorded-execution"
+              },
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "학습 리뷰: 미완료(독립 리뷰어 관찰 필요).",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "독립 리뷰어(또는 이번 심사와 별도인 실제 실행)로 verify.py night-console 재실행 로그를 quality/observations/night-console.json 또는 quality/text-reviews/night-console/에 남겨 작성자 서술과 별도의 재현 근거를 확보할 것."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-3",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learning-designer",
+      "first_pass": "의뢰인/맥락: '야간당직'이 야간 진단 콘솔을 관리하며, 콘솔은 명령 한 줄과 메모 한 번을 순서대로 받는다. STATUS만 의미 있는 응답을 주고 나머지는 '알 수 없는 명령입니다'로 처리된다. 보호할 자료: SHOW-ADMIN-LOG 처리 경로와 그 안의 flag이며, README는 이 명령이 명령 입력 칸보다 길어 타이핑으로 완전히 입력할 수 없다고 명시한다. 조사 이유: 메모 입력으로 그 경로를 간접 실행시킬 수 있다는 제보 확인. requires=[return-address-control, terminal-commands], teaches=[argument-call-chains]이므로 복귀주소 단일 덮어쓰기를 넘어 인자 전달이 필요한 호출 연쇄가 요구될 것으로 추정되나 README 단독으로는 SHOW-ADMIN-LOG가 인자를 받는지, 메모 버퍼 크기, 보호기법(canary/PIE) 여부를 알 수 없다. 시작 가능한 행동: files/console을 objdump/nm/strings로 분석, ncat으로 STATUS와 메모 입력을 시험, 메모 길이 경계 실험. 단서를 연결해야 하는 지점: '간접적으로 실행시킬 수 있다'는 표현이 메모 오버플로우로 복귀주소를 덮어써 SHOW-ADMIN-LOG로 점프시키는 것을 의미한다는 것은 플레이어가 분석으로 확인해야 함. 완료 증거: submission 섹션에 '운영진 전용 기록에 나타난 pwnden{...} 값을 제출'로 명시.",
+      "review": {
+        "slug": "night-console",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-3",
+        "source_sha256": "e6602c3b1dc442cd1caebd974ea56bf55eff5d2739d62ae2d7bc1602d1573b30",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "의뢰(SHOW-ADMIN-LOG를 메모로 간접 실행), 보안 원리(인자 있는 함수 호출을 레지스터 설정 조각으로 구성), 완료 증거(관리자 기록 안의 pwnden{...})가 AUTHORING.md와 solve/README.md에서 서로 일치하며, console.c의 run_command 분기와 pop_rdi_ret naked 함수가 이 목표를 실제로 구현한다. '관리자 기록: %s' 출력으로 목표 달성을 직접 관찰할 수 있다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/README.md",
+                "quote": "메모 입력을 이용해 운영진 전용 기록(SHOW-ADMIN-LOG)을 끌어내고, 그 안의\nflag를 읽자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/vulnerable/console.c",
+                "quote": "const char *flag = getenv(\"FLAG\");\n        printf(\"관리자 기록: %s\\n\", flag ? flag : \"(no flag)\");",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "본문은 호스트·포트, 실행 파일, 두 단계 프로토콜(명령 한 줄 뒤 메모 한 번)만 제공하고, 복귀 주소·레지스터·함수 이름 같은 용어는 공개하지 않는다. 선수지식(return-address-control, terminal-commands)만으로 시작은 가능하지만 메모 경계값, 함수 인자 여부, 가젯 존재는 전적으로 플레이어의 도구 선택과 분석에 맡겨져 있어 판단 여지가 충분하다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/README.md",
+                "quote": "프로토콜: 접속 후 명령 한 줄(`STATUS` 권장)을 보내면 응답과 다음 안내가\n  온다. 이어서 메모를 보내면 저장 결과를 보여주고 연결을 닫는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "복귀 주소, 레지스터, 함수 이름 같은 용어는 공개하지 않는다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "난도 4에 맞게 복귀주소 단일 덮어쓰기(선수지식)에서 더 나아가, 인자를 전달하기 위한 레지스터 설정 조각(pop_rdi_ret) 선택, 세 값(가젯 주소·문자열 주소·함수 주소)의 순서 연결, 오프셋(104바이트) 계산이라는 다단계 추론을 요구한다. '복귀 위치를 그 함수의 주소로만 덮어써서는 인자를 전달할 수 없다'는 힌트3의 서술은 그럴듯한 오답(단일 주소 덮어쓰기만으로 충분하다는 가정)을 명시적으로 배제시켜 단서 연결 수준의 판단을 요구한다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/hints/3.md",
+                "quote": "복귀 위치를 그 함수의 주소로만 덮어써서는 인자를 전달할 수 없다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/solve/README.md",
+                "quote": "`run_command`는 인자(문자열 주소)를 받아야 동작이 갈리는 함수이므로,\n복귀 위치만으로는 부족하다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 3,
+            "reason": "정상(짧은 메모), 거부(알 수 없는 명령), 경계값(64바이트), 이전 공격(ROP 체인)의 네 가지 대조군을 patched/test.py가 모두 검사하며, 패치는 console 바이너리를 바꾸지 않고 래퍼 계층에서 MEMO_MAX=64를 적용해 공격을 막으면서 정상 기능을 유지함이 코드로 확인된다. AUTHORING.md는 또한 파이프라이닝된 클라이언트에서 메모 바이트가 누락되는 별도 버그를 발견해 수정했다고 기술하나, 이는 검증 과정의 부수적 발견이며 리뷰 자체의 핵심 대조군은 아니다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/patched/test.py",
+                "quote": "check(rop.strip().endswith(b'ERR memo_too_long'), 'the former ROP-chain memo was not rejected')",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/patched/policy.py",
+                "quote": "MEMO_MAX = 64",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "hints": {
+            "level": 3,
+            "reason": "본문은 도구 이름·오프셋·가젯 이름을 전혀 노출하지 않는다. 힌트1은 메모 한계 시험 방향만, 힌트2는 objdump/nm 도구와 '평소 불리지 않는 함수' 존재만 알려주고 정확한 오프셋·주소는 주지 않으며, 힌트3에서 비로소 가젯-인자-함수 순서 구성 방법을 설명하되 실제 세 주소값은 해설(solve/README.md)에만 있다. 힌트별로 새 정보가 단계적으로 늘어나는 구조가 AUTHORING.md의 '필요한 힌트' 절과 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/hints/2.md",
+                "quote": "`nm files/console`로\n보면 평소 어느 경로에서도 불리지 않는 함수가 하나 있는데, 이 함수는 문자열\n하나를 인자로 받아 그 값에 따라 다르게 동작한다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/README.md",
+                "quote": "프로그램 안에는 운영진 전용 기록(SHOW-ADMIN-LOG)을 보여주는 처리 경로도\n있지만, 그 글자 수가 명령을 받는 칸보다 길어서 타이핑으로는 완전한 명령을\n넣을 방법이 없다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "'드러난 보안 원리' 절이 원리(짧은 입력 칸이 값 전달 자체를 막지 않음), 원인(별도 메모리 쓰기 결함), 이전 문제와의 차이(인자 없는 호출 대 인자 있는 호출), 수정 방법(래퍼 계층에서 길이 제한)을 모두 연결한다. 다만 카나리·PIE 부재 등 이 문제에 적용되지 않는 보호기법에 대한 한계 설명은 없어 '실습 증거로 말할 수 있는 한계'를 더 명시적으로 다룰 여지가 있다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/solve/README.md",
+                "quote": "입력 칸이 짧아서 어떤 값을 타이핑으로 넣을 수 없다는 것은, 그 값을 다른\n경로로도 전달할 수 없다는 뜻이 아니다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/night-console/solve/README.md",
+                "quote": "수정한 서비스는 메모를 받는 계층에서 길이를 선언된 버퍼 크기(64바이트)로\n실제로 제한한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "카나리/PIE 미적용 등 이 문제의 보호기법 범위를 명시해 결론이 다른 바이너리 설정에는 그대로 적용되지 않을 수 있음을 밝히면 좋겠다."
+          },
+          "execution": {
+            "level": 2,
+            "reason": "AUTHORING.md의 '검증과 리뷰' 절은 2026-10-14에 objdump/nm으로 확인한 오프셋(104바이트)과 세 주소(0x401248, 0x40201e, 0x401196)가 실제 공격 성공과 일치했고 tools/verify.py night-console이 통과했다고 서술하며, 파이프라이닝 버그 발견·수정 경위도 날짜와 함께 기술한다. 그러나 이 ballot 작성 시점에는 그 실행 로그 자체(명령 출력, verify.py 실행 결과 파일)를 직접 관찰하지 못했고 AUTHORING.md의 서술만 근거로 삼았으므로, 기록된 실행 자체가 아니라 그 기록에 대한 서술만 확인한 수준이다.",
+            "evidence": [
+              {
+                "path": "challenges/night-console/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-14, `objdump`·`nm`으로 확인한 오프셋(메모 버퍼=rbp-0x60, 복귀 위치까지 104)과 세 주소(`pop_rdi_ret`=0x401248, 문자열=0x40201e, `run_command`=0x401196)가 실제 공격 성공과 일치함을 확인했다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "verify.py와 patched/test.py의 실제 실행 로그(명령·출력)를 별도 파일로 남겨 서술과 독립적으로 검증 가능하게 하면 좋겠다."
+          }
+        }
+      }
+    }
+  ],
+  "distribution": {
+    "goal": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "starting_context": {
+      "levels": {
+        "judge-1": 2,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "reasoning": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "controls": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 4,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "hints": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "explanation": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 4,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "execution": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 2
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    }
+  },
+  "needs_adjudication": [],
+  "summary": {
+    "slug": "night-console",
+    "points": 75.0,
+    "reviewed_weight": 100.0,
+    "pending": [],
+    "improvements": [
+      {
+        "criterion": "starting_context",
+        "action": "challenge.toml의 requires에 tcp-services(또는 동등한 접속 방법 문서)를 추가하거나, README/힌트1에 접속 방법(소켓·ncat)에 대한 최소 안내를 포함한다."
+      },
+      {
+        "criterion": "explanation",
+        "action": "카나리/PIE 미적용 등 이 문제의 보호기법 범위를 명시해 결론이 다른 바이너리 설정에는 그대로 적용되지 않을 수 있음을 밝히면 좋겠다."
+      },
+      {
+        "criterion": "execution",
+        "action": "독립 심사 시점에서의 재실행 기록은 없으므로, 필요하다면 별도로 tools/verify.py 재실행 결과를 기록한다.\n독립 리뷰어(또는 이번 심사와 별도인 실제 실행)로 verify.py night-console 재실행 로그를 quality/observations/night-console.json 또는 quality/text-reviews/night-console/에 남겨 작성자 서술과 별도의 재현 근거를 확보할 것.\nverify.py와 patched/test.py의 실제 실행 로그(명령·출력)를 별도 파일로 남겨 서술과 독립적으로 검증 가능하게 하면 좋겠다."
+      }
+    ]
+  },
+  "adjudications": {}
+}
