@@ -1,34 +1,102 @@
 {
   "slug": "false-label",
   "rubric_version": 2,
-  "reviewed_at": "2026-10-04",
-  "reviewer": "content-maintenance (changed criteria pending; unchanged evidence retained)",
+  "reviewed_at": "2026-10-14",
+  "reviewer": "3-judge panel (judge-1 learner-advocate, judge-2 evidence-examiner, judge-3 learning-designer; claude-sonnet-5-5, low effort, substituted for the skill's configured gpt-6-luna with explicit user approval); audit record quality/panels/false-label/2026-10-14-panel.json",
   "criteria": {
     "goal": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
+      "level": 3,
+      "reason": "judge-1 (3): README.md의 objective/submission은 'banner.png의 실제 형식을 확인하고, 내부 복구 키를 찾아 제출'로 명시되고, solve/README.md의 실제 절차(od로 바이트 확인 -> tar -tzf로 구조 확인 -> tar -xOzf로 키 추출)와 flag(sha256)가 그대로 일치한다. 완료 증거(flag 제출)로 목표 달성 여부를 바로 관찰할 수 있다. 다만 제목 '확장자가 바뀐 파일'과 달리 본문에는 확장자가 바뀌었다는 명시적 진술이 없고 '전달 과정에서 파일 이름이 바뀌었다'는 다른 표현을 쓰는 등 제목-본문 간 미세한 표현 불일치가 있어 완전한 일치로 보기는 어렵다.\njudge-2 (3): README의 의뢰(확장자가 바뀐 파일, 복구 키 찾기)·teaches=file-type-checks·submission 요구(pwnden{...})가 서로 일치하며, 실제로 solve.py가 수행하는 동작(바이트 검사→tar 목록→tar -xOzf 출력)으로 목표 달성을 직접 관찰할 수 있음을 파일 재현으로 확인했다. 의뢰 텍스트가 '복구 키'를 '비밀값'으로 규정하고 제출 형식을 명시해 목표가 모호하지 않다.\njudge-3 (3): 의뢰(잔비의 요청), teaches=file-type-checks, 완료 증거(pwnden{...} 제출)가 일치한다. README의 objective가 '실제 형식 확인 + 복구 키 제출'로 명확히 동작으로 관찰 가능하게 서술되어 있다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/README.md",
+          "quote": "banner.png의 실제 형식을 확인하고, 내부 복구 키를 찾아 제출하자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/solve/README.md",
+          "quote": "`pwnden{bytes_tell_the_story}`를 제출한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/challenge.toml",
+          "quote": "teaches = [\"file-type-checks\"]",
+          "kind": "source"
+        }
+      ],
+      "improvement": "README 본문에 '확장자가 바뀌었다'는 제목과 직접 연결되는 문장을 추가해 제목-본문 표현을 일치시킨다."
     },
     "starting_context": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다. 학습 순서 정리 후 선수 개념의 관계와 문제별 requires가 실제 풀이에 필요한 능력의 범위를 다루는지도 함께 확인한다."
+      "level": 3,
+      "reason": "judge-1 (3): 선수지식 file-signatures.md가 PNG/gzip 식별 바이트와 tar -tzf/-xOzf 사용법을 미리 제공하고, terminal-commands.md가 files/ 경로 규칙을 설명해, 선언된 선수 능력만으로 od 실행 -> 시그니처 비교 -> tar 명령 선택까지 이어갈 자료가 있다. 다만 README 본문은 '압축 파일'이라고만 하고 tar라는 용어·구조를 언급하지 않아, gzip 바이트 확인 이후 '이것이 gzip+tar 중첩일 수 있다'는 연결은 오직 knowledge 문서 한 문장에 의존한다. 이 연결이 암묵적이라 완전한 수준은 아니다.\njudge-2 (3): player.tools=[files,terminal], cli=[od,tar]로 접근 도구가 명시되고, requires=file-signatures 지식 문서가 PNG/gzip 식별 바이트 값과 tar -tzf/-xOzf 사용법을 미리 제공해 풀이자가 어떤 자료·도구로 시작할지 판단할 범위가 분명하다. 다만 지식 문서가 거의 완전한 명령 형태를 담고 있어 도구 선택의 판단 폭이 입문 난도에 맞게 제한적으로만 열려 있다.\njudge-3 (3): 조사 범위(files/banner.png)와 도구(terminal의 od, tar)가 명시되어 있어 입문 수준에서 시작 정보는 충분하다. 다만 선수지식 문서(file-signatures.md)가 gzip 매직바이트뿐 아니라 tar -tzf/-xOzf의 정확한 사용법까지 제공하므로, 본문이 남기는 '도구 선택·절차 설계' 판단은 제한적이다. 이는 입문 난도에서는 허용되는 범위지만 시작 정보 자체의 풍부함보다는 선수지식 전이로 설명된다.",
+      "evidence": [
+        {
+          "path": "knowledge/file-signatures.md",
+          "quote": "`tar -tzf 파일명`은 gzip으로 압축된 tar 묶음의 파일 목록을 보여준다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/README.md",
+          "quote": "이전 담당자는 여러 문서와 사이트의 복구 키를 압축 파일 하나에 넣었다고 알려 왔다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/challenge.toml",
+          "quote": "cli = [\"od\", \"tar\"]",
+          "kind": "source"
+        },
+        {
+          "path": "knowledge/file-signatures.md",
+          "quote": "PNG 그림의 앞 여덟 바이트는 `89 50 4e 47 0d 0a 1a 0a`다.\ngzip 압축 자료는 보통 `1f 8b 08`로 시작한다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": "README 본문이나 힌트에서 '압축 파일'이 tar로 묶인 자료일 수 있다는 점을 한 문장 더 연결해 단서를 명시한다.\nstarting_context와 reasoning 경계를 명확히 하려면, 선수지식에 정확한 명령 문법까지 포함할지 혹은 원리만 남기고 문법은 선택형 힌트로 옮길지 작성 기록에 근거를 남기면 좋다."
     },
     "reasoning": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
+      "level": 3,
+      "reason": "judge-1 (3): 입문(난도1) 수준에 맞게 식별 바이트 비교라는 한 원리의 관찰로 문제가 해결된다. PNG와 gzip 두 식별 바이트를 비교해 '그럴듯한 오답'(이 파일이 그냥 손상된 PNG라는 추정)을 배제하는 판단이 요구되며, 이는 AUTHORING.md의 난도 근거와도 일치한다.\njudge-2 (3): 입문 난도 기준으로 '한 원리의 관찰'(식별 바이트로 실제 형식 판별)에 더해 내부 두 파일(notes/transfer.txt, recovery/key.txt) 중 실제 복구 키가 든 파일을 선택하는 가벼운 단서 연결이 요구된다. 실제 재현에서 두 파일이 모두 존재함을 확인했다(tar -tzf 출력에 두 경로가 모두 나타남).\njudge-3 (3): 입문 난도 기준('한 원리의 관찰')을 충족한다. 확장자(.png)와 실제 식별 바이트(gzip)가 다르다는 점을 확인하고, 해당 형식의 도구(tar)가 구조를 읽는지로 재확인하는 한 가지 핵심 판단이 명확히 존재한다. 그럴듯한 오답을 구분하는 2–3단계 단서 연결은 없으나 이는 입문 난도에서 요구되지 않는다.",
+      "evidence": [
+        {
+          "path": "challenges/false-label/AUTHORING.md",
+          "quote": "형식 표식과 필요한 명령을 문제 본문에서 제공한다. 도구 옵션을 발명하거나 분석 프로그램을 만들 필요가 없다. 파일 형식 식별이라는 한 개념과 자료 읽기의 짧은 경로라 입문으로 제안한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/solve/README.md",
+          "quote": "notes/transfer.txt와 recovery/key.txt가 나타난다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/hints/1.md",
+          "quote": "파일 이름보다 앞부분의 바이트를 먼저 보자.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/solve/README.md",
+          "quote": "시작은 `1f 8b 08`이다. PNG의 식별 바이트와 다르고 gzip에 해당한다.",
+          "kind": "source"
+        }
+      ],
+      "improvement": ""
     },
     "controls": {
       "level": 3,
-      "reason": "false-label-learner (3): 이 정적 파일 문제에는 서비스 거부나 패치 기능 대조가 적용되지 않는다. 풀이 경로는 이름의 주장과 바이트 표식을 비교하고, tar 도구가 내부 목록을 읽는지 확인한 뒤 필요한 내부 경로의 값을 읽는다. 자동 해답도 표식·목록 멤버·키 형식 각각을 검사해 제출물을 임의 문자열로 처리하지 않는다. 별도 변조 파일 대조군까지 포함한 수준은 아니다.\nfalse-label-evidence (3): 결론은 선두 표식만으로 끝나지 않고 실제 tar 목록과 내부 파일의 읽기 가능성으로 뒷받침된다. 전달 문서가 키 파일 위치를 알려주고 키 파일의 내용은 정답과 일치한다. 파일 전체 손상, 변조, 잘못된 키 파일에 대한 별도 대조 검사는 없지만 입문 목표에는 필수라고 보기 어렵다.\nfalse-label-designer (3): 접두 바이트만으로 결론내리지 않고 tar 목록 조회가 성공하는지 확인하도록 안내한다. 이는 입문자의 식별 추론을 뒷받침하는 적절한 두 번째 관찰이다. 다만 PNG 대조군이나 손상·변조된 압축 자료 검사는 없어 경계 사례까지 입증하지는 않는다.",
+      "reason": "judge-1 (2): 정상(PNG 시그니처)과 실제 관찰값(gzip 시그니처)의 대조는 knowledge 문서에 명시되어 결론(이것은 PNG가 아니다)을 지지한다. 그러나 이 문제는 파일 포렌식형으로 '서비스 패치가 공격을 막고 정상 기능을 유지'하는 류의 대조군은 해당되지 않으며, 변조/누락 탐지 같은 추가 대조 단계도 제공되지 않아 대조군의 범위가 시그니처 비교 하나로 제한적이다.\njudge-2 (3): 대조군은 'PNG로 명명됐지만 실제로는 gzip 압축 tar'라는 변조(확장자 위장) 사례이며, notes/transfer.txt(안내용 메모)와 recovery/key.txt(실제 키)로 정답과 보조 자료가 구분되어 있어 오답을 가려내는 최소한의 구조가 있다. 직접 od/tar를 실행해 1f 8b 08로 시작하고 tar -xOzf로 pwnden{bytes_tell_the_story}가 나오며 그 SHA-256이 challenge.toml의 선언 해시와 정확히 일치함을 확인했다(503538700fc01b3697eef4a9da65a2123736dcd888b012999c7235a883fcd79c). 이는 패치/서비스형 문제가 아니라 파일 문제라 '정상 기능 유지' 항목은 해당되지 않는다.\njudge-3 (3): solve.py가 서명 확인(startswith 1f8b08), tar -tzf로 구조 확인(목록 내 recovery/key.txt 존재), tar -xOzf 결과의 플래그 형식 검증까지 단계별 대조를 수행한다. authoring/build.py는 메타데이터(mtime 등)를 고정해 결정론적 아카이브를 생성하고, tools/test_second_experiments.py가 배포 파일과 생성 원본의 바이트 일치를 회귀 검사한다. 다만 별도의 '정상 PNG' 같은 오답 유인 파일은 제공되지 않아 입문 수준의 단일 경로 확인에 그친다.",
       "evidence": [
         {
+          "path": "knowledge/file-signatures.md",
+          "quote": "PNG 그림의 앞 여덟 바이트는 `89 50 4e 47 0d 0a 1a 0a`다.",
+          "kind": "source"
+        },
+        {
           "path": "challenges/false-label/solve/README.md",
-          "quote": "이름이 banner.png여도 내부 바이트는 gzip으로 압축된 tar다.\n식별 바이트로 형식을 추정하고, 해당 형식의 도구가 구조를 읽는 것으로 확인했다.",
+          "quote": "시작은 `1f 8b 08`이다. PNG의 식별 바이트와 다르고 gzip에 해당한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/challenge.toml",
+          "quote": "sha256 = \"503538700fc01b3697eef4a9da65a2123736dcd888b012999c7235a883fcd79c\"",
           "kind": "source"
         },
         {
@@ -37,37 +105,43 @@
           "kind": "source"
         },
         {
-          "path": "challenges/false-label/solve/solve.py",
-          "quote": "assert 'recovery/key.txt' in listing.stdout.splitlines()",
+          "path": "tools/test_second_experiments.py",
+          "quote": "self.assertEqual((directory / 'files/banner.png').read_bytes(), archive())",
           "kind": "source"
-        },
+        }
+      ],
+      "improvement": "식별 바이트 비교 외에, 예를 들어 손상되지 않은 tar 구조와 임의로 자른 자료를 비교하는 등 추가적인 대조 단계를 본문이나 해설에 넣어 결론의 근거를 넓힌다."
+    },
+    "hints": {
+      "level": 3,
+      "reason": "judge-1 (4): hints/1.md는 '파일 이름보다 앞부분의 바이트를 먼저 보자'는 한 가지 판단만 돕고 구체적 명령어·옵션·전체 절차는 제시하지 않는다. 완성된 풀이 순서(od/tar 명령, 내부 파일명, flag)는 solve/README.md에만 있다. 기본 본문(README.md)에도 구체적 명령이나 도구 옵션이 노출되지 않는다.\njudge-2 (3): 힌트 1은 '앞부분 바이트를 보라'는 방향만 제시하고 구체적 명령·완성된 절차는 노출하지 않으며, od/tar의 정확한 플래그와 전체 순서는 solve/README.md(해설)에만 있다. 본문(README.md)에는 명령 예시가 전혀 없어 힌트 전/후 정보 격차가 뚜렷하다.\njudge-3 (3): 기본 본문(README)은 명령이나 완성된 절차를 노출하지 않고 상황·목표·자료 위치만 제공한다. 유일한 힌트(hints/1.md)는 '파일 앞부분 바이트를 먼저 보고 시작 지식을 참고하라'는 한 가지 막힘(식별 방법 선택)만 돕고, tar 명령 전체 절차는 해설(solve/README.md)에만 있다.",
+      "evidence": [
         {
-          "path": "challenges/false-label/authoring/build.py",
-          "quote": "for name, text in [('notes/transfer.txt', '이전 자료 묶음입니다. 복구 키는 recovery/key.txt에 있습니다.\\n'), ('recovery/key.txt', 'pwnden{bytes_tell_the_story}\\n')]:",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/file-signatures.md",
-          "quote": "앞부분이 맞는다는 이유만으로 파일 전체가 정상인지는 확정할 수 없다.",
+          "path": "challenges/false-label/hints/1.md",
+          "quote": "파일 이름보다 앞부분의 바이트를 먼저 보자. PNG와 gzip의 식별 바이트는\n시작 지식에 나와 있다.",
           "kind": "source"
         },
         {
           "path": "challenges/false-label/solve/README.md",
-          "quote": "식별 바이트로 형식을 추정하고, 해당 형식의 도구가 구조를 읽는 것으로 확인했다.",
+          "quote": "`od -An -tx1 -N8 files/banner.png`로 앞부분을 확인한다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/hints/1.md",
+          "quote": "PNG와 gzip의 식별 바이트는\n시작 지식에 나와 있다.",
+          "kind": "source"
+        },
+        {
+          "path": "challenges/false-label/README.md",
+          "quote": "압축 파일 안에서 복구 키를 찾아 달라는 의뢰다.",
           "kind": "source"
         }
       ],
-      "improvement": "입문 목표에는 현재 교차 확인으로 충분하다. 형식 판정의 한계를 더 가르치려면 손상된 gzip 또는 PNG 대조 자료가 실제로 거부되는지 추가할 수 있다."
-    },
-    "hints": {
-      "level": null,
-      "reason": "2026-10-04 기본 브리핑의 풀이 지시를 제거했다. 이전 점수는 변경 전 설명에 대한 판단이므로 현재 설명의 점수로 사용하지 않는다.",
-      "evidence": [],
-      "improvement": "수정한 기본 본문과 제공 자료만 읽고 남은 판단을 정리한 뒤, 선택형 힌트·해설과 대조해 해당 항목을 재평가한다."
+      "improvement": ""
     },
     "explanation": {
       "level": 3,
-      "reason": "false-label-learner (3): 해설이 바이트 확인, tar 목록 확인, 키 멤버 출력이라는 행동과 관찰을 순서대로 이어 준다. gzip 압축은 기밀성이 아니라 크기 축소라는 점과 파일 추출 없이 화면에서 읽을 수 있다는 점도 설명한다. 실습 자료로 확인한 결과의 범위는 과장하지 않지만, 식별 바이트만으로 전체 무결성을 증명할 수 없다는 경계는 시작 지식에 있고 해설에는 반복되지 않는다.\nfalse-label-evidence (4): 해설은 조사 순서, 실제 관찰값, 내부 목록, 제출값을 연결하고 확장자와 내용의 차이를 설명한다. 해당 형식의 도구가 구조를 읽는 점과 압축은 기밀 보호가 아니라는 결론, 파일을 디스크에 풀지 않고 stdout으로 읽는 방법까지 제시한다.\nfalse-label-designer (3): 해설은 바이트 관찰에서 압축 자료 판단, 내부 경로 열기, 압축이 기밀성을 제공하지 않는다는 결론까지 연결한다. 출력 추출 대신 표준 출력으로 필요한 항목만 읽는 이유도 다룬다. 다만 형식 접두부와 파서 검증이 보장하지 않는 범위를 구체 사례로 설명하지 않는다.",
+      "reason": "judge-1 (3): solve/README.md의 '드러난 보안 원리' 절이 행동(바이트 확인, tar 구조 확인)과 결론(이름이 banner.png여도 내부는 gzip+tar)과 원인(식별 바이트로 형식 추정, 도구로 구조 확인)을 연결한다. 압축이 기밀성을 보장하지 않는다는 보호 원리도 설명한다. 다만 실습 증거로 말할 수 있는 한계(예: 이 파일만으로 일반화할 수 없는 부분)에 대한 명시적 서술은 약하다.\njudge-2 (3): 해설이 행동(od/tar 명령)→관찰(1f 8b 08, 내부 파일 목록)→결론(이름은 png이나 실제는 gzip tar)→보안 원리(압축은 비밀 보호가 아니며 형식 검사는 확장자+내용 검증 병행)를 순서대로 연결한다. 다만 이 결론이 실습 범위를 넘어선 일반화인지에 대한 명시적 한계 서술은 없다.\njudge-3 (3): 해설이 행동(서명 확인→tar 목록→tar -xOzf)→관찰→결론(이름은 png지만 실제는 gzip-tar)을 연결하고, 일반화 가능한 한계 하나를 명시한다: 압축이 곧 기밀성 보장이 아니라는 점. 다만 그 외 혼동 사례(예: 다른 압축 포맷, 부분 손상 파일 등)는 다루지 않아 4점 수준의 폭넓은 경계 설명에는 미치지 못한다.",
       "evidence": [
         {
           "path": "challenges/false-label/solve/README.md",
@@ -76,54 +150,34 @@
         },
         {
           "path": "challenges/false-label/solve/README.md",
-          "quote": "명령의 대문자 O는 내용을 화면으로 내보낸다.",
-          "kind": "source"
-        },
-        {
-          "path": "knowledge/file-signatures.md",
-          "quote": "앞부분이 맞는다는 이유만으로 파일 전체가 정상인지는 확정할 수 없다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/false-label/solve/README.md",
           "quote": "이름이 banner.png여도 내부 바이트는 gzip으로 압축된 tar다.",
-          "kind": "source"
-        },
-        {
-          "path": "challenges/false-label/solve/README.md",
-          "quote": "식별 바이트로 형식을 추정하고, 해당 형식의 도구가 구조를 읽는 것으로 확인했다.",
           "kind": "source"
         }
       ],
-      "improvement": "서명만으로 전체 무결성을 증명할 수 없으며 파서 성공도 출처의 신뢰성을 입증하지 않는다는 짧은 한계 설명을 덧붙일 수 있다."
+      "improvement": "해설에 '이 한 사례만으로 모든 압축 파일의 안전성을 판단할 수 없다'는 식의 한계 서술을 한 문장 추가한다.\n해설에 '이 결론은 이 문제에서 관찰한 범위(고정된 od/tar 조작)에 한정되며, 다른 압축/형식에 일반화하려면 추가 검증이 필요하다'는 한계 문구를 덧붙이면 좋음.\n압축 포맷이 다른 경우(예: zip, bzip2)나 서명이 일부 손상된 경우처럼 비슷한 문제에 적용할 때 주의할 경계를 한두 문장 추가하면 4점에 가까워진다."
     },
     "execution": {
       "level": 3,
-      "reason": "false-label-learner (3): 작성 기록은 2026-10-02 기술 검증에서 고정된 Python 이미지로 풀이와 제출 해시를 확인하고, 선언된 실행 검증을 성공했다고 기록한다. 이는 과거 작성자 검증 범위의 근거이며 이번 심사에서 새 실행한 결과로 취급하지 않는다.\nfalse-label-evidence (3): 작성 기록에는 2026-10-02 최초 콘텐츠 구현 작업 트리에서 실제 od/tar가 포함된 준비 이미지로 자료를 읽고 제출 해시를 확인했으며, 고정 Python 이미지의 verify 명령에서 풀이·선언 패치·컨테이너/네트워크/볼륨 정리가 통과했다고 기록되어 있다. 이는 과거 작성자 검증의 근거이며 이번 검토에서 새로 실행한 증거는 아니다.\nfalse-label-designer (3): 작성 기록은 2026-10-02에 고정된 Python 3.13.15 이미지에서 제출 자료를 읽고 해시를 확인했으며 `tools/verify.py false-label`이 통과했다고 보고한다. 이는 과거 기술 검증 기록이며 이번 심사에서 새로 실행한 결과는 아니다.",
+      "reason": "judge-1 (3): AUTHORING.md의 검증 절에 2026-10-02 날짜로 고정 이미지에서 실제 od·tar 명령을 실행해 flag 해시를 확인했고, authoring/build.py가 배포 파일을 결정적으로 재생성함을 회귀 검사로 확인했다는 기록이 있다. `python3 -B tools/verify.py false-label` 실행 결과도 명시된다. 다만 독립적인 대상 수준 풀이자의 실제 리뷰는 아직 수행되지 않았다고 스스로 명시하고 있어, 실행 재현 기록은 작성자 자가 검증 범위로 제한된다.\njudge-2 (3): AUTHORING.md에 2026-10-02 날짜의 작성자 검증 기록이 있고(`python3 -B tools/verify.py false-label` 통과, 배포 바이트와 생성 원본 일치 확인), 오늘 독립적으로 직접 od/tar를 실행해 동일한 결과(1f 8b 08 시작, recovery/key.txt에서 pwnden{bytes_tell_the_story} 추출, 해시 일치)를 재현했다. 다만 '독립 학습 리뷰'와 '실제 화면(Browser Plugin) 조작 검증'은 AUTHORING.md 스스로 미수행으로 명시해 player 세션 차원의 실행 증거는 없다.\njudge-3 (3): 작성 기록에 날짜가 명시된 실행 근거가 있다: 고정 이미지에서 verify.py를 통해 풀이·패치·컨테이너 정리를 확인했다고 기록되어 있고, 범위(2026-10-02, 작업 트리 기준)가 구분되어 있다.",
       "evidence": [
         {
           "path": "challenges/false-label/AUTHORING.md",
-          "quote": "- 2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/false-label/AUTHORING.md",
-          "quote": "- `python3 -B tools/verify.py false-label`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
-          "kind": "recorded-execution"
-        },
-        {
-          "path": "challenges/false-label/AUTHORING.md",
-          "quote": "2026-10-02, Codex 작성·기술 검증. 최초 콘텐츠 구현 작업 트리 기준.",
+          "quote": "실제 od·tar가 포함된 준비 이미지에서 자료를 읽고 제출 해시를 확인했다. authoring/build.py는 시간·사용자 메타데이터를 고정해 동일한 압축 자료를 생성한다. 회귀 검사가 배포 바이트와 생성 원본의 일치를 확인한다.",
           "kind": "recorded-execution"
         },
         {
           "path": "challenges/false-label/AUTHORING.md",
           "quote": "`python3 -B tools/verify.py false-label`: 고정 Python 3.13.15 이미지에서 풀이와 선언된 패치, 컨테이너·네트워크·볼륨 정리 통과.",
           "kind": "recorded-execution"
+        },
+        {
+          "path": "challenges/false-label/AUTHORING.md",
+          "quote": "Browser Plugin을 통한 실제 화면 조작 검증은 수행하지 않았다.",
+          "kind": "recorded-execution"
         }
       ],
-      "improvement": "독립 검토에서 재현성을 더 확인하려면 현재 snapshot 기준 실제 검증 실행과 결과를 날짜가 포함된 기록으로 보존한다."
+      "improvement": "독립 학습자(대상 수준) 세션으로 실제 풀이를 재현한 기록을 추가한다.\n대상 수준 플레이어(또는 Browser Plugin)의 실제 player 세션 실행 기록을 추가하면 execution 증거가 완전해짐."
     }
   },
-  "source_sha256": "7f3a9f6dbe25a3c72f301b70c735d7e943c6a0c6458ec78ecc960d80fb99fe5c"
+  "source_sha256": "b3338d17cb2023140248bdcd99e5891ad30242e4e9eeb96de708a60ed9035815"
 }
