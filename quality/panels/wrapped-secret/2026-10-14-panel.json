@@ -1,0 +1,467 @@
+{
+  "slug": "wrapped-secret",
+  "input_sha256": "d675352d974d0675e8d85abd34df258e8e606bc05d67873e084cae476a378e48",
+  "model": "claude-sonnet-5-5",
+  "reasoning_effort": "low",
+  "judge_count": 3,
+  "method": "criterion median",
+  "ballots": [
+    {
+      "judge_id": "judge-1",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learner-advocate",
+      "first_pass": "시작 행동: files/recovery.txt의 Base64 한 줄을 열면 README가 '텍스트를 Base64로 저장한다'고 바로 밝혀 변환 방식을 알 수 있다. 단서 연결: challenge.toml의 [player].cli=[\"base64\"]로 도구가 주어지지만, knowledge/base64.md는 인코딩 예시(cat→Y2F0)만 보여주고 디코딩 플래그는 본문·선수지식 문서 어디에도 없다. 완료 증거: README의 ::submission이 pwnden{...} 형식을 명시해 성공 여부를 스스로 판별 가능. 용어: '내보내기'는 README가 직접 정의해 선수지식 밖 지식 요구는 아님. 잠정적으로 디코딩 명령 자체를 찾는 단계가 힌트 없이는 본문만으로 막힐 수 있는 지점으로 보임 — hints/2.md가 이를 보완하는지 확인 필요.",
+      "review": {
+        "slug": "wrapped-secret",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-1",
+        "source_sha256": "d74d55d84abacfff4c7fa50d0f088b07d36ca7604fac5116130df617b26cd99f",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "의뢰(moru17이 내보낸 파일에서 복구 키가 읽히는지 확인), 보안 원리(encoding-secrecy: 공개 변환 규칙은 비밀을 보호하지 않음), 완료 증거(pwnden{...} 제출)가 README와 solve/README.md에서 일치하며, 디코딩이라는 단일 관찰 가능한 동작으로 목표를 확인할 수 있다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "전달받은 자료를 원래 텍스트로 되돌려 복구 키를 확보하고 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "공개된 파일의 Base64 값을 되돌리자 복구 키가 그대로 나왔다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 2,
+            "reason": "조사 대상(files/recovery.txt)과 접근 정보는 명확하고 file-paths 선수지식과도 일치한다. 그러나 '도구 선택·핵심 비교·복원 절차는 풀이자가 판단할 수 있는가'를 보면, base64 CLI가 제공된다는 사실 외에 복원(디코딩) 절차 자체는 본문이나 base64 선수지식 문서에 없다. knowledge/base64.md는 인코딩 방향 예시만 제시하고, README에는 명령 예제가 없어 플레이어가 --help로 직접 옵션을 찾아야 한다. AUTHORING.md의 의도된 풀이 표는 2단계로 '본문에 제공한 명령'을 언급하지만 실제 README에는 그런 명령 예제가 없어, 작성 기록의 전제와 실제 본문 사이에 불일치가 있다.",
+            "evidence": [
+              {
+                "path": "knowledge/base64.md",
+                "quote": "예를 들어 `cat`을 Base64로 나타내면 `Y2F0`가 된다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/AUTHORING.md",
+                "quote": "| 2 | hello 예제를 실행한다 | 공개 규칙으로 복원되는 텍스트 | 본문에 제공한 명령 |",
+                "kind": "source"
+              }
+            ],
+            "improvement": "README 본문 또는 base64 선수지식 문서에 디코딩 방향의 실행 예시(예: hello 예제)를 추가해 작성 기록의 의도된 2단계와 실제 본문을 일치시킨다."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "입문(난도1) 기준은 준비된 조작으로 한 원리를 관찰하면 충족된다. 이 문제는 base64 디코딩이라는 단일 조작으로 '공개 규칙은 비밀을 보호하지 않는다'는 원리를 직접 확인시키며, 복잡한 비교나 오답 구분을 요구하지 않는다는 점이 난도 선언과 일치한다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/AUTHORING.md",
+                "quote": "하나의 공개 변환 규칙을 실제로 적용하며 코드 작성과 암호 수학이 없다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 1,
+            "reason": "본문·자료에는 정상/거부/오답/변조 대조군이 되는 추가 파일이나 비교 대상이 없다. 배포 자료는 recovery.txt 단 하나이며, 플레이어가 확인할 수 있는 것은 디코딩 성공 여부(출력이 pwnden{...} 형식인지)뿐이다. AUTHORING.md는 '잘못된 데이터의 오류와 정답·오답 해시 판정을 확인했다'고 적지만 이는 작성자의 검증 실행 범위를 설명하는 것으로, 플레이어가 겪는 대조군 경험(예: 틀린 명령/다른 인코딩 시도 시 구분되는 단서)은 본문에 설계되어 있지 않다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/challenge.toml",
+                "quote": "files = [\"files/recovery.txt\"]",
+                "kind": "source"
+              }
+            ],
+            "improvement": "플레이어가 스스로 변조/오답을 구분할 수 있는 대조 자료(예: 다른 인코딩이거나 손상된 샘플)를 본문이나 힌트 경로에 추가하거나, 이 항목이 난도1 file 유형에 기대되지 않는다면 루브릭상 기대 수준을 명확히 한다."
+          },
+          "hints": {
+            "level": 3,
+            "reason": "hints/1.md는 '비밀 키 암호인지 공개 변환 규칙인지' 판단을 돕는 개념적 질문만 던지고 정답을 주지 않는다. hints/2.md에서야 'base64 --help에서 되돌리는 옵션을 찾아보자'며 실행 방법에 대한 구체적 방향을 주되 정확한 플래그 문자열이나 전체 명령은 주지 않는다. 완전한 재현 명령(`base64 --decode files/recovery.txt`)은 solve/README.md에만 있다. 기본 본문(README)에는 도구·옵션·완성된 풀이 순서가 노출되지 않아 분리가 적절하다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/hints/1.md",
+                "quote": "파일을 가진 사람이 원래 값을 읽으려면 무엇이 필요한지 생각해 보자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/hints/2.md",
+                "quote": "터미널의 `base64 --help`에서 입력을 원래 데이터로 되돌리는 옵션을 찾아보자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "base64 --decode files/recovery.txt",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "solve/README.md는 행동(디코딩 명령)→관찰(복구 키 복원)→결론(비밀 키 불필요)→원리(Base64는 공개 규칙)→보호 방법(파일 접근 제한, 암호화 적용, 내보내기 자료 포함 여부 검토)을 모두 연결한다. 실습 증거의 한계(비밀 키가 필요하지 않았다는 관찰 범위)도 명시한다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "복구 키를 다른 사람이 읽지 못하게 하려면 파일 접근을 제한하고, 필요에 따라 비밀 키를 사용하는\n암호화를 적용해야 한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "AUTHORING.md의 검증과 리뷰 절에 날짜(2026-10-02)와 범위(호스트 Python 3.14.7, 풀이 이미지 Python 3.13.15, Docker 29.4.1, Compose 5.1.3)를 구분해 기록하고, 전체 6개 문제 풀이·패치·정리 검사와 47개 회귀 검사를 통과했다고 명시한다. 다만 '독립 학습 리뷰: 대상 수준 풀이자의 실제 리뷰는 아직 수행하지 않았다'고 스스로 밝혀 완전한 독립 재현 기록은 아니다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-02, 이 파일을 포함한 최초 콘텐츠 제출 버전. 호스트 Python 3.14.7, 풀이 이미지 Python 3.13.15, Docker 29.4.1, Compose 5.1.3에서 형식 검사, 전체 6개 문제 풀이·선언된 패치·정리 검사와 47개 회귀 검사를 통과했다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "대상 수준 풀이자의 독립 학습 리뷰 기록을 추가해 '독립 학습 리뷰는 아직 수행하지 않았다'는 미해결 항목을 해소한다."
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-2",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "evidence-examiner",
+      "first_pass": "challenge.toml: difficulty=1, files=[\"files/recovery.txt\"], player.cli=[\"base64\"], learning.requires=[\"terminal-commands\",\"file-paths\",\"base64\"], teaches=[\"encoding-secrecy\"], flag.mode=\"sha256\". README.md states the export note 'Base64로 저장한다' directly, and gives the objective to recover the original text; files/recovery.txt contains a single line 'cHduZGVue2VuY29kaW5nX2hhc19ub19zZWNyZXRfa2V5fQ==' whose character set and '==' padding match standard Base64. No tampered/negative control file is declared alongside the single correct file. knowledge/base64.md gives a worked example (cat -> Y2F0) consistent with teaches=encoding-secrecy, but README itself has no command example; whether the base-level text alone (without hints) lets a declared-prerequisite player reach the base64 --decode command was an open question going into step 2. No knowledge/terminal-commands.md file exists separately; catalog.toml lists the concept id without a dedicated doc.",
+      "review": {
+        "slug": "wrapped-secret",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-2",
+        "source_sha256": "d74d55d84abacfff4c7fa50d0f088b07d36ca7604fac5116130df617b26cd99f",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "의뢰(복구 키 보호 여부 확인), 보안 원리(공개 변환은 비밀 보호가 아님), 완료 증거(pwnden{...} 형식 제출)가 일치하며 base64 --decode 한 번으로 관찰 가능하다. hints/1.md가 '비밀 키를 사용하는 암호일까, 공개된 변환 규칙일까'라는 혼동 지점까지 입문 단계에서 짚어 기본 기준을 충족한다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "전달받은 자료를 원래 텍스트로 되돌려 복구 키를 확보하고 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "표시 방식의 변환은 정보를 주고받기 편하게 만든다. Base64 규칙은 공개돼 있으며,\n파일을 가진 사람은 같은 규칙으로 내용을 복원할 수 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 2,
+            "reason": "README는 파일 위치·인코딩 종류('텍스트를 Base64로 저장한다')·제출 형식을 명시해 선수 능력(terminal-commands, file-paths, base64)으로 시작할 범위는 있다. 다만 AUTHORING.md가 스스로 '명령 예제를 기본 본문에 제공했던 기존 설계의 시작 정보·판단·힌트 평가는 재검토 대기'라고 명시하며 '새 본문에 대한 심사를 완료했다고 간주하지 않는다'고 적어, 현재 README에는 base64 디코드 명령 예시가 전혀 없고 그 공백이 작성자 스스로도 미검증 상태임을 인정한다. hint2가 이 공백을 메우지만(터미널 base64 --help), 본문만으로의 시작 정보 적정성은 작성자 기록상 아직 확인되지 않은 지점이다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/AUTHORING.md",
+                "quote": "명령 예제를 기본 본문에 제공했던 기존 설계의 시작 정보·판단·\n힌트 평가는 재검토 대기이며, 새 본문에 대한 심사를 완료했다고 간주하지 않는다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "내보내기 안내에는 ‘텍스트를 Base64로 저장한다’고 적혀 있다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "README 본문 또는 선택형 힌트에서, 변경된 본문 구성(명령 예제 제거)이 선언된 선수 능력만으로 시작 가능한지 독립적으로 재확인하고 AUTHORING.md의 재검토 대기 상태를 해소할 것."
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "입문 난도 기준에 맞게 '이 문자열이 공개 규칙인 Base64인가, 비밀 키 암호인가'라는 단일 원리 판단 하나만 요구한다. 추가로 base64 --help에서 --decode와 파일 인자 방식을 스스로 찾는 작은 조사 단계가 있어 단순 명령 복사보다 약간의 판단을 더한다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/hints/1.md",
+                "quote": "내보내기 안내에 적힌 Base64는 비밀 키를 사용하는 암호일까, 공개된 변환 규칙일까?",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/hints/2.md",
+                "quote": "터미널의 `base64 --help`에서 입력을 원래 데이터로 되돌리는 옵션을 찾아보자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "controls": {
+            "level": 2,
+            "reason": "배포 자료는 정답 파일 1개뿐이며 변조·제거·오답 대조 파일은 선언되어 있지 않다. solve.py의 정규식 검사(`pwnden\\{[a-z_]+\\}`)가 잘못된 디코딩 결과를 걸러내는 최소한의 자기 검증 역할을 하지만, 이는 '다른 사람도 파일만으로 복구 키를 읽어 낼 수 있는가'라는 README의 조사 질문에 대해 실제로 '정상 접근(파일 보유자) vs 거부/오답(키 없이 못 읾음)'을 대조하는 구조는 아니다. 공개 변환 규칙이라는 원리상 비밀 키 유무를 가르는 대조군(가짜 키 필요 여부)이 자료로 제시되지 않아, 결론이 설명문의 주장에 의존하는 부분이 있다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/solve/solve.py",
+                "quote": "if re.fullmatch(r\"pwnden\\{[a-z_]+\\}\", flag) is None:\n    raise SystemExit(\"the decoded material did not contain a recovery key\")",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/challenge.toml",
+                "quote": "files = [\"files/recovery.txt\"]",
+                "kind": "source"
+              }
+            ],
+            "improvement": "비밀 키 없이도 같은 결과가 나온다는 원리를 더 분명히 대조하려면, 동일한 공개 규칙을 다른 입력에 적용한 예시(이미 knowledge/base64.md에 있음)와 이번 파일을 나란히 언급하거나, 틀린 디코딩 시도(예: base32로 잘못 해석)가 실패하는 사례를 해설에 추가해 '규칙을 모르면 못 읽는다'가 아니라 '규칙이 공개돼 있어 누구나 읽는다'는 대조를 강화할 것."
+          },
+          "hints": {
+            "level": 3,
+            "reason": "hint1은 완성된 절차 없이 암호 대 공개 규칙이라는 판단 하나만 유도하고, hint2는 옵션 이름과 파일 지정 방법을 '직접 찾아보라'는 형태로 제공해 완전한 명령 문자열을 그대로 주지 않는다. 완성된 재현 절차(정확한 명령과 출력)는 solve/README.md에만 있어 기본 본문·힌트와 해설의 분리가 유지된다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/hints/2.md",
+                "quote": "입력 파일을 지정하는 방법도 도움말에 나온다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "base64 --decode files/recovery.txt",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "solve/README.md가 조사 결과(비밀 키 불필요)→조사 과정(명령 1개)→완료 확인(정확한 flag)→보안 원리(공개 규칙은 보호가 아님)→보호 방법(접근 제한, 암호화 적용, 내보내기 자료에 포함 여부 재검토)까지 순서대로 연결한다. 다만 이번 실습 증거로 말할 수 있는 범위의 한계(예: 이 사례가 모든 인코딩에 일반화되지는 않는다는 점)는 명시적으로 쓰여 있지 않다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "복구 키를 다른 사람이 읽지 못하게 하려면 파일 접근을 제한하고, 필요에 따라 비밀 키를 사용하는\n암호화를 적용해야 한다. 내보내기 자료에 복구 키를 포함할 필요가 있는지도 검토해야 한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "해설에 '이 결론은 Base64라는 특정 공개 규칙에 대한 것이며 다른 인코딩/난독화에도 동일한 성질이 적용되는지는 별도로 확인해야 한다'는 한계 문장을 짧게 추가할 것."
+          },
+          "execution": {
+            "level": 3,
+            "reason": "AUTHORING.md는 날짜가 있는 실행 기록을 제공한다: 특정 날짜, 호스트/풀이 이미지의 Python 버전, Docker/Compose 버전과 함께 '전체 6개 문제 풀이·선언된 패치·정리 검사와 47개 회귀 검사를 통과'했다고 기록한다. 이 문제에 서비스나 패치가 없어 '패치가 공격을 막는지'는 적용되지 않는 항목이며, 고정 파일 디코딩과 flag sha256 대조만 검증 범위다. 직접 재현한 결과도 challenge.toml의 sha256과 정확히 일치했다(이 재검증은 이번 심사의 관찰이며 과거 실행 기록과 구분한다).",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-02, 이 파일을 포함한 최초 콘텐츠 제출 버전. 호스트 Python 3.14.7, 풀이 이미지 Python 3.13.15, Docker 29.4.1, Compose 5.1.3에서 형식 검사, 전체 6개 문제 풀이·선언된 패치·정리 검사와 47개 회귀 검사를 통과했다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": ""
+          }
+        }
+      }
+    },
+    {
+      "judge_id": "judge-3",
+      "model": "claude-sonnet-5-5",
+      "reasoning_effort": "low",
+      "lens": "learning-designer",
+      "first_pass": "의뢰인 moru17은 장비 복구 키를 Base64로 내보낸 파일(files/recovery.txt)이 공개된 상황에서 원래 키를 읽어낼 수 있는지 확인해 달라고 요청한다. README는 '내보내기 안내에는 텍스트를 Base64로 저장한다고 적혀 있다'를 직접 제공해 인코딩 식별 자체를 대신 해결해 준다. 시작 행동은 files/recovery.txt를 Base64 디코드하는 것뿐이며, 완료 증거는 pwnden{...} 형식 출력이다. 선수지식(terminal-commands, file-paths, base64)과 난도 1(입문)에 비해 본문이 핵심 변환 방식을 이미 알려주므로, 남은 판단은 '표준 디코드 명령을 어떻게 적용하는가'뿐으로 보인다. terminal-commands.md는 base64 명령 사용법을 직접 설명하지 않고 '해당 명령의 도움말에서 확인'하라고만 안내해, 플레이어가 base64 --help를 스스로 찾아야 하는 조작 하나가 남아있다. '공개 변환 규칙은 비밀을 지키지 못한다'는 보안 원리를 플레이어가 디코딩 후 관찰로 확인하는지, 해설만 설명하는지는 힌트/해설 열람 전에는 판단 보류.",
+      "review": {
+        "slug": "wrapped-secret",
+        "rubric_version": 2,
+        "reviewed_at": "2026-10-14",
+        "reviewer": "judge-3",
+        "source_sha256": "d74d55d84abacfff4c7fa50d0f088b07d36ca7604fac5116130df617b26cd99f",
+        "criteria": {
+          "goal": {
+            "level": 3,
+            "reason": "README의 의뢰·목표·제출 형식과 해설의 완료 증거(정답 값)가 일치하며, 디코딩 결과로 '공개 변환 규칙에는 비밀이 없다'는 원리를 직접 관찰할 수 있다. 다만 README가 Base64라는 변환 방식 자체를 명시해 관찰 대상이 '원리 확인'에 집중되도록 설계되어 있어, 혼동 사례나 경계까지 다루는 4수준으로는 보기 어렵다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "전달받은 자료를 원래 텍스트로 되돌려 복구 키를 확보하고 제출하자.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "제출할 값은 `pwnden{encoding_has_no_secret_key}`다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "starting_context": {
+            "level": 3,
+            "reason": "README는 파일 위치·내보내기 안내(Base64 사용)·제출 형식을 제공하지만 실제 디코드 명령(옵션·파일 지정 방법)은 본문에 없다. player.cli에 base64만 선언되어 있어 선수지식 base64.md의 개념 설명과 연결해 플레이어가 도구 사용법을 스스로 찾아야 하는 범위가 남아 있다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/README.md",
+                "quote": "내보내기 안내에는 ‘텍스트를 Base64로 저장한다’고 적혀 있다.",
+                "kind": "source"
+              },
+              {
+                "path": "challenges/wrapped-secret/challenge.toml",
+                "quote": "cli = [\"base64\"]",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "reasoning": {
+            "level": 3,
+            "reason": "입문 난도에 맞게 '공개 변환 규칙은 비밀을 지키지 않는다'는 한 원리를 디코딩 행위로 관찰하는 구조다. hints/1.md가 '비밀 키를 사용하는 암호일까, 공개된 변환 규칙일까'라는 판단 질문을 던져 플레이어가 결론을 스스로 연결하게 하지만, README가 이미 Base64임을 명시해 그 판단의 전제를 상당 부분 대신 제공한다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/hints/1.md",
+                "quote": "내보내기 안내에 적힌 Base64는 비밀 키를 사용하는 암호일까, 공개된 변환 규칙일까?",
+                "kind": "source"
+              }
+            ],
+            "improvement": "입문 수준을 유지하되, README가 변환 방식 이름을 직접 노출하는 대신 '알아보기 어려운 문자열'이라는 관찰만 주고 하나의 선택형 힌트에서 Base64 여부를 판단하게 하면 관찰-판단 분리가 더 뚜렷해진다."
+          },
+          "controls": {
+            "level": 1,
+            "reason": "정답 해시로 성공/실패를 구분하는 자동 채점은 있으나, 플레이어가 결론을 지지할 대조(예: 틀린 변환 방식으로 시도했을 때의 실패, 비밀 키가 실제로 필요 없다는 것을 보여주는 변조·누락 사례)가 본문·힌트·해설 어디에도 없다. 배포 자료도 정답 인코딩 값 하나뿐이라 오답이나 변조된 입력과 비교할 지점이 없다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/AUTHORING.md",
+                "quote": "배포 자료에는 인코딩된 값만 둔다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": "예를 들어 비슷하게 생긴 다른 인코딩(예: hex)의 샘플이나, '비밀 키 없이 복원됐다'는 것을 명시적으로 비교할 수 있는 대조 자료를 추가하면 결론을 직접 지지하는 증거가 생긴다."
+          },
+          "hints": {
+            "level": 3,
+            "reason": "hints/1.md는 암호/공개변환 구분이라는 판단만 돕고 완전한 명령을 주지 않으며, hints/2.md는 base64 --decode 옵션을 찾아보라는 절차적 도움만 주고 완성된 명령 전체 문자열은 주지 않는다. 완전한 재현 절차는 solve/README.md에만 있어 힌트와 정답의 분리가 유지된다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/hints/2.md",
+                "quote": "터미널의 `base64 --help`에서 입력을 원래 데이터로 되돌리는 옵션을 찾아보자.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "explanation": {
+            "level": 3,
+            "reason": "해설이 행동(디코딩)·관찰(비밀 키 불필요)·원인(Base64는 공개 규칙)·보호 방법(접근 제한, 필요시 암호화, 내보내기 자료 포함 여부 검토)을 연결한다. 다만 '공개 변환 규칙'과 '암호화'의 경계를 더 구체적인 예시(예: 대칭키 암호와의 직접 비교)로 설명하지는 않아 혼동 사례까지 다루는 4수준에는 못 미친다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/solve/README.md",
+                "quote": "복구 키를 다른 사람이 읽지 못하게 하려면 파일 접근을 제한하고, 필요에 따라 비밀 키를 사용하는\n암호화를 적용해야 한다.",
+                "kind": "source"
+              }
+            ],
+            "improvement": ""
+          },
+          "execution": {
+            "level": 3,
+            "reason": "AUTHORING.md는 날짜가 있는 기술 검증 기록(호스트/풀이 이미지 버전, 6개 문제 풀이·패치·정리 검사, 47개 회귀 검사 통과)을 제공한다. 다만 이 챌린지 전용의 개별 실행 로그가 아니라 저장소 전체 검증의 일부로 인용되어 있어, 이 문제만의 독립적 재현 기록으로는 범위가 다소 넓다.",
+            "evidence": [
+              {
+                "path": "challenges/wrapped-secret/AUTHORING.md",
+                "quote": "기술 검증: 2026-10-02, 이 파일을 포함한 최초 콘텐츠 제출 버전. 호스트 Python 3.14.7, 풀이 이미지 Python 3.13.15, Docker 29.4.1, Compose 5.1.3에서 형식 검사, 전체 6개 문제 풀이·선언된 패치·정리 검사와 47개 회귀 검사를 통과했다.",
+                "kind": "recorded-execution"
+              }
+            ],
+            "improvement": "이 문제에 한정된 solve.py 단독 실행 로그(날짜·출력)를 별도로 기록하면 범위가 더 명확해진다."
+          }
+        }
+      }
+    }
+  ],
+  "distribution": {
+    "goal": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "starting_context": {
+      "levels": {
+        "judge-1": 2,
+        "judge-2": 2,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 2,
+      "needs_adjudication": false
+    },
+    "reasoning": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "controls": {
+      "levels": {
+        "judge-1": 1,
+        "judge-2": 2,
+        "judge-3": 1
+      },
+      "unverified_judges": 0,
+      "proposed_median": 1,
+      "needs_adjudication": false
+    },
+    "hints": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "explanation": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    },
+    "execution": {
+      "levels": {
+        "judge-1": 3,
+        "judge-2": 3,
+        "judge-3": 3
+      },
+      "unverified_judges": 0,
+      "proposed_median": 3,
+      "needs_adjudication": false
+    }
+  },
+  "needs_adjudication": [],
+  "summary": {
+    "slug": "wrapped-secret",
+    "points": 62.5,
+    "reviewed_weight": 100.0,
+    "pending": [],
+    "improvements": [
+      {
+        "criterion": "starting_context",
+        "action": "README 본문 또는 base64 선수지식 문서에 디코딩 방향의 실행 예시(예: hello 예제)를 추가해 작성 기록의 의도된 2단계와 실제 본문을 일치시킨다.\nREADME 본문 또는 선택형 힌트에서, 변경된 본문 구성(명령 예제 제거)이 선언된 선수 능력만으로 시작 가능한지 독립적으로 재확인하고 AUTHORING.md의 재검토 대기 상태를 해소할 것."
+      },
+      {
+        "criterion": "reasoning",
+        "action": "입문 수준을 유지하되, README가 변환 방식 이름을 직접 노출하는 대신 '알아보기 어려운 문자열'이라는 관찰만 주고 하나의 선택형 힌트에서 Base64 여부를 판단하게 하면 관찰-판단 분리가 더 뚜렷해진다."
+      },
+      {
+        "criterion": "controls",
+        "action": "플레이어가 스스로 변조/오답을 구분할 수 있는 대조 자료(예: 다른 인코딩이거나 손상된 샘플)를 본문이나 힌트 경로에 추가하거나, 이 항목이 난도1 file 유형에 기대되지 않는다면 루브릭상 기대 수준을 명확히 한다.\n비밀 키 없이도 같은 결과가 나온다는 원리를 더 분명히 대조하려면, 동일한 공개 규칙을 다른 입력에 적용한 예시(이미 knowledge/base64.md에 있음)와 이번 파일을 나란히 언급하거나, 틀린 디코딩 시도(예: base32로 잘못 해석)가 실패하는 사례를 해설에 추가해 '규칙을 모르면 못 읽는다'가 아니라 '규칙이 공개돼 있어 누구나 읽는다'는 대조를 강화할 것.\n예를 들어 비슷하게 생긴 다른 인코딩(예: hex)의 샘플이나, '비밀 키 없이 복원됐다'는 것을 명시적으로 비교할 수 있는 대조 자료를 추가하면 결론을 직접 지지하는 증거가 생긴다."
+      },
+      {
+        "criterion": "explanation",
+        "action": "해설에 '이 결론은 Base64라는 특정 공개 규칙에 대한 것이며 다른 인코딩/난독화에도 동일한 성질이 적용되는지는 별도로 확인해야 한다'는 한계 문장을 짧게 추가할 것."
+      },
+      {
+        "criterion": "execution",
+        "action": "대상 수준 풀이자의 독립 학습 리뷰 기록을 추가해 '독립 학습 리뷰는 아직 수행하지 않았다'는 미해결 항목을 해소한다.\n이 문제에 한정된 solve.py 단독 실행 로그(날짜·출력)를 별도로 기록하면 범위가 더 명확해진다."
+      }
+    ]
+  },
+  "adjudications": {}
+}
